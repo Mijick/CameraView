@@ -17,9 +17,10 @@ public struct MCameraController: View {
     @ObservedObject private var cameraManager: CameraManager = .init(config: .init())
     @State private var cameraError: CameraManager.Error?
     @Namespace private var namespace
+    private var config: CameraConfig
 
 
-    public init(capturedMedia: Binding<MCameraMedia?>, appDelegate: MApplicationDelegate.Type) { self._capturedMedia = capturedMedia; self.appDelegate = appDelegate }
+    public init(capturedMedia: Binding<MCameraMedia?>, appDelegate: MApplicationDelegate.Type, config: (CameraConfig) -> CameraConfig = { $0 }) { self._capturedMedia = capturedMedia; self.appDelegate = appDelegate; self.config = config(.init()) }
     public var body: some View {
         ZStack { switch cameraError {
             case .some(let error): createErrorStateView(error)
@@ -32,7 +33,7 @@ public struct MCameraController: View {
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {
-        DefaultCameraErrorView(error: error)
+        config.cameraErrorView(error).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch capturedMedia {
         case .some: createCameraPreview()
@@ -41,10 +42,10 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func createCameraPreview() -> some View {
-        DefaultCameraPreview(media: $capturedMedia, namespace: namespace)
+        config.mediaPreviewView($capturedMedia, namespace).erased()
     }
     func createCameraView() -> some View {
-        DefaultCameraView(cameraManager: cameraManager, capturedMedia: $capturedMedia, namespace: namespace)
+        config.cameraView(cameraManager, $capturedMedia, namespace).erased()
     }
 }
 

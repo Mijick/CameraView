@@ -11,6 +11,7 @@
 
 import SwiftUI
 
+// MARK: - Is Active Modifier
 extension View {
     @ViewBuilder func isActive(_ value: Bool) -> some View { ZStack {
         if value { self }
@@ -18,4 +19,9 @@ extension View {
     @ViewBuilder func isActiveStackElement(_ value: Bool) -> some View {
         if value { self }
     }
+}
+
+// MARK: - Erased Modifier
+extension View {
+    func erased() -> AnyView { .init(self) }
 }
