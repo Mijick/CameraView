@@ -76,6 +76,23 @@ private extension MCameraController {
 public extension MCameraController {
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate } }
 
+    func outputType() -> Self { self }
+    func cameraPosition() -> Self { self }
+    func zoomFactor() -> Self { self }
+    func flashMode() -> Self { self }
+    func torchMode() -> Self { self }
+    func gridVisible() -> Self { self }
+    func pinchVelocity() -> Self { self }
+
+    func focusImage() -> Self { self }
+    func focusImageColor() -> Self { self }
+    func focusImageSize() -> Self { self }
+
+    
+
+
+
+    
     func showCapturedMediaPreview() -> Self { self }
 
     func changeErrorScreen() -> Self { self }
