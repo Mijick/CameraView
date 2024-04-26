@@ -15,4 +15,7 @@ public struct CameraConfig: Configurable { public init() {}
     private(set) var cameraErrorView: (CameraManager.Error) -> any CameraErrorView = DefaultCameraErrorView.init
     private(set) var cameraView: (CameraManager, Binding<MCameraMedia?>, Namespace.ID) -> any CameraView = DefaultCameraView.init
     private(set) var mediaPreviewView: (Binding<MCameraMedia?>, Namespace.ID) -> any CameraPreview = DefaultCameraPreview.init
+
+
+    var appDelegate: MApplicationDelegate.Type?
 }

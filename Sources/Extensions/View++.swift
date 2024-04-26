@@ -25,3 +25,12 @@ extension View {
 extension View {
     func erased() -> AnyView { .init(self) }
 }
+
+// MARK: - Returning Self
+extension View {
+    func setAndReturnSelf(_ body: (inout Self) -> Void) -> Self {
+        var result = self
+        body(&result)
+        return result
+    }
+}

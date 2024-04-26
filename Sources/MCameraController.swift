@@ -13,14 +13,13 @@ import SwiftUI
 
 public struct MCameraController: View {
     @Binding var capturedMedia: MCameraMedia?
-    let appDelegate: MApplicationDelegate.Type
     @ObservedObject private var cameraManager: CameraManager = .init(config: .init())
     @State private var cameraError: CameraManager.Error?
     @Namespace private var namespace
-    private var config: CameraConfig
+    private var config: CameraConfig = .init()
 
 
-    public init(capturedMedia: Binding<MCameraMedia?>, appDelegate: MApplicationDelegate.Type, config: (CameraConfig) -> CameraConfig = { $0 }) { self._capturedMedia = capturedMedia; self.appDelegate = appDelegate; self.config = config(.init()) }
+    public init(capturedMedia: Binding<MCameraMedia?>) { self._capturedMedia = capturedMedia }
     public var body: some View {
         ZStack { switch cameraError {
             case .some(let error): createErrorStateView(error)
@@ -64,10 +63,17 @@ private extension MCameraController {
         catch { cameraError = error as? CameraManager.Error }
     }
     func lockScreenOrientation() {
-        appDelegate.orientationLock = .portrait
+        config.appDelegate?.orientationLock = .portrait
         UINavigationController.attemptRotationToDeviceOrientation()
     }
     func unlockScreenOrientation() {
-        appDelegate.orientationLock = .all
+        config.appDelegate?.orientationLock = .all
     }
+}
+
+
+
+public extension MCameraController {
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate } }
+
 }
