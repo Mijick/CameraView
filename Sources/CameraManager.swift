@@ -76,6 +76,14 @@ public class CameraManager: NSObject, ObservableObject {
     }
 }
 
+// MARK: - Checking Camera Permissions
+extension CameraManager {
+    func checkPermissions() throws {
+        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied { throw Error.microphonePermissionsNotGranted }
+        if AVCaptureDevice.authorizationStatus(for: .video) == .denied { throw Error.cameraPermissionsNotGranted }
+    }
+}
+
 // MARK: - Initialising Camera
 extension CameraManager {
     func setup(in cameraView: UIView) throws {
@@ -179,12 +187,40 @@ private extension CameraManager {
     }
 }
 
-// MARK: - Checking Camera Permissions
+// MARK: - Camera Rotation
 extension CameraManager {
-    func checkPermissions() throws {
-        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied { throw Error.microphonePermissionsNotGranted }
-        if AVCaptureDevice.authorizationStatus(for: .video) == .denied { throw Error.cameraPermissionsNotGranted }
+    func fixCameraRotation() { let orientation = UIDevice.current.orientation
+        if #available(iOS 17.0, *) { fixCameraRotationForIOS17(orientation) }
+        else { fixCameraRotationForOlderIOSVersions(orientation) }
     }
+}
+private extension CameraManager {
+    @available(iOS 17.0, *) func fixCameraRotationForIOS17(_ deviceOrientation: UIDeviceOrientation) { let rotationAngle = calculateRotationAngle(deviceOrientation)
+        if cameraLayer.connection?.isVideoRotationAngleSupported(rotationAngle) ?? false {
+            cameraLayer.connection?.videoRotationAngle = rotationAngle
+        }
+    }
+    func fixCameraRotationForOlderIOSVersions(_ deviceOrientation: UIDeviceOrientation) { let videoOrientation = calculateVideoOrientation(deviceOrientation)
+        if cameraLayer.connection?.isVideoOrientationSupported ?? false {
+            cameraLayer.connection?.videoOrientation = videoOrientation
+        }
+    }
+}
+private extension CameraManager {
+    func calculateRotationAngle(_ deviceOrientation: UIDeviceOrientation) -> CGFloat { switch deviceOrientation {
+        case .portrait: 90
+        case .landscapeLeft: 0
+        case .landscapeRight: 180
+        case .portraitUpsideDown: 270
+        default: 0
+    }}
+    func calculateVideoOrientation(_ deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation { switch deviceOrientation {
+        case .portrait: .portrait
+        case .landscapeLeft: .landscapeRight
+        case .landscapeRight: .landscapeLeft
+        case .portraitUpsideDown: .portraitUpsideDown
+        default: .portrait
+    }}
 }
 
 // MARK: - On Media Captured
