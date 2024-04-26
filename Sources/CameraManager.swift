@@ -488,7 +488,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        if let media = createPhotoMedia(photo) { onMediaCaptured?(.success(media)) }
+        if let media = createPhotoMedia(photo) { onMediaCaptured?(.success(media)); resetZoomAndTorchAfterMediaCaptured() }
         else { onMediaCaptured?(.failure(.capturedPhotoCannotBeFetched)) }
     }
 }
@@ -546,6 +546,7 @@ extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
         let media = MCameraMedia(data: nil, url: outputFileURL)
         onMediaCaptured?(.success(media))
+        resetZoomAndTorchAfterMediaCaptured()
     }
 }
 
@@ -641,6 +642,10 @@ private extension CameraManager {
         connection.isVideoMirrored = mirrorOutput ? cameraPosition != .front : cameraPosition == .front
         connection.videoOrientation = deviceOrientation
     }}
+    func resetZoomAndTorchAfterMediaCaptured() {
+        zoomFactor = 1.0
+        torchMode = .off
+    }
 }
 private extension CameraManager {
     var cameraView: UIView { cameraLayer.superview ?? .init() }
