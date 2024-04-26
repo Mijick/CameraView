@@ -12,14 +12,14 @@
 import SwiftUI
 
 public struct MCameraController: View {
-    @Binding var capturedMedia: MCameraMedia?
     @ObservedObject private var cameraManager: CameraManager = .init(config: .init())
+    @State private var capturedMedia: MCameraMedia? = nil
     @State private var cameraError: CameraManager.Error?
     @Namespace private var namespace
     private var config: CameraConfig = .init()
 
 
-    public init(capturedMedia: Binding<MCameraMedia?>) { self._capturedMedia = capturedMedia }
+    public init() {}
     public var body: some View {
         ZStack { switch cameraError {
             case .some(let error): createErrorStateView(error)
@@ -75,5 +75,19 @@ private extension MCameraController {
 
 public extension MCameraController {
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate } }
+
+    func showCapturedMediaPreview() -> Self { self }
+
+    func changeErrorScreen() -> Self { self }
+    func changeMediaPreviewScreen() -> Self { self }
+    func changeCameraScreen() -> Self { self }
+
+
+
+    func onImageCaptured() -> Self { self }
+    func onVideoCaptured() -> Self { self }
+
+    func onCloseButtonTap() -> Self { self }
+
 
 }
