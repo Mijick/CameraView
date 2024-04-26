@@ -289,11 +289,24 @@ private extension CameraManager {
 // MARK: - Camera Focusing
 extension CameraManager {
     func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(cameraPosition) {
-        insertNewCameraFocusView(touchPoint)
-        animateCameraFocusView()
+        removeCameraFocusAnimations()
+        insertCameraFocus(touchPoint)
 
         try setCameraFocus(touchPoint, device)
     }}
+}
+private extension CameraManager {
+    func removeCameraFocusAnimations() {
+        cameraFocusView.layer.removeAllAnimations()
+    }
+    func insertCameraFocus(_ touchPoint: CGPoint) { DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [self] in
+        insertNewCameraFocusView(touchPoint)
+        animateCameraFocusView()
+    }}
+    func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
+        let focusPoint = cameraLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
+        try configureCameraFocus(focusPoint, device)
+    }
 }
 private extension CameraManager {
     func insertNewCameraFocusView(_ touchPoint: CGPoint) {
@@ -310,12 +323,6 @@ private extension CameraManager {
             UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
         }
     }
-    func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
-        let focusPoint = cameraLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
-        try configureCameraFocus(focusPoint, device)
-    }
-}
-private extension CameraManager {
     func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws {
         try device.lockForConfiguration()
         setFocusPointOfInterest(focusPoint, device)
