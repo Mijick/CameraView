@@ -74,7 +74,7 @@ private extension MCameraController {
 
 
 public extension MCameraController {
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate } }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 
     func outputType() -> Self { self }
     func cameraPosition() -> Self { self }

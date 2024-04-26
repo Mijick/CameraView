@@ -52,9 +52,10 @@ public class CameraManager: NSObject, ObservableObject {
     private(set) var cameraBlurView: UIImageView!
 
     // MARK: Others
+    private var motionManager: CMMotionManager = .init()
     private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
-    private var motionManager: CMMotionManager = .init()
+    private var orientationLocked: Bool = false
 
 
     // MARK: Initialiser
@@ -187,12 +188,19 @@ private extension CameraManager {
     }
 }
 
+// MARK: - Locking Camera Orientation
+extension CameraManager {
+    func lockOrientation() {
+        orientationLocked = true
+    }
+}
+
 // MARK: - Camera Rotation
 extension CameraManager {
-    func fixCameraRotation() { let orientation = UIDevice.current.orientation
+    func fixCameraRotation() { if !orientationLocked { let orientation = UIDevice.current.orientation
         if #available(iOS 17.0, *) { fixCameraRotationForIOS17(orientation) }
         else { fixCameraRotationForOlderIOSVersions(orientation) }
-    }
+    }}
 }
 private extension CameraManager {
     @available(iOS 17.0, *) func fixCameraRotationForIOS17(_ deviceOrientation: UIDeviceOrientation) { let rotationAngle = calculateRotationAngle(deviceOrientation)
