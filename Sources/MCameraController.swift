@@ -79,9 +79,7 @@ public extension MCameraController {
     func outputType() -> Self { self }
     func cameraPosition() -> Self { self }
     func flashMode() -> Self { self }
-    func torchMode() -> Self { self }
     func gridVisible() -> Self { self }
-    func pinchVelocity() -> Self { self }
 
     func focusImage() -> Self { self }
     func focusImageColor() -> Self { self }
