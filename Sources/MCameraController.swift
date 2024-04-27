@@ -36,13 +36,13 @@ private extension MCameraController {
         config.cameraErrorView(error).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch capturedMedia {
-        case .some: createCameraPreview()
-        case nil: createCameraView()
+        case .some where config.mediaPreviewView != nil: createCameraPreview()
+        default: createCameraView()
     }}}
 }
 private extension MCameraController {
     func createCameraPreview() -> some View {
-        config.mediaPreviewView($capturedMedia, namespace).erased()
+        config.mediaPreviewView?($capturedMedia, namespace).erased()
     }
     func createCameraView() -> some View {
         config.cameraView(cameraManager, $capturedMedia, namespace).erased()
@@ -85,7 +85,7 @@ public extension MCameraController {
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 
     func errorScreen(_ builder: @escaping (CameraManager.Error) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
-    func mediaPreviewScreen(_ builder: @escaping (Binding<MCameraMedia?>, Namespace.ID) -> any CameraPreview) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
+    func mediaPreviewScreen(_ builder: ((Binding<MCameraMedia?>, Namespace.ID) -> any CameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
     func cameraScreen(_ builder: @escaping (CameraManager, Binding<MCameraMedia?>, Namespace.ID) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
 
 
