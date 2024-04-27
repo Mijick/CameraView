@@ -16,6 +16,7 @@ import MijickTimer
 
 public class CameraManager: NSObject, ObservableObject {
     // MARK: Attributes
+    @Published private(set) var capturedMedia: MCameraMedia? = nil
     @Published private(set) var outputType: CameraOutputType = .photo
     @Published private(set) var cameraPosition: AVCaptureDevice.Position = .back
     @Published private(set) var zoomFactor: CGFloat = 1.0
@@ -42,9 +43,6 @@ public class CameraManager: NSObject, ObservableObject {
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureMovieFileOutput?
 
-    // MARK: Completions
-    private var onMediaCaptured: ((Result<MCameraMedia, CameraManager.Error>) -> ())?
-
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
     private(set) var cameraGridView: GridView!
@@ -58,7 +56,7 @@ public class CameraManager: NSObject, ObservableObject {
     private var orientationLocked: Bool = false
 }
 
-// MARK: - Changing Initial Attributes
+// MARK: - Changing Attributes
 extension CameraManager {
     func change(outputType: CameraOutputType? = nil, cameraPosition: AVCaptureDevice.Position? = nil, flashMode: AVCaptureDevice.FlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
         if let outputType { self.outputType = outputType }
@@ -68,6 +66,9 @@ extension CameraManager {
         if let focusImage { self.cameraFocusView.image = focusImage }
         if let focusImageColor { self.cameraFocusView.tintColor = focusImageColor }
         if let focusImageSize { self.cameraFocusView.frame.size = .init(width: focusImageSize, height: focusImageSize) }
+    }
+    func resetCapturedMedia() {
+        capturedMedia = nil
     }
 }
 
@@ -223,13 +224,6 @@ private extension CameraManager {
         case .portraitUpsideDown: .portraitUpsideDown
         default: .portrait
     }}
-}
-
-// MARK: - On Media Captured
-extension CameraManager {
-    func onMediaCaptured(_ completionHandler: @escaping (Result<MCameraMedia, CameraManager.Error>) -> ()) {
-        onMediaCaptured = completionHandler
-    }
 }
 
 // MARK: - Changing Output Type
@@ -481,10 +475,10 @@ private extension CameraManager {
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        if let media = createPhotoMedia(photo) { onMediaCaptured?(.success(media)); resetZoomAndTorchAfterMediaCaptured() }
-        else { onMediaCaptured?(.failure(.capturedPhotoCannotBeFetched)) }
-    }
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) { if let media = createPhotoMedia(photo) {
+        capturedMedia = media
+        resetZoomAndTorchAfterMediaCaptured()
+    }}
 }
 private extension CameraManager {
     func createPhotoMedia(_ photo: AVCapturePhoto) -> MCameraMedia? {
@@ -538,8 +532,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        let media = MCameraMedia(data: nil, url: outputFileURL)
-        onMediaCaptured?(.success(media))
+        capturedMedia = MCameraMedia(data: nil, url: outputFileURL)
         resetZoomAndTorchAfterMediaCaptured()
     }
 }
