@@ -11,6 +11,6 @@
 
 import SwiftUI
 
-protocol CameraPreview: View {
+public protocol CameraPreview: View {
     
 }

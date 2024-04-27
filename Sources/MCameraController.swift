@@ -75,34 +75,26 @@ private extension MCameraController {
 
 
 public extension MCameraController {
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
-
     func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.change(outputType: type) } }
     func cameraPosition(_ position: AVCaptureDevice.Position) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraPosition: position) } }
     func flashMode(_ flashMode: AVCaptureDevice.FlashMode) -> Self { setAndReturnSelf { $0.cameraManager.change(flashMode: flashMode) } }
     func gridVisible(_ visible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.change(isGridVisible: visible) } }
-
     func focusImage(_ focusImage: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImage: focusImage) } }
     func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageColor: color) } }
     func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 
-    
+    func errorScreen(_ builder: @escaping (CameraManager.Error) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
+    func mediaPreviewScreen(_ builder: @escaping (Binding<MCameraMedia?>, Namespace.ID) -> any CameraPreview) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
+    func cameraScreen(_ builder: @escaping (CameraManager, Binding<MCameraMedia?>, Namespace.ID) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
 
 
 
-    
-    func showCapturedMediaPreview() -> Self { self }
 
-    func changeErrorScreen() -> Self { self }
-    func changeMediaPreviewScreen() -> Self { self }
-    func changeCameraScreen() -> Self { self }
 
 
 
     func onImageCaptured() -> Self { self }
     func onVideoCaptured() -> Self { self }
-
     func onCloseButtonTap() -> Self { self }
-
-
 }
