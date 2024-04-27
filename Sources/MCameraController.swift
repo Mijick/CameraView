@@ -10,9 +10,10 @@
 
 
 import SwiftUI
+import AVFoundation
 
 public struct MCameraController: View {
-    @ObservedObject private var cameraManager: CameraManager = .init(config: .init())
+    @ObservedObject private var cameraManager: CameraManager = .init()
     @State private var capturedMedia: MCameraMedia? = nil
     @State private var cameraError: CameraManager.Error?
     @Namespace private var namespace
@@ -76,14 +77,14 @@ private extension MCameraController {
 public extension MCameraController {
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 
-    func outputType() -> Self { self }
-    func cameraPosition() -> Self { self }
-    func flashMode() -> Self { self }
-    func gridVisible() -> Self { self }
+    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.change(outputType: type) } }
+    func cameraPosition(_ position: AVCaptureDevice.Position) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraPosition: position) } }
+    func flashMode(_ flashMode: AVCaptureDevice.FlashMode) -> Self { setAndReturnSelf { $0.cameraManager.change(flashMode: flashMode) } }
+    func gridVisible(_ visible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.change(isGridVisible: visible) } }
 
-    func focusImage() -> Self { self }
-    func focusImageColor() -> Self { self }
-    func focusImageSize() -> Self { self }
+    func focusImage(_ focusImage: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImage: focusImage) } }
+    func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageColor: color) } }
+    func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
 
     
 
