@@ -16,6 +16,7 @@ struct DefaultCameraPreview: CameraPreview {
     let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
     let retakeMediaAction: () -> ()
+    let onMediaAcceptAction: () -> ()
     @State private var player: AVPlayer = .init()
     @State private var shouldShowContent: Bool = false
 
@@ -64,7 +65,7 @@ private extension DefaultCameraPreview {
         BottomButton(icon: "icon-cancel", primary: false, action: retakeMediaAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(icon: "icon-check", primary: true, action: onSaveButtonTap).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(icon: "icon-check", primary: true, action: onMediaAcceptAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 
@@ -75,9 +76,6 @@ private extension DefaultCameraPreview {
     func onVideoAppear(_ url: URL) {
         player = .init(url: url)
         player.play()
-    }
-    func onSaveButtonTap() {
-
     }
 }
 
