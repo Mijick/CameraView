@@ -88,7 +88,7 @@ fileprivate struct BottomButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel)
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }
 private extension BottomButton {

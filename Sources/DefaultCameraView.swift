@@ -239,7 +239,7 @@ fileprivate struct CaptureButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel).buttonStyle(BottomButtonStyle())
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }
 private extension CaptureButton {
@@ -284,7 +284,7 @@ fileprivate struct BottomButton: View {
 
     var body: some View {
         Button(action: action, label: createButtonLabel)
-            .buttonStyle(BottomButtonStyle())
+            .buttonStyle(ButtonScaleStyle())
             .transition(.scale.combined(with: .opacity))
     }
 }
@@ -322,7 +322,7 @@ fileprivate struct OutputTypeButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel).buttonStyle(BottomButtonStyle())
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }
 private extension OutputTypeButton {
@@ -350,12 +350,4 @@ private extension OutputTypeButton {
         case true: .yellow
         case false: .white.opacity(0.6)
     }}
-}
-
-// MARK: - BottomButtonStyle
-fileprivate struct BottomButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View { configuration
-        .label
-        .scaleEffect(configuration.isPressed ? 0.96 : 1)
-    }
 }
