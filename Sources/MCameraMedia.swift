@@ -11,7 +11,7 @@
 
 import Foundation
 
-public struct MCameraMedia {
+public struct MCameraMedia: Equatable {
     let data: Data?
     let url: URL?
 }

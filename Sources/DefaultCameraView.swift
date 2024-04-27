@@ -13,7 +13,6 @@ import SwiftUI
 
 struct DefaultCameraView: CameraView {
     @ObservedObject var cameraManager: CameraManager
-    var capturedMedia: Binding<MCameraMedia?>
     let namespace: Namespace.ID
 
 
