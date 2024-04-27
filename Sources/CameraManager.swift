@@ -16,16 +16,17 @@ import MijickTimer
 
 public class CameraManager: NSObject, ObservableObject {
     // MARK: Attributes
-    @Published private(set) var outputType: CameraOutputType
-    @Published private(set) var cameraPosition: AVCaptureDevice.Position
-    @Published private(set) var zoomFactor: CGFloat
-    @Published private(set) var flashMode: AVCaptureDevice.FlashMode
-    @Published private(set) var torchMode: AVCaptureDevice.TorchMode
-    @Published private(set) var mirrorOutput: Bool
-    @Published private(set) var isGridVisible: Bool
-    @Published private(set) var isRecording: Bool
-    @Published private(set) var recordingTime: MTime
-    @Published private(set) var deviceOrientation: AVCaptureVideoOrientation
+    @Published private(set) var capturedMedia: MCameraMedia? = nil
+    @Published private(set) var outputType: CameraOutputType = .photo
+    @Published private(set) var cameraPosition: AVCaptureDevice.Position = .back
+    @Published private(set) var zoomFactor: CGFloat = 1.0
+    @Published private(set) var flashMode: AVCaptureDevice.FlashMode = .off
+    @Published private(set) var torchMode: AVCaptureDevice.TorchMode = .off
+    @Published private(set) var mirrorOutput: Bool = false
+    @Published private(set) var isGridVisible: Bool = true
+    @Published private(set) var isRecording: Bool = false
+    @Published private(set) var recordingTime: MTime = .zero
+    @Published private(set) var deviceOrientation: AVCaptureVideoOrientation = .portrait
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
@@ -42,37 +43,44 @@ public class CameraManager: NSObject, ObservableObject {
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureMovieFileOutput?
 
-    // MARK: Completions
-    private var onMediaCaptured: ((Result<MCameraMedia, CameraManager.Error>) -> ())?
-
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
     private(set) var cameraGridView: GridView!
-    private(set) var cameraFocusView: UIImageView!
     private(set) var cameraBlurView: UIImageView!
+    private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
     // MARK: Others
+    private var motionManager: CMMotionManager = .init()
     private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
-    private var motionManager: CMMotionManager = .init()
+    private var orientationLocked: Bool = false
+}
 
+// MARK: - Changing Attributes
+extension CameraManager {
+    func change(outputType: CameraOutputType? = nil, cameraPosition: AVCaptureDevice.Position? = nil, flashMode: AVCaptureDevice.FlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
+        if let outputType { self.outputType = outputType }
+        if let cameraPosition { self.cameraPosition = cameraPosition }
+        if let flashMode { self.flashMode = flashMode }
+        if let isGridVisible { self.isGridVisible = isGridVisible }
+        if let focusImage { self.cameraFocusView.image = focusImage }
+        if let focusImageColor { self.cameraFocusView.tintColor = focusImageColor }
+        if let focusImageSize { self.cameraFocusView.frame.size = .init(width: focusImageSize, height: focusImageSize) }
+    }
+    func resetCapturedMedia() {
+        capturedMedia = nil
+    }
+    func resetZoomAndTorch() {
+        zoomFactor = 1.0
+        torchMode = .off
+    }
+}
 
-    // MARK: Initialiser
-    public init(config: CameraManagerConfig) {
-        self.outputType = config.outputType
-        self.cameraPosition = config.cameraPosition
-        self.zoomFactor = config.zoomFactor
-        self.flashMode = config.flashMode
-        self.torchMode = config.torchMode
-        self.mirrorOutput = config.mirrorOutput
-        self.isGridVisible = config.gridVisible
-        self.isRecording = false
-        self.recordingTime = .zero
-        self.deviceOrientation = .portrait
-
-        self.cameraFocusView = .init(image: config.focusImage)
-        self.cameraFocusView.tintColor = config.focusImageColor
-        self.cameraFocusView.frame.size = .init(width: config.focusImageSize, height: config.focusImageSize)
+// MARK: - Checking Camera Permissions
+extension CameraManager {
+    func checkPermissions() throws {
+        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied { throw Error.microphonePermissionsNotGranted }
+        if AVCaptureDevice.authorizationStatus(for: .video) == .denied { throw Error.cameraPermissionsNotGranted }
     }
 }
 
@@ -179,19 +187,47 @@ private extension CameraManager {
     }
 }
 
-// MARK: - Checking Camera Permissions
+// MARK: - Locking Camera Orientation
 extension CameraManager {
-    func checkPermissions() throws {
-        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied { throw Error.microphonePermissionsNotGranted }
-        if AVCaptureDevice.authorizationStatus(for: .video) == .denied { throw Error.cameraPermissionsNotGranted }
+    func lockOrientation() {
+        orientationLocked = true
     }
 }
 
-// MARK: - On Media Captured
+// MARK: - Camera Rotation
 extension CameraManager {
-    func onMediaCaptured(_ completionHandler: @escaping (Result<MCameraMedia, CameraManager.Error>) -> ()) {
-        onMediaCaptured = completionHandler
+    func fixCameraRotation() { if !orientationLocked { let orientation = UIDevice.current.orientation
+        if #available(iOS 17.0, *) { fixCameraRotationForIOS17(orientation) }
+        else { fixCameraRotationForOlderIOSVersions(orientation) }
+    }}
+}
+private extension CameraManager {
+    @available(iOS 17.0, *) func fixCameraRotationForIOS17(_ deviceOrientation: UIDeviceOrientation) { let rotationAngle = calculateRotationAngle(deviceOrientation)
+        if cameraLayer.connection?.isVideoRotationAngleSupported(rotationAngle) ?? false {
+            cameraLayer.connection?.videoRotationAngle = rotationAngle
+        }
     }
+    func fixCameraRotationForOlderIOSVersions(_ deviceOrientation: UIDeviceOrientation) { let videoOrientation = calculateVideoOrientation(deviceOrientation)
+        if cameraLayer.connection?.isVideoOrientationSupported ?? false {
+            cameraLayer.connection?.videoOrientation = videoOrientation
+        }
+    }
+}
+private extension CameraManager {
+    func calculateRotationAngle(_ deviceOrientation: UIDeviceOrientation) -> CGFloat { switch deviceOrientation {
+        case .portrait: 90
+        case .landscapeLeft: 0
+        case .landscapeRight: 180
+        case .portraitUpsideDown: 270
+        default: 0
+    }}
+    func calculateVideoOrientation(_ deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation { switch deviceOrientation {
+        case .portrait: .portrait
+        case .landscapeLeft: .landscapeRight
+        case .landscapeRight: .landscapeLeft
+        case .portraitUpsideDown: .portraitUpsideDown
+        default: .portrait
+    }}
 }
 
 // MARK: - Changing Output Type
@@ -253,11 +289,24 @@ private extension CameraManager {
 // MARK: - Camera Focusing
 extension CameraManager {
     func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(cameraPosition) {
-        insertNewCameraFocusView(touchPoint)
-        animateCameraFocusView()
+        removeCameraFocusAnimations()
+        insertCameraFocus(touchPoint)
 
         try setCameraFocus(touchPoint, device)
     }}
+}
+private extension CameraManager {
+    func removeCameraFocusAnimations() {
+        cameraFocusView.layer.removeAllAnimations()
+    }
+    func insertCameraFocus(_ touchPoint: CGPoint) { DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [self] in
+        insertNewCameraFocusView(touchPoint)
+        animateCameraFocusView()
+    }}
+    func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
+        let focusPoint = cameraLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
+        try configureCameraFocus(focusPoint, device)
+    }
 }
 private extension CameraManager {
     func insertNewCameraFocusView(_ touchPoint: CGPoint) {
@@ -274,12 +323,6 @@ private extension CameraManager {
             UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
         }
     }
-    func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
-        let focusPoint = cameraLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
-        try configureCameraFocus(focusPoint, device)
-    }
-}
-private extension CameraManager {
     func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws {
         try device.lockForConfiguration()
         setFocusPointOfInterest(focusPoint, device)
@@ -436,10 +479,9 @@ private extension CameraManager {
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        if let media = createPhotoMedia(photo) { onMediaCaptured?(.success(media)) }
-        else { onMediaCaptured?(.failure(.capturedPhotoCannotBeFetched)) }
-    }
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) { if let media = createPhotoMedia(photo) {
+        capturedMedia = media
+    }}
 }
 private extension CameraManager {
     func createPhotoMedia(_ photo: AVCapturePhoto) -> MCameraMedia? {
@@ -493,8 +535,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        let media = MCameraMedia(data: nil, url: outputFileURL)
-        onMediaCaptured?(.success(media))
+        capturedMedia = MCameraMedia(data: nil, url: outputFileURL)
     }
 }
 

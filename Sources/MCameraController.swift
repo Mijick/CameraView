@@ -10,41 +10,42 @@
 
 
 import SwiftUI
+import AVFoundation
 
 public struct MCameraController: View {
-    @Binding var capturedMedia: MCameraMedia?
-    let appDelegate: MApplicationDelegate.Type
-    @ObservedObject private var cameraManager: CameraManager = .init(config: .init())
+    @ObservedObject private var cameraManager: CameraManager = .init()
     @State private var cameraError: CameraManager.Error?
     @Namespace private var namespace
+    private var config: CameraConfig = .init()
 
 
-    public init(capturedMedia: Binding<MCameraMedia?>, appDelegate: MApplicationDelegate.Type) { self._capturedMedia = capturedMedia; self.appDelegate = appDelegate }
+    public init() {}
     public var body: some View {
         ZStack { switch cameraError {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
         }}
-        .animation(.defaultEase, value: capturedMedia == nil)
+        .animation(.defaultEase, value: cameraManager.capturedMedia)
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
+        .onChange(of: cameraManager.capturedMedia, perform: onMediaCaptured)
     }
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {
-        DefaultCameraErrorView(error: error)
+        config.cameraErrorView(error, config.onCloseController).erased()
     }
-    func createNormalStateView() -> some View { ZStack { switch capturedMedia {
-        case .some: createCameraPreview()
-        case nil: createCameraView()
+    func createNormalStateView() -> some View { ZStack { switch cameraManager.capturedMedia {
+        case .some(let media) where config.mediaPreviewView != nil: createCameraPreview(media)
+        default: createCameraView()
     }}}
 }
 private extension MCameraController {
-    func createCameraPreview() -> some View {
-        DefaultCameraPreview(media: $capturedMedia, namespace: namespace)
+    func createCameraPreview(_ media: MCameraMedia) -> some View {
+        config.mediaPreviewView?(media, namespace, cameraManager.resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
-        DefaultCameraView(cameraManager: cameraManager, capturedMedia: $capturedMedia, namespace: namespace)
+        config.cameraView(cameraManager, namespace, config.onCloseController).erased()
     }
 }
 
@@ -56,6 +57,12 @@ private extension MCameraController {
     func onDisappear() {
         unlockScreenOrientation()
     }
+    func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
+        switch config.mediaPreviewView != nil {
+            case true: cameraManager.resetZoomAndTorch()
+            case false: performAfterMediaCapturedAction()
+        }
+    }}
 }
 private extension MCameraController {
     func checkCameraPermissions() {
@@ -63,10 +70,43 @@ private extension MCameraController {
         catch { cameraError = error as? CameraManager.Error }
     }
     func lockScreenOrientation() {
-        appDelegate.orientationLock = .portrait
+        config.appDelegate?.orientationLock = .portrait
         UINavigationController.attemptRotationToDeviceOrientation()
     }
     func unlockScreenOrientation() {
-        appDelegate.orientationLock = .all
+        config.appDelegate?.orientationLock = .all
     }
+    func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.capturedMedia {
+        notifyUserOfMediaCaptured(capturedMedia)
+        config.afterMediaCaptured()
+    }}
+}
+private extension MCameraController {
+    func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
+        if let image = capturedMedia.data { config.onImageCaptured(image) }
+        else if let video = capturedMedia.url { config.onVideoCaptured(video) }
+    }
+}
+
+
+
+public extension MCameraController {
+    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.change(outputType: type) } }
+    func cameraPosition(_ position: AVCaptureDevice.Position) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraPosition: position) } }
+    func flashMode(_ flashMode: AVCaptureDevice.FlashMode) -> Self { setAndReturnSelf { $0.cameraManager.change(flashMode: flashMode) } }
+    func gridVisible(_ visible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.change(isGridVisible: visible) } }
+    func focusImage(_ focusImage: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImage: focusImage) } }
+    func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageColor: color) } }
+    func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
+
+    func errorScreen(_ builder: @escaping (CameraManager.Error, () -> ()) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
+    func mediaPreviewScreen(_ builder: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any CameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
+    func cameraScreen(_ builder: @escaping (CameraManager, Namespace.ID, () -> ()) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
+
+    func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
+    func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }
+
+    func afterMediaCaptured(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.afterMediaCaptured = action } }
+    func onCloseController(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.onCloseController = action } }
 }

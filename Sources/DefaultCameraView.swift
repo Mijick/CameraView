@@ -13,11 +13,11 @@ import SwiftUI
 
 struct DefaultCameraView: CameraView {
     @ObservedObject var cameraManager: CameraManager
-    var capturedMedia: Binding<MCameraMedia?>
     let namespace: Namespace.ID
+    let closeControllerAction: () -> ()
 
 
-    func createContent() -> some View {
+    var body: some View {
         VStack(spacing: 0) {
             createTopView()
             createContentView()
@@ -80,7 +80,7 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createCloseButton() -> some View {
-        CloseButton(action: onCloseButtonTap)
+        CloseButton(action: closeControllerAction)
             .rotationEffect(deviceOrientation.getAngle())
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(!isRecording)
@@ -157,9 +157,6 @@ private extension DefaultCameraView {
 }
 
 private extension DefaultCameraView {
-    func onCloseButtonTap() {
-        
-    }
     func changeGridVisibility() {
         changeGridVisibility(!showGrid)
     }
@@ -240,7 +237,7 @@ fileprivate struct CaptureButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel).buttonStyle(BottomButtonStyle())
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }
 private extension CaptureButton {
@@ -285,7 +282,7 @@ fileprivate struct BottomButton: View {
 
     var body: some View {
         Button(action: action, label: createButtonLabel)
-            .buttonStyle(BottomButtonStyle())
+            .buttonStyle(ButtonScaleStyle())
             .transition(.scale.combined(with: .opacity))
     }
 }
@@ -323,7 +320,7 @@ fileprivate struct OutputTypeButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel).buttonStyle(BottomButtonStyle())
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }
 private extension OutputTypeButton {
@@ -351,12 +348,4 @@ private extension OutputTypeButton {
         case true: .yellow
         case false: .white.opacity(0.6)
     }}
-}
-
-// MARK: - BottomButtonStyle
-fileprivate struct BottomButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View { configuration
-        .label
-        .scaleEffect(configuration.isPressed ? 0.96 : 1)
-    }
 }

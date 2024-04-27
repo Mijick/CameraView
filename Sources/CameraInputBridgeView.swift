@@ -47,6 +47,7 @@ fileprivate class UICameraInputView: UIViewController {
         super.viewDidLayoutSubviews()
 
         cameraManager.cameraLayer.frame = view.bounds
+        cameraManager.fixCameraRotation()
     }
 }
 

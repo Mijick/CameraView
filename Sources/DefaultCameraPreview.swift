@@ -13,8 +13,10 @@ import SwiftUI
 import AVKit
 
 struct DefaultCameraPreview: CameraPreview {
-    @Binding var media: MCameraMedia?
+    let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
+    let retakeMediaAction: () -> ()
+    let onMediaAcceptAction: () -> ()
     @State private var player: AVPlayer = .init()
     @State private var shouldShowContent: Bool = false
 
@@ -34,8 +36,8 @@ struct DefaultCameraPreview: CameraPreview {
 private extension DefaultCameraPreview {
     func createContentView() -> some View {
         ZStack {
-            if let data = media?.data, let image = UIImage(data: data) { createImageView(image) }
-            else if let video = media?.url { createVideoView(video) }
+            if let data = capturedMedia.data, let image = UIImage(data: data) { createImageView(image) }
+            else if let video = capturedMedia.url { createVideoView(video) }
             else { EmptyView() }
         }
         .opacity(shouldShowContent ? 1 : 0)
@@ -60,10 +62,10 @@ private extension DefaultCameraPreview {
         VideoPlayer(player: player).onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(icon: "icon-cancel", primary: false, action: onRetakeButtonTap).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(icon: "icon-cancel", primary: false, action: retakeMediaAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(icon: "icon-check", primary: true, action: onSaveButtonTap).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(icon: "icon-check", primary: true, action: onMediaAcceptAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 
@@ -74,12 +76,6 @@ private extension DefaultCameraPreview {
     func onVideoAppear(_ url: URL) {
         player = .init(url: url)
         player.play()
-    }
-    func onRetakeButtonTap() {
-        media = nil
-    }
-    func onSaveButtonTap() {
-
     }
 }
 
@@ -92,7 +88,7 @@ fileprivate struct BottomButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel)
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }
 private extension BottomButton {

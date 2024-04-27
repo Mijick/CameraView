@@ -1,5 +1,5 @@
 //
-//  CameraPreview.swift of MijickCameraView
+//  ButtonScaleStyle.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -11,6 +11,9 @@
 
 import SwiftUI
 
-public protocol CameraPreview: View {
-    
+struct ButtonScaleStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View { configuration
+        .label
+        .scaleEffect(configuration.isPressed ? 0.96 : 1)
+    }
 }
