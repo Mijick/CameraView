@@ -16,16 +16,16 @@ import MijickTimer
 
 public class CameraManager: NSObject, ObservableObject {
     // MARK: Attributes
-    @Published private(set) var outputType: CameraOutputType
-    @Published private(set) var cameraPosition: AVCaptureDevice.Position
-    @Published private(set) var zoomFactor: CGFloat
-    @Published private(set) var flashMode: AVCaptureDevice.FlashMode
-    @Published private(set) var torchMode: AVCaptureDevice.TorchMode
-    @Published private(set) var mirrorOutput: Bool
-    @Published private(set) var isGridVisible: Bool
-    @Published private(set) var isRecording: Bool
-    @Published private(set) var recordingTime: MTime
-    @Published private(set) var deviceOrientation: AVCaptureVideoOrientation
+    @Published private(set) var outputType: CameraOutputType = .photo
+    @Published private(set) var cameraPosition: AVCaptureDevice.Position = .back
+    @Published private(set) var zoomFactor: CGFloat = 1.0
+    @Published private(set) var flashMode: AVCaptureDevice.FlashMode = .off
+    @Published private(set) var torchMode: AVCaptureDevice.TorchMode = .off
+    @Published private(set) var mirrorOutput: Bool = false
+    @Published private(set) var isGridVisible: Bool = true
+    @Published private(set) var isRecording: Bool = false
+    @Published private(set) var recordingTime: MTime = .zero
+    @Published private(set) var deviceOrientation: AVCaptureVideoOrientation = .portrait
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
@@ -48,32 +48,26 @@ public class CameraManager: NSObject, ObservableObject {
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
     private(set) var cameraGridView: GridView!
-    private(set) var cameraFocusView: UIImageView!
     private(set) var cameraBlurView: UIImageView!
+    private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
     // MARK: Others
     private var motionManager: CMMotionManager = .init()
     private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
     private var orientationLocked: Bool = false
+}
 
-
-    // MARK: Initialiser
-    public init(config: CameraManagerConfig) {
-        self.outputType = config.outputType
-        self.cameraPosition = config.cameraPosition
-        self.zoomFactor = config.zoomFactor
-        self.flashMode = config.flashMode
-        self.torchMode = config.torchMode
-        self.mirrorOutput = config.mirrorOutput
-        self.isGridVisible = config.gridVisible
-        self.isRecording = false
-        self.recordingTime = .zero
-        self.deviceOrientation = .portrait
-
-        self.cameraFocusView = .init(image: config.focusImage)
-        self.cameraFocusView.tintColor = config.focusImageColor
-        self.cameraFocusView.frame.size = .init(width: config.focusImageSize, height: config.focusImageSize)
+// MARK: - Changing Initial Attributes
+extension CameraManager {
+    func change(outputType: CameraOutputType? = nil, cameraPosition: AVCaptureDevice.Position? = nil, flashMode: AVCaptureDevice.FlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
+        if let outputType { self.outputType = outputType }
+        if let cameraPosition { self.cameraPosition = cameraPosition }
+        if let flashMode { self.flashMode = flashMode }
+        if let isGridVisible { self.isGridVisible = isGridVisible }
+        if let focusImage { self.cameraFocusView.image = focusImage }
+        if let focusImageColor { self.cameraFocusView.tintColor = focusImageColor }
+        if let focusImageSize { self.cameraFocusView.frame.size = .init(width: focusImageSize, height: focusImageSize) }
     }
 }
 
