@@ -33,7 +33,7 @@ public struct MCameraController: View {
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {
-        config.cameraErrorView(error).erased()
+        config.cameraErrorView(error, config.onCloseController).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch cameraManager.capturedMedia {
         case .some(let media) where config.mediaPreviewView != nil: createCameraPreview(media)
@@ -45,7 +45,7 @@ private extension MCameraController {
         config.mediaPreviewView?(media, namespace, cameraManager.resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
-        config.cameraView(cameraManager, namespace).erased()
+        config.cameraView(cameraManager, namespace, config.onCloseController).erased()
     }
 }
 
@@ -100,9 +100,9 @@ public extension MCameraController {
     func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 
-    func errorScreen(_ builder: @escaping (CameraManager.Error) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
+    func errorScreen(_ builder: @escaping (CameraManager.Error, () -> ()) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
     func mediaPreviewScreen(_ builder: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any CameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
-    func cameraScreen(_ builder: @escaping (CameraManager, Namespace.ID) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
+    func cameraScreen(_ builder: @escaping (CameraManager, Namespace.ID, () -> ()) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
 
     func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
     func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }

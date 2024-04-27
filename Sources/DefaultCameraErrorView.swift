@@ -13,6 +13,7 @@ import SwiftUI
 
 struct DefaultCameraErrorView: CameraErrorView {
     let error: CameraManager.Error
+    let closeControllerAction: () -> ()
 
 
     var body: some View {
@@ -33,7 +34,7 @@ struct DefaultCameraErrorView: CameraErrorView {
 }
 private extension DefaultCameraErrorView {
     func createCloseButton() -> some View {
-        Button(action: onCloseButtonTap) {
+        Button(action: closeControllerAction) {
             Image("icon-cancel", bundle: .module)
                 .resizable()
                 .frame(width: 24, height: 24)
@@ -64,11 +65,5 @@ private extension DefaultCameraErrorView {
                 .font(.system(size: 15, weight: .bold))
                 .foregroundColor(Color.accent)
         }
-    }
-}
-
-private extension DefaultCameraErrorView {
-    func onCloseButtonTap() {
-
     }
 }

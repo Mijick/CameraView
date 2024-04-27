@@ -14,6 +14,7 @@ import SwiftUI
 struct DefaultCameraView: CameraView {
     @ObservedObject var cameraManager: CameraManager
     let namespace: Namespace.ID
+    let closeControllerAction: () -> ()
 
 
     var body: some View {
@@ -79,7 +80,7 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createCloseButton() -> some View {
-        CloseButton(action: onCloseButtonTap)
+        CloseButton(action: closeControllerAction)
             .rotationEffect(deviceOrientation.getAngle())
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(!isRecording)
@@ -156,9 +157,6 @@ private extension DefaultCameraView {
 }
 
 private extension DefaultCameraView {
-    func onCloseButtonTap() {
-        
-    }
     func changeGridVisibility() {
         changeGridVisibility(!showGrid)
     }
