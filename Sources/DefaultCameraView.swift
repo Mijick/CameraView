@@ -16,7 +16,7 @@ struct DefaultCameraView: CameraView {
     let namespace: Namespace.ID
 
 
-    func createContent() -> some View {
+    var body: some View {
         VStack(spacing: 0) {
             createTopView()
             createContentView()

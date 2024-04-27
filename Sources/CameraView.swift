@@ -14,13 +14,8 @@ import AVFoundation
 import MijickTimer
 
 public protocol CameraView: View {
-    associatedtype V: View
-
-    var capturedMedia: Binding<MCameraMedia?> { get set }
     var cameraManager: CameraManager { get }
     var namespace: Namespace.ID { get }
-
-    func createContent() -> V
 }
 
 // MARK: - Use-only View Methods
@@ -38,14 +33,6 @@ public extension CameraView {
     func changeTorchMode(_ mode: AVCaptureDevice.TorchMode) throws { try cameraManager.changeTorchMode(mode) }
     func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.changeMirrorMode(shouldMirror) }
     func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.changeGridVisibility(shouldShowGrid) }
-}
-
-// MARK: - Body Override
-public extension CameraView {
-    var body: some View { createContent().onAppear(perform: onAppear) }
-}
-private extension CameraView {
-    func onAppear() { cameraManager.onMediaCaptured { capturedMedia.wrappedValue = try? $0.get() } }
 }
 
 // MARK: - Flags
