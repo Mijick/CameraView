@@ -16,6 +16,9 @@ struct CameraConfig {
     var cameraView: (CameraManager, Binding<MCameraMedia?>, Namespace.ID) -> any CameraView = DefaultCameraView.init
     var mediaPreviewView: ((Binding<MCameraMedia?>, Namespace.ID) -> any CameraPreview)? = DefaultCameraPreview.init
 
-
     var appDelegate: MApplicationDelegate.Type?
+
+    var onImageCaptured: (Data) -> () = { _ in }
+    var onVideoCaptured: (URL) -> () = { _ in }
+    var onCloseButtonTap: () -> () = {}
 }

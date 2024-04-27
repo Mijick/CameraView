@@ -88,13 +88,7 @@ public extension MCameraController {
     func mediaPreviewScreen(_ builder: ((Binding<MCameraMedia?>, Namespace.ID) -> any CameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
     func cameraScreen(_ builder: @escaping (CameraManager, Binding<MCameraMedia?>, Namespace.ID) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
 
-
-
-
-
-
-
-    func onImageCaptured() -> Self { self }
-    func onVideoCaptured() -> Self { self }
-    func onCloseButtonTap() -> Self { self }
+    func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
+    func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }
+    func onCloseButtonTap(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.onCloseButtonTap = action } }
 }
