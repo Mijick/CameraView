@@ -59,7 +59,7 @@ private extension MCameraController {
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
-            case true: break
+            case true: cameraManager.resetZoomAndTorch()
             case false: notifyUserOfMediaCaptured()
         }
     }}
