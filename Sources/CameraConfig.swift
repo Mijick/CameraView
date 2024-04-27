@@ -20,5 +20,7 @@ struct CameraConfig {
 
     var onImageCaptured: (Data) -> () = { _ in }
     var onVideoCaptured: (URL) -> () = { _ in }
-    var onCloseButtonTap: () -> () = {}
+
+    var afterMediaCaptured: () -> () = {}
+    var onCloseController: () -> () = {}
 }

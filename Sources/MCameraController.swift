@@ -42,7 +42,7 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func createCameraPreview(_ media: MCameraMedia) -> some View {
-        config.mediaPreviewView?(media, namespace, cameraManager.resetCapturedMedia, notifyUserOfMediaCaptured).erased()
+        config.mediaPreviewView?(media, namespace, cameraManager.resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
         config.cameraView(cameraManager, namespace).erased()
@@ -60,7 +60,7 @@ private extension MCameraController {
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
             case true: cameraManager.resetZoomAndTorch()
-            case false: notifyUserOfMediaCaptured()
+            case false: performAfterMediaCapturedAction()
         }
     }}
 }
@@ -76,10 +76,16 @@ private extension MCameraController {
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
     }
-    func notifyUserOfMediaCaptured() { if let capturedMedia = cameraManager.capturedMedia {
-        if let image = capturedMedia.data { config.onImageCaptured(image) }
-        if let video = capturedMedia.url { config.onVideoCaptured(video) }
+    func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.capturedMedia {
+        notifyUserOfMediaCaptured(capturedMedia)
+        config.afterMediaCaptured()
     }}
+}
+private extension MCameraController {
+    func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
+        if let image = capturedMedia.data { config.onImageCaptured(image) }
+        else if let video = capturedMedia.url { config.onVideoCaptured(video) }
+    }
 }
 
 
@@ -100,5 +106,7 @@ public extension MCameraController {
 
     func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
     func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }
-    func onCloseButtonTap(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.onCloseButtonTap = action } }
+
+    func afterMediaCaptured(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.afterMediaCaptured = action } }
+    func onCloseController(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.onCloseController = action } }
 }
