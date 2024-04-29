@@ -12,7 +12,7 @@
 import SwiftUI
 import AVKit
 
-struct DefaultCameraPreview: CameraPreview {
+struct DefaultCameraPreview: MCameraPreview {
     let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
     let retakeMediaAction: () -> ()

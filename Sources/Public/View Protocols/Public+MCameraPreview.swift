@@ -1,5 +1,5 @@
 //
-//  CameraPreview.swift of MijickCameraView
+//  Public+MCameraPreview.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -11,6 +11,6 @@
 
 import SwiftUI
 
-public protocol CameraPreview: View {
+public protocol MCameraPreview: View {
     
 }

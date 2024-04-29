@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct DefaultCameraView: CameraView {
+struct DefaultCameraView: MCameraView {
     @ObservedObject var cameraManager: CameraManager
     let namespace: Namespace.ID
     let closeControllerAction: () -> ()

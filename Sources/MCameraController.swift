@@ -100,9 +100,9 @@ public extension MCameraController {
     func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 
-    func errorScreen(_ builder: @escaping (CameraManager.Error, () -> ()) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
-    func mediaPreviewScreen(_ builder: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any CameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
-    func cameraScreen(_ builder: @escaping (CameraManager, Namespace.ID, () -> ()) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
+    func errorScreen(_ builder: @escaping (CameraManager.Error, () -> ()) -> any MCameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
+    func mediaPreviewScreen(_ builder: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any MCameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
+    func cameraScreen(_ builder: @escaping (CameraManager, Namespace.ID, () -> ()) -> any MCameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
 
     func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
     func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }

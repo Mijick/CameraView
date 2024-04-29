@@ -1,5 +1,5 @@
 //
-//  CameraView.swift of MijickCameraView
+//  Public+MCameraView.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -13,18 +13,18 @@ import SwiftUI
 import AVFoundation
 import MijickTimer
 
-public protocol CameraView: View {
+public protocol MCameraView: View {
     var cameraManager: CameraManager { get }
     var namespace: Namespace.ID { get }
 }
 
 // MARK: - Use-only View Methods
-public extension CameraView {
+public extension MCameraView {
     func createCameraView() -> some View { CameraInputBridgeView(cameraManager).equatable() }
 }
 
 // MARK: - Use-only Logic Methods
-public extension CameraView {
+public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
     func changeOutput(_ type: CameraOutputType) throws { try cameraManager.changeOutputType(type) }
     func changeCamera(_ position: AVCaptureDevice.Position) throws { try cameraManager.changeCamera(position) }
@@ -36,7 +36,7 @@ public extension CameraView {
 }
 
 // MARK: - Flags
-public extension CameraView {
+public extension MCameraView {
     var outputType: CameraOutputType { cameraManager.outputType }
     var cameraPosition: AVCaptureDevice.Position { cameraManager.cameraPosition }
     var torchMode: AVCaptureDevice.TorchMode { cameraManager.torchMode }
