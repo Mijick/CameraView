@@ -15,7 +15,6 @@ let package = Package(
         .package(url: "https://github.com/Mijick/Timer", branch: "main")
     ],
     targets: [
-        .target(name: "MijickCameraView", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources"),
-        .testTarget(name: "MijickCameraViewTests", dependencies: ["MijickCameraView"], path: "Tests"),
+        .target(name: "MijickCameraView", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources")
     ]
 )
