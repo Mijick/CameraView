@@ -10,12 +10,11 @@
 
 
 import SwiftUI
-import AVFoundation
 
 public extension MCameraController {
     func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.change(outputType: type) } }
-    func cameraPosition(_ position: AVCaptureDevice.Position) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraPosition: position) } }
-    func flashMode(_ flashMode: AVCaptureDevice.FlashMode) -> Self { setAndReturnSelf { $0.cameraManager.change(flashMode: flashMode) } }
+    func cameraPosition(_ position: CameraPosition) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraPosition: position.get()) } }
+    func flashMode(_ flashMode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.change(flashMode: flashMode.get()) } }
     func gridVisible(_ visible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.change(isGridVisible: visible) } }
     func focusImage(_ focusImage: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImage: focusImage) } }
     func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageColor: color) } }

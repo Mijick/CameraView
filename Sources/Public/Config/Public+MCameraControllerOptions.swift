@@ -11,29 +11,27 @@
 
 import SwiftUI
 
+// MARK: Camera Output Type
 public enum CameraOutputType: CaseIterable {
     case photo
     case video
 }
 
+// MARK: Camera Position
 public enum CameraPosition: CaseIterable {
     case back
     case front
 }
 
+// MARK: Camera Flash Mode
 public enum CameraFlashMode: CaseIterable {
     case off
     case on
     case auto
 }
 
-public enum CameraTorchMode: CaseIterable {
-    case off
-    case on
-}
 
-
-
-public typealias ErrorViewBuilder = (CameraManager.Error, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView
-public typealias PreviewViewBuilder = (MCameraMedia, Namespace.ID, _ retakeAction: @escaping () -> (), _ acceptMediaAction: @escaping () -> ()) -> any MCameraPreview
+// MARK: - Typealiases
 public typealias CameraViewBuilder = (CameraManager, Namespace.ID, _ closeControllerAction: @escaping () -> ()) -> any MCameraView
+public typealias PreviewViewBuilder = (MCameraMedia, Namespace.ID, _ retakeAction: @escaping () -> (), _ acceptMediaAction: @escaping () -> ()) -> any MCameraPreview
+public typealias ErrorViewBuilder = (CameraManager.Error, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView
