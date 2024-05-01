@@ -1,5 +1,5 @@
 //
-//  MCameraControllerOptions.swift of MijickCameraView
+//  CameraUtilities++.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
