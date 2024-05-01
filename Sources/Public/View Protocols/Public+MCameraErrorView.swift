@@ -16,12 +16,12 @@ public protocol MCameraErrorView: View {
     var closeControllerAction: () -> () { get }
 }
 
+// MARK: - Helpers
 public extension MCameraErrorView {
     func openAppSettings() { if let url = URL(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.open(url)
     }}
 }
-
 public extension MCameraErrorView {
     func getDefaultTitle() -> String { switch error {
         case .microphonePermissionsNotGranted: NSLocalizedString("Enable Microphone Access", comment: "")
