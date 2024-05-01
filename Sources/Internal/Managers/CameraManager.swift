@@ -486,7 +486,7 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
 private extension CameraManager {
     func createPhotoMedia(_ photo: AVCapturePhoto) -> MCameraMedia? {
         guard let imageData = photo.fileDataRepresentation() else { return nil }
-        return .init(data: imageData, url: nil)
+        return .init(data: imageData)
     }
 }
 
@@ -535,7 +535,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        capturedMedia = MCameraMedia(data: nil, url: outputFileURL)
+        capturedMedia = MCameraMedia(data: outputFileURL)
     }
 }
 

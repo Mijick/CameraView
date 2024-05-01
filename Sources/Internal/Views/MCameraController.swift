@@ -82,7 +82,7 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.data { config.onImageCaptured(image) }
-        else if let video = capturedMedia.url { config.onVideoCaptured(video) }
+        if let image = capturedMedia.image { config.onImageCaptured(image) }
+        else if let video = capturedMedia.video { config.onVideoCaptured(video) }
     }
 }

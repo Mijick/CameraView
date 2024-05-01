@@ -36,8 +36,8 @@ struct DefaultCameraPreview: MCameraPreview {
 private extension DefaultCameraPreview {
     func createContentView() -> some View {
         ZStack {
-            if let data = capturedMedia.data, let image = UIImage(data: data) { createImageView(image) }
-            else if let video = capturedMedia.url { createVideoView(video) }
+            if let image = capturedMedia.image { createImageView(image) }
+            else if let video = capturedMedia.video { createVideoView(video) }
             else { EmptyView() }
         }
         .opacity(shouldShowContent ? 1 : 0)
@@ -52,8 +52,8 @@ private extension DefaultCameraPreview {
     }
 }
 private extension DefaultCameraPreview {
-    func createImageView(_ image: UIImage) -> some View {
-        Image(uiImage: image)
+    func createImageView(_ image: Data) -> some View {
+        Image(uiImage: .init(data: image) ?? .init())
             .resizable()
             .aspectRatio(contentMode: .fit)
             .ignoresSafeArea()
