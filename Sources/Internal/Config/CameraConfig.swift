@@ -12,9 +12,9 @@
 import SwiftUI
 
 struct CameraConfig {
-    var cameraErrorView: (CameraManager.Error, @escaping () -> ()) -> any MCameraErrorView = DefaultCameraErrorView.init
-    var cameraView: (CameraManager, Namespace.ID, @escaping () -> ()) -> any MCameraView = DefaultCameraView.init
-    var mediaPreviewView: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any MCameraPreview)? = DefaultCameraPreview.init
+    var cameraErrorView: ErrorViewBuilder = DefaultCameraErrorView.init
+    var cameraView: CameraViewBuilder = DefaultCameraView.init
+    var mediaPreviewView: PreviewViewBuilder? = DefaultCameraPreview.init
 
     var appDelegate: MApplicationDelegate.Type?
 
