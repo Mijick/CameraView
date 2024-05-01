@@ -15,8 +15,8 @@ import AVKit
 struct DefaultCameraPreview: MCameraPreview {
     let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
-    let retakeMediaAction: () -> ()
-    let onMediaAcceptAction: () -> ()
+    let retakeAction: () -> ()
+    let acceptMediaAction: () -> ()
     @State private var player: AVPlayer = .init()
     @State private var shouldShowContent: Bool = false
 
@@ -62,10 +62,10 @@ private extension DefaultCameraPreview {
         VideoPlayer(player: player).onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(icon: "icon-cancel", primary: false, action: retakeMediaAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(icon: "icon-cancel", primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(icon: "icon-check", primary: true, action: onMediaAcceptAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(icon: "icon-check", primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 

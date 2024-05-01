@@ -16,6 +16,7 @@ import MijickTimer
 public protocol MCameraView: View {
     var cameraManager: CameraManager { get }
     var namespace: Namespace.ID { get }
+    var closeControllerAction: () -> () { get }
 }
 
 // MARK: - Use-only View Methods

@@ -44,7 +44,7 @@ private extension DefaultCameraErrorView {
         .padding(.leading, 20)
     }
     func createTitle() -> some View {
-        Text(title)
+        Text(getDefaultTitle())
             .font(.system(size: 20, weight: .bold))
             .foregroundColor(Color.white)
             .multilineTextAlignment(.center)
@@ -52,7 +52,7 @@ private extension DefaultCameraErrorView {
             .padding(.horizontal, 60)
     }
     func createDescription() -> some View {
-        Text(description)
+        Text(getDefaultDescription())
             .font(.system(size: 15, weight: .regular))
             .foregroundColor(Color.white.opacity(0.7))
             .multilineTextAlignment(.center)

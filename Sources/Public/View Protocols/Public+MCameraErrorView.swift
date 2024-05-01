@@ -13,6 +13,7 @@ import SwiftUI
 
 public protocol MCameraErrorView: View {
     var error: CameraManager.Error { get }
+    var closeControllerAction: () -> () { get }
 }
 
 public extension MCameraErrorView {
@@ -22,12 +23,12 @@ public extension MCameraErrorView {
 }
 
 public extension MCameraErrorView {
-    var title: String { switch error {
+    func getDefaultTitle() -> String { switch error {
         case .microphonePermissionsNotGranted: NSLocalizedString("Enable Microphone Access", comment: "")
         case .cameraPermissionsNotGranted: NSLocalizedString("Enable Camera Access", comment: "")
         default: ""
     }}
-    var description: String { switch error {
+    func getDefaultDescription() -> String { switch error {
         case .microphonePermissionsNotGranted: Bundle.main.infoDictionary?["NSMicrophoneUsageDescription"] as? String ?? ""
         case .cameraPermissionsNotGranted: Bundle.main.infoDictionary?["NSCameraUsageDescription"] as? String ?? ""
         default: ""
