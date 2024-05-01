@@ -176,7 +176,7 @@ private extension DefaultCameraView {
         catch {}
     }
     func changeOutputType(_ type: CameraOutputType) {
-        do { try changeOutput(type) }
+        do { try changeOutputType(type) }
         catch {}
     }
 }

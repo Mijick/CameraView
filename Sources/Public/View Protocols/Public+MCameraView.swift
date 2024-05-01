@@ -26,7 +26,7 @@ public extension MCameraView {
 // MARK: - Use-only Logic Methods
 public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
-    func changeOutput(_ type: CameraOutputType) throws { try cameraManager.changeOutputType(type) }
+    func changeOutputType(_ type: CameraOutputType) throws { try cameraManager.changeOutputType(type) }
     func changeCamera(_ position: CameraPosition) throws { try cameraManager.changeCamera(position) }
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.changeZoomFactor(value) }
     func changeFlashMode(_ mode: CameraFlashMode) throws { try cameraManager.changeFlashMode(mode) }
