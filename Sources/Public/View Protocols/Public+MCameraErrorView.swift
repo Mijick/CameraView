@@ -1,5 +1,5 @@
 //
-//  CameraErrorView.swift of MijickCameraView
+//  Public+MCameraErrorView.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -11,23 +11,24 @@
 
 import SwiftUI
 
-public protocol CameraErrorView: View {
+public protocol MCameraErrorView: View {
     var error: CameraManager.Error { get }
+    var closeControllerAction: () -> () { get }
 }
 
-public extension CameraErrorView {
+// MARK: - Helpers
+public extension MCameraErrorView {
     func openAppSettings() { if let url = URL(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.open(url)
     }}
 }
-
-public extension CameraErrorView {
-    var title: String { switch error {
+public extension MCameraErrorView {
+    func getDefaultTitle() -> String { switch error {
         case .microphonePermissionsNotGranted: NSLocalizedString("Enable Microphone Access", comment: "")
         case .cameraPermissionsNotGranted: NSLocalizedString("Enable Camera Access", comment: "")
         default: ""
     }}
-    var description: String { switch error {
+    func getDefaultDescription() -> String { switch error {
         case .microphonePermissionsNotGranted: Bundle.main.infoDictionary?["NSMicrophoneUsageDescription"] as? String ?? ""
         case .cameraPermissionsNotGranted: Bundle.main.infoDictionary?["NSCameraUsageDescription"] as? String ?? ""
         default: ""

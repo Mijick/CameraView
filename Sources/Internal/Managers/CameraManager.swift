@@ -18,10 +18,10 @@ public class CameraManager: NSObject, ObservableObject {
     // MARK: Attributes
     @Published private(set) var capturedMedia: MCameraMedia? = nil
     @Published private(set) var outputType: CameraOutputType = .photo
-    @Published private(set) var cameraPosition: AVCaptureDevice.Position = .back
+    @Published private(set) var cameraPosition: CameraPosition = .back
     @Published private(set) var zoomFactor: CGFloat = 1.0
-    @Published private(set) var flashMode: AVCaptureDevice.FlashMode = .off
-    @Published private(set) var torchMode: AVCaptureDevice.TorchMode = .off
+    @Published private(set) var flashMode: CameraFlashMode = .off
+    @Published private(set) var torchMode: CameraTorchMode = .off
     @Published private(set) var mirrorOutput: Bool = false
     @Published private(set) var isGridVisible: Bool = true
     @Published private(set) var isRecording: Bool = false
@@ -58,7 +58,7 @@ public class CameraManager: NSObject, ObservableObject {
 
 // MARK: - Changing Attributes
 extension CameraManager {
-    func change(outputType: CameraOutputType? = nil, cameraPosition: AVCaptureDevice.Position? = nil, flashMode: AVCaptureDevice.FlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
+    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
         if let outputType { self.outputType = outputType }
         if let cameraPosition { self.cameraPosition = cameraPosition }
         if let flashMode { self.flashMode = flashMode }
@@ -162,9 +162,9 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func setupCameraInput(_ cameraPosition: AVCaptureDevice.Position) throws { switch cameraPosition {
+    func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
-        default: try setupInput(backCameraInput)
+        case .back: try setupInput(backCameraInput)
     }}
     func setupCameraOutput(_ outputType: CameraOutputType) throws { if let output = getOutput(outputType) {
         try setupOutput(output)
@@ -260,7 +260,7 @@ private extension CameraManager {
 
 // MARK: - Changing Camera Position
 extension CameraManager {
-    func changeCamera(_ newPosition: AVCaptureDevice.Position) throws { if newPosition != cameraPosition && !isChanging {
+    func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != cameraPosition && !isChanging {
         captureCurrentFrameAndDelay(.cameraPositionChange) { [self] in
             removeCameraInput(cameraPosition)
             try setupCameraInput(newPosition)
@@ -272,17 +272,17 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func removeCameraInput(_ position: AVCaptureDevice.Position) { if let input = getInput(position) {
+    func removeCameraInput(_ position: CameraPosition) { if let input = getInput(position) {
         captureSession.removeInput(input)
     }}
-    func updateCameraPosition(_ position: AVCaptureDevice.Position) {
+    func updateCameraPosition(_ position: CameraPosition) {
         cameraPosition = position
     }
 }
 private extension CameraManager {
-    func getInput(_ position: AVCaptureDevice.Position) -> AVCaptureInput? { switch position {
+    func getInput(_ position: CameraPosition) -> AVCaptureInput? { switch position {
         case .front: frontCameraInput
-        default: backCameraInput
+        case .back: backCameraInput
     }}
 }
 
@@ -351,9 +351,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func getDevice(_ position: AVCaptureDevice.Position) -> AVCaptureDevice? { switch position {
+    func getDevice(_ position: CameraPosition) -> AVCaptureDevice? { switch position {
         case .front: frontCamera
-        default: backCamera
+        case .back: backCamera
     }}
     func calculateZoomFactor(_ value: CGFloat, _ device: AVCaptureDevice) -> CGFloat {
         min(max(value, getMinZoomLevel(device)), getMaxZoomLevel(device))
@@ -378,30 +378,30 @@ private extension CameraManager {
 
 // MARK: - Changing Flash Mode
 extension CameraManager {
-    func changeFlashMode(_ mode: AVCaptureDevice.FlashMode) throws { if let device = getDevice(cameraPosition), device.hasFlash, !isChanging {
+    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getDevice(cameraPosition), device.hasFlash, !isChanging {
         updateFlashMode(mode)
     }}
 }
 private extension CameraManager {
-    func updateFlashMode(_ value: AVCaptureDevice.FlashMode) {
+    func updateFlashMode(_ value: CameraFlashMode) {
         flashMode = value
     }
 }
 
 // MARK: - Changing Torch Mode
 extension CameraManager {
-    func changeTorchMode(_ mode: AVCaptureDevice.TorchMode) throws { if let device = getDevice(cameraPosition), device.hasTorch, !isChanging {
+    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getDevice(cameraPosition), device.hasTorch, !isChanging {
         try changeTorchMode(device, mode)
         updateTorchMode(mode)
     }}
 }
 private extension CameraManager {
-    func changeTorchMode(_ device: AVCaptureDevice, _ mode: AVCaptureDevice.TorchMode) throws {
+    func changeTorchMode(_ device: AVCaptureDevice, _ mode: CameraTorchMode) throws {
         try device.lockForConfiguration()
-        device.torchMode = mode
+        device.torchMode = mode.get()
         device.unlockForConfiguration()
     }
-    func updateTorchMode(_ value: AVCaptureDevice.TorchMode) {
+    func updateTorchMode(_ value: CameraTorchMode) {
         torchMode = value
     }
 }
@@ -450,7 +450,7 @@ private extension CameraManager {
 private extension CameraManager {
     func getPhotoOutputSettings() -> AVCapturePhotoSettings {
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = flashMode
+        settings.flashMode = flashMode.get()
         return settings
     }
     func performCaptureAnimation() {
@@ -486,7 +486,7 @@ extension CameraManager: AVCapturePhotoCaptureDelegate {
 private extension CameraManager {
     func createPhotoMedia(_ photo: AVCapturePhoto) -> MCameraMedia? {
         guard let imageData = photo.fileDataRepresentation() else { return nil }
-        return .init(data: imageData, url: nil)
+        return .init(data: imageData)
     }
 }
 
@@ -535,7 +535,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        capturedMedia = MCameraMedia(data: nil, url: outputFileURL)
+        capturedMedia = MCameraMedia(data: outputFileURL)
     }
 }
 

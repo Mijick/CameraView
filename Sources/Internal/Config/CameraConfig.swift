@@ -12,15 +12,17 @@
 import SwiftUI
 
 struct CameraConfig {
-    var cameraErrorView: (CameraManager.Error, @escaping () -> ()) -> any CameraErrorView = DefaultCameraErrorView.init
-    var cameraView: (CameraManager, Namespace.ID, @escaping () -> ()) -> any CameraView = DefaultCameraView.init
-    var mediaPreviewView: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any CameraPreview)? = DefaultCameraPreview.init
+    // MARK: Default Views
+    var cameraErrorView: ErrorViewBuilder = DefaultCameraErrorView.init
+    var cameraView: CameraViewBuilder = DefaultCameraView.init
+    var mediaPreviewView: PreviewViewBuilder? = DefaultCameraPreview.init
 
-    var appDelegate: MApplicationDelegate.Type?
+    // MARK: To Lock Orientation
+    var appDelegate: MApplicationDelegate.Type? = nil
 
+    // MARK: Actions
     var onImageCaptured: (Data) -> () = { _ in }
     var onVideoCaptured: (URL) -> () = { _ in }
-
     var afterMediaCaptured: () -> () = {}
     var onCloseController: () -> () = {}
 }

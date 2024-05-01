@@ -12,11 +12,11 @@
 import SwiftUI
 import AVKit
 
-struct DefaultCameraPreview: CameraPreview {
+struct DefaultCameraPreview: MCameraPreview {
     let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
-    let retakeMediaAction: () -> ()
-    let onMediaAcceptAction: () -> ()
+    let retakeAction: () -> ()
+    let acceptMediaAction: () -> ()
     @State private var player: AVPlayer = .init()
     @State private var shouldShowContent: Bool = false
 
@@ -36,8 +36,8 @@ struct DefaultCameraPreview: CameraPreview {
 private extension DefaultCameraPreview {
     func createContentView() -> some View {
         ZStack {
-            if let data = capturedMedia.data, let image = UIImage(data: data) { createImageView(image) }
-            else if let video = capturedMedia.url { createVideoView(video) }
+            if let image = capturedMedia.image { createImageView(image) }
+            else if let video = capturedMedia.video { createVideoView(video) }
             else { EmptyView() }
         }
         .opacity(shouldShowContent ? 1 : 0)
@@ -52,8 +52,8 @@ private extension DefaultCameraPreview {
     }
 }
 private extension DefaultCameraPreview {
-    func createImageView(_ image: UIImage) -> some View {
-        Image(uiImage: image)
+    func createImageView(_ image: Data) -> some View {
+        Image(uiImage: .init(data: image) ?? .init())
             .resizable()
             .aspectRatio(contentMode: .fit)
             .ignoresSafeArea()
@@ -62,10 +62,10 @@ private extension DefaultCameraPreview {
         VideoPlayer(player: player).onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(icon: "icon-cancel", primary: false, action: retakeMediaAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(icon: "icon-cancel", primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(icon: "icon-check", primary: true, action: onMediaAcceptAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(icon: "icon-check", primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 

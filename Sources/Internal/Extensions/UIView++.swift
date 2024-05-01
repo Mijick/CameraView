@@ -11,6 +11,7 @@
 
 import SwiftUI
 
+// MARK: - Blurring View
 extension UIView {
     func applyBlurEffect(style: UIBlurEffect.Style, animationDuration: Double) {
         let blurEffectView = UIVisualEffectView()

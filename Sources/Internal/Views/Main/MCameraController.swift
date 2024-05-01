@@ -10,16 +10,14 @@
 
 
 import SwiftUI
-import AVFoundation
 
-public struct MCameraController: View {
-    @ObservedObject private var cameraManager: CameraManager = .init()
-    @State private var cameraError: CameraManager.Error?
-    @Namespace private var namespace
-    private var config: CameraConfig = .init()
+public struct MCameraController: View { public init() {}
+    @ObservedObject var cameraManager: CameraManager = .init()
+    @State var cameraError: CameraManager.Error?
+    @Namespace var namespace
+    var config: CameraConfig = .init()
 
-
-    public init() {}
+    
     public var body: some View {
         ZStack { switch cameraError {
             case .some(let error): createErrorStateView(error)
@@ -83,30 +81,7 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.data { config.onImageCaptured(image) }
-        else if let video = capturedMedia.url { config.onVideoCaptured(video) }
+        if let image = capturedMedia.image { config.onImageCaptured(image) }
+        else if let video = capturedMedia.video { config.onVideoCaptured(video) }
     }
-}
-
-
-
-public extension MCameraController {
-    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.change(outputType: type) } }
-    func cameraPosition(_ position: AVCaptureDevice.Position) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraPosition: position) } }
-    func flashMode(_ flashMode: AVCaptureDevice.FlashMode) -> Self { setAndReturnSelf { $0.cameraManager.change(flashMode: flashMode) } }
-    func gridVisible(_ visible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.change(isGridVisible: visible) } }
-    func focusImage(_ focusImage: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImage: focusImage) } }
-    func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageColor: color) } }
-    func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
-
-    func errorScreen(_ builder: @escaping (CameraManager.Error, () -> ()) -> any CameraErrorView) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
-    func mediaPreviewScreen(_ builder: ((MCameraMedia, Namespace.ID, @escaping () -> (), @escaping () -> ()) -> any CameraPreview)?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
-    func cameraScreen(_ builder: @escaping (CameraManager, Namespace.ID, () -> ()) -> any CameraView) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
-
-    func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
-    func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }
-
-    func afterMediaCaptured(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.afterMediaCaptured = action } }
-    func onCloseController(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.onCloseController = action } }
 }

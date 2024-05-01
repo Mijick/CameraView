@@ -13,5 +13,5 @@ import SwiftUI
 
 extension Animation {
     static var defaultSpring: Animation { .spring(response: 0.4, dampingFraction: 1, blendDuration: 0.1) }
-    static var defaultEase: Animation { .easeInOut(duration: 0.4) }
+    static var defaultEase: Animation { .easeInOut(duration: 0.32) }
 }

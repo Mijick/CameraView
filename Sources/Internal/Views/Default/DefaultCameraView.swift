@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct DefaultCameraView: CameraView {
+struct DefaultCameraView: MCameraView {
     @ObservedObject var cameraManager: CameraManager
     let namespace: Namespace.ID
     let closeControllerAction: () -> ()
@@ -136,7 +136,7 @@ private extension DefaultCameraView {
             .isActive(!isRecording)
     }
     func createOutputTypeButton(_ cameraOutputType: CameraOutputType) -> some View {
-        OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeOutputType(cameraOutputType) })
+        OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeCameraOutputType(cameraOutputType) })
             .rotationEffect(deviceOrientation.getAngle())
     }
 }
@@ -152,7 +152,7 @@ private extension DefaultCameraView {
     var flashButtonIcon: String { switch flashMode {
         case .off: "icon-flash-off"
         case .on: "icon-flash-on"
-        default: "icon-flash-auto"
+        case .auto: "icon-flash-auto"
     }}
 }
 
@@ -175,8 +175,8 @@ private extension DefaultCameraView {
         do { try changeCamera(cameraPosition.next()) }
         catch {}
     }
-    func changeOutputType(_ type: CameraOutputType) {
-        do { try changeOutput(type) }
+    func changeCameraOutputType(_ type: CameraOutputType) {
+        do { try changeOutputType(type) }
         catch {}
     }
 }
@@ -335,7 +335,7 @@ private extension OutputTypeButton {
     }
 }
 private extension OutputTypeButton {
-    var icon: String { "icon-" + type.rawValue }
+    var icon: String { "icon-" + .init(describing: type) }
     var iconSize: CGFloat { switch active {
         case true: 28
         case false: 22
