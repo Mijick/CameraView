@@ -1,5 +1,5 @@
 //
-//  CameraOutputType.swift of MijickCameraView
+//  Public+MCameraControllerOptions.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
