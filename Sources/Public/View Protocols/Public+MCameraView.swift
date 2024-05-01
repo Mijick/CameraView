@@ -44,10 +44,8 @@ public extension MCameraView {
     var mirrorOutput: Bool { cameraManager.mirrorOutput }
     var showGrid: Bool { cameraManager.isGridVisible }
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.deviceOrientation }
-
     var isRecording: Bool { cameraManager.isRecording }
     var recordingTime: MTime { cameraManager.recordingTime }
-
     var hasTorch: Bool { cameraManager.hasTorch }
     var hasFlash: Bool { cameraManager.hasFlash }
 }
