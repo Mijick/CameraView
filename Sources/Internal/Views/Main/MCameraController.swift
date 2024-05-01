@@ -11,14 +11,13 @@
 
 import SwiftUI
 
-public struct MCameraController: View {
+public struct MCameraController: View { public init() {}
     @ObservedObject var cameraManager: CameraManager = .init()
     @State var cameraError: CameraManager.Error?
     @Namespace var namespace
     var config: CameraConfig = .init()
 
     
-    public init() {}
     public var body: some View {
         ZStack { switch cameraError {
             case .some(let error): createErrorStateView(error)
