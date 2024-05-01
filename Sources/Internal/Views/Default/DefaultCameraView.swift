@@ -136,7 +136,7 @@ private extension DefaultCameraView {
             .isActive(!isRecording)
     }
     func createOutputTypeButton(_ cameraOutputType: CameraOutputType) -> some View {
-        OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeOutputType(cameraOutputType) })
+        OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeCameraOutputType(cameraOutputType) })
             .rotationEffect(deviceOrientation.getAngle())
     }
 }
@@ -175,7 +175,7 @@ private extension DefaultCameraView {
         do { try changeCamera(cameraPosition.next()) }
         catch {}
     }
-    func changeOutputType(_ type: CameraOutputType) {
+    func changeCameraOutputType(_ type: CameraOutputType) {
         do { try changeOutputType(type) }
         catch {}
     }
