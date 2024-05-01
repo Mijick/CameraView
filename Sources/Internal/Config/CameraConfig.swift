@@ -16,7 +16,7 @@ struct CameraConfig {
     var cameraView: CameraViewBuilder = DefaultCameraView.init
     var mediaPreviewView: PreviewViewBuilder? = DefaultCameraPreview.init
 
-    var appDelegate: MApplicationDelegate.Type?
+    var appDelegate: MApplicationDelegate.Type? = nil
 
     var onImageCaptured: (Data) -> () = { _ in }
     var onVideoCaptured: (URL) -> () = { _ in }
