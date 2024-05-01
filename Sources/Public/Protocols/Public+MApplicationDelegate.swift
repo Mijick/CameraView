@@ -1,5 +1,5 @@
 //
-//  MApplicationDelegate.swift of MijickCameraView
+//  Public+MApplicationDelegate.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
