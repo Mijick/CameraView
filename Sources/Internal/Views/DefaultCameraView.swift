@@ -152,7 +152,7 @@ private extension DefaultCameraView {
     var flashButtonIcon: String { switch flashMode {
         case .off: "icon-flash-off"
         case .on: "icon-flash-on"
-        default: "icon-flash-auto"
+        case .auto: "icon-flash-auto"
     }}
 }
 

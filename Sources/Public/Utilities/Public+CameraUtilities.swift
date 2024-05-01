@@ -1,5 +1,5 @@
 //
-//  Public+MCameraControllerOptions.swift of MijickCameraView
+//  Public+CameraUtilities.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -28,6 +28,12 @@ public enum CameraFlashMode: CaseIterable {
     case off
     case on
     case auto
+}
+
+// MARK: Camera Torch Mode
+public enum CameraTorchMode: CaseIterable {
+    case off
+    case on
 }
 
 

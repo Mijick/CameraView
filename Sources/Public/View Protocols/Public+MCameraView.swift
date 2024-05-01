@@ -27,10 +27,10 @@ public extension MCameraView {
 public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
     func changeOutput(_ type: CameraOutputType) throws { try cameraManager.changeOutputType(type) }
-    func changeCamera(_ position: AVCaptureDevice.Position) throws { try cameraManager.changeCamera(position) }
+    func changeCamera(_ position: CameraPosition) throws { try cameraManager.changeCamera(position) }
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.changeZoomFactor(value) }
-    func changeFlashMode(_ mode: AVCaptureDevice.FlashMode) throws { try cameraManager.changeFlashMode(mode) }
-    func changeTorchMode(_ mode: AVCaptureDevice.TorchMode) throws { try cameraManager.changeTorchMode(mode) }
+    func changeFlashMode(_ mode: CameraFlashMode) throws { try cameraManager.changeFlashMode(mode) }
+    func changeTorchMode(_ mode: CameraTorchMode) throws { try cameraManager.changeTorchMode(mode) }
     func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.changeMirrorMode(shouldMirror) }
     func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.changeGridVisibility(shouldShowGrid) }
 }
@@ -38,9 +38,9 @@ public extension MCameraView {
 // MARK: - Flags
 public extension MCameraView {
     var outputType: CameraOutputType { cameraManager.outputType }
-    var cameraPosition: AVCaptureDevice.Position { cameraManager.cameraPosition }
-    var torchMode: AVCaptureDevice.TorchMode { cameraManager.torchMode }
-    var flashMode: AVCaptureDevice.FlashMode { cameraManager.flashMode }
+    var cameraPosition: CameraPosition { cameraManager.cameraPosition }
+    var torchMode: CameraTorchMode { cameraManager.torchMode }
+    var flashMode: CameraFlashMode { cameraManager.flashMode }
     var mirrorOutput: Bool { cameraManager.mirrorOutput }
     var showGrid: Bool { cameraManager.isGridVisible }
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.deviceOrientation }

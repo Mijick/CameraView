@@ -27,3 +27,11 @@ extension CameraFlashMode {
         case .auto: .auto
     }}
 }
+
+// MARK: Camera Torch Mode
+extension CameraTorchMode {
+    func get() -> AVCaptureDevice.TorchMode { switch self {
+        case .off: .off
+        case .on: .on
+    }}
+}
