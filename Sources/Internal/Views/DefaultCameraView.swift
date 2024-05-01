@@ -335,7 +335,7 @@ private extension OutputTypeButton {
     }
 }
 private extension OutputTypeButton {
-    var icon: String { "icon-" + type.rawValue }
+    var icon: String { "icon-" + .init(describing: type) }
     var iconSize: CGFloat { switch active {
         case true: 28
         case false: 22
