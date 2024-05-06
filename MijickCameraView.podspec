@@ -5,11 +5,13 @@ Pod::Spec.new do |s|
     CameraView is a free and open-source library dedicated for SwiftUI that allows you to create fully customisable camera view in no time. Keep your code clean.
                             DESC
 
-    s.version               = '1.0.0'
+    s.version               = '1.0.1'
     s.ios.deployment_target = '14.0'
     s.swift_version         = '5.10'
 
-    s.source_files          = 'Sources/**/*'
+    s.source_files          = 'Sources/**/*.{swift}'
+    s.resources             = 'Sources/Internal/Assets/*.{xcassets, json}'
+    s.dependency            'MijickTimer'
     s.frameworks            = 'SwiftUI', 'Foundation', 'AVKit', 'AVFoundation', 'MijickTimer'
 
     s.homepage              = 'https://github.com/Mijick/CameraView.git'
