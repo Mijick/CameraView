@@ -124,7 +124,35 @@ struct CameraView: View {
 ```
 
 
-### 3. (Optional) Block screen rotation for MCameraController
+### 3. Declare `onImageCaptured`, `onVideoCaptured`, `afterMediaCaptured` and `onCloseController`
+The above functions define what happens after a given action and are optional; for example, if your application only captures images, you don't need to declare onVideoCaptured and so on.
+```Swift
+struct CameraView: View {
+
+    (...)
+   
+    var body: some View {
+        MCameraController()
+            .onImageCaptured { data in
+                print("IMAGE CAPTURED")
+            }
+            .onVideoCaptured { url in
+                print("VIDEO CAPTURED")
+            }
+            .afterMediaCaptured {
+                print("IMAGE OR VIDEO WAS PROCESSED. WHAT'S NEXT?")
+            }
+            .onCloseController {
+                print("CLOSE THE CONTROLLER")
+            }
+    }
+
+    (...)
+}
+```
+
+
+### 4. (Optional) Block screen rotation for MCameraController
 CameraView library by Mijick, allows you to lock the screen rotation for `MCameraController`, even if a **device rotation is unlocked**.
 To achieve it, create an AppDelegate class conforming to `MApplicationDelegate`, declare `@UIApplicationDelegateAdaptor` in `@main struct` and set `lockOrientation(AppDelegate.self)` for `MCameraController`.
 ```Swift
@@ -153,34 +181,6 @@ struct CameraView: View {
     var body: some View {
         MCameraController()
             .lockOrientation(AppDelegate.self)
-    }
-
-    (...)
-}
-```
-
-
-### 4. Declare `onImageCaptured`, `onVideoCaptured`, `afterMediaCaptured` and `onCloseController`
-The above functions define what happens after a given action and are optional; for example, if your application only captures images, you don't need to declare onVideoCaptured and so on.
-```Swift
-struct CameraView: View {
-
-    (...)
-   
-    var body: some View {
-        MCameraController()
-            .onImageCaptured { data in
-                print("IMAGE CAPTURED")
-            }
-            .onVideoCaptured { url in
-                print("VIDEO CAPTURED")
-            }
-            .afterMediaCaptured {
-                print("IMAGE OR VIDEO WAS PROCESSED. WHAT'S NEXT?")
-            }
-            .onCloseController {
-                print("CLOSE THE CONTROLLER")
-            }
     }
 
     (...)
