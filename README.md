@@ -261,6 +261,64 @@ struct CameraView: View {
 You can change the appearance of the `CameraPreview` by creating a new structure, conforming to `MCameraPreview` and using the `mediaPreviewScreen` modifier.
 <br>
 **Note:** To disable the preview of captured media, use the mediaPreviewScreen modifier with nil as the argument.
+```Swift
+struct CustomCameraPreview: MCameraPreview {
+    let capturedMedia: MijickCameraView.MCameraMedia
+    let namespace: Namespace.ID
+    let retakeAction: () -> ()
+    let acceptMediaAction: () -> ()
+
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            createContentView()
+            Spacer()
+            createButtons()
+        }
+    }
+}
+private extension CustomCameraPreview {
+    func createContentView() -> some View { ZStack {
+        if let image = capturedMedia.image { createImageView(image) }
+        else { EmptyView() }
+    }}
+    func createButtons() -> some View {
+        HStack(spacing: 24) {
+            createRetakeButton()
+            createSaveButton()
+        }
+    }
+}
+private extension CustomCameraPreview {
+    func createImageView(_ image: Data) -> some View {
+        Image(uiImage: .init(data: image) ?? .init())
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .ignoresSafeArea()
+    }
+    func createRetakeButton() -> some View {
+        Button(action: retakeAction) { Text("Retake") }
+    }
+    func createSaveButton() -> some View {
+        Button(action: acceptMediaAction) { Text("Save") }
+    }
+}
+```
+
+```Swift
+struct CameraView: View {
+
+    (...)
+   
+    var body: some View {
+        MCameraController()
+            .mediaPreviewScreen(CustomCameraPreview.init)
+    }
+
+    (...)
+}
+```
 
 
 
