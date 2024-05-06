@@ -188,7 +188,27 @@ struct CameraView: View {
 ```
 
 
-### 5. (Optional) 
+### 5. (Optional) Change the initial camera settings
+You can change the initial camera settings using the modifiers from the list below:
+```Swift
+struct CameraView: View {
+
+    (...)
+   
+    var body: some View {
+        MCameraController()
+            .outputType(.video)
+            .cameraPosition(.front)
+            .flashMode(.auto)
+            .gridVisible(false)
+            .focusImage(.init(named: "icon-focus")!)
+            .focusImageColor(.blue)
+            .focusImageSize(120)
+    }
+
+    (...)
+}
+```
 
 
 <br>
