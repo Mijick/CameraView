@@ -56,3 +56,66 @@ CameraView by Mijick is a powerful, open-source library that simplifies the came
 * **Covers the entire process.** Our library both presents the camera controller, asks for permissions, displays an error view if permissions are not granted, and shows the result of the capture in a separate view (if you wish, of course).
 * **Improves code quality.** Allows you to focus on the most important things, hiding implementation details inside this powerful library.
 * **Designed for SwiftUI.** As we developed the library, we utilized SwiftUI's capabilities to offer you a powerful tool for streamlining your implementation process.
+
+
+<br>
+
+# Getting Started
+### ✋ Requirements
+
+| **Platforms** | **Minimum Swift Version** |
+|:----------|:----------|
+| iOS 14+ | 5.10 |
+
+### ⏳ Installation
+
+#### [Swift Package Manager][spm]
+Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the Swift compiler.
+
+Once you have your Swift package set up, adding PopupView as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+
+```Swift
+dependencies: [
+    .package(url: "https://github.com/Mijick/CameraView.git", branch(“main”))
+]
+```
+
+#### [Cocoapods][cocoapods]   
+Cocoapods is a dependency manager for Swift and Objective-C Cocoa projects that helps to scale them elegantly.
+
+Installation steps:
+- Install CocoaPods 1.10.0 (or later)
+- [Generate CocoaPods][generate_cocoapods] for your project
+```Swift
+    pod init
+```
+- Add CocoaPods dependency into your `Podfile`   
+```Swift
+    pod 'MijickCameraView'
+```
+- Install dependency and generate `.xcworkspace` file
+```Swift
+    pod install
+```
+- Use new XCode project file `.xcworkspace`
+<br>
+
+
+
+
+
+[MIT]: https://en.wikipedia.org/wiki/MIT_License
+[SPM]: https://www.swift.org/package-manager
+
+[Demo]: https://github.com/Mijick/CameraView-Demo
+[License]: https://github.com/Mijick/CameraView/blob/main/LICENSE
+
+[spm]: https://www.swift.org/package-manager/
+[cocoapods]: https://cocoapods.org/
+[generate_cocoapods]: https://github.com/square/cocoapods-generate
+
+[PopupView]: https://github.com/Mijick/PopupView
+[Navigattie]: https://github.com/Mijick/Navigattie
+[CalendarView]: https://github.com/Mijick/CalendarView 
+[GridView]: https://github.com/Mijick/GridView
+[Timer]: https://github.com/Mijick/Timer
