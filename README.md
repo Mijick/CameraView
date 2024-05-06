@@ -160,6 +160,9 @@ struct CameraView: View {
 ```
 
 
+### 4. Declare `onImageCaptured`, `onVideoCaptured`, `afterMediaCaptured` and `onCloseController`
+
+
 
 <br>
 
