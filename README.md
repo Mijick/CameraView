@@ -257,7 +257,11 @@ struct CameraView: View {
 ```
 
 
-### 7. (Optional) Change CameraPreview UI
+### 7. (Optional) Change (or disable) CameraPreview UI
+You can change the appearance of the `CameraPreview` by creating a new structure, conforming to `MCameraPreview` and using the `mediaPreviewScreen` modifier.
+<br>
+**Note:** To disable the preview of captured media, use the mediaPreviewScreen modifier with nil as the argument.
+
 
 
 
