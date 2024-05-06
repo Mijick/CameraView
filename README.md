@@ -41,3 +41,18 @@
         <img alt="Stargazers" src="https://github.com/Mijick/Assets/blob/main/CameraView/Labels/Stars.svg"/>
     </a>                                                                                                               
 </p>
+
+<p align="center">
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/PopupView/GIFs/PopupView-Bottom.gif" width="30%"/>
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/PopupView/GIFs/PopupView-Centre.gif" width="30%"/>
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/PopupView/GIFs/PopupView-Top.gif" width="30%"/>
+</p>
+
+<br>
+
+
+CameraView by Mijick is a powerful, open-source library that simplifies the camera presentation process, making it super fast and totally customisable, allowing you to focus on the important elements of your project while hiding the technical complexities.
+* **Customise your UI completely.** Use a clean and modern UI we designed or change it completely within minutes!
+* **Covers the entire process.** Our library both presents the camera controller, asks for permissions, displays an error view if permissions are not granted, and shows the result of the capture in a separate view (if you wish, of course).
+* **Improves code quality.** Allows you to focus on the most important things, hiding implementation details inside this powerful library.
+* **Designed for SwiftUI.** As we developed the library, we utilized SwiftUI's capabilities to offer you a powerful tool for streamlining your implementation process.
