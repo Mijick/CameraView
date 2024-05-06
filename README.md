@@ -127,7 +127,8 @@ struct CameraView: View {
 
 
 ### 3. (Optional) Block screen rotation for MCameraController
-CameraView library by Mijick, allows you to lock the screen rotation for `MCameraController`, even if a **device rotation is unlocked**. 
+CameraView library by Mijick, allows you to lock the screen rotation for `MCameraController`, even if a **device rotation is unlocked**.
+To achieve it, create an AppDelegate class conforming to `MApplicationDelegate`, declare `@UIApplicationDelegateAdaptor` in `@main struct` and set `lockOrientation(AppDelegate.self)` for `MCameraController`.
 
 
 
