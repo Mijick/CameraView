@@ -323,6 +323,31 @@ struct CameraView: View {
 
 ### 8. (Optional) Change CameraErrorView UI
 You can change the appearance of the `CameraErrorView` by creating a new structure, conforming to `MCameraErrorView` and using the `errorScreen` modifier.
+```Swift
+struct CustomCameraErrorView: MCameraErrorView {
+    let error: CameraManager.Error
+    let closeControllerAction: () -> ()
+
+
+    var body: some View {
+        Button(action: openAppSettings) { Text("Open Settings") }
+    }
+}
+```
+
+```Swift
+struct CameraView: View {
+
+    (...)
+   
+    var body: some View {
+        MCameraController()
+            .errorScreen(CustomCameraErrorView.init)
+    }
+
+    (...)
+}
+```
 
 
 <br>
