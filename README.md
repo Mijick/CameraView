@@ -127,6 +127,7 @@ struct CameraView: View {
 
 
 ### 3. (Optional) Block screen rotation for MCameraController
+CameraView library by Mijick, allows you to lock the screen rotation for `MCameraController`, even if a **device rotation is unlocked**. 
 
 
 
