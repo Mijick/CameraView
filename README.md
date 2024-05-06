@@ -212,6 +212,53 @@ struct CameraView: View {
 
 
 ### 6. (Optional) Change CameraView UI
+You can change the appearance of the `CameraView` by creating a new structure, conforming to `MCameraView` and using the `cameraScreen` modifier.
+```Swift
+struct CustomCameraView: MCameraView {
+    @ObservedObject var cameraManager: MijickCameraView.CameraManager
+    let namespace: Namespace.ID
+    let closeControllerAction: () -> ()
+
+
+    var body: some View {
+        VStack(spacing: 0) {
+            createNavigationBar()
+            createCameraView()
+            createCaptureButton()
+        }
+    }
+}
+private extension CustomCameraView {
+    func createNavigationBar() -> some View {
+        Text("This is a Custom Camera View")
+            .padding(.top, 12)
+            .padding(.bottom, 12)
+    }
+    func createCaptureButton() -> some View {
+        Button(action: captureOutput) { Text("Click to capture") }
+            .padding(.top, 12)
+            .padding(.bottom, 12)
+    }
+}
+```
+
+```Swift
+struct CameraView: View {
+
+    (...)
+   
+    var body: some View {
+        MCameraController()
+            .cameraScreen(CustomCameraView.init)
+    }
+
+    (...)
+}
+```
+
+
+### 7. (Optional)
+
 
 
 <br>
