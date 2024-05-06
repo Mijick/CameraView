@@ -102,7 +102,11 @@ Installation steps:
 
 
 # Usage
-### 1. (Optional) 
+### 1. Modify the info.plist file
+Open the info.plist file of your project. Add two new keys: `Privacy - Microphone Usage Description` and `Privacy - Camera Usage Description`. Value will be displayed by default in the error screen when the user denies access to one of the above permissions.
+
+![CleanShot 2024-05-06 at 13 41 25](https://github.com/Mijick/CameraView/assets/23524947/5da706bd-1d16-49f9-8e58-3a416872bb68)
+
 
 
 
