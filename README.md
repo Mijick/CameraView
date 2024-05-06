@@ -126,7 +126,7 @@ struct CameraView: View {
 ```
 
 
-### 3. (Optional) Block screen rotation for the MCameraController
+### 3. (Optional) Block screen rotation for MCameraController
 
 
 
