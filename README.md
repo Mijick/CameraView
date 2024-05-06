@@ -110,8 +110,20 @@ Open the info.plist file of your project. Add two new keys: `Privacy - Microphon
 
 ### 2. Insert MCameraController into the selected view
 MCameraController contains three screens - `CameraView`, `CameraPreview` (which can be turned off) and `CameraErrorView`. Therefore, we advise that there should be no other elements in the view where you declare `MCameraController`. We’ve designed this system around the experience and needs of ourselves and the developers we know. However, if your preferences are different, we are happy to meet your expectations and adapt our library. Share them with us by creating an [issue][AddIssue] for this project.
+```Swift
+import MijickCameraView
 
+struct CameraView: View {
 
+    (...)
+   
+    var body: some View {
+        MCameraController()
+    }
+
+    (...)
+}
+```
 
 
 
