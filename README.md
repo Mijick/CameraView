@@ -161,7 +161,31 @@ struct CameraView: View {
 
 
 ### 4. Declare `onImageCaptured`, `onVideoCaptured`, `afterMediaCaptured` and `onCloseController`
+The above functions define what happens after a given action and are optional; for example, if your application only captures images, you don't need to declare onVideoCaptured and so on.
+```Swift
+struct CameraView: View {
 
+    (...)
+   
+    var body: some View {
+        MCameraController()
+            .onImageCaptured { data in
+                print("IMAGE CAPTURED")
+            }
+            .onVideoCaptured { url in
+                print("VIDEO CAPTURED")
+            }
+            .afterMediaCaptured {
+                print("IMAGE OR VIDEO WAS PROCESSED. WHAT'S NEXT?")
+            }
+            .onCloseController {
+                print("CLOSE THE CONTROLLER")
+            }
+    }
+
+    (...)
+}
+```
 
 
 <br>
