@@ -9,7 +9,9 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = '14.0'
     s.swift_version         = '5.10'
 
-    s.source_files          = 'Sources/**/*'
+    s.source_files          = 'Sources/**/*.{swift}'
+    s.resources             = 'Sources/Internal/Assets/*.{xcassets, json}'
+    s.dependency            'MijickTimer'
     s.frameworks            = 'SwiftUI', 'Foundation', 'AVKit', 'AVFoundation', 'MijickTimer'
 
     s.homepage              = 'https://github.com/Mijick/CameraView.git'
