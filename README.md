@@ -211,7 +211,7 @@ struct CameraView: View {
 ```
 
 
-### 6. (Optional) 
+### 6. (Optional) Change CameraView UI
 
 
 <br>
