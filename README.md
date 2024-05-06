@@ -321,6 +321,8 @@ struct CameraView: View {
 ```
 
 
+### 8. (Optional) Change CameraErrorView UI
+You can change the appearance of the `CameraErrorView` by creating a new structure, conforming to `MCameraErrorView` and using the `errorScreen` modifier.
 
 
 <br>
