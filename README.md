@@ -257,7 +257,7 @@ struct CameraView: View {
 ```
 
 
-### 7. (Optional)
+### 7. (Optional) Change CameraPreview UI
 
 
 
