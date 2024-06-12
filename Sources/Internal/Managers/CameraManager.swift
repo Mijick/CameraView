@@ -141,12 +141,13 @@ private extension CameraManager {
 
         cameraMetalView.contentMode = .scaleAspectFill
         cameraMetalView.clipsToBounds = true
-        cameraMetalView.addAsSubview(to: cameraView)
+        cameraMetalView.addToParent(cameraView)
     }
     func initialiseCameraGridView() {
         cameraGridView = .init()
-        cameraGridView.addAsSubview(to: cameraView)
+        cameraGridView.backgroundColor = .clear
         cameraGridView.alpha = isGridVisible ? 1 : 0
+        cameraGridView.addToParent(cameraView)
     }
     func initialiseDevices() {
         frontCamera = .default(.builtInWideAngleCamera, for: .video, position: .front)
