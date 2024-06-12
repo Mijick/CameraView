@@ -11,6 +11,7 @@
 
 import SwiftUI
 import AVKit
+import MetalKit
 import CoreMotion
 import MijickTimer
 
@@ -43,8 +44,14 @@ public class CameraManager: NSObject, ObservableObject {
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureMovieFileOutput?
 
+    // MARK: Metal
+    private var metalDevice: MTLDevice!
+    private var metalCommandQueue: MTLCommandQueue!
+    private var ciContext: CIContext!
+
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
+    private(set) var cameraMetalView: MTKView!
     private(set) var cameraGridView: GridView!
     private(set) var cameraBlurView: UIImageView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
@@ -88,8 +95,10 @@ extension CameraManager {
 extension CameraManager {
     func setup(in cameraView: UIView) throws {
         initialiseCaptureSession()
+        initialiseMetal()
         initialiseCameraLayer(cameraView)
-        initialiseCameraGridView(cameraView)
+        initialiseCameraMetalView()
+        initialiseCameraGridView()
         initialiseDevices()
         initialiseInputs()
         initialiseOutputs()
@@ -108,13 +117,26 @@ private extension CameraManager {
     func initialiseCaptureSession() {
         captureSession = .init()
     }
+    func initialiseMetal() {
+        metalDevice = MTLCreateSystemDefaultDevice()
+        metalCommandQueue = metalDevice.makeCommandQueue()
+        ciContext = CIContext(mtlDevice: metalDevice)
+    }
     func initialiseCameraLayer(_ cameraView: UIView) {
         cameraLayer = .init(session: captureSession)
         cameraLayer.videoGravity = .resizeAspectFill
         
         cameraView.layer.addSublayer(cameraLayer)
     }
-    func initialiseCameraGridView(_ cameraView: UIView) {
+    func initialiseCameraMetalView() {
+        cameraMetalView = .init()
+        cameraMetalView.delegate = self
+        cameraMetalView.device = metalDevice
+        cameraMetalView.isPaused = true
+        cameraMetalView.enableSetNeedsDisplay = false
+        cameraMetalView.framebufferOnly = false
+    }
+    func initialiseCameraGridView() {
         cameraGridView = .init()
         cameraGridView.addAsSubview(to: cameraView)
         cameraGridView.alpha = isGridVisible ? 1 : 0
@@ -643,3 +665,19 @@ public extension CameraManager { enum Error: Swift.Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
 }}
+
+
+
+
+
+extension CameraManager: MTKViewDelegate {
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        <#code#>
+    }
+    
+    public func draw(in view: MTKView) {
+        <#code#>
+    }
+    
+
+}
