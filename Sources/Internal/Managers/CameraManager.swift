@@ -20,6 +20,7 @@ public class CameraManager: NSObject, ObservableObject {
     @Published private(set) var capturedMedia: MCameraMedia? = nil
     @Published private(set) var outputType: CameraOutputType = .photo
     @Published private(set) var cameraPosition: CameraPosition = .back
+    @Published private(set) var filters: [CIFilter] = []
     @Published private(set) var zoomFactor: CGFloat = 1.0
     @Published private(set) var flashMode: CameraFlashMode = .off
     @Published private(set) var torchMode: CameraTorchMode = .off
@@ -48,6 +49,7 @@ public class CameraManager: NSObject, ObservableObject {
     private var metalDevice: MTLDevice!
     private var metalCommandQueue: MTLCommandQueue!
     private var ciContext: CIContext!
+    private var currentFrame: CIImage?
 
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
@@ -125,7 +127,8 @@ private extension CameraManager {
     func initialiseCameraLayer(_ cameraView: UIView) {
         cameraLayer = .init(session: captureSession)
         cameraLayer.videoGravity = .resizeAspectFill
-        
+        cameraLayer.isHidden = true
+
         cameraView.layer.addSublayer(cameraLayer)
     }
     func initialiseCameraMetalView() {
@@ -135,6 +138,10 @@ private extension CameraManager {
         cameraMetalView.isPaused = true
         cameraMetalView.enableSetNeedsDisplay = false
         cameraMetalView.framebufferOnly = false
+
+        cameraMetalView.contentMode = .scaleAspectFill
+        cameraMetalView.clipsToBounds = true
+        cameraMetalView.addAsSubview(to: cameraView)
     }
     func initialiseCameraGridView() {
         cameraGridView = .init()
@@ -587,24 +594,49 @@ private extension CameraManager {
     }
 }
 
-// MARK: - Output Type / Camera Change Animations
+// MARK: - Capturing Live Frames
 extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { if lastAction != .none {
-        let snapshot = createSnapshot(sampleBuffer)
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch lastAction {
+        case .none: changeDisplayedFrame(sampleBuffer)
+        default: presentCameraAnimation()
+    }}
+}
+private extension CameraManager {
+    func changeDisplayedFrame(_ sampleBuffer: CMSampleBuffer) { if let cvImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+        let currentFrame = captureCurrentFrame(cvImageBuffer)
+        let currentFrameWithFiltersApplied = applyFiltersToCurrentFrame(currentFrame)
+
+        redrawCameraView(currentFrameWithFiltersApplied ?? currentFrame)
+    }}
+    func presentCameraAnimation() {
+        let snapshot = createSnapshot()
 
         insertBlurView(snapshot)
         animateBlurFlip()
         lastAction = .none
-    }}
+    }
 }
 private extension CameraManager {
-    func createSnapshot(_ sampleBuffer: CMSampleBuffer?) -> UIImage? {
-        guard let sampleBuffer,
-              let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        else { return nil }
+    func captureCurrentFrame(_ cvImageBuffer: CVImageBuffer) -> CIImage {
+        let currentFrame = CIImage(cvImageBuffer: cvImageBuffer)
+        return currentFrame.oriented(frameOrientation)
+    }
+    func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage? {
+        var currentFrameWithFiltersApplied: CIImage? = currentFrame
+        filters.forEach {
+            $0.setValue(currentFrameWithFiltersApplied, forKey: kCIInputImageKey)
+            currentFrameWithFiltersApplied = $0.outputImage
+        }
+        return currentFrameWithFiltersApplied
+    }
+    func redrawCameraView(_ frame: CIImage) {
+        currentFrame = frame
+        cameraMetalView.draw()
+    }
+    func createSnapshot() -> UIImage? {
+        guard let currentFrame else { return nil }
 
-        let ciImage = CIImage(cvPixelBuffer: imageBuffer)
-        let image = UIImage(ciImage: ciImage, scale: UIScreen.main.scale, orientation: blurImageOrientation)
+        let image = UIImage(ciImage: currentFrame)
         return image
     }
     func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
@@ -625,7 +657,7 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    var blurImageOrientation: UIImage.Orientation { cameraPosition == .back ? .right : .leftMirrored }
+    var frameOrientation: CGImagePropertyOrientation { cameraPosition == .back ? .right : .leftMirrored }
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
@@ -633,6 +665,33 @@ private extension CameraManager {
 }
 private extension CameraManager {
     enum LastAction { case cameraPositionChange, outputTypeChange, mediaCapture, none }
+}
+
+// MARK: - Metal Handlers
+extension CameraManager: MTKViewDelegate {
+    public func draw(in view: MTKView) {
+        guard let commandBuffer = metalCommandQueue.makeCommandBuffer(),
+              let ciImage = currentFrame,
+              let currentDrawable = view.currentDrawable
+        else { return }
+
+        changeDrawableSize(view, ciImage)
+        renderView(view, currentDrawable, commandBuffer, ciImage)
+        commitBuffer(currentDrawable, commandBuffer)
+    }
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
+}
+private extension CameraManager {
+    func changeDrawableSize(_ view: MTKView, _ ciImage: CIImage) {
+        view.drawableSize = ciImage.extent.size
+    }
+    func renderView(_ view: MTKView, _ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer, _ ciImage: CIImage) {
+        ciContext.render(ciImage, to: currentDrawable.texture, commandBuffer: commandBuffer, bounds: .init(origin: .zero, size: view.drawableSize), colorSpace: CGColorSpaceCreateDeviceRGB())
+    }
+    func commitBuffer(_ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer) {
+        commandBuffer.present(currentDrawable)
+        commandBuffer.commit()
+    }
 }
 
 // MARK: - Modifiers
@@ -665,19 +724,3 @@ public extension CameraManager { enum Error: Swift.Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
 }}
-
-
-
-
-
-extension CameraManager: MTKViewDelegate {
-    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        <#code#>
-    }
-    
-    public func draw(in view: MTKView) {
-        <#code#>
-    }
-    
-
-}
