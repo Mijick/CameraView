@@ -89,7 +89,7 @@ extension CameraManager {
     func setup(in cameraView: UIView) throws {
         initialiseCaptureSession()
         initialiseCameraLayer(cameraView)
-        initialiseCameraGridView()
+        initialiseCameraGridView(cameraView)
         initialiseDevices()
         initialiseInputs()
         initialiseOutputs()
@@ -114,7 +114,7 @@ private extension CameraManager {
         
         cameraView.layer.addSublayer(cameraLayer)
     }
-    func initialiseCameraGridView() {
+    func initialiseCameraGridView(_ cameraView: UIView) {
         cameraGridView = .init()
         cameraGridView.addAsSubview(to: cameraView)
         cameraGridView.alpha = isGridVisible ? 1 : 0
