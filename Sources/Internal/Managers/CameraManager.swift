@@ -67,9 +67,10 @@ public class CameraManager: NSObject, ObservableObject {
 
 // MARK: - Changing Attributes
 extension CameraManager {
-    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
+    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, filters: [CIFilter]? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
         if let outputType { self.outputType = outputType }
         if let cameraPosition { self.cameraPosition = cameraPosition }
+        if let filters { self.filters = filters }
         if let flashMode { self.flashMode = flashMode }
         if let isGridVisible { self.isGridVisible = isGridVisible }
         if let focusImage { self.cameraFocusView.image = focusImage }
