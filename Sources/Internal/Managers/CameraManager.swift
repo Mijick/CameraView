@@ -20,7 +20,7 @@ public class CameraManager: NSObject, ObservableObject {
     @Published private(set) var capturedMedia: MCameraMedia? = nil
     @Published private(set) var outputType: CameraOutputType = .photo
     @Published private(set) var cameraPosition: CameraPosition = .back
-    @Published private(set) var filters: [CIFilter] = []
+    @Published private(set) var cameraFilters: [CIFilter] = []
     @Published private(set) var zoomFactor: CGFloat = 1.0
     @Published private(set) var flashMode: CameraFlashMode = .off
     @Published private(set) var torchMode: CameraTorchMode = .off
@@ -67,10 +67,10 @@ public class CameraManager: NSObject, ObservableObject {
 
 // MARK: - Changing Attributes
 extension CameraManager {
-    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, filters: [CIFilter]? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
+    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
         if let outputType { self.outputType = outputType }
         if let cameraPosition { self.cameraPosition = cameraPosition }
-        if let filters { self.filters = filters }
+        if let cameraFilters { self.cameraFilters = cameraFilters }
         if let flashMode { self.flashMode = flashMode }
         if let isGridVisible { self.isGridVisible = isGridVisible }
         if let focusImage { self.cameraFocusView.image = focusImage }
@@ -314,6 +314,15 @@ private extension CameraManager {
     func getInput(_ position: CameraPosition) -> AVCaptureInput? { switch position {
         case .front: frontCameraInput
         case .back: backCameraInput
+    }}
+}
+
+// MARK: - Changing Camera Filters
+extension CameraManager {
+    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != cameraFilters {
+        
+
+
     }}
 }
 
@@ -625,7 +634,7 @@ private extension CameraManager {
     }
     func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage? {
         var currentFrameWithFiltersApplied: CIImage? = currentFrame
-        filters.forEach {
+        cameraFilters.forEach {
             $0.setValue(currentFrameWithFiltersApplied, forKey: kCIInputImageKey)
             currentFrameWithFiltersApplied = $0.outputImage
         }

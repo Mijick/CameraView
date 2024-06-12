@@ -58,7 +58,7 @@ public extension MCameraController {
 public extension MCameraController {
     /// Changes the camera filters. Applies to both camera live preview and camera output.
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func changeCameraFilters(_ filters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.change(filters: filters) } }
+    func changeCameraFilters(_ cameraFilters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraFilters: cameraFilters) } }
 }
 
 // MARK: - Actions
