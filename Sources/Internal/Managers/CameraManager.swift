@@ -517,14 +517,8 @@ private extension CameraManager {
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) { if let media = createPhotoMedia(photo) {
-        capturedMedia = media
-    }}
-}
-private extension CameraManager {
-    func createPhotoMedia(_ photo: AVCapturePhoto) -> MCameraMedia? {
-        guard let imageData = photo.fileDataRepresentation() else { return nil }
-        return .init(data: imageData)
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
+        capturedMedia = .create(imageData: photo, filters: cameraFilters)
     }
 }
 
@@ -573,7 +567,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        capturedMedia = MCameraMedia(data: outputFileURL)
+        capturedMedia = .create(videoData: outputFileURL, filters: cameraFilters)
     }
 }
 
@@ -615,7 +609,7 @@ private extension CameraManager {
         let currentFrame = captureCurrentFrame(cvImageBuffer)
         let currentFrameWithFiltersApplied = applyFiltersToCurrentFrame(currentFrame)
 
-        redrawCameraView(currentFrameWithFiltersApplied ?? currentFrame)
+        redrawCameraView(currentFrameWithFiltersApplied)
     }}
     func presentCameraAnimation() {
         let snapshot = createSnapshot()
@@ -630,13 +624,8 @@ private extension CameraManager {
         let currentFrame = CIImage(cvImageBuffer: cvImageBuffer)
         return currentFrame.oriented(frameOrientation)
     }
-    func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage? {
-        var currentFrameWithFiltersApplied: CIImage? = currentFrame
-        cameraFilters.forEach {
-            $0.setValue(currentFrameWithFiltersApplied, forKey: kCIInputImageKey)
-            currentFrameWithFiltersApplied = $0.outputImage
-        }
-        return currentFrameWithFiltersApplied
+    func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage {
+        currentFrame.applyingFilters(cameraFilters)
     }
     func redrawCameraView(_ frame: CIImage) {
         currentFrame = frame
