@@ -64,7 +64,7 @@ public extension MCameraController {
 // MARK: - Actions
 public extension MCameraController {
     /// Sets the action to be triggered when the photo is taken. Passes the captured content as an argument
-    func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
+    func onImageCaptured(_ action: @escaping (CIImage) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
 
     /// Sets the action to be triggered when the video is taken. Passes the captured content as an argument
     func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }
