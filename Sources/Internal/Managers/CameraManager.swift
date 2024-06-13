@@ -320,9 +320,7 @@ private extension CameraManager {
 // MARK: - Changing Camera Filters
 extension CameraManager {
     func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != cameraFilters {
-        
-
-
+        cameraFilters = newCameraFilters
     }}
 }
 
