@@ -46,8 +46,7 @@ extension MCameraMedia {
 }
 private extension MCameraMedia {
     static func prepareCIImage(_ ciImage: CIImage, _ filters: [CIFilter]) -> CIImage {
-        let ciImageWithFiltersApplied = ciImage.applyingFilters(filters)
-        return ciImageWithFiltersApplied
+        ciImage.applyingFilters(filters)
     }
     static func prepareCGImage(_ ciImage: CIImage) -> CGImage? {
         CIContext().createCGImage(ciImage, from: ciImage.extent)
