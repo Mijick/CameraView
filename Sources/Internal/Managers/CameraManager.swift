@@ -518,7 +518,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        capturedMedia = .create(imageData: photo, filters: cameraFilters)
+        capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: cameraFilters)
     }
 }
 
