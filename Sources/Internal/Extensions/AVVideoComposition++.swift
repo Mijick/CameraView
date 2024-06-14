@@ -13,9 +13,9 @@ import AVKit
 
 // MARK: - Applying Filters
 extension AVVideoComposition {
-    static func applyFilters(to asset: AVAsset, applyFiltersAction: (AVAsynchronousCIImageFilteringRequest) -> (), completionHandler: (AVVideoComposition, (any Error)?)) {
-        if #available(iOS 16.0, *) {}
-        else {}
+    static func applyFilters(to asset: AVAsset, applyFiltersAction: @escaping (AVAsynchronousCIImageFilteringRequest) -> (), completionHandler: @escaping (AVVideoComposition?, (any Error)?) -> ()) {
+        if #available(iOS 16.0, *) { applyFiltersNewWay(asset, applyFiltersAction, completionHandler) }
+        else { applyFiltersOldWay(asset, applyFiltersAction, completionHandler) }
     }
 }
 private extension AVVideoComposition {
@@ -27,10 +27,4 @@ private extension AVVideoComposition {
         let composition = AVVideoComposition(asset: asset, applyingCIFiltersWithHandler: applyFiltersAction)
         completionHandler(composition, nil)
     }
-}
-private extension AVVideoComposition {
-
-}
-private extension AVVideoComposition {
-
 }
