@@ -530,14 +530,12 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func startRecording() {
-        let url = prepareUrlForVideoRecording()
-
+    func startRecording() { if let url = prepareUrlForVideoRecording() {
         configureOutput(videoOutput)
         videoOutput?.startRecording(to: url, recordingDelegate: self)
         updateIsRecording(true)
         startRecordingTimer()
-    }
+    }}
     func stopRecording() {
         videoOutput?.stopRecording()
         updateIsRecording(false)
@@ -545,12 +543,8 @@ private extension CameraManager {
     }
 }
 private extension CameraManager {
-    func prepareUrlForVideoRecording() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let fileUrl = paths[0].appendingPathComponent("output.mp4")
-
-        try? FileManager.default.removeItem(at: fileUrl)
-        return fileUrl
+    func prepareUrlForVideoRecording() -> URL? {
+        FileManager.prepareURLForVideoOutput()
     }
     func updateIsRecording(_ value: Bool) {
         isRecording = value
@@ -566,9 +560,9 @@ private extension CameraManager {
 }
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
-    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        capturedMedia = .create(videoData: outputFileURL, filters: cameraFilters)
-    }
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task { @MainActor in
+        capturedMedia = await .create(videoData: outputFileURL, filters: cameraFilters)
+    }}
 }
 
 // MARK: - Handling Device Rotation
