@@ -204,6 +204,7 @@ struct CameraView: View {
             .focusImage(.init(named: "icon-focus")!)
             .focusImageColor(.blue)
             .focusImageSize(120)
+            .changeCameraFilters([.init(name: "CISepiaTone")!])
     }
 
     (...)
