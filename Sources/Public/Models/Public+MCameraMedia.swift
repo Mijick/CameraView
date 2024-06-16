@@ -60,6 +60,8 @@ private extension MCameraMedia {
 // MARK: - Video Initialiser
 extension MCameraMedia {
     static func create(videoData: URL, filters: [CIFilter]) async -> Self? { await withCheckedContinuation { task in
+        if filters.isEmpty { return task.resume(returning: .init(data: videoData)) }
+
         let asset = AVAsset(url: videoData)
         AVVideoComposition.applyFilters(
             to: asset,
