@@ -12,6 +12,7 @@
 import SwiftUI
 import AVKit
 
+// MARK: - To Angle
 extension AVCaptureVideoOrientation {
     func getAngle() -> Angle { switch self {
         case .portrait: .degrees(0)
@@ -19,5 +20,16 @@ extension AVCaptureVideoOrientation {
         case .landscapeRight: .degrees(90)
         case .portraitUpsideDown: .degrees(180)
         default: .degrees(0)
+    }}
+}
+
+// MARK: - To UIImage.Orientation
+extension AVCaptureVideoOrientation {
+    func toImageOrientation() -> UIImage.Orientation { switch self {
+        case .portrait: .downMirrored
+        case .landscapeLeft: .leftMirrored
+        case .landscapeRight: .rightMirrored
+        case .portraitUpsideDown: .upMirrored
+        default: .up
     }}
 }

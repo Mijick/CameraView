@@ -18,6 +18,10 @@
 
 <p align="center">
     <a href="https://github.com/Mijick/CameraView-Demo" rel="nofollow">Try demo we prepared</a>
+    |
+    <a href="https://github.com/orgs/Mijick/projects/12" rel="nofollow">Roadmap</a>
+    |
+    <a href="https://github.com/Mijick/CameraView/issues/new" rel="nofollow">Propose a new feature</a>
 </p>
 
 <br>
@@ -204,6 +208,7 @@ struct CameraView: View {
             .focusImage(.init(named: "icon-focus")!)
             .focusImageColor(.blue)
             .focusImageSize(120)
+            .changeCameraFilters([.init(name: "CISepiaTone")!])
     }
 
     (...)

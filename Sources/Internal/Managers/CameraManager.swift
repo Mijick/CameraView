@@ -11,6 +11,7 @@
 
 import SwiftUI
 import AVKit
+import MetalKit
 import CoreMotion
 import MijickTimer
 
@@ -19,6 +20,7 @@ public class CameraManager: NSObject, ObservableObject {
     @Published private(set) var capturedMedia: MCameraMedia? = nil
     @Published private(set) var outputType: CameraOutputType = .photo
     @Published private(set) var cameraPosition: CameraPosition = .back
+    @Published private(set) var cameraFilters: [CIFilter] = []
     @Published private(set) var zoomFactor: CGFloat = 1.0
     @Published private(set) var flashMode: CameraFlashMode = .off
     @Published private(set) var torchMode: CameraTorchMode = .off
@@ -43,8 +45,16 @@ public class CameraManager: NSObject, ObservableObject {
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureMovieFileOutput?
 
+    // MARK: Metal
+    private var metalDevice: MTLDevice!
+    private var metalCommandQueue: MTLCommandQueue!
+    private var ciContext: CIContext!
+    private var currentFrame: CIImage?
+    private var firstRecordedFrame: UIImage?
+
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
+    private(set) var cameraMetalView: MTKView!
     private(set) var cameraGridView: GridView!
     private(set) var cameraBlurView: UIImageView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
@@ -58,9 +68,10 @@ public class CameraManager: NSObject, ObservableObject {
 
 // MARK: - Changing Attributes
 extension CameraManager {
-    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
+    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
         if let outputType { self.outputType = outputType }
         if let cameraPosition { self.cameraPosition = cameraPosition }
+        if let cameraFilters { self.cameraFilters = cameraFilters }
         if let flashMode { self.flashMode = flashMode }
         if let isGridVisible { self.isGridVisible = isGridVisible }
         if let focusImage { self.cameraFocusView.image = focusImage }
@@ -88,7 +99,9 @@ extension CameraManager {
 extension CameraManager {
     func setup(in cameraView: UIView) throws {
         initialiseCaptureSession()
+        initialiseMetal()
         initialiseCameraLayer(cameraView)
+        initialiseCameraMetalView()
         initialiseCameraGridView()
         initialiseDevices()
         initialiseInputs()
@@ -108,16 +121,35 @@ private extension CameraManager {
     func initialiseCaptureSession() {
         captureSession = .init()
     }
+    func initialiseMetal() {
+        metalDevice = MTLCreateSystemDefaultDevice()
+        metalCommandQueue = metalDevice.makeCommandQueue()
+        ciContext = CIContext(mtlDevice: metalDevice)
+    }
     func initialiseCameraLayer(_ cameraView: UIView) {
         cameraLayer = .init(session: captureSession)
         cameraLayer.videoGravity = .resizeAspectFill
-        
+        cameraLayer.isHidden = true
+
         cameraView.layer.addSublayer(cameraLayer)
+    }
+    func initialiseCameraMetalView() {
+        cameraMetalView = .init()
+        cameraMetalView.delegate = self
+        cameraMetalView.device = metalDevice
+        cameraMetalView.isPaused = true
+        cameraMetalView.enableSetNeedsDisplay = false
+        cameraMetalView.framebufferOnly = false
+
+        cameraMetalView.contentMode = .scaleAspectFill
+        cameraMetalView.clipsToBounds = true
+        cameraMetalView.addToParent(cameraView)
     }
     func initialiseCameraGridView() {
         cameraGridView = .init()
-        cameraGridView.addAsSubview(to: cameraView)
+        cameraGridView.backgroundColor = .clear
         cameraGridView.alpha = isGridVisible ? 1 : 0
+        cameraGridView.addToParent(cameraView)
     }
     func initialiseDevices() {
         frontCamera = .default(.builtInWideAngleCamera, for: .video, position: .front)
@@ -283,6 +315,13 @@ private extension CameraManager {
     func getInput(_ position: CameraPosition) -> AVCaptureInput? { switch position {
         case .front: frontCameraInput
         case .back: backCameraInput
+    }}
+}
+
+// MARK: - Changing Camera Filters
+extension CameraManager {
+    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != cameraFilters {
+        cameraFilters = newCameraFilters
     }}
 }
 
@@ -479,14 +518,8 @@ private extension CameraManager {
 }
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) { if let media = createPhotoMedia(photo) {
-        capturedMedia = media
-    }}
-}
-private extension CameraManager {
-    func createPhotoMedia(_ photo: AVCapturePhoto) -> MCameraMedia? {
-        guard let imageData = photo.fileDataRepresentation() else { return nil }
-        return .init(data: imageData)
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
+        capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: cameraFilters)
     }
 }
 
@@ -498,27 +531,31 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func startRecording() {
-        let url = prepareUrlForVideoRecording()
-
+    func startRecording() { if let url = prepareUrlForVideoRecording() {
         configureOutput(videoOutput)
         videoOutput?.startRecording(to: url, recordingDelegate: self)
+        storeLastFrame()
         updateIsRecording(true)
         startRecordingTimer()
-    }
+    }}
     func stopRecording() {
+        presentLastFrame()
         videoOutput?.stopRecording()
         updateIsRecording(false)
         stopRecordingTimer()
     }
 }
 private extension CameraManager {
-    func prepareUrlForVideoRecording() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let fileUrl = paths[0].appendingPathComponent("output.mp4")
+    func prepareUrlForVideoRecording() -> URL? {
+        FileManager.prepareURLForVideoOutput()
+    }
+    func storeLastFrame() {
+        guard let texture = cameraMetalView.currentDrawable?.texture,
+              let ciImage = CIImage(mtlTexture: texture, options: nil),
+              let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent)
+        else { return }
 
-        try? FileManager.default.removeItem(at: fileUrl)
-        return fileUrl
+        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: deviceOrientation.toImageOrientation())
     }
     func updateIsRecording(_ value: Bool) {
         isRecording = value
@@ -528,15 +565,18 @@ private extension CameraManager {
             .publish(every: 1) { [self] in recordingTime = $0 }
             .start()
     }
+    func presentLastFrame() {
+        capturedMedia = .init(data: firstRecordedFrame)
+    }
     func stopRecordingTimer() {
         timer.reset()
     }
 }
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
-    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) {
-        capturedMedia = MCameraMedia(data: outputFileURL)
-    }
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task { @MainActor in
+        capturedMedia = await .create(videoData: outputFileURL, filters: cameraFilters)
+    }}
 }
 
 // MARK: - Handling Device Rotation
@@ -565,24 +605,44 @@ private extension CameraManager {
     }
 }
 
-// MARK: - Output Type / Camera Change Animations
+// MARK: - Capturing Live Frames
 extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { if lastAction != .none {
-        let snapshot = createSnapshot(sampleBuffer)
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch lastAction {
+        case .none: changeDisplayedFrame(sampleBuffer)
+        default: presentCameraAnimation()
+    }}
+}
+private extension CameraManager {
+    func changeDisplayedFrame(_ sampleBuffer: CMSampleBuffer) { if let cvImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+        let currentFrame = captureCurrentFrame(cvImageBuffer)
+        let currentFrameWithFiltersApplied = applyFiltersToCurrentFrame(currentFrame)
+
+        redrawCameraView(currentFrameWithFiltersApplied)
+    }}
+    func presentCameraAnimation() {
+        let snapshot = createSnapshot()
 
         insertBlurView(snapshot)
         animateBlurFlip()
         lastAction = .none
-    }}
+    }
 }
 private extension CameraManager {
-    func createSnapshot(_ sampleBuffer: CMSampleBuffer?) -> UIImage? {
-        guard let sampleBuffer,
-              let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        else { return nil }
+    func captureCurrentFrame(_ cvImageBuffer: CVImageBuffer) -> CIImage {
+        let currentFrame = CIImage(cvImageBuffer: cvImageBuffer)
+        return currentFrame.oriented(frameOrientation)
+    }
+    func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage {
+        currentFrame.applyingFilters(cameraFilters)
+    }
+    func redrawCameraView(_ frame: CIImage) {
+        currentFrame = frame
+        cameraMetalView.draw()
+    }
+    func createSnapshot() -> UIImage? {
+        guard let currentFrame else { return nil }
 
-        let ciImage = CIImage(cvPixelBuffer: imageBuffer)
-        let image = UIImage(ciImage: ciImage, scale: UIScreen.main.scale, orientation: blurImageOrientation)
+        let image = UIImage(ciImage: currentFrame)
         return image
     }
     func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
@@ -603,7 +663,7 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    var blurImageOrientation: UIImage.Orientation { cameraPosition == .back ? .right : .leftMirrored }
+    var frameOrientation: CGImagePropertyOrientation { cameraPosition == .back ? .right : .leftMirrored }
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
@@ -611,6 +671,33 @@ private extension CameraManager {
 }
 private extension CameraManager {
     enum LastAction { case cameraPositionChange, outputTypeChange, mediaCapture, none }
+}
+
+// MARK: - Metal Handlers
+extension CameraManager: MTKViewDelegate {
+    public func draw(in view: MTKView) {
+        guard let commandBuffer = metalCommandQueue.makeCommandBuffer(),
+              let ciImage = currentFrame,
+              let currentDrawable = view.currentDrawable
+        else { return }
+
+        changeDrawableSize(view, ciImage)
+        renderView(view, currentDrawable, commandBuffer, ciImage)
+        commitBuffer(currentDrawable, commandBuffer)
+    }
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
+}
+private extension CameraManager {
+    func changeDrawableSize(_ view: MTKView, _ ciImage: CIImage) {
+        view.drawableSize = ciImage.extent.size
+    }
+    func renderView(_ view: MTKView, _ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer, _ ciImage: CIImage) {
+        ciContext.render(ciImage, to: currentDrawable.texture, commandBuffer: commandBuffer, bounds: .init(origin: .zero, size: view.drawableSize), colorSpace: CGColorSpaceCreateDeviceRGB())
+    }
+    func commitBuffer(_ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer) {
+        commandBuffer.present(currentDrawable)
+        commandBuffer.commit()
+    }
 }
 
 // MARK: - Modifiers

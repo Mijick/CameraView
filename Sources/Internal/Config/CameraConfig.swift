@@ -21,7 +21,7 @@ struct CameraConfig {
     var appDelegate: MApplicationDelegate.Type? = nil
 
     // MARK: Actions
-    var onImageCaptured: (Data) -> () = { _ in }
+    var onImageCaptured: (UIImage) -> () = { _ in }
     var onVideoCaptured: (URL) -> () = { _ in }
     var afterMediaCaptured: () -> () = {}
     var onCloseController: () -> () = {}

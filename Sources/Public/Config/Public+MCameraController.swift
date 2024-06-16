@@ -54,10 +54,17 @@ public extension MCameraController {
     func errorScreen(_ builder: @escaping ErrorViewBuilder) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
 }
 
+// MARK: - Changing Camera Filters
+public extension MCameraController {
+    /// Changes the camera filters. Applies to both camera live preview and camera output.
+    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
+    func changeCameraFilters(_ cameraFilters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraFilters: cameraFilters) } }
+}
+
 // MARK: - Actions
 public extension MCameraController {
     /// Sets the action to be triggered when the photo is taken. Passes the captured content as an argument
-    func onImageCaptured(_ action: @escaping (Data) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
+    func onImageCaptured(_ action: @escaping (UIImage) -> ()) -> Self { setAndReturnSelf { $0.config.onImageCaptured = action } }
 
     /// Sets the action to be triggered when the video is taken. Passes the captured content as an argument
     func onVideoCaptured(_ action: @escaping (URL) -> ()) -> Self { setAndReturnSelf { $0.config.onVideoCaptured = action } }

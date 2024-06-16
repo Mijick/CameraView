@@ -52,8 +52,8 @@ private extension DefaultCameraPreview {
     }
 }
 private extension DefaultCameraPreview {
-    func createImageView(_ image: Data) -> some View {
-        Image(uiImage: .init(data: image) ?? .init())
+    func createImageView(_ image: UIImage) -> some View {
+        Image(uiImage: image)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .ignoresSafeArea()
