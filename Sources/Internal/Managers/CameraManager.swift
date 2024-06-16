@@ -50,6 +50,7 @@ public class CameraManager: NSObject, ObservableObject {
     private var metalCommandQueue: MTLCommandQueue!
     private var ciContext: CIContext!
     private var currentFrame: CIImage?
+    private var firstRecordedFrame: UIImage?
 
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
@@ -533,10 +534,12 @@ private extension CameraManager {
     func startRecording() { if let url = prepareUrlForVideoRecording() {
         configureOutput(videoOutput)
         videoOutput?.startRecording(to: url, recordingDelegate: self)
+        storeLastFrame()
         updateIsRecording(true)
         startRecordingTimer()
     }}
     func stopRecording() {
+        presentLastFrame()
         videoOutput?.stopRecording()
         updateIsRecording(false)
         stopRecordingTimer()
@@ -546,6 +549,14 @@ private extension CameraManager {
     func prepareUrlForVideoRecording() -> URL? {
         FileManager.prepareURLForVideoOutput()
     }
+    func storeLastFrame() {
+        guard let texture = cameraMetalView.currentDrawable?.texture,
+              let ciImage = CIImage(mtlTexture: texture, options: nil),
+              let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent)
+        else { return }
+
+        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: deviceOrientation.toImageOrientation())
+    }
     func updateIsRecording(_ value: Bool) {
         isRecording = value
     }
@@ -553,6 +564,9 @@ private extension CameraManager {
         try? timer
             .publish(every: 1) { [self] in recordingTime = $0 }
             .start()
+    }
+    func presentLastFrame() {
+        capturedMedia = .init(data: firstRecordedFrame)
     }
     func stopRecordingTimer() {
         timer.reset()
