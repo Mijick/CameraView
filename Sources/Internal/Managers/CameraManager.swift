@@ -24,6 +24,7 @@ public class CameraManager: NSObject, ObservableObject {
     @Published private(set) var zoomFactor: CGFloat = 1.0
     @Published private(set) var flashMode: CameraFlashMode = .off
     @Published private(set) var torchMode: CameraTorchMode = .off
+    @Published private(set) var cameraExposure: CameraExposure = .init()
     @Published private(set) var mirrorOutput: Bool = false
     @Published private(set) var isGridVisible: Bool = true
     @Published private(set) var isRecording: Bool = false
@@ -112,6 +113,7 @@ extension CameraManager {
         try setupDeviceInputs()
         try setupDeviceOutput()
         try setupFrameRecorder()
+        try setupCameraExposure()
 
         startCaptureSession()
         announceSetupCompletion()
@@ -186,6 +188,12 @@ private extension CameraManager {
 
         if captureSession.canAddOutput(captureVideoOutput) { captureSession?.addOutput(captureVideoOutput) }
     }
+    func setupCameraExposure() throws { if let device = getDevice(cameraPosition) {
+        cameraExposure.duration = device.exposureDuration
+        cameraExposure.iso = device.iso
+        cameraExposure.targetBias = device.exposureTargetBias
+        cameraExposure.mode = device.exposureMode
+    }}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
     }}
