@@ -453,6 +453,24 @@ private extension CameraManager {
     }
 }
 
+// MARK: - Changing Exposure Mode
+extension CameraManager {
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(newExposureMode), newExposureMode != cameraExposure.mode {
+        try changeExposureMode(newExposureMode, device)
+        updateExposureMode(newExposureMode)
+    }}
+}
+private extension CameraManager {
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: AVCaptureDevice) throws {
+        try device.lockForConfiguration()
+        device.exposureMode = newExposureMode
+        device.unlockForConfiguration()
+    }
+    func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
+        cameraExposure.mode = newExposureMode
+    }
+}
+
 // MARK: - Changing Mirror Mode
 extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
