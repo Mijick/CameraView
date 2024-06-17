@@ -33,6 +33,10 @@ public extension MCameraView {
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.changeZoomFactor(value) }
     func changeFlashMode(_ mode: CameraFlashMode) throws { try cameraManager.changeFlashMode(mode) }
     func changeTorchMode(_ mode: CameraTorchMode) throws { try cameraManager.changeTorchMode(mode) }
+    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.changeExposureMode(exposureMode) }
+    func changeExposureDuration(_ value: CMTime) throws { try cameraManager.changeExposureDuration(value) }
+    func changeISO(_ value: Float) throws { try cameraManager.changeISO(value) }
+    func changeExposureTargetBias(_ value: Float) throws { try cameraManager.changeExposureTargetBias(value) }
     func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.changeMirrorMode(shouldMirror) }
     func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.changeGridVisibility(shouldShowGrid) }
 }
@@ -43,6 +47,10 @@ public extension MCameraView {
     var cameraPosition: CameraPosition { cameraManager.cameraPosition }
     var torchMode: CameraTorchMode { cameraManager.torchMode }
     var flashMode: CameraFlashMode { cameraManager.flashMode }
+    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.cameraExposure.mode }
+    var exposureDuration: CMTime { cameraManager.cameraExposure.duration }
+    var iso: Float { cameraManager.cameraExposure.iso }
+    var exposureTargetBias: Float { cameraManager.cameraExposure.targetBias }
     var mirrorOutput: Bool { cameraManager.mirrorOutput }
     var showGrid: Bool { cameraManager.isGridVisible }
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.deviceOrientation }

@@ -188,12 +188,12 @@ private extension CameraManager {
 
         if captureSession.canAddOutput(captureVideoOutput) { captureSession?.addOutput(captureVideoOutput) }
     }
-    func setupCameraExposure() throws { if let device = getDevice(cameraPosition) {
+    func setupCameraExposure() throws { if let device = getDevice(cameraPosition) { DispatchQueue.main.async { [self] in
         cameraExposure.duration = device.exposureDuration
         cameraExposure.iso = device.iso
         cameraExposure.targetBias = device.exposureTargetBias
         cameraExposure.mode = device.exposureMode
-    }}
+    }}}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
     }}
