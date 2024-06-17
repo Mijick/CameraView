@@ -34,6 +34,10 @@ public extension MCameraController {
     /// Changes the size of Focus Image that is displayed when the camera screen is tapped
     func focusImageSize(_ size: CGFloat) -> Self { setAndReturnSelf { $0.cameraManager.change(focusImageSize: size) } }
 
+    /// Changes the camera filters. Applies to both camera live preview and camera output.
+    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
+    func changeCameraFilters(_ cameraFilters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraFilters: cameraFilters) } }
+
     /// Locks the camera interface in portrait orientation (even if device screen rotation is enabled).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
@@ -52,13 +56,6 @@ public extension MCameraController {
     /// Replaces the default Error Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func errorScreen(_ builder: @escaping ErrorViewBuilder) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
-}
-
-// MARK: - Changing Camera Filters
-public extension MCameraController {
-    /// Changes the camera filters. Applies to both camera live preview and camera output.
-    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func changeCameraFilters(_ cameraFilters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.change(cameraFilters: cameraFilters) } }
 }
 
 // MARK: - Actions
