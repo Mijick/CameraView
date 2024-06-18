@@ -37,6 +37,7 @@ public extension MCameraView {
     func changeExposureDuration(_ value: CMTime) throws { try cameraManager.changeExposureDuration(value) }
     func changeISO(_ value: Float) throws { try cameraManager.changeISO(value) }
     func changeExposureTargetBias(_ value: Float) throws { try cameraManager.changeExposureTargetBias(value) }
+    func changeHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.changeHDRMode(mode) }
     func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.changeMirrorMode(shouldMirror) }
     func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.changeGridVisibility(shouldShowGrid) }
 }
@@ -51,6 +52,7 @@ public extension MCameraView {
     var exposureDuration: CMTime { cameraManager.cameraExposure.duration }
     var iso: Float { cameraManager.cameraExposure.iso }
     var exposureTargetBias: Float { cameraManager.cameraExposure.targetBias }
+    var hdrMode: CameraHDRMode { cameraManager.hdrMode }
     var mirrorOutput: Bool { cameraManager.mirrorOutput }
     var showGrid: Bool { cameraManager.isGridVisible }
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.deviceOrientation }
