@@ -510,11 +510,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: AVCaptureDevice) throws {
-        try device.lockForConfiguration()
+    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.setExposureTargetBias(newExposureTargetBias)
-        device.unlockForConfiguration()
-    }
+    }}
     func updateExposureTargetBias(_ newExposureTargetBias: Float) {
         cameraExposure.targetBias = newExposureTargetBias
     }
@@ -796,6 +794,11 @@ private extension CameraManager {
         connection.isVideoMirrored = mirrorOutput ? cameraPosition != .front : cameraPosition == .front
         connection.videoOrientation = deviceOrientation
     }}
+    func withLockingDeviceForConfiguration(_ device: AVCaptureDevice, _ action: (AVCaptureDevice) -> ()) throws {
+        try device.lockForConfiguration()
+        action(device)
+        device.unlockForConfiguration()
+    }
 }
 private extension CameraManager {
     var cameraView: UIView { cameraLayer.superview ?? .init() }
