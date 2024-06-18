@@ -371,12 +371,10 @@ private extension CameraManager {
             UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
         }
     }
-    func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws {
-        try device.lockForConfiguration()
+    func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         setFocusPointOfInterest(focusPoint, device)
         setExposurePointOfInterest(focusPoint, device)
-        device.unlockForConfiguration()
-    }
+    }}
 }
 private extension CameraManager {
     func setFocusPointOfInterest(_ focusPoint: CGPoint, _ device: AVCaptureDevice) { if device.isFocusPointOfInterestSupported {
@@ -406,11 +404,9 @@ private extension CameraManager {
     func calculateZoomFactor(_ value: CGFloat, _ device: AVCaptureDevice) -> CGFloat {
         min(max(value, getMinZoomLevel(device)), getMaxZoomLevel(device))
     }
-    func setVideoZoomFactor(_ zoomFactor: CGFloat, _ device: AVCaptureDevice) throws  {
-        try device.lockForConfiguration()
+    func setVideoZoomFactor(_ zoomFactor: CGFloat, _ device: AVCaptureDevice) throws  { try withLockingDeviceForConfiguration(device) { device in
         device.videoZoomFactor = zoomFactor
-        device.unlockForConfiguration()
-    }
+    }}
     func updateZoomFactor(_ value: CGFloat) {
         zoomFactor = value
     }
@@ -444,11 +440,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeTorchMode(_ device: AVCaptureDevice, _ mode: CameraTorchMode) throws {
-        try device.lockForConfiguration()
+    func changeTorchMode(_ device: AVCaptureDevice, _ mode: CameraTorchMode) throws { try withLockingDeviceForConfiguration(device) { device in
         device.torchMode = mode.get()
-        device.unlockForConfiguration()
-    }
+    }}
     func updateTorchMode(_ value: CameraTorchMode) {
         torchMode = value
     }
@@ -462,11 +456,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: AVCaptureDevice) throws {
-        try device.lockForConfiguration()
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.exposureMode = newExposureMode
-        device.unlockForConfiguration()
-    }
+    }}
     func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
         cameraExposure.mode = newExposureMode
     }
@@ -482,11 +474,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: AVCaptureDevice) throws {
-        try device.lockForConfiguration()
+    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.setExposureModeCustom(duration: newExposureDuration, iso: cameraExposure.iso)
-        device.unlockForConfiguration()
-    }
+    }}
     func updateExposureDuration(_ newExposureDuration: CMTime) {
         cameraExposure.duration = newExposureDuration
     }
@@ -502,11 +492,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeISO(_ newISO: Float, _ device: AVCaptureDevice) throws {
-        try device.lockForConfiguration()
+    func changeISO(_ newISO: Float, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.setExposureModeCustom(duration: cameraExposure.duration, iso: newISO)
-        device.unlockForConfiguration()
-    }
+    }}
     func updateISO(_ newISO: Float) {
         cameraExposure.iso = newISO
     }
