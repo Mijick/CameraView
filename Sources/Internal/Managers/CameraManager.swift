@@ -518,6 +518,22 @@ private extension CameraManager {
     }
 }
 
+// MARK: - Changing Camera HDR Mode
+extension CameraManager {
+    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getDevice(cameraPosition), newHDRMode != hdrMode {
+        try changeHDRMode(newHDRMode, device)
+        updateHDRMode(newHDRMode)
+    }}
+}
+private extension CameraManager {
+    func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+        newHDRMode.modify(device)
+    }}
+    func updateHDRMode(_ newHDRMode: CameraHDRMode) {
+        hdrMode = newHDRMode
+    }
+}
+
 // MARK: - Changing Mirror Mode
 extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
