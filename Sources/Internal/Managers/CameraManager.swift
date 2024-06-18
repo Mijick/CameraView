@@ -168,8 +168,7 @@ private extension CameraManager {
         videoOutput = .init()
     }
     func initializeMotionManager() {
-        motionManager.accelerometerUpdateInterval = 1
-        motionManager.gyroUpdateInterval = 1
+        motionManager.accelerometerUpdateInterval = 0.2
         motionManager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
     }
     func initialiseObservers() {
@@ -669,7 +668,7 @@ extension CameraManager: AVCaptureFileOutputRecordingDelegate {
 private extension CameraManager {
     func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Swift.Error?) { if let data, error == nil {
         let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
-        deviceOrientation = newDeviceOrientation
+        updateDeviceOrientation(newDeviceOrientation)
     }}
 }
 private extension CameraManager {
@@ -679,6 +678,9 @@ private extension CameraManager {
         case let acceleration where acceleration.y <= -0.75: return .portrait
         case let acceleration where acceleration.y >= 0.75: return .portraitUpsideDown
         default: return deviceOrientation
+    }}
+    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != deviceOrientation {
+        deviceOrientation = newDeviceOrientation
     }}
 }
 
