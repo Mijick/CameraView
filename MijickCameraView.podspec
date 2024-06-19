@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
     CameraView is a free and open-source library dedicated for SwiftUI that allows you to create fully customisable camera view in no time. Keep your code clean.
                             DESC
 
-    s.version               = '1.1.0'
+    s.version               = '1.2.0'
     s.ios.deployment_target = '14.0'
     s.swift_version         = '5.10'
 
