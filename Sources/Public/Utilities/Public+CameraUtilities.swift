@@ -36,6 +36,12 @@ public enum CameraTorchMode: CaseIterable {
     case on
 }
 
+// MARK: Camera HDR Mode
+public enum CameraHDRMode: CaseIterable {
+    case off
+    case on
+    case auto
+}
 
 // MARK: - Typealiases
 public typealias CameraViewBuilder = (CameraManager, Namespace.ID, _ closeControllerAction: @escaping () -> ()) -> any MCameraView
