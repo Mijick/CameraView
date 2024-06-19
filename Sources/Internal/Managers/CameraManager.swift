@@ -193,7 +193,7 @@ private extension CameraManager {
         cameraExposure.iso = device.iso
         cameraExposure.targetBias = device.exposureTargetBias
         cameraExposure.mode = device.exposureMode
-        hdrMode = .init(device: device)
+        hdrMode = device.hdrMode
     }}}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
@@ -527,7 +527,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        newHDRMode.modify(device)
+        device.hdrMode = newHDRMode
     }}
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
         hdrMode = newHDRMode

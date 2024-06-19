@@ -17,13 +17,3 @@ struct CameraExposure {
     var iso: Float = 0
     var mode: AVCaptureDevice.ExposureMode = .autoExpose
 }
-
-// MARK: - Initialiser
-extension CameraExposure {
-    init(device: AVCaptureDevice) {
-        self.duration = device.exposureDuration
-        self.targetBias = device.exposureTargetBias
-        self.iso = device.iso
-        self.mode = device.exposureMode
-    }
-}
