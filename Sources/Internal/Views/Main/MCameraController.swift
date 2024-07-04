@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-public struct MCameraController: View { public init() {}
+public struct MCameraController: View, Equatable { public init() {}
     @ObservedObject var cameraManager: CameraManager = .init()
     @State var cameraError: CameraManager.Error?
     @Namespace var namespace
@@ -28,6 +28,7 @@ public struct MCameraController: View { public init() {}
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.capturedMedia, perform: onMediaCaptured)
     }
+    public static func == (lhs: MCameraController, rhs: MCameraController) -> Bool { true }
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {
