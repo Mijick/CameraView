@@ -19,7 +19,7 @@
 <p align="center">
     <a href="https://github.com/Mijick/CameraView-Demo" rel="nofollow">Try demo we prepared</a>
     |
-    <a href="https://github.com/orgs/Mijick/projects/12" rel="nofollow">Roadmap</a>
+    <a href="https://mijick.notion.site/dd769c1a21bd48849aa2e5a807cfdf98?v=adda1c8b04854f1f95611c2805c052fe" rel="nofollow">Roadmap</a>
     |
     <a href="https://github.com/Mijick/CameraView/issues/new" rel="nofollow">Propose a new feature</a>
 </p>
