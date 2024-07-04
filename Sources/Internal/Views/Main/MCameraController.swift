@@ -14,6 +14,7 @@ import SwiftUI
 public struct MCameraController: View, Equatable { public init() {}
     @ObservedObject var cameraManager: CameraManager = .init()
     @State var cameraError: CameraManager.Error?
+    @State private var dupa: Bool = false
     @Namespace var namespace
     var config: CameraConfig = .init()
 
@@ -28,7 +29,7 @@ public struct MCameraController: View, Equatable { public init() {}
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.capturedMedia, perform: onMediaCaptured)
     }
-    public static func == (lhs: MCameraController, rhs: MCameraController) -> Bool { true }
+    public static func == (lhs: MCameraController, rhs: MCameraController) -> Bool { lhs.dupa == rhs.dupa }
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {
@@ -50,11 +51,13 @@ private extension MCameraController {
 
 private extension MCameraController {
     func onAppear() {
+        dupa = false
         checkCameraPermissions()
         lockScreenOrientation()
     }
     func onDisappear() {
         unlockScreenOrientation()
+        dupa = true
         cameraManager.stopCM()
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
