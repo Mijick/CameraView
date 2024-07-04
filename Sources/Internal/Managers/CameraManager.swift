@@ -87,6 +87,14 @@ extension CameraManager {
         zoomFactor = 1.0
         torchMode = .off
     }
+
+
+    func stopCM() {
+        print("Stopuję Was")
+
+        motionManager.stopAccelerometerUpdates()
+        captureSession.stopRunning()
+    }
 }
 
 // MARK: - Checking Camera Permissions

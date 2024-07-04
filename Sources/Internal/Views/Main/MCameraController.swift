@@ -55,6 +55,7 @@ private extension MCameraController {
     }
     func onDisappear() {
         unlockScreenOrientation()
+        cameraManager.stopCM()
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
