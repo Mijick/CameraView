@@ -66,6 +66,11 @@ public class CameraManager: NSObject, ObservableObject {
     private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
     private var orientationLocked: Bool = false
+
+
+    deinit {
+        print("RUTR")
+    }
 }
 
 // MARK: - Changing Attributes
@@ -90,10 +95,15 @@ extension CameraManager {
 
 
     func stopCM() {
-        print("Stopuję Was")
+        frontCamera = nil
+        backCamera = nil
+        microphone = nil
+        captureSession.stopRunning()
+        captureSession = nil
+
 
         motionManager.stopAccelerometerUpdates()
-        captureSession.stopRunning()
+        motionManager = .init()
     }
 }
 
