@@ -100,6 +100,22 @@ extension CameraManager {
         microphone = nil
         captureSession.stopRunning()
         captureSession = nil
+        frontCameraInput = nil
+        backCameraInput = nil
+        audioInput = nil
+        photoOutput = nil
+        videoOutput = nil
+        metalDevice = nil
+        metalCommandQueue = nil
+        ciContext = nil
+        currentFrame = nil
+        firstRecordedFrame = nil
+        cameraLayer = nil
+        cameraMetalView = nil
+        cameraGridView = nil
+        cameraBlurView = nil
+        cameraFocusView = .init()
+
 
 
         motionManager.stopAccelerometerUpdates()
