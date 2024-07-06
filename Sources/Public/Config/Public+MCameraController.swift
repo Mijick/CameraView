@@ -11,6 +11,11 @@
 
 import SwiftUI
 
+// MARK: - Initialiser
+extension MCameraController {
+    public init(manager: CameraManager) { self.init(cameraManager: manager) }
+}
+
 // MARK: - Initial Camera Settings
 public extension MCameraController {
     /// Changes the initial setting of Camera Output Type
