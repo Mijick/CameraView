@@ -66,39 +66,28 @@ public class CameraManager: NSObject, ObservableObject {
     private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
     private var orientationLocked: Bool = false
-
-
-    deinit {
-        print("RUTR")
-    }
 }
 
-// MARK: - Changing Attributes
+// MARK: - Cancellation
 extension CameraManager {
-    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
-        if let outputType { self.outputType = outputType }
-        if let cameraPosition { self.cameraPosition = cameraPosition }
-        if let cameraFilters { self.cameraFilters = cameraFilters }
-        if let flashMode { self.flashMode = flashMode }
-        if let isGridVisible { self.isGridVisible = isGridVisible }
-        if let focusImage { self.cameraFocusView.image = focusImage }
-        if let focusImageColor { self.cameraFocusView.tintColor = focusImageColor }
-        if let focusImageSize { self.cameraFocusView.frame.size = .init(width: focusImageSize, height: focusImageSize) }
+    func cancel() {
+        cancelProcesses()
+        resetAttributes()
+        resetOthers()
     }
-    func resetCapturedMedia() {
-        capturedMedia = nil
+}
+private extension CameraManager {
+    func cancelProcesses() {
+        captureSession.stopRunning()
+        motionManager.stopAccelerometerUpdates()
     }
-    func resetZoomAndTorch() {
-        zoomFactor = 1.0
-        torchMode = .off
+    func resetAttributes() {
+        attributes = .init()
     }
-
-
-    func stopCM() {
+    func resetOthers() {
         frontCamera = nil
         backCamera = nil
         microphone = nil
-        captureSession.stopRunning()
         captureSession = nil
         frontCameraInput = nil
         backCameraInput = nil
@@ -115,11 +104,19 @@ extension CameraManager {
         cameraGridView = nil
         cameraBlurView = nil
         cameraFocusView = .init()
-
-
-
-        motionManager.stopAccelerometerUpdates()
         motionManager = .init()
+        timer.reset()
+    }
+}
+
+// MARK: - Changing Attributes
+extension CameraManager {
+    func resetCapturedMedia() {
+        attributes.capturedMedia = nil
+    }
+    func resetZoomAndTorch() {
+        attributes.zoomFactor = 1.0
+        attributes.torchMode = .off
     }
 }
 
