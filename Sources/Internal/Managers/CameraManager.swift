@@ -221,12 +221,12 @@ private extension CameraManager {
 
         if captureSession.canAddOutput(captureVideoOutput) { captureSession?.addOutput(captureVideoOutput) }
     }
-    func setupCameraAttributes() throws { if let device = getDevice(cameraPosition) { DispatchQueue.main.async { [self] in
-        cameraExposure.duration = device.exposureDuration
-        cameraExposure.iso = device.iso
-        cameraExposure.targetBias = device.exposureTargetBias
-        cameraExposure.mode = device.exposureMode
-        hdrMode = device.hdrMode
+    func setupCameraAttributes() throws { if let device = getDevice(attributes.cameraPosition) { DispatchQueue.main.async { [self] in
+        attributes.cameraExposure.duration = device.exposureDuration
+        attributes.cameraExposure.iso = device.iso
+        attributes.cameraExposure.targetBias = device.exposureTargetBias
+        attributes.cameraExposure.mode = device.exposureMode
+        attributes.hdrMode = device.hdrMode
     }}}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
@@ -306,9 +306,9 @@ private extension CameraManager {
 
 // MARK: - Changing Output Type
 extension CameraManager {
-    func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != outputType && !isChanging {
+    func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
         captureCurrentFrameAndDelay(.outputTypeChange) { [self] in
-            removeCameraOutput(outputType)
+            removeCameraOutput(attributes.outputType)
             try setupCameraOutput(newOutputType)
             updateCameraOutputType(newOutputType)
 
@@ -334,9 +334,9 @@ private extension CameraManager {
 
 // MARK: - Changing Camera Position
 extension CameraManager {
-    func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != cameraPosition && !isChanging {
+    func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != attributes.cameraPosition && !isChanging {
         captureCurrentFrameAndDelay(.cameraPositionChange) { [self] in
-            removeCameraInput(cameraPosition)
+            removeCameraInput(attributes.cameraPosition)
             try setupCameraInput(newPosition)
             updateCameraPosition(newPosition)
             
@@ -483,7 +483,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Mode
 extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(newExposureMode), newExposureMode != cameraExposure.mode {
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(newExposureMode), newExposureMode != attributes.cameraExposure.mode {
         try changeExposureMode(newExposureMode, device)
         updateExposureMode(newExposureMode)
     }}
