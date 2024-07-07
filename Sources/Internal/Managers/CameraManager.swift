@@ -499,7 +499,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Duration
 extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(.custom), newExposureDuration != cameraExposure.duration {
+    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newExposureDuration != attributes.cameraExposure.duration {
         let newExposureDuration = min(max(newExposureDuration, device.activeFormat.minExposureDuration), device.activeFormat.maxExposureDuration)
 
         try changeExposureDuration(newExposureDuration, device)
@@ -508,16 +508,16 @@ extension CameraManager {
 }
 private extension CameraManager {
     func changeExposureDuration(_ newExposureDuration: CMTime, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureModeCustom(duration: newExposureDuration, iso: cameraExposure.iso)
+        device.setExposureModeCustom(duration: newExposureDuration, iso: attributes.cameraExposure.iso)
     }}
     func updateExposureDuration(_ newExposureDuration: CMTime) {
-        cameraExposure.duration = newExposureDuration
+        attributes.cameraExposure.duration = newExposureDuration
     }
 }
 
 // MARK: - Changing ISO
 extension CameraManager {
-    func changeISO(_ newISO: Float) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(.custom), newISO != cameraExposure.iso {
+    func changeISO(_ newISO: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newISO != attributes.cameraExposure.iso {
         let newISO = min(max(newISO, device.activeFormat.minISO), device.activeFormat.maxISO)
 
         try changeISO(newISO, device)
@@ -535,7 +535,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Target Bias
 extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(.custom), newExposureTargetBias != cameraExposure.targetBias {
+    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newExposureTargetBias != attributes.cameraExposure.targetBias {
         let newExposureTargetBias = min(max(newExposureTargetBias, device.minExposureTargetBias), device.maxExposureTargetBias)
 
         try changeExposureTargetBias(newExposureTargetBias, device)
