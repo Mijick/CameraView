@@ -351,7 +351,7 @@ private extension CameraManager {
         captureSession.removeInput(input)
     }}
     func updateCameraPosition(_ position: CameraPosition) {
-        cameraPosition = position
+        attributes.cameraPosition = position
     }
 }
 private extension CameraManager {
@@ -363,14 +363,14 @@ private extension CameraManager {
 
 // MARK: - Changing Camera Filters
 extension CameraManager {
-    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != cameraFilters {
-        cameraFilters = newCameraFilters
+    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != attributes.cameraFilters {
+        attributes.cameraFilters = newCameraFilters
     }}
 }
 
 // MARK: - Camera Focusing
 extension CameraManager {
-    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(cameraPosition) {
+    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(attributes.cameraPosition) {
         removeCameraFocusAnimations()
         insertCameraFocus(touchPoint)
 
@@ -423,7 +423,7 @@ private extension CameraManager {
 
 // MARK: - Changing Zoom Factor
 extension CameraManager {
-    func changeZoomFactor(_ value: CGFloat) throws { if let device = getDevice(cameraPosition), !isChanging {
+    func changeZoomFactor(_ value: CGFloat) throws { if let device = getDevice(attributes.cameraPosition), !isChanging {
         let zoomFactor = calculateZoomFactor(value, device)
 
         try setVideoZoomFactor(zoomFactor, device)
@@ -442,7 +442,7 @@ private extension CameraManager {
         device.videoZoomFactor = zoomFactor
     }}
     func updateZoomFactor(_ value: CGFloat) {
-        zoomFactor = value
+        attributes.zoomFactor = value
     }
 }
 private extension CameraManager {
@@ -456,19 +456,19 @@ private extension CameraManager {
 
 // MARK: - Changing Flash Mode
 extension CameraManager {
-    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getDevice(cameraPosition), device.hasFlash, !isChanging {
+    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getDevice(attributes.cameraPosition), device.hasFlash, !isChanging {
         updateFlashMode(mode)
     }}
 }
 private extension CameraManager {
     func updateFlashMode(_ value: CameraFlashMode) {
-        flashMode = value
+        attributes.flashMode = value
     }
 }
 
 // MARK: - Changing Torch Mode
 extension CameraManager {
-    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getDevice(cameraPosition), device.hasTorch, !isChanging {
+    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getDevice(attributes.cameraPosition), device.hasTorch, !isChanging {
         try changeTorchMode(device, mode)
         updateTorchMode(mode)
     }}
@@ -478,7 +478,7 @@ private extension CameraManager {
         device.torchMode = mode.get()
     }}
     func updateTorchMode(_ value: CameraTorchMode) {
-        torchMode = value
+        attributes.torchMode = value
     }
 }
 
@@ -494,7 +494,7 @@ private extension CameraManager {
         device.exposureMode = newExposureMode
     }}
     func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
-        cameraExposure.mode = newExposureMode
+        attributes.cameraExposure.mode = newExposureMode
     }
 }
 
@@ -527,10 +527,10 @@ extension CameraManager {
 }
 private extension CameraManager {
     func changeISO(_ newISO: Float, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureModeCustom(duration: cameraExposure.duration, iso: newISO)
+        device.setExposureModeCustom(duration: attributes.cameraExposure.duration, iso: newISO)
     }}
     func updateISO(_ newISO: Float) {
-        cameraExposure.iso = newISO
+        attributes.cameraExposure.iso = newISO
     }
 }
 
@@ -548,13 +548,13 @@ private extension CameraManager {
         device.setExposureTargetBias(newExposureTargetBias)
     }}
     func updateExposureTargetBias(_ newExposureTargetBias: Float) {
-        cameraExposure.targetBias = newExposureTargetBias
+        attributes.cameraExposure.targetBias = newExposureTargetBias
     }
 }
 
 // MARK: - Changing Camera HDR Mode
 extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getDevice(cameraPosition), newHDRMode != hdrMode {
+    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getDevice(attributes.cameraPosition), newHDRMode != attributes.hdrMode {
         try changeHDRMode(newHDRMode, device)
         updateHDRMode(newHDRMode)
     }}
