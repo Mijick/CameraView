@@ -33,7 +33,7 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
         var recordingTime: MTime = .zero
         var deviceOrientation: AVCaptureVideoOrientation = .portrait
     }
-    @Published private(set) var attributes: Attributes = .init()
+    @Published private(set) var attributes: Attributes
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?

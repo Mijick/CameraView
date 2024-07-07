@@ -12,8 +12,8 @@
 import SwiftUI
 
 // MARK: - Initialiser
-extension MCameraController {
-    public init(manager: CameraManager) { self.init(cameraManager: manager) }
+public extension MCameraController {
+    init(manager: CameraManager) { self.init(cameraManager: manager) }
 }
 
 // MARK: - Changing Default Views
