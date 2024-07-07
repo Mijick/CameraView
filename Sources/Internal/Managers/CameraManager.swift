@@ -183,6 +183,7 @@ private extension CameraManager {
         cameraMetalView.addToParent(cameraView)
     }
     func initialiseCameraGridView() {
+        cameraGridView?.removeFromSuperview()
         cameraGridView = .init()
         cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
@@ -270,22 +271,9 @@ extension CameraManager {
 
 // MARK: - Camera Rotation
 extension CameraManager {
-    func fixCameraRotation() { if !orientationLocked { let orientation = UIDevice.current.orientation
-        if #available(iOS 17.0, *) { fixCameraRotationForIOS17(orientation) }
-        else { fixCameraRotationForOlderIOSVersions(orientation) }
+    func fixCameraRotation() { if !orientationLocked { 
+        initialiseCameraGridView()
     }}
-}
-private extension CameraManager {
-    @available(iOS 17.0, *) func fixCameraRotationForIOS17(_ deviceOrientation: UIDeviceOrientation) { let rotationAngle = calculateRotationAngle(deviceOrientation)
-        if cameraLayer.connection?.isVideoRotationAngleSupported(rotationAngle) ?? false {
-            cameraLayer.connection?.videoRotationAngle = rotationAngle
-        }
-    }
-    func fixCameraRotationForOlderIOSVersions(_ deviceOrientation: UIDeviceOrientation) { let videoOrientation = calculateVideoOrientation(deviceOrientation)
-        if cameraLayer.connection?.isVideoOrientationSupported ?? false {
-            cameraLayer.connection?.videoOrientation = videoOrientation
-        }
-    }
 }
 private extension CameraManager {
     func calculateRotationAngle(_ deviceOrientation: UIDeviceOrientation) -> CGFloat { switch deviceOrientation {
