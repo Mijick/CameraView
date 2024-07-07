@@ -564,14 +564,14 @@ private extension CameraManager {
         device.hdrMode = newHDRMode
     }}
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
-        hdrMode = newHDRMode
+        attributes.hdrMode = newHDRMode
     }
 }
 
 // MARK: - Changing Mirror Mode
 extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
-        mirrorOutput = shouldMirror
+        attributes.mirrorOutput = shouldMirror
     }}
 }
 
@@ -587,13 +587,13 @@ private extension CameraManager {
         cameraGridView.alpha = shouldShowGrid ? 1 : 0
     }}
     func updateGridVisibility(_ shouldShowGrid: Bool) {
-        isGridVisible = shouldShowGrid
+        attributes.isGridVisible = shouldShowGrid
     }
 }
 
 // MARK: - Capturing Output
 extension CameraManager {
-    func captureOutput() { if !isChanging { switch outputType {
+    func captureOutput() { if !isChanging { switch attributes.outputType {
         case .photo: capturePhoto()
         case .video: toggleVideoRecording()
     }}}
@@ -612,7 +612,7 @@ private extension CameraManager {
 private extension CameraManager {
     func getPhotoOutputSettings() -> AVCapturePhotoSettings {
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = flashMode.get()
+        settings.flashMode = attributes.flashMode.get()
         return settings
     }
     func performCaptureAnimation() {
@@ -642,7 +642,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: cameraFilters)
+        attributes.capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: attributes.cameraFilters)
     }
 }
 
@@ -698,7 +698,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task { @MainActor in
-        capturedMedia = await .create(videoData: outputFileURL, filters: cameraFilters)
+        attributes.capturedMedia = await .create(videoData: outputFileURL, filters: attributes.cameraFilters)
     }}
 }
 
