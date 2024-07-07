@@ -715,17 +715,17 @@ private extension CameraManager {
         case let acceleration where acceleration.x <= -0.75: return .landscapeRight
         case let acceleration where acceleration.y <= -0.75: return .portrait
         case let acceleration where acceleration.y >= 0.75: return .portraitUpsideDown
-        default: return deviceOrientation
+        default: return attributes.deviceOrientation
     }}
-    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != deviceOrientation {
-        deviceOrientation = newDeviceOrientation
+    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != attributes.deviceOrientation {
+        attributes.deviceOrientation = newDeviceOrientation
     }}
 }
 
 // MARK: - Handling Observers
 private extension CameraManager {
     @objc func handleSessionWasInterrupted() {
-        torchMode = .off
+        attributes.torchMode = .off
         updateIsRecording(false)
         stopRecordingTimer()
     }
@@ -759,7 +759,7 @@ private extension CameraManager {
         return currentFrame.oriented(frameOrientation)
     }
     func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage {
-        currentFrame.applyingFilters(cameraFilters)
+        currentFrame.applyingFilters(attributes.cameraFilters)
     }
     func redrawCameraView(_ frame: CIImage) {
         currentFrame = frame
@@ -789,11 +789,11 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    var frameOrientation: CGImagePropertyOrientation { cameraPosition == .back ? .right : .leftMirrored }
+    var frameOrientation: CGImagePropertyOrientation { attributes.cameraPosition == .back ? .right : .leftMirrored }
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
-    var flipAnimationTransition: UIView.AnimationOptions { cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
+    var flipAnimationTransition: UIView.AnimationOptions { attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
 private extension CameraManager {
     enum LastAction { case cameraPositionChange, outputTypeChange, mediaCapture, none }
@@ -828,8 +828,8 @@ private extension CameraManager {
 
 // MARK: - Modifiers
 extension CameraManager {
-    var hasFlash: Bool { getDevice(cameraPosition)?.hasFlash ?? false }
-    var hasTorch: Bool { getDevice(cameraPosition)?.hasTorch ?? false }
+    var hasFlash: Bool { getDevice(attributes.cameraPosition)?.hasFlash ?? false }
+    var hasTorch: Bool { getDevice(attributes.cameraPosition)?.hasTorch ?? false }
 }
 
 // MARK: - Helpers
@@ -841,8 +841,8 @@ private extension CameraManager {
         try action()
     }}
     func configureOutput(_ output: AVCaptureOutput?) { if let connection = output?.connection(with: .video), connection.isVideoMirroringSupported {
-        connection.isVideoMirrored = mirrorOutput ? cameraPosition != .front : cameraPosition == .front
-        connection.videoOrientation = deviceOrientation
+        connection.isVideoMirrored = attributes.mirrorOutput ? attributes.cameraPosition != .front : attributes.cameraPosition == .front
+        connection.videoOrientation = attributes.deviceOrientation
     }}
     func withLockingDeviceForConfiguration(_ device: AVCaptureDevice, _ action: (AVCaptureDevice) -> ()) throws {
         try device.lockForConfiguration()
