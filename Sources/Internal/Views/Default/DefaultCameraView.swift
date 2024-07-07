@@ -23,8 +23,8 @@ struct DefaultCameraView: MCameraView {
             createContentView()
             createBottomView()
         }
+        .ignoresSafeArea(.all, edges: .horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.all, edges: .top)
         .background(Color.background.ignoresSafeArea())
         .statusBarHidden()
         .animation(.defaultSpring, value: isRecording)
@@ -41,7 +41,7 @@ private extension DefaultCameraView {
             createTopRightView()
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, max(4, ScreenManager.safeArea.top - 8))
+        .padding(.top, 4)
         .padding(.bottom, 12)
         .padding(.horizontal, 20)
     }
