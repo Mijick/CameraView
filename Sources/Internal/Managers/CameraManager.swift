@@ -17,6 +17,22 @@ import MijickTimer
 
 public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attributes) { self.attributes = attributes }
     // MARK: Attributes
+    struct Attributes {
+        var capturedMedia: MCameraMedia? = nil
+        var outputType: CameraOutputType = .photo
+        var cameraPosition: CameraPosition = .back
+        var cameraFilters: [CIFilter] = []
+        var zoomFactor: CGFloat = 1.0
+        var flashMode: CameraFlashMode = .off
+        var torchMode: CameraTorchMode = .off
+        var cameraExposure: CameraExposure = .init()
+        var hdrMode: CameraHDRMode = .auto
+        var mirrorOutput: Bool = false
+        var isGridVisible: Bool = true
+        var isRecording: Bool = false
+        var recordingTime: MTime = .zero
+        var deviceOrientation: AVCaptureVideoOrientation = .portrait
+    }
     @Published private(set) var attributes: Attributes = .init()
 
     // MARK: Devices
