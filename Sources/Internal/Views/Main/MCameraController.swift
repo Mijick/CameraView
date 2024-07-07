@@ -23,17 +23,17 @@ public struct MCameraController: View {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
         }}
-        .animation(.defaultEase, value: cameraManager.capturedMedia)
+        .animation(.defaultEase, value: cameraManager.attributes.capturedMedia)
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
-        .onChange(of: cameraManager.capturedMedia, perform: onMediaCaptured)
+        .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)
     }
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {
         config.cameraErrorView(error, config.onCloseController).erased()
     }
-    func createNormalStateView() -> some View { ZStack { switch cameraManager.capturedMedia {
+    func createNormalStateView() -> some View { ZStack { switch cameraManager.attributes.capturedMedia {
         case .some(let media) where config.mediaPreviewView != nil: createCameraPreview(media)
         default: createCameraView()
     }}}
@@ -54,7 +54,7 @@ private extension MCameraController {
     }
     func onDisappear() {
         unlockScreenOrientation()
-        cameraManager.stopCM()
+        cameraManager.cancel()
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
@@ -75,7 +75,7 @@ private extension MCameraController {
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
     }
-    func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.capturedMedia {
+    func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
         notifyUserOfMediaCaptured(capturedMedia)
         config.afterMediaCaptured()
     }}
