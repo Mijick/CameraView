@@ -184,8 +184,7 @@ private extension CameraManager {
     }
     func initialiseCameraGridView() {
         cameraGridView = .init()
-        cameraGridView.backgroundColor = .clear
-        cameraGridView.alpha = isGridVisible ? 1 : 0
+        cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
     }
     func initialiseDevices() {
@@ -210,11 +209,11 @@ private extension CameraManager {
         NotificationCenter.default.addObserver(self, selector: #selector(handleSessionWasInterrupted), name: .AVCaptureSessionWasInterrupted, object: captureSession)
     }
     func setupDeviceInputs() throws {
-        try setupCameraInput(cameraPosition)
+        try setupCameraInput(attributes.cameraPosition)
         try setupInput(audioInput)
     }
     func setupDeviceOutput() throws {
-        try setupCameraOutput(outputType)
+        try setupCameraOutput(attributes.outputType)
     }
     func setupFrameRecorder() throws {
         let captureVideoOutput = AVCaptureVideoDataOutput()
@@ -323,7 +322,7 @@ private extension CameraManager {
         captureSession.removeOutput(output)
     }}
     func updateCameraOutputType(_ cameraOutputType: CameraOutputType) {
-        outputType = cameraOutputType
+        attributes.outputType = cameraOutputType
     }
 }
 private extension CameraManager {
@@ -678,18 +677,18 @@ private extension CameraManager {
               let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent)
         else { return }
 
-        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: deviceOrientation.toImageOrientation())
+        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: attributes.deviceOrientation.toImageOrientation())
     }
     func updateIsRecording(_ value: Bool) {
-        isRecording = value
+        attributes.isRecording = value
     }
     func startRecordingTimer() {
         try? timer
-            .publish(every: 1) { [self] in recordingTime = $0 }
+            .publish(every: 1) { [self] in attributes.recordingTime = $0 }
             .start()
     }
     func presentLastFrame() {
-        capturedMedia = .init(data: firstRecordedFrame)
+        attributes.capturedMedia = .init(data: firstRecordedFrame)
     }
     func stopRecordingTimer() {
         timer.reset()
