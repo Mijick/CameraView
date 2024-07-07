@@ -15,22 +15,9 @@ import MetalKit
 import CoreMotion
 import MijickTimer
 
-public class CameraManager: NSObject, ObservableObject {
+public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attributes) { self.attributes = attributes }
     // MARK: Attributes
-    @Published private(set) var capturedMedia: MCameraMedia? = nil
-    @Published private(set) var outputType: CameraOutputType = .photo
-    @Published private(set) var cameraPosition: CameraPosition = .back
-    @Published private(set) var cameraFilters: [CIFilter] = []
-    @Published private(set) var zoomFactor: CGFloat = 1.0
-    @Published private(set) var flashMode: CameraFlashMode = .off
-    @Published private(set) var torchMode: CameraTorchMode = .off
-    @Published private(set) var cameraExposure: CameraExposure = .init()
-    @Published private(set) var hdrMode: CameraHDRMode = .auto
-    @Published private(set) var mirrorOutput: Bool = false
-    @Published private(set) var isGridVisible: Bool = true
-    @Published private(set) var isRecording: Bool = false
-    @Published private(set) var recordingTime: MTime = .zero
-    @Published private(set) var deviceOrientation: AVCaptureVideoOrientation = .portrait
+    @Published private(set) var attributes: Attributes = .init()
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
