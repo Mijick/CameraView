@@ -83,6 +83,7 @@ private extension CameraManager {
     func cancelProcesses() {
         captureSession.stopRunning()
         motionManager.stopAccelerometerUpdates()
+        timer.reset()
     }
     func resetAttributes() {
         attributes = .init()
@@ -108,7 +109,6 @@ private extension CameraManager {
         cameraBlurView = nil
         cameraFocusView = .init()
         motionManager = .init()
-        timer.reset()
     }
 }
 
@@ -776,7 +776,13 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    var frameOrientation: CGImagePropertyOrientation { attributes.cameraPosition == .back ? .right : .leftMirrored }
+    var frameOrientation: CGImagePropertyOrientation { switch UIDevice.current.orientation {
+        case .portrait: attributes.cameraPosition == .back ? .right : .leftMirrored
+        case .landscapeLeft: attributes.cameraPosition == .back ? .up : .downMirrored
+        case .landscapeRight: attributes.cameraPosition == .back ? .down : .upMirrored
+        case .portraitUpsideDown: attributes.cameraPosition == .back ? .right : .leftMirrored
+        default: attributes.cameraPosition == .back ? .right : .leftMirrored
+    }}
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
