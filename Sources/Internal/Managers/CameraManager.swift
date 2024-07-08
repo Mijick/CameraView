@@ -19,6 +19,7 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
     // MARK: Attributes
     struct Attributes {
         var capturedMedia: MCameraMedia? = nil
+        var error: Error? = nil
         var outputType: CameraOutputType = .photo
         var cameraPosition: CameraPosition = .back
         var cameraFilters: [CIFilter] = []
