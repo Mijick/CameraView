@@ -234,11 +234,16 @@ private extension CameraManager {
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
     }}
-    func announceSetupCompletion() { DispatchQueue.main.async { [self] in
-        objectWillChange.send()
-    }}
 }
 private extension CameraManager {
+    func checkPermissions(_ mediaType: AVMediaType) async throws { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
+        case .denied, .restricted: throw getPermissionsError(mediaType)
+        case .notDetermined: let granted = await AVCaptureDevice.requestAccess(for: mediaType); if !granted { throw getPermissionsError(mediaType) }
+        default: return
+    }}
+    func animateCameraViewEntrance() { UIView.animate(withDuration: 0.4, delay: 0.8) {
+        self.cameraView.alpha = 1
+    }}
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
         case .back: try setupInput(backCameraInput)
