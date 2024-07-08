@@ -60,13 +60,13 @@ private extension UICameraInputView {
         do { try self.cameraManager.setup(in: view) }
         catch {}
     }
-    func setupPinchGesture() {
-        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
-        view.addGestureRecognizer(pinchRecognizer)
-    }
     func setupTapGesture() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         view.addGestureRecognizer(tapRecognizer)
+    }
+    func setupPinchGesture() {
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
+        view.addGestureRecognizer(pinchRecognizer)
     }
     func animateEntrance() { UIView.animate(withDuration: 0.4, delay: 0.8) { [self] in
         view.alpha = 1
