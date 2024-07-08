@@ -124,38 +124,43 @@ extension CameraManager {
     }
 }
 
-// MARK: - Checking Camera Permissions
-extension CameraManager {
-    func checkPermissions() throws {
-        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied { throw Error.microphonePermissionsNotGranted }
-        if AVCaptureDevice.authorizationStatus(for: .video) == .denied { throw Error.cameraPermissionsNotGranted }
-    }
-}
-
 // MARK: - Initialising Camera
 extension CameraManager {
-    func setup(in cameraView: UIView) throws {
-        initialiseCaptureSession()
-        initialiseMetal()
-        initialiseCameraLayer(cameraView)
-        initialiseCameraMetalView()
-        initialiseCameraGridView()
-        initialiseDevices()
-        initialiseInputs()
-        initialiseOutputs()
-        initializeMotionManager()
-        initialiseObservers()
+    func setup(in cameraView: UIView) {
+        do {
+            makeCameraViewInvisible(cameraView)
+            checkPermissions()
+            initialiseCaptureSession()
+            initialiseMetal()
+            initialiseCameraLayer(cameraView)
+            initialiseCameraMetalView()
+            initialiseCameraGridView()
+            initialiseDevices()
+            initialiseInputs()
+            initialiseOutputs()
+            initializeMotionManager()
+            initialiseObservers()
 
-        try setupDeviceInputs()
-        try setupDeviceOutput()
-        try setupFrameRecorder()
-        try setupCameraAttributes()
+            try setupDeviceInputs()
+            try setupDeviceOutput()
+            try setupFrameRecorder()
+            try setupCameraAttributes()
 
-        startCaptureSession()
-        announceSetupCompletion()
+            startCaptureSession()
+        } catch {}
     }
 }
 private extension CameraManager {
+    func makeCameraViewInvisible(_ view: UIView) {
+        view.alpha = 0
+    }
+    func checkPermissions() { Task { @MainActor in
+        do {
+            try await checkPermissions(.video)
+            try await checkPermissions(.audio)
+            animateCameraViewEntrance()
+        } catch { attributes.error = error as? Error }
+    }}
     func initialiseCaptureSession() {
         captureSession = .init()
     }
