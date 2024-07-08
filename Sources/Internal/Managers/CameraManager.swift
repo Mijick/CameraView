@@ -273,24 +273,13 @@ extension CameraManager {
 // MARK: - Camera Rotation
 extension CameraManager {
     func fixCameraRotation() { if !orientationLocked { 
-        initialiseCameraGridView()
+        redrawGrid()
     }}
 }
 private extension CameraManager {
-    func calculateRotationAngle(_ deviceOrientation: UIDeviceOrientation) -> CGFloat { switch deviceOrientation {
-        case .portrait: 90
-        case .landscapeLeft: 0
-        case .landscapeRight: 180
-        case .portraitUpsideDown: 270
-        default: 0
-    }}
-    func calculateVideoOrientation(_ deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation { switch deviceOrientation {
-        case .portrait: .portrait
-        case .landscapeLeft: .landscapeRight
-        case .landscapeRight: .landscapeLeft
-        case .portraitUpsideDown: .portraitUpsideDown
-        default: .portrait
-    }}
+    func redrawGrid() {
+        cameraGridView?.draw(.zero)
+    }
 }
 
 // MARK: - Changing Output Type
