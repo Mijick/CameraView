@@ -177,6 +177,7 @@ private extension CameraManager {
         cameraMetalView.isPaused = true
         cameraMetalView.enableSetNeedsDisplay = false
         cameraMetalView.framebufferOnly = false
+        cameraMetalView.autoResizeDrawable = false
 
         cameraMetalView.contentMode = .scaleAspectFill
         cameraMetalView.clipsToBounds = true
