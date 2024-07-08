@@ -13,13 +13,12 @@ import SwiftUI
 
 public struct MCameraController: View {
     @ObservedObject var cameraManager: CameraManager
-    @State var cameraError: CameraManager.Error?
     @Namespace var namespace
     var config: CameraConfig = .init()
 
     
     public var body: some View {
-        ZStack { switch cameraError {
+        ZStack { switch cameraManager.attributes.error {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
         }}
@@ -49,7 +48,6 @@ private extension MCameraController {
 
 private extension MCameraController {
     func onAppear() {
-        checkCameraPermissions()
         lockScreenOrientation()
     }
     func onDisappear() {
@@ -64,10 +62,6 @@ private extension MCameraController {
     }}
 }
 private extension MCameraController {
-    func checkCameraPermissions() {
-        do { try cameraManager.checkPermissions() }
-        catch { cameraError = error as? CameraManager.Error }
-    }
     func lockScreenOrientation() {
         config.appDelegate?.orientationLock = .portrait
         UINavigationController.attemptRotationToDeviceOrientation()

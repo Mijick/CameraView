@@ -37,28 +37,21 @@ fileprivate class UICameraInputView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        makeViewInvisible()
         setupCameraManager()
         setupTapGesture()
         setupPinchGesture()
-        animateEntrance()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        cameraManager.cameraLayer.frame = view.bounds
         cameraManager.fixCameraRotation()
     }
 }
 
 // MARK: - Setup
 private extension UICameraInputView {
-    func makeViewInvisible() {
-        view.alpha = 0
-    }
     func setupCameraManager() {
-        do { try self.cameraManager.setup(in: view) }
-        catch {}
+        cameraManager.setup(in: view)
     }
     func setupTapGesture() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
@@ -68,9 +61,6 @@ private extension UICameraInputView {
         let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
         view.addGestureRecognizer(pinchRecognizer)
     }
-    func animateEntrance() { UIView.animate(withDuration: 0.4, delay: 0.8) { [self] in
-        view.alpha = 1
-    }}
 }
 
 // MARK: - Gestures
