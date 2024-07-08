@@ -248,6 +248,11 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
+    func getPermissionsError(_ mediaType: AVMediaType) -> Error { switch mediaType {
+        case .audio: .microphonePermissionsNotGranted
+        case .video: .cameraPermissionsNotGranted
+        default: .cameraPermissionsNotGranted
+    }}
     func setupInput(_ input: AVCaptureDeviceInput?) throws {
         guard let input,
               captureSession.canAddInput(input)
