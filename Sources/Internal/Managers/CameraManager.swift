@@ -729,13 +729,10 @@ private extension CameraManager {
         let newUserBlockedScreenRotation = getNewUserBlockedScreenRotation()
         updateUserBlockedScreenRotation(newUserBlockedScreenRotation)
     }
-    func updateFrameOrientation() {
-        guard !orientationLocked else { return updateFrameOrientationWhenOrientationIsLocked() }
-        guard UIDevice.current.orientation != .portraitUpsideDown else { return }
-
-        let newFrameOrientation = getNewFrameOrientation()
+    func updateFrameOrientation() { if UIDevice.current.orientation != .portraitUpsideDown {
+        let newFrameOrientation = getNewFrameOrientation(orientationLocked ? .portrait : UIDevice.current.orientation)
         updateFrameOrientation(newFrameOrientation)
-    }
+    }}
 }
 private extension CameraManager {
     func getNewUserBlockedScreenRotation() -> Bool { switch attributes.deviceOrientation.rawValue == UIDevice.current.orientation.rawValue {
