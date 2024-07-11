@@ -723,6 +723,75 @@ private extension CameraManager {
     func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != attributes.deviceOrientation {
         attributes.deviceOrientation = newDeviceOrientation
     }}
+    func updateUserBlockedScreenRotation() {
+        // jeśli UIDevice.current.orientation == .portrait -> blocked z automatu
+        // jeśli inne
+
+
+
+
+
+
+
+
+        let a = UIDevice.current.orientation.rawValue
+
+
+
+        //print(newDeviceOrientation.rawValue == a)
+
+
+        // jeśli użytkownik zablokował to UIScreen.device i tak robi swoje
+
+
+
+        //attributes.isScreenRotationBlocked
+
+
+
+
+
+    }
+    func updateFrameOrientation() {
+        guard !orientationLocked else { return updateFrameOrientationWhenOrientationIsLocked() }
+        guard UIDevice.current.orientation != .portraitUpsideDown else { return }
+
+        let newFrameOrientation = getNewFrameOrientation()
+        updateFrameOrientation(newFrameOrientation)
+    }
+}
+private extension CameraManager {
+    func updateFrameOrientationWhenOrientationIsLocked() {
+        let newFrameOrientation: CGImagePropertyOrientation = attributes.cameraPosition == .back ? .right : .leftMirrored
+        updateFrameOrientation(newFrameOrientation)
+    }
+    func getNewFrameOrientation() -> CGImagePropertyOrientation { switch UIDevice.current.orientation {
+        case .portrait: attributes.cameraPosition == .back ? .right : .leftMirrored
+        case .landscapeLeft: attributes.cameraPosition == .back ? .up : .downMirrored
+        case .landscapeRight: attributes.cameraPosition == .back ? .down : .upMirrored
+        default: attributes.cameraPosition == .back ? .right : .leftMirrored
+    }}
+    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != frameOrientation {
+        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
+
+        animateFrameOrientationChangeIfNeeded(shouldAnimate)
+        changeFrameOrientation(shouldAnimate, newFrameOrientation)
+    }}
+}
+private extension CameraManager {
+    func shouldAnimateFrameOrientationChange(_ newFrameOrientation: CGImagePropertyOrientation) -> Bool {
+        let backCameraOrientations: [CGImagePropertyOrientation] = [.left, .right, .up, .down],
+            frontCameraOrientations: [CGImagePropertyOrientation] = [.leftMirrored, .rightMirrored, .upMirrored, .downMirrored]
+        return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(frameOrientation))
+            || (frontCameraOrientations.contains(frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
+    }
+    func animateFrameOrientationChangeIfNeeded(_ shouldAnimate: Bool) { if shouldAnimate {
+        cameraView.alpha = 0
+        UIView.animate(withDuration: 0.3, delay: 0.3) { [self] in cameraView.alpha = 1 }
+    }}
+    func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) { DispatchQueue.main.asyncAfter(deadline: .now() + (shouldAnimate ? 0.1 : 0)) { [self] in
+        frameOrientation = newFrameOrientation
+    }}
 }
 
 // MARK: - Handling Observers
@@ -792,13 +861,6 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    var frameOrientation: CGImagePropertyOrientation { switch UIDevice.current.orientation {
-        case .portrait: attributes.cameraPosition == .back ? .right : .leftMirrored
-        case .landscapeLeft: attributes.cameraPosition == .back ? .up : .downMirrored
-        case .landscapeRight: attributes.cameraPosition == .back ? .down : .upMirrored
-        case .portraitUpsideDown: attributes.cameraPosition == .back ? .right : .leftMirrored
-        default: attributes.cameraPosition == .back ? .right : .leftMirrored
-    }}
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
