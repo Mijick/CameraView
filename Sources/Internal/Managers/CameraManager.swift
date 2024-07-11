@@ -78,6 +78,7 @@ extension CameraManager {
         cancelProcesses()
         resetAttributes()
         resetOthers()
+        removeObservers()
     }
 }
 private extension CameraManager {
@@ -110,6 +111,9 @@ private extension CameraManager {
         cameraBlurView = nil
         cameraFocusView = .init()
         motionManager = .init()
+    }
+    func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
     }
 }
 
