@@ -73,7 +73,7 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
 
     // MARK: Other Attributes
     private(set) var isRunning: Bool = false
-    private(set) var frameOrientation: CGImagePropertyOrientation = .up
+    private(set) var frameOrientation: CGImagePropertyOrientation = .right
     private(set) var orientationLocked: Bool = false
 }
 
