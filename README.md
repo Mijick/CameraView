@@ -113,15 +113,24 @@ Open the info.plist file of your project. Add two new keys: `Privacy - Microphon
 ![CleanShot 2024-05-06 at 13 41 25](https://github.com/Mijick/CameraView/assets/23524947/5da706bd-1d16-49f9-8e58-3a416872bb68)
 
 
-### 2. Insert MCameraController into the selected view
-MCameraController contains three screens - `CameraView`, `CameraPreview` (which can be turned off) and `CameraErrorView`. Therefore, we advise that there should be no other elements in the view where you declare `MCameraController`. We’ve designed this system around the experience and needs of ourselves and the developers we know. However, if your preferences are different, we are happy to meet your expectations and adapt our library. Share them with us by creating an [issue][AddIssue] for this project.
+### 2. Create a new CameraManager object
+Create a camera manager object in the view structure to contain MCameraController. It can be initialized with attributes, with which you will start an instance of your camera.
 ```Swift
 struct CameraView: View {
+    @ObservedObject private var manager: CameraManager = .init(
+        outputType: .photo,
+        cameraPosition: .back,
+        cameraFilters: [.init(name: "CISepiaTone")!],
+        flashMode: .off,
+        isGridVisible: true,
+        focusImageColor: .blue,
+        focusImageSize: 100
+    )
 
     (...)
    
     var body: some View {
-        MCameraController()
+        (...)
     }
 
     (...)
@@ -129,7 +138,24 @@ struct CameraView: View {
 ```
 
 
-### 3. Declare `onImageCaptured`, `onVideoCaptured`, `afterMediaCaptured` and `onCloseController`
+### 3. Insert MCameraController into the selected view
+MCameraController contains three screens - `CameraView`, `CameraPreview` (which can be turned off) and `CameraErrorView`. Therefore, we advise that there should be no other elements in the view where you declare `MCameraController`. We’ve designed this system around the experience and needs of ourselves and the developers we know. However, if your preferences are different, we are happy to meet your expectations and adapt our library. Share them with us by creating an [issue][AddIssue] for this project.
+```Swift
+struct CameraView: View {
+    @ObservedObject private var manager: CameraManager = (...)
+
+    (...)
+   
+    var body: some View {
+        MCameraController(manager: manager)
+    }
+
+    (...)
+}
+```
+
+
+### 4. Declare `onImageCaptured`, `onVideoCaptured`, `afterMediaCaptured` and `onCloseController`
 The above functions define what happens after a given action and are optional; for example, if your application only captures images, you don't need to declare onVideoCaptured and so on.
 ```Swift
 struct CameraView: View {
@@ -137,7 +163,7 @@ struct CameraView: View {
     (...)
    
     var body: some View {
-        MCameraController()
+        MCameraController(manager: manager)
             .onImageCaptured { data in
                 print("IMAGE CAPTURED")
             }
@@ -157,7 +183,7 @@ struct CameraView: View {
 ```
 
 
-### 4. (Optional) Block screen rotation for MCameraController
+### 5. (Optional) Block screen rotation for MCameraController
 CameraView library by Mijick, allows you to lock the screen rotation for `MCameraController`, even if a **device rotation is unlocked**.
 To achieve it, create an AppDelegate class conforming to `MApplicationDelegate`, declare `@UIApplicationDelegateAdaptor` in `@main struct` and set `lockOrientation(AppDelegate.self)` for `MCameraController`.
 ```Swift
@@ -184,38 +210,13 @@ struct CameraView: View {
     (...)
    
     var body: some View {
-        MCameraController()
+        MCameraController(manager: manager)
             .lockOrientation(AppDelegate.self)
     }
 
     (...)
 }
 ```
-
-
-### 5. (Optional) Change the initial camera settings
-You can change the initial camera settings using the modifiers from the list below:
-```Swift
-struct CameraView: View {
-
-    (...)
-   
-    var body: some View {
-        MCameraController()
-            .outputType(.video)
-            .cameraPosition(.front)
-            .flashMode(.auto)
-            .gridVisible(false)
-            .focusImage(.init(named: "icon-focus")!)
-            .focusImageColor(.blue)
-            .focusImageSize(120)
-            .changeCameraFilters([.init(name: "CISepiaTone")!])
-    }
-
-    (...)
-}
-```
-
 
 ### 6. (Optional) Change CameraView UI
 You can change the appearance of the `CameraView` by creating a new structure, conforming to `MCameraView` and using the `cameraScreen` modifier.
@@ -254,7 +255,7 @@ struct CameraView: View {
     (...)
    
     var body: some View {
-        MCameraController()
+        MCameraController(manager: manager)
             .cameraScreen(CustomCameraView.init)
     }
 
@@ -318,7 +319,7 @@ struct CameraView: View {
     (...)
    
     var body: some View {
-        MCameraController()
+        MCameraController(manager: manager)
             .mediaPreviewScreen(CustomCameraPreview.init)
     }
 
@@ -347,7 +348,7 @@ struct CameraView: View {
     (...)
    
     var body: some View {
-        MCameraController()
+        MCameraController(manager: manager)
             .errorScreen(CustomCameraErrorView.init)
     }
 
