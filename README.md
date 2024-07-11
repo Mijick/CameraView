@@ -47,9 +47,10 @@
 </p>
 
 <p align="center">
-    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-1.gif" width="30%"/>
-    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-2.gif" width="30%"/>
-    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-3.gif" width="30%"/>
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-1.gif" width="24.5%"/>
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-2.gif" width="24.5%"/>
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-3.gif" width="24.5%"/>
+    <img alt="Popup Examples" src="https://github.com/Mijick/Assets/blob/main/CameraView/GIFs/CameraView-4.gif" width="24.5%"/>
 </p>
 
 <br>
