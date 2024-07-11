@@ -763,6 +763,18 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
+    func getNewFrameOrientationForBackCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
+        case .portrait: attributes.mirrorOutput ? .leftMirrored : .right
+        case .landscapeLeft: attributes.mirrorOutput ? .upMirrored : .up
+        case .landscapeRight: attributes.mirrorOutput ? .downMirrored : .down
+        default: attributes.mirrorOutput ? .leftMirrored : .right
+    }}
+    func getNewFrameOrientationForFrontCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
+        case .portrait: attributes.mirrorOutput ? .right : .leftMirrored
+        case .landscapeLeft: attributes.mirrorOutput ? .down : .downMirrored
+        case .landscapeRight: attributes.mirrorOutput ? .up : .upMirrored
+        default: attributes.mirrorOutput ? .right : .leftMirrored
+    }}
     func shouldAnimateFrameOrientationChange(_ newFrameOrientation: CGImagePropertyOrientation) -> Bool {
         let backCameraOrientations: [CGImagePropertyOrientation] = [.left, .right, .up, .down],
             frontCameraOrientations: [CGImagePropertyOrientation] = [.leftMirrored, .rightMirrored, .upMirrored, .downMirrored]
