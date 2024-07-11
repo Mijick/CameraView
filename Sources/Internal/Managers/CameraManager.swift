@@ -724,33 +724,8 @@ private extension CameraManager {
         attributes.deviceOrientation = newDeviceOrientation
     }}
     func updateUserBlockedScreenRotation() {
-        // jeśli UIDevice.current.orientation == .portrait -> blocked z automatu
-        // jeśli inne
-
-
-
-
-
-
-
-
-        let a = UIDevice.current.orientation.rawValue
-
-
-
-        //print(newDeviceOrientation.rawValue == a)
-
-
-        // jeśli użytkownik zablokował to UIScreen.device i tak robi swoje
-
-
-
-        //attributes.isScreenRotationBlocked
-
-
-
-
-
+        let newUserBlockedScreenRotation = getNewUserBlockedScreenRotation()
+        updateUserBlockedScreenRotation(newUserBlockedScreenRotation)
     }
     func updateFrameOrientation() {
         guard !orientationLocked else { return updateFrameOrientationWhenOrientationIsLocked() }
