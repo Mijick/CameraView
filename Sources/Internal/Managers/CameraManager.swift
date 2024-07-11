@@ -730,7 +730,7 @@ private extension CameraManager {
 
 // MARK: - Capturing Live Frames
 extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch lastAction {
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch metalAnimation {
         case .none: changeDisplayedFrame(sampleBuffer)
         default: presentCameraAnimation()
     }}
@@ -747,7 +747,7 @@ private extension CameraManager {
 
         insertBlurView(snapshot)
         animateBlurFlip()
-        lastAction = .none
+        metalAnimation = .none
     }
 }
 private extension CameraManager {
@@ -777,7 +777,7 @@ private extension CameraManager {
 
         cameraView.addSubview(cameraBlurView)
     }}
-    func animateBlurFlip() { if lastAction == .cameraPositionChange {
+    func animateBlurFlip() { if metalAnimation == .blurAndFlip {
         UIView.transition(with: cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
     func removeBlur() { Task { @MainActor [self] in
@@ -799,7 +799,7 @@ private extension CameraManager {
     var flipAnimationTransition: UIView.AnimationOptions { attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
 private extension CameraManager {
-    enum LastAction { case cameraPositionChange, outputTypeChange, mediaCapture, none }
+    enum MetalAnimation { case blurAndFlip, blur, none }
 }
 
 // MARK: - Metal Handlers
@@ -837,8 +837,8 @@ extension CameraManager {
 
 // MARK: - Helpers
 private extension CameraManager {
-    func captureCurrentFrameAndDelay(_ type: LastAction, _ action: @escaping () throws -> ()) { Task { @MainActor in
-        lastAction = type
+    func captureCurrentFrameAndDelay(_ type: MetalAnimation, _ action: @escaping () throws -> ()) { Task { @MainActor in
+        metalAnimation = type
         try await Task.sleep(nanoseconds: 150_000_000)
 
         try action()
