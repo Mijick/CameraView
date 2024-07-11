@@ -57,6 +57,7 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
     private var ciContext: CIContext!
     private var currentFrame: CIImage?
     private var firstRecordedFrame: UIImage?
+    private var metalAnimation: MetalAnimation = .none
 
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
