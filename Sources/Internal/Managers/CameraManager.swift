@@ -33,6 +33,7 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
         var isRecording: Bool = false
         var recordingTime: MTime = .zero
         var deviceOrientation: AVCaptureVideoOrientation = .portrait
+        var userBlockedScreenRotation: Bool = false
     }
     @Published private(set) var attributes: Attributes
 
@@ -66,11 +67,13 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
     private(set) var cameraBlurView: UIImageView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
-    // MARK: Others
+    // MARK: Other Objects
     private var motionManager: CMMotionManager = .init()
-    private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
-    private var orientationLocked: Bool = false
+
+    // MARK: Other Attributes
+    private(set) var frameOrientation: CGImagePropertyOrientation = .up
+    private(set) var orientationLocked: Bool = false
 }
 
 // MARK: - Cancellation
@@ -215,7 +218,7 @@ private extension CameraManager {
         videoOutput = .init()
     }
     func initializeMotionManager() {
-        motionManager.accelerometerUpdateInterval = 0.2
+        motionManager.accelerometerUpdateInterval = 0.05
         motionManager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
     }
     func initialiseObservers() {
@@ -705,6 +708,8 @@ private extension CameraManager {
     func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Swift.Error?) { if let data, error == nil {
         let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
         updateDeviceOrientation(newDeviceOrientation)
+        updateUserBlockedScreenRotation()
+        updateFrameOrientation()
     }}
 }
 private extension CameraManager {
