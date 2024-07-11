@@ -305,7 +305,7 @@ private extension CameraManager {
 // MARK: - Changing Output Type
 extension CameraManager {
     func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
-        captureCurrentFrameAndDelay(.outputTypeChange) { [self] in
+        captureCurrentFrameAndDelay(.blur) { [self] in
             removeCameraOutput(attributes.outputType)
             try setupCameraOutput(newOutputType)
             updateCameraOutputType(newOutputType)
@@ -333,7 +333,7 @@ private extension CameraManager {
 // MARK: - Changing Camera Position
 extension CameraManager {
     func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != attributes.cameraPosition && !isChanging {
-        captureCurrentFrameAndDelay(.cameraPositionChange) { [self] in
+        captureCurrentFrameAndDelay(.blurAndFlip) { [self] in
             removeCameraInput(attributes.cameraPosition)
             try setupCameraInput(newPosition)
             updateCameraPosition(newPosition)
@@ -708,11 +708,11 @@ private extension CameraManager {
 }
 private extension CameraManager {
     func fetchDeviceOrientation(_ acceleration: CMAcceleration) -> AVCaptureVideoOrientation { switch acceleration {
-        case let acceleration where acceleration.x >= 0.75: return .landscapeLeft
-        case let acceleration where acceleration.x <= -0.75: return .landscapeRight
-        case let acceleration where acceleration.y <= -0.75: return .portrait
-        case let acceleration where acceleration.y >= 0.75: return .portraitUpsideDown
-        default: return attributes.deviceOrientation
+        case let acceleration where acceleration.x >= 0.75: .landscapeLeft
+        case let acceleration where acceleration.x <= -0.75: .landscapeRight
+        case let acceleration where acceleration.y <= -0.75: .portrait
+        case let acceleration where acceleration.y >= 0.75: .portraitUpsideDown
+        default: attributes.deviceOrientation
     }}
     func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != attributes.deviceOrientation {
         attributes.deviceOrientation = newDeviceOrientation
