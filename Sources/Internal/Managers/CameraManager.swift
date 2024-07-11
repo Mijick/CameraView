@@ -770,8 +770,8 @@ private extension CameraManager {
             || (frontCameraOrientations.contains(frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
     }
     func animateFrameOrientationChangeIfNeeded(_ shouldAnimate: Bool) { if shouldAnimate {
-        cameraView.alpha = 0
-        UIView.animate(withDuration: 0.3, delay: 0.3) { [self] in cameraView.alpha = 1 }
+        UIView.animate(withDuration: 0.2) { [self] in cameraView.alpha = 0 }
+        UIView.animate(withDuration: 0.3, delay: 0.2) { [self] in cameraView.alpha = 1 }
     }}
     func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) { DispatchQueue.main.asyncAfter(deadline: .now() + (shouldAnimate ? 0.1 : 0)) { [self] in
         frameOrientation = newFrameOrientation
