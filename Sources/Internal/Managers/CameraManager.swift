@@ -72,6 +72,7 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
     private var timer: MTimer = .createNewInstance()
 
     // MARK: Other Attributes
+    private(set) var isRunning: Bool = false
     private(set) var frameOrientation: CGImagePropertyOrientation = .up
     private(set) var orientationLocked: Bool = false
 }
@@ -254,9 +255,10 @@ private extension CameraManager {
         case .notDetermined: let granted = await AVCaptureDevice.requestAccess(for: mediaType); if !granted { throw getPermissionsError(mediaType) }
         default: return
     }}
-    func animateCameraViewEntrance() { UIView.animate(withDuration: 0.4, delay: 0.8) {
-        self.cameraView.alpha = 1
-    }}
+    func animateCameraViewEntrance() {
+        UIView.animate(withDuration: 0.3, delay: 1) { [self] in cameraView.alpha = 1 }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in isRunning = true }
+    }
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
         case .back: try setupInput(backCameraInput)
@@ -754,7 +756,7 @@ private extension CameraManager {
         default: attributes.cameraPosition == .back ? .right : .leftMirrored
     }}
     func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != frameOrientation {
-        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
+        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation) && isRunning
 
         animateFrameOrientationChangeIfNeeded(shouldAnimate)
         changeFrameOrientation(shouldAnimate, newFrameOrientation)
