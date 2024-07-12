@@ -37,40 +37,30 @@ fileprivate class UICameraInputView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        makeViewInvisible()
         setupCameraManager()
         setupTapGesture()
         setupPinchGesture()
-        animateEntrance()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        cameraManager.cameraLayer.frame = view.bounds
         cameraManager.fixCameraRotation()
     }
 }
 
 // MARK: - Setup
 private extension UICameraInputView {
-    func makeViewInvisible() {
-        view.alpha = 0
-    }
     func setupCameraManager() {
-        do { try self.cameraManager.setup(in: view) }
-        catch {}
-    }
-    func setupPinchGesture() {
-        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
-        view.addGestureRecognizer(pinchRecognizer)
+        cameraManager.setup(in: view)
     }
     func setupTapGesture() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         view.addGestureRecognizer(tapRecognizer)
     }
-    func animateEntrance() { UIView.animate(withDuration: 0.4, delay: 0.8) { [self] in
-        view.alpha = 1
-    }}
+    func setupPinchGesture() {
+        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
+        view.addGestureRecognizer(pinchRecognizer)
+    }
 }
 
 // MARK: - Gestures
@@ -92,7 +82,7 @@ private extension UICameraInputView {
 // MARK: Pinch
 private extension UICameraInputView {
     @objc func handlePinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
-        let desiredZoomFactor = cameraManager.zoomFactor + atan2(pinch.velocity, 33)
+        let desiredZoomFactor = cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
         changeZoomFactor(desiredZoomFactor)
     }}
 }

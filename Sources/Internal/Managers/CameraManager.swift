@@ -15,22 +15,27 @@ import MetalKit
 import CoreMotion
 import MijickTimer
 
-public class CameraManager: NSObject, ObservableObject {
+public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attributes) { self.initialAttributes = attributes; self.attributes = attributes }
     // MARK: Attributes
-    @Published private(set) var capturedMedia: MCameraMedia? = nil
-    @Published private(set) var outputType: CameraOutputType = .photo
-    @Published private(set) var cameraPosition: CameraPosition = .back
-    @Published private(set) var cameraFilters: [CIFilter] = []
-    @Published private(set) var zoomFactor: CGFloat = 1.0
-    @Published private(set) var flashMode: CameraFlashMode = .off
-    @Published private(set) var torchMode: CameraTorchMode = .off
-    @Published private(set) var cameraExposure: CameraExposure = .init()
-    @Published private(set) var hdrMode: CameraHDRMode = .auto
-    @Published private(set) var mirrorOutput: Bool = false
-    @Published private(set) var isGridVisible: Bool = true
-    @Published private(set) var isRecording: Bool = false
-    @Published private(set) var recordingTime: MTime = .zero
-    @Published private(set) var deviceOrientation: AVCaptureVideoOrientation = .portrait
+    struct Attributes {
+        var capturedMedia: MCameraMedia? = nil
+        var error: Error? = nil
+        var outputType: CameraOutputType = .photo
+        var cameraPosition: CameraPosition = .back
+        var cameraFilters: [CIFilter] = []
+        var zoomFactor: CGFloat = 1.0
+        var flashMode: CameraFlashMode = .off
+        var torchMode: CameraTorchMode = .off
+        var cameraExposure: CameraExposure = .init()
+        var hdrMode: CameraHDRMode = .auto
+        var mirrorOutput: Bool = false
+        var isGridVisible: Bool = true
+        var isRecording: Bool = false
+        var recordingTime: MTime = .zero
+        var deviceOrientation: AVCaptureVideoOrientation = .portrait
+        var userBlockedScreenRotation: Bool = false
+    }
+    @Published private(set) var attributes: Attributes
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
@@ -53,6 +58,7 @@ public class CameraManager: NSObject, ObservableObject {
     private var ciContext: CIContext!
     private var currentFrame: CIImage?
     private var firstRecordedFrame: UIImage?
+    private var metalAnimation: MetalAnimation = .none
 
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
@@ -61,66 +67,110 @@ public class CameraManager: NSObject, ObservableObject {
     private(set) var cameraBlurView: UIImageView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
-    // MARK: Others
+    // MARK: Other Objects
     private var motionManager: CMMotionManager = .init()
-    private var lastAction: LastAction = .none
     private var timer: MTimer = .createNewInstance()
-    private var orientationLocked: Bool = false
+
+    // MARK: Other Attributes
+    private(set) var isRunning: Bool = false
+    private(set) var frameOrientation: CGImagePropertyOrientation = .right
+    private(set) var orientationLocked: Bool = false
+    private(set) var initialAttributes: Attributes
+}
+
+// MARK: - Cancellation
+extension CameraManager {
+    func cancel() {
+        cancelProcesses()
+        resetAttributes()
+        resetOthers()
+        removeObservers()
+    }
+}
+private extension CameraManager {
+    func cancelProcesses() {
+        captureSession.stopRunning()
+        motionManager.stopAccelerometerUpdates()
+        timer.reset()
+    }
+    func resetAttributes() {
+        attributes = initialAttributes
+    }
+    func resetOthers() {
+        frontCamera = nil
+        backCamera = nil
+        microphone = nil
+        captureSession = nil
+        frontCameraInput = nil
+        backCameraInput = nil
+        audioInput = nil
+        photoOutput = nil
+        videoOutput = nil
+        metalDevice = nil
+        metalCommandQueue = nil
+        ciContext = nil
+        currentFrame = nil
+        firstRecordedFrame = nil
+        cameraLayer = nil
+        cameraMetalView = nil
+        cameraGridView = nil
+        cameraBlurView = nil
+        cameraFocusView = .init()
+        motionManager = .init()
+    }
+    func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
+    }
 }
 
 // MARK: - Changing Attributes
 extension CameraManager {
-    func change(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, flashMode: CameraFlashMode? = nil, isGridVisible: Bool? = nil, focusImage: UIImage? = nil, focusImageColor: UIColor? = nil, focusImageSize: CGFloat? = nil) {
-        if let outputType { self.outputType = outputType }
-        if let cameraPosition { self.cameraPosition = cameraPosition }
-        if let cameraFilters { self.cameraFilters = cameraFilters }
-        if let flashMode { self.flashMode = flashMode }
-        if let isGridVisible { self.isGridVisible = isGridVisible }
-        if let focusImage { self.cameraFocusView.image = focusImage }
-        if let focusImageColor { self.cameraFocusView.tintColor = focusImageColor }
-        if let focusImageSize { self.cameraFocusView.frame.size = .init(width: focusImageSize, height: focusImageSize) }
-    }
     func resetCapturedMedia() {
-        capturedMedia = nil
+        attributes.capturedMedia = nil
     }
     func resetZoomAndTorch() {
-        zoomFactor = 1.0
-        torchMode = .off
-    }
-}
-
-// MARK: - Checking Camera Permissions
-extension CameraManager {
-    func checkPermissions() throws {
-        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied { throw Error.microphonePermissionsNotGranted }
-        if AVCaptureDevice.authorizationStatus(for: .video) == .denied { throw Error.cameraPermissionsNotGranted }
+        attributes.zoomFactor = 1.0
+        attributes.torchMode = .off
     }
 }
 
 // MARK: - Initialising Camera
 extension CameraManager {
-    func setup(in cameraView: UIView) throws {
-        initialiseCaptureSession()
-        initialiseMetal()
-        initialiseCameraLayer(cameraView)
-        initialiseCameraMetalView()
-        initialiseCameraGridView()
-        initialiseDevices()
-        initialiseInputs()
-        initialiseOutputs()
-        initializeMotionManager()
-        initialiseObservers()
+    func setup(in cameraView: UIView) {
+        do {
+            makeCameraViewInvisible(cameraView)
+            checkPermissions()
+            initialiseCaptureSession()
+            initialiseMetal()
+            initialiseCameraLayer(cameraView)
+            initialiseCameraMetalView()
+            initialiseCameraGridView()
+            initialiseDevices()
+            initialiseInputs()
+            initialiseOutputs()
+            initializeMotionManager()
+            initialiseObservers()
 
-        try setupDeviceInputs()
-        try setupDeviceOutput()
-        try setupFrameRecorder()
-        try setupCameraAttributes()
+            try setupDeviceInputs()
+            try setupDeviceOutput()
+            try setupFrameRecorder()
+            try setupCameraAttributes()
 
-        startCaptureSession()
-        announceSetupCompletion()
+            startCaptureSession()
+        } catch {}
     }
 }
 private extension CameraManager {
+    func makeCameraViewInvisible(_ view: UIView) {
+        view.alpha = 0
+    }
+    func checkPermissions() { Task { @MainActor in
+        do {
+            try await checkPermissions(.video)
+            try await checkPermissions(.audio)
+            animateCameraViewEntrance()
+        } catch { attributes.error = error as? Error }
+    }}
     func initialiseCaptureSession() {
         captureSession = .init()
     }
@@ -143,15 +193,16 @@ private extension CameraManager {
         cameraMetalView.isPaused = true
         cameraMetalView.enableSetNeedsDisplay = false
         cameraMetalView.framebufferOnly = false
+        cameraMetalView.autoResizeDrawable = false
 
         cameraMetalView.contentMode = .scaleAspectFill
         cameraMetalView.clipsToBounds = true
         cameraMetalView.addToParent(cameraView)
     }
     func initialiseCameraGridView() {
+        cameraGridView?.removeFromSuperview()
         cameraGridView = .init()
-        cameraGridView.backgroundColor = .clear
-        cameraGridView.alpha = isGridVisible ? 1 : 0
+        cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
     }
     func initialiseDevices() {
@@ -169,18 +220,18 @@ private extension CameraManager {
         videoOutput = .init()
     }
     func initializeMotionManager() {
-        motionManager.accelerometerUpdateInterval = 0.2
+        motionManager.accelerometerUpdateInterval = 0.05
         motionManager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
     }
     func initialiseObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleSessionWasInterrupted), name: .AVCaptureSessionWasInterrupted, object: captureSession)
     }
     func setupDeviceInputs() throws {
-        try setupCameraInput(cameraPosition)
+        try setupCameraInput(attributes.cameraPosition)
         try setupInput(audioInput)
     }
     func setupDeviceOutput() throws {
-        try setupCameraOutput(outputType)
+        try setupCameraOutput(attributes.outputType)
     }
     func setupFrameRecorder() throws {
         let captureVideoOutput = AVCaptureVideoDataOutput()
@@ -188,21 +239,27 @@ private extension CameraManager {
 
         if captureSession.canAddOutput(captureVideoOutput) { captureSession?.addOutput(captureVideoOutput) }
     }
-    func setupCameraAttributes() throws { if let device = getDevice(cameraPosition) { DispatchQueue.main.async { [self] in
-        cameraExposure.duration = device.exposureDuration
-        cameraExposure.iso = device.iso
-        cameraExposure.targetBias = device.exposureTargetBias
-        cameraExposure.mode = device.exposureMode
-        hdrMode = device.hdrMode
+    func setupCameraAttributes() throws { if let device = getDevice(attributes.cameraPosition) { DispatchQueue.main.async { [self] in
+        attributes.cameraExposure.duration = device.exposureDuration
+        attributes.cameraExposure.iso = device.iso
+        attributes.cameraExposure.targetBias = device.exposureTargetBias
+        attributes.cameraExposure.mode = device.exposureMode
+        attributes.hdrMode = device.hdrMode
     }}}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
     }}
-    func announceSetupCompletion() { DispatchQueue.main.async { [self] in
-        objectWillChange.send()
-    }}
 }
 private extension CameraManager {
+    func checkPermissions(_ mediaType: AVMediaType) async throws { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
+        case .denied, .restricted: throw getPermissionsError(mediaType)
+        case .notDetermined: let granted = await AVCaptureDevice.requestAccess(for: mediaType); if !granted { throw getPermissionsError(mediaType) }
+        default: return
+    }}
+    func animateCameraViewEntrance() {
+        UIView.animate(withDuration: 0.3, delay: 1.2) { [self] in cameraView.alpha = 1 }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) { [self] in isRunning = true }
+    }
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
         case .back: try setupInput(backCameraInput)
@@ -212,6 +269,11 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
+    func getPermissionsError(_ mediaType: AVMediaType) -> Error { switch mediaType {
+        case .audio: .microphonePermissionsNotGranted
+        case .video: .cameraPermissionsNotGranted
+        default: .cameraPermissionsNotGranted
+    }}
     func setupInput(_ input: AVCaptureDeviceInput?) throws {
         guard let input,
               captureSession.canAddInput(input)
@@ -237,45 +299,21 @@ extension CameraManager {
 
 // MARK: - Camera Rotation
 extension CameraManager {
-    func fixCameraRotation() { if !orientationLocked { let orientation = UIDevice.current.orientation
-        if #available(iOS 17.0, *) { fixCameraRotationForIOS17(orientation) }
-        else { fixCameraRotationForOlderIOSVersions(orientation) }
+    func fixCameraRotation() { if !orientationLocked { 
+        redrawGrid()
     }}
 }
 private extension CameraManager {
-    @available(iOS 17.0, *) func fixCameraRotationForIOS17(_ deviceOrientation: UIDeviceOrientation) { let rotationAngle = calculateRotationAngle(deviceOrientation)
-        if cameraLayer.connection?.isVideoRotationAngleSupported(rotationAngle) ?? false {
-            cameraLayer.connection?.videoRotationAngle = rotationAngle
-        }
+    func redrawGrid() {
+        cameraGridView?.draw(.zero)
     }
-    func fixCameraRotationForOlderIOSVersions(_ deviceOrientation: UIDeviceOrientation) { let videoOrientation = calculateVideoOrientation(deviceOrientation)
-        if cameraLayer.connection?.isVideoOrientationSupported ?? false {
-            cameraLayer.connection?.videoOrientation = videoOrientation
-        }
-    }
-}
-private extension CameraManager {
-    func calculateRotationAngle(_ deviceOrientation: UIDeviceOrientation) -> CGFloat { switch deviceOrientation {
-        case .portrait: 90
-        case .landscapeLeft: 0
-        case .landscapeRight: 180
-        case .portraitUpsideDown: 270
-        default: 0
-    }}
-    func calculateVideoOrientation(_ deviceOrientation: UIDeviceOrientation) -> AVCaptureVideoOrientation { switch deviceOrientation {
-        case .portrait: .portrait
-        case .landscapeLeft: .landscapeRight
-        case .landscapeRight: .landscapeLeft
-        case .portraitUpsideDown: .portraitUpsideDown
-        default: .portrait
-    }}
 }
 
 // MARK: - Changing Output Type
 extension CameraManager {
-    func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != outputType && !isChanging {
-        captureCurrentFrameAndDelay(.outputTypeChange) { [self] in
-            removeCameraOutput(outputType)
+    func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
+        captureCurrentFrameAndDelay(.blur) { [self] in
+            removeCameraOutput(attributes.outputType)
             try setupCameraOutput(newOutputType)
             updateCameraOutputType(newOutputType)
 
@@ -289,7 +327,7 @@ private extension CameraManager {
         captureSession.removeOutput(output)
     }}
     func updateCameraOutputType(_ cameraOutputType: CameraOutputType) {
-        outputType = cameraOutputType
+        attributes.outputType = cameraOutputType
     }
 }
 private extension CameraManager {
@@ -301,9 +339,9 @@ private extension CameraManager {
 
 // MARK: - Changing Camera Position
 extension CameraManager {
-    func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != cameraPosition && !isChanging {
-        captureCurrentFrameAndDelay(.cameraPositionChange) { [self] in
-            removeCameraInput(cameraPosition)
+    func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != attributes.cameraPosition && !isChanging {
+        captureCurrentFrameAndDelay(.blurAndFlip) { [self] in
+            removeCameraInput(attributes.cameraPosition)
             try setupCameraInput(newPosition)
             updateCameraPosition(newPosition)
             
@@ -317,7 +355,7 @@ private extension CameraManager {
         captureSession.removeInput(input)
     }}
     func updateCameraPosition(_ position: CameraPosition) {
-        cameraPosition = position
+        attributes.cameraPosition = position
     }
 }
 private extension CameraManager {
@@ -329,14 +367,14 @@ private extension CameraManager {
 
 // MARK: - Changing Camera Filters
 extension CameraManager {
-    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != cameraFilters {
-        cameraFilters = newCameraFilters
+    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != attributes.cameraFilters {
+        attributes.cameraFilters = newCameraFilters
     }}
 }
 
 // MARK: - Camera Focusing
 extension CameraManager {
-    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(cameraPosition) {
+    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(attributes.cameraPosition) {
         removeCameraFocusAnimations()
         insertCameraFocus(touchPoint)
 
@@ -389,7 +427,7 @@ private extension CameraManager {
 
 // MARK: - Changing Zoom Factor
 extension CameraManager {
-    func changeZoomFactor(_ value: CGFloat) throws { if let device = getDevice(cameraPosition), !isChanging {
+    func changeZoomFactor(_ value: CGFloat) throws { if let device = getDevice(attributes.cameraPosition), !isChanging {
         let zoomFactor = calculateZoomFactor(value, device)
 
         try setVideoZoomFactor(zoomFactor, device)
@@ -408,7 +446,7 @@ private extension CameraManager {
         device.videoZoomFactor = zoomFactor
     }}
     func updateZoomFactor(_ value: CGFloat) {
-        zoomFactor = value
+        attributes.zoomFactor = value
     }
 }
 private extension CameraManager {
@@ -422,19 +460,19 @@ private extension CameraManager {
 
 // MARK: - Changing Flash Mode
 extension CameraManager {
-    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getDevice(cameraPosition), device.hasFlash, !isChanging {
+    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getDevice(attributes.cameraPosition), device.hasFlash, !isChanging {
         updateFlashMode(mode)
     }}
 }
 private extension CameraManager {
     func updateFlashMode(_ value: CameraFlashMode) {
-        flashMode = value
+        attributes.flashMode = value
     }
 }
 
 // MARK: - Changing Torch Mode
 extension CameraManager {
-    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getDevice(cameraPosition), device.hasTorch, !isChanging {
+    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getDevice(attributes.cameraPosition), device.hasTorch, !isChanging {
         try changeTorchMode(device, mode)
         updateTorchMode(mode)
     }}
@@ -444,13 +482,13 @@ private extension CameraManager {
         device.torchMode = mode.get()
     }}
     func updateTorchMode(_ value: CameraTorchMode) {
-        torchMode = value
+        attributes.torchMode = value
     }
 }
 
 // MARK: - Changing Exposure Mode
 extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(newExposureMode), newExposureMode != cameraExposure.mode {
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(newExposureMode), newExposureMode != attributes.cameraExposure.mode {
         try changeExposureMode(newExposureMode, device)
         updateExposureMode(newExposureMode)
     }}
@@ -460,13 +498,13 @@ private extension CameraManager {
         device.exposureMode = newExposureMode
     }}
     func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
-        cameraExposure.mode = newExposureMode
+        attributes.cameraExposure.mode = newExposureMode
     }
 }
 
 // MARK: - Changing Exposure Duration
 extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(.custom), newExposureDuration != cameraExposure.duration {
+    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newExposureDuration != attributes.cameraExposure.duration {
         let newExposureDuration = min(max(newExposureDuration, device.activeFormat.minExposureDuration), device.activeFormat.maxExposureDuration)
 
         try changeExposureDuration(newExposureDuration, device)
@@ -475,16 +513,16 @@ extension CameraManager {
 }
 private extension CameraManager {
     func changeExposureDuration(_ newExposureDuration: CMTime, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureModeCustom(duration: newExposureDuration, iso: cameraExposure.iso)
+        device.setExposureModeCustom(duration: newExposureDuration, iso: attributes.cameraExposure.iso)
     }}
     func updateExposureDuration(_ newExposureDuration: CMTime) {
-        cameraExposure.duration = newExposureDuration
+        attributes.cameraExposure.duration = newExposureDuration
     }
 }
 
 // MARK: - Changing ISO
 extension CameraManager {
-    func changeISO(_ newISO: Float) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(.custom), newISO != cameraExposure.iso {
+    func changeISO(_ newISO: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newISO != attributes.cameraExposure.iso {
         let newISO = min(max(newISO, device.activeFormat.minISO), device.activeFormat.maxISO)
 
         try changeISO(newISO, device)
@@ -493,16 +531,16 @@ extension CameraManager {
 }
 private extension CameraManager {
     func changeISO(_ newISO: Float, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureModeCustom(duration: cameraExposure.duration, iso: newISO)
+        device.setExposureModeCustom(duration: attributes.cameraExposure.duration, iso: newISO)
     }}
     func updateISO(_ newISO: Float) {
-        cameraExposure.iso = newISO
+        attributes.cameraExposure.iso = newISO
     }
 }
 
 // MARK: - Changing Exposure Target Bias
 extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getDevice(cameraPosition), device.isExposureModeSupported(.custom), newExposureTargetBias != cameraExposure.targetBias {
+    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newExposureTargetBias != attributes.cameraExposure.targetBias {
         let newExposureTargetBias = min(max(newExposureTargetBias, device.minExposureTargetBias), device.maxExposureTargetBias)
 
         try changeExposureTargetBias(newExposureTargetBias, device)
@@ -514,13 +552,13 @@ private extension CameraManager {
         device.setExposureTargetBias(newExposureTargetBias)
     }}
     func updateExposureTargetBias(_ newExposureTargetBias: Float) {
-        cameraExposure.targetBias = newExposureTargetBias
+        attributes.cameraExposure.targetBias = newExposureTargetBias
     }
 }
 
 // MARK: - Changing Camera HDR Mode
 extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getDevice(cameraPosition), newHDRMode != hdrMode {
+    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getDevice(attributes.cameraPosition), newHDRMode != attributes.hdrMode {
         try changeHDRMode(newHDRMode, device)
         updateHDRMode(newHDRMode)
     }}
@@ -530,14 +568,14 @@ private extension CameraManager {
         device.hdrMode = newHDRMode
     }}
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
-        hdrMode = newHDRMode
+        attributes.hdrMode = newHDRMode
     }
 }
 
 // MARK: - Changing Mirror Mode
 extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
-        mirrorOutput = shouldMirror
+        attributes.mirrorOutput = shouldMirror
     }}
 }
 
@@ -553,13 +591,13 @@ private extension CameraManager {
         cameraGridView.alpha = shouldShowGrid ? 1 : 0
     }}
     func updateGridVisibility(_ shouldShowGrid: Bool) {
-        isGridVisible = shouldShowGrid
+        attributes.isGridVisible = shouldShowGrid
     }
 }
 
 // MARK: - Capturing Output
 extension CameraManager {
-    func captureOutput() { if !isChanging { switch outputType {
+    func captureOutput() { if !isChanging { switch attributes.outputType {
         case .photo: capturePhoto()
         case .video: toggleVideoRecording()
     }}}
@@ -578,7 +616,7 @@ private extension CameraManager {
 private extension CameraManager {
     func getPhotoOutputSettings() -> AVCapturePhotoSettings {
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = flashMode.get()
+        settings.flashMode = attributes.flashMode.get()
         return settings
     }
     func performCaptureAnimation() {
@@ -608,7 +646,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: cameraFilters)
+        attributes.capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: attributes.cameraFilters)
     }
 }
 
@@ -644,18 +682,18 @@ private extension CameraManager {
               let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent)
         else { return }
 
-        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: deviceOrientation.toImageOrientation())
+        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: attributes.deviceOrientation.toImageOrientation())
     }
     func updateIsRecording(_ value: Bool) {
-        isRecording = value
+        attributes.isRecording = value
     }
     func startRecordingTimer() {
         try? timer
-            .publish(every: 1) { [self] in recordingTime = $0 }
+            .publish(every: 1) { [self] in attributes.recordingTime = $0 }
             .start()
     }
     func presentLastFrame() {
-        capturedMedia = .init(data: firstRecordedFrame)
+        attributes.capturedMedia = .init(data: firstRecordedFrame)
     }
     func stopRecordingTimer() {
         timer.reset()
@@ -664,7 +702,7 @@ private extension CameraManager {
 
 extension CameraManager: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task { @MainActor in
-        capturedMedia = await .create(videoData: outputFileURL, filters: cameraFilters)
+        attributes.capturedMedia = await .create(videoData: outputFileURL, filters: attributes.cameraFilters)
     }}
 }
 
@@ -673,25 +711,81 @@ private extension CameraManager {
     func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Swift.Error?) { if let data, error == nil {
         let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
         updateDeviceOrientation(newDeviceOrientation)
+        updateUserBlockedScreenRotation()
+        updateFrameOrientation()
     }}
 }
 private extension CameraManager {
     func fetchDeviceOrientation(_ acceleration: CMAcceleration) -> AVCaptureVideoOrientation { switch acceleration {
-        case let acceleration where acceleration.x >= 0.75: return .landscapeLeft
-        case let acceleration where acceleration.x <= -0.75: return .landscapeRight
-        case let acceleration where acceleration.y <= -0.75: return .portrait
-        case let acceleration where acceleration.y >= 0.75: return .portraitUpsideDown
-        default: return deviceOrientation
+        case let acceleration where acceleration.x >= 0.75: .landscapeLeft
+        case let acceleration where acceleration.x <= -0.75: .landscapeRight
+        case let acceleration where acceleration.y <= -0.75: .portrait
+        case let acceleration where acceleration.y >= 0.75: .portraitUpsideDown
+        default: attributes.deviceOrientation
     }}
-    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != deviceOrientation {
-        deviceOrientation = newDeviceOrientation
+    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != attributes.deviceOrientation {
+        attributes.deviceOrientation = newDeviceOrientation
+    }}
+    func updateUserBlockedScreenRotation() {
+        let newUserBlockedScreenRotation = getNewUserBlockedScreenRotation()
+        updateUserBlockedScreenRotation(newUserBlockedScreenRotation)
+    }
+    func updateFrameOrientation() { if UIDevice.current.orientation != .portraitUpsideDown {
+        let newFrameOrientation = getNewFrameOrientation(orientationLocked ? .portrait : UIDevice.current.orientation)
+        updateFrameOrientation(newFrameOrientation)
+    }}
+}
+private extension CameraManager {
+    func getNewUserBlockedScreenRotation() -> Bool { switch attributes.deviceOrientation.rawValue == UIDevice.current.orientation.rawValue {
+        case true: false
+        case false: !orientationLocked
+    }}
+    func updateUserBlockedScreenRotation(_ newUserBlockedScreenRotation: Bool) { if newUserBlockedScreenRotation != attributes.userBlockedScreenRotation {
+        attributes.userBlockedScreenRotation = newUserBlockedScreenRotation
+    }}
+    func getNewFrameOrientation(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch attributes.cameraPosition {
+        case .back: getNewFrameOrientationForBackCamera(orientation)
+        case .front: getNewFrameOrientationForFrontCamera(orientation)
+    }}
+    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != frameOrientation {
+        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation) && isRunning
+
+        animateFrameOrientationChangeIfNeeded(shouldAnimate)
+        changeFrameOrientation(shouldAnimate, newFrameOrientation)
+    }}
+}
+private extension CameraManager {
+    func getNewFrameOrientationForBackCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
+        case .portrait: attributes.mirrorOutput ? .leftMirrored : .right
+        case .landscapeLeft: attributes.mirrorOutput ? .upMirrored : .up
+        case .landscapeRight: attributes.mirrorOutput ? .downMirrored : .down
+        default: attributes.mirrorOutput ? .leftMirrored : .right
+    }}
+    func getNewFrameOrientationForFrontCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
+        case .portrait: attributes.mirrorOutput ? .right : .leftMirrored
+        case .landscapeLeft: attributes.mirrorOutput ? .down : .downMirrored
+        case .landscapeRight: attributes.mirrorOutput ? .up : .upMirrored
+        default: attributes.mirrorOutput ? .right : .leftMirrored
+    }}
+    func shouldAnimateFrameOrientationChange(_ newFrameOrientation: CGImagePropertyOrientation) -> Bool {
+        let backCameraOrientations: [CGImagePropertyOrientation] = [.left, .right, .up, .down],
+            frontCameraOrientations: [CGImagePropertyOrientation] = [.leftMirrored, .rightMirrored, .upMirrored, .downMirrored]
+        return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(frameOrientation))
+            || (frontCameraOrientations.contains(frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
+    }
+    func animateFrameOrientationChangeIfNeeded(_ shouldAnimate: Bool) { if shouldAnimate {
+        UIView.animate(withDuration: 0.2) { [self] in cameraView.alpha = 0 }
+        UIView.animate(withDuration: 0.3, delay: 0.2) { [self] in cameraView.alpha = 1 }
+    }}
+    func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) { DispatchQueue.main.asyncAfter(deadline: .now() + (shouldAnimate ? 0.1 : 0)) { [self] in
+        frameOrientation = newFrameOrientation
     }}
 }
 
 // MARK: - Handling Observers
 private extension CameraManager {
     @objc func handleSessionWasInterrupted() {
-        torchMode = .off
+        attributes.torchMode = .off
         updateIsRecording(false)
         stopRecordingTimer()
     }
@@ -699,7 +793,7 @@ private extension CameraManager {
 
 // MARK: - Capturing Live Frames
 extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch lastAction {
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch metalAnimation {
         case .none: changeDisplayedFrame(sampleBuffer)
         default: presentCameraAnimation()
     }}
@@ -716,7 +810,7 @@ private extension CameraManager {
 
         insertBlurView(snapshot)
         animateBlurFlip()
-        lastAction = .none
+        metalAnimation = .none
     }
 }
 private extension CameraManager {
@@ -725,7 +819,7 @@ private extension CameraManager {
         return currentFrame.oriented(frameOrientation)
     }
     func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage {
-        currentFrame.applyingFilters(cameraFilters)
+        currentFrame.applyingFilters(attributes.cameraFilters)
     }
     func redrawCameraView(_ frame: CIImage) {
         currentFrame = frame
@@ -746,7 +840,7 @@ private extension CameraManager {
 
         cameraView.addSubview(cameraBlurView)
     }}
-    func animateBlurFlip() { if lastAction == .cameraPositionChange {
+    func animateBlurFlip() { if metalAnimation == .blurAndFlip {
         UIView.transition(with: cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
     func removeBlur() { Task { @MainActor [self] in
@@ -755,14 +849,13 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    var frameOrientation: CGImagePropertyOrientation { cameraPosition == .back ? .right : .leftMirrored }
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
-    var flipAnimationTransition: UIView.AnimationOptions { cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
+    var flipAnimationTransition: UIView.AnimationOptions { attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
 private extension CameraManager {
-    enum LastAction { case cameraPositionChange, outputTypeChange, mediaCapture, none }
+    enum MetalAnimation { case blurAndFlip, blur, none }
 }
 
 // MARK: - Metal Handlers
@@ -794,21 +887,21 @@ private extension CameraManager {
 
 // MARK: - Modifiers
 extension CameraManager {
-    var hasFlash: Bool { getDevice(cameraPosition)?.hasFlash ?? false }
-    var hasTorch: Bool { getDevice(cameraPosition)?.hasTorch ?? false }
+    var hasFlash: Bool { getDevice(attributes.cameraPosition)?.hasFlash ?? false }
+    var hasTorch: Bool { getDevice(attributes.cameraPosition)?.hasTorch ?? false }
 }
 
 // MARK: - Helpers
 private extension CameraManager {
-    func captureCurrentFrameAndDelay(_ type: LastAction, _ action: @escaping () throws -> ()) { Task { @MainActor in
-        lastAction = type
+    func captureCurrentFrameAndDelay(_ type: MetalAnimation, _ action: @escaping () throws -> ()) { Task { @MainActor in
+        metalAnimation = type
         try await Task.sleep(nanoseconds: 150_000_000)
 
         try action()
     }}
     func configureOutput(_ output: AVCaptureOutput?) { if let connection = output?.connection(with: .video), connection.isVideoMirroringSupported {
-        connection.isVideoMirrored = mirrorOutput ? cameraPosition != .front : cameraPosition == .front
-        connection.videoOrientation = deviceOrientation
+        connection.isVideoMirrored = attributes.mirrorOutput ? attributes.cameraPosition != .front : attributes.cameraPosition == .front
+        connection.videoOrientation = attributes.deviceOrientation
     }}
     func withLockingDeviceForConfiguration(_ device: AVCaptureDevice, _ action: (AVCaptureDevice) -> ()) throws {
         try device.lockForConfiguration()

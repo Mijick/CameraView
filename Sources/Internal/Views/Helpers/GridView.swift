@@ -16,6 +16,8 @@ class GridView: UIView {}
 // MARK: - Draw
 extension GridView {
     override func draw(_ rect: CGRect) {
+        clearOldLayersBeforeDraw()
+
         let firstColumnPath = UIBezierPath()
         firstColumnPath.move(to: CGPoint(x: bounds.width / 3, y: 0))
         firstColumnPath.addLine(to: CGPoint(x: bounds.width / 3, y: bounds.height))
@@ -46,6 +48,10 @@ extension GridView {
     }
 }
 private extension GridView {
+    func clearOldLayersBeforeDraw() {
+        layer.sublayers?.removeAll()
+        layer.backgroundColor = .none
+    }
     func createGridLayer() -> CAShapeLayer {
         let shapeLayer = CAShapeLayer()
         shapeLayer.strokeColor = UIColor(white: 1.0, alpha: 0.28).cgColor

@@ -23,14 +23,14 @@ struct DefaultCameraView: MCameraView {
             createContentView()
             createBottomView()
         }
+        .ignoresSafeArea(.all, edges: .horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.all, edges: .top)
         .background(Color.background.ignoresSafeArea())
         .statusBarHidden()
         .animation(.defaultSpring, value: isRecording)
         .animation(.defaultSpring, value: outputType)
         .animation(.defaultSpring, value: hasTorch)
-        .animation(.defaultSpring, value: deviceOrientation)
+        .animation(.defaultSpring, value: iconAngle)
     }
 }
 private extension DefaultCameraView {
@@ -41,7 +41,7 @@ private extension DefaultCameraView {
             createTopRightView()
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, max(4, ScreenManager.safeArea.top - 8))
+        .padding(.top, 4)
         .padding(.bottom, 12)
         .padding(.horizontal, 20)
     }
@@ -81,7 +81,7 @@ private extension DefaultCameraView {
 private extension DefaultCameraView {
     func createCloseButton() -> some View {
         CloseButton(action: closeControllerAction)
-            .rotationEffect(deviceOrientation.getAngle())
+            .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(!isRecording)
     }
@@ -103,16 +103,16 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createGridButton() -> some View {
-        TopButton(icon: gridButtonIcon, action: changeGridVisibility).rotationEffect(deviceOrientation.getAngle())
+        TopButton(icon: gridButtonIcon, action: changeGridVisibility).rotationEffect(iconAngle)
     }
     func createFlipOutputButton() -> some View {
         TopButton(icon: flipButtonIcon, action: changeMirrorOutput)
-            .rotationEffect(deviceOrientation.getAngle())
+            .rotationEffect(iconAngle)
             .isActiveStackElement(cameraPosition == .front)
     }
     func createFlashButton() -> some View {
         TopButton(icon: flashButtonIcon, action: changeFlashMode)
-            .rotationEffect(deviceOrientation.getAngle())
+            .rotationEffect(iconAngle)
             .isActiveStackElement(hasFlash)
             .isActiveStackElement(outputType == .photo)
     }
@@ -121,7 +121,7 @@ private extension DefaultCameraView {
     func createTorchButton() -> some View {
         BottomButton(icon: "icon-torch", active: torchMode == .on, action: changeTorchMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
-            .rotationEffect(deviceOrientation.getAngle())
+            .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(hasTorch)
     }
@@ -131,16 +131,20 @@ private extension DefaultCameraView {
     func createChangeCameraButton() -> some View {
         BottomButton(icon: "icon-change-camera", active: false, action: changeCameraPosition)
             .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
-            .rotationEffect(deviceOrientation.getAngle())
+            .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .isActive(!isRecording)
     }
     func createOutputTypeButton(_ cameraOutputType: CameraOutputType) -> some View {
         OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeCameraOutputType(cameraOutputType) })
-            .rotationEffect(deviceOrientation.getAngle())
+            .rotationEffect(iconAngle)
     }
 }
 private extension DefaultCameraView {
+    var iconAngle: Angle { switch isOrientationLocked {
+        case true: deviceOrientation.getAngle()
+        case false: .zero
+    }}
     var gridButtonIcon: String { switch showGrid {
         case true: "icon-grid-on"
         case false: "icon-grid-off"

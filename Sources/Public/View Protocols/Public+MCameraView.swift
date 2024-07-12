@@ -44,20 +44,21 @@ public extension MCameraView {
 
 // MARK: - Flags
 public extension MCameraView {
-    var outputType: CameraOutputType { cameraManager.outputType }
-    var cameraPosition: CameraPosition { cameraManager.cameraPosition }
-    var torchMode: CameraTorchMode { cameraManager.torchMode }
-    var flashMode: CameraFlashMode { cameraManager.flashMode }
-    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.cameraExposure.mode }
-    var exposureDuration: CMTime { cameraManager.cameraExposure.duration }
-    var iso: Float { cameraManager.cameraExposure.iso }
-    var exposureTargetBias: Float { cameraManager.cameraExposure.targetBias }
-    var hdrMode: CameraHDRMode { cameraManager.hdrMode }
-    var mirrorOutput: Bool { cameraManager.mirrorOutput }
-    var showGrid: Bool { cameraManager.isGridVisible }
-    var deviceOrientation: AVCaptureVideoOrientation { cameraManager.deviceOrientation }
-    var isRecording: Bool { cameraManager.isRecording }
-    var recordingTime: MTime { cameraManager.recordingTime }
+    var outputType: CameraOutputType { cameraManager.attributes.outputType }
+    var cameraPosition: CameraPosition { cameraManager.attributes.cameraPosition }
+    var torchMode: CameraTorchMode { cameraManager.attributes.torchMode }
+    var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
+    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
+    var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
+    var iso: Float { cameraManager.attributes.cameraExposure.iso }
+    var exposureTargetBias: Float { cameraManager.attributes.cameraExposure.targetBias }
+    var hdrMode: CameraHDRMode { cameraManager.attributes.hdrMode }
+    var mirrorOutput: Bool { cameraManager.attributes.mirrorOutput }
+    var showGrid: Bool { cameraManager.attributes.isGridVisible }
+    var deviceOrientation: AVCaptureVideoOrientation { cameraManager.attributes.deviceOrientation }
+    var isRecording: Bool { cameraManager.attributes.isRecording }
+    var recordingTime: MTime { cameraManager.attributes.recordingTime }
     var hasTorch: Bool { cameraManager.hasTorch }
     var hasFlash: Bool { cameraManager.hasFlash }
+    var isOrientationLocked: Bool { cameraManager.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
 }
