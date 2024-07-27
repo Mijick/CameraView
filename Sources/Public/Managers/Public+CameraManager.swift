@@ -10,6 +10,7 @@
 
 
 import SwiftUI
+import AVFoundation
 
 // MARK: - Initialiser
 public extension CameraManager {
@@ -17,13 +18,14 @@ public extension CameraManager {
         outputType: CameraOutputType? = nil,
         cameraPosition: CameraPosition? = nil,
         cameraFilters: [CIFilter]? = nil,
+        resolution: AVCaptureSession.Preset? = nil,
         flashMode: CameraFlashMode? = nil,
         isGridVisible: Bool? = nil,
         focusImage: UIImage? = nil,
         focusImageColor: UIColor? = nil,
         focusImageSize: CGFloat? = nil
     ) {
-        self.init(.init(outputType, cameraPosition, cameraFilters, flashMode, isGridVisible))
+        self.init(.init(outputType, cameraPosition, cameraFilters, resolution, flashMode, isGridVisible))
 
         if let focusImage { self.cameraFocusView.image = focusImage }
         if let focusImageColor { self.cameraFocusView.tintColor = focusImageColor }
