@@ -574,6 +574,14 @@ private extension CameraManager {
     }
 }
 
+// MARK: - Changing Camera Resolution
+extension CameraManager {
+    func changeResolution(_ newResolution: AVCaptureSession.Preset) throws { if newResolution != attributes.resolution {
+        captureSession.sessionPreset = newResolution
+        attributes.resolution = newResolution
+    }}
+}
+
 // MARK: - Changing Mirror Mode
 extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
