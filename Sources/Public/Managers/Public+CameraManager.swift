@@ -33,12 +33,11 @@ public extension CameraManager {
     }
 }
 private extension CameraManager.Attributes {
-    init(_ outputType: CameraOutputType?, _ cameraPosition: CameraPosition?, _ cameraFilters: [CIFilter]?, _ flashMode: CameraFlashMode?, _ isGridVisible: Bool?) {
-        self.init()
-
+    init(_ outputType: CameraOutputType?, _ cameraPosition: CameraPosition?, _ cameraFilters: [CIFilter]?, _ resolution: AVCaptureSession.Preset?, _ flashMode: CameraFlashMode?, _ isGridVisible: Bool?) { self.init()
         if let outputType { self.outputType = outputType }
         if let cameraPosition { self.cameraPosition = cameraPosition }
         if let cameraFilters { self.cameraFilters = cameraFilters }
+        if let resolution { self.resolution = resolution }
         if let flashMode { self.flashMode = flashMode }
         if let isGridVisible { self.isGridVisible = isGridVisible }
     }
