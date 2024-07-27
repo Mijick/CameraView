@@ -48,6 +48,9 @@ public extension MCameraView {
 public extension MCameraView {
     var outputType: CameraOutputType { cameraManager.attributes.outputType }
     var cameraPosition: CameraPosition { cameraManager.attributes.cameraPosition }
+    var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
+    var frameRate: Int32 { cameraManager.attributes.frameRate }
+    var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
     var torchMode: CameraTorchMode { cameraManager.attributes.torchMode }
     var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
     var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
