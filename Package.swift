@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "MijickCameraView", targets: ["MijickCameraView"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Mijick/Timer", branch: "main")
+        .package(url: "https://github.com/Mijick/Timer", from: "1.0.1")
     ],
     targets: [
         .target(name: "MijickCameraView", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources")
