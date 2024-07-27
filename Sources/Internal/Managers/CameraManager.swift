@@ -583,6 +583,28 @@ extension CameraManager {
     }}
 }
 
+// MARK: - Changing Frame Rate
+extension CameraManager {
+    func changeFrameRate(_ newFrameRate: Int32) throws { if let device = getDevice(attributes.cameraPosition), newFrameRate != attributes.frameRate {
+        try checkNewFrameRate(newFrameRate, device)
+        try updateFrameRate(newFrameRate, device)
+        updateFrameRate(newFrameRate)
+    }}
+}
+private extension CameraManager {
+    func checkNewFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.activeFormat.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
+        if newFrameRate < 15 { throw Error.incorrectFrameRate }
+        if newFrameRate > maxFrameRate { throw Error.incorrectFrameRate }
+    }
+    func updateFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+        device.activeVideoMinFrameDuration = .init(value: 1, timescale: newFrameRate)
+        device.activeVideoMaxFrameDuration = .init(value: 1, timescale: newFrameRate)
+    }}
+    func updateFrameRate(_ newFrameRate: Int32) {
+        attributes.frameRate = newFrameRate
+    }
+}
+
 // MARK: - Changing Mirror Mode
 extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
@@ -930,4 +952,5 @@ private extension CameraManager {
 public extension CameraManager { enum Error: Swift.Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
+    case incorrectFrameRate
 }}
