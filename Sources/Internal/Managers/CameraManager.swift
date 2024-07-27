@@ -160,7 +160,7 @@ extension CameraManager {
             try setupFrameRate()
 
             startCaptureSession()
-        } catch {}
+        } catch { print("CANNOT SETUP CAMERA: \(error)") }
     }
 }
 private extension CameraManager {
