@@ -174,6 +174,7 @@ private extension CameraManager {
     }}
     func initialiseCaptureSession() {
         captureSession = .init()
+        captureSession.sessionPreset = attributes.resolution
     }
     func initialiseMetal() {
         metalDevice = MTLCreateSystemDefaultDevice()
