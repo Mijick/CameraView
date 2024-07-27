@@ -157,6 +157,7 @@ extension CameraManager {
             try setupDeviceOutput()
             try setupFrameRecorder()
             try setupCameraAttributes()
+            try setupFrameRate()
 
             startCaptureSession()
         } catch {}
@@ -249,6 +250,10 @@ private extension CameraManager {
         attributes.cameraExposure.mode = device.exposureMode
         attributes.hdrMode = device.hdrMode
     }}}
+    func setupFrameRate() throws { if let device = getDevice(attributes.cameraPosition) {
+        try checkNewFrameRate(attributes.frameRate, device)
+        try updateFrameRate(attributes.frameRate, device)
+    }}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
     }}
