@@ -10,6 +10,10 @@
 
 
 public class PostCameraConfig {
+    // MARK: Attributes
     var shouldReturnToCameraView: Bool = false
+    var shouldCloseCameraController: Bool = false
+
+    // MARK: Actions
     var customAction: () -> () = {}
 }

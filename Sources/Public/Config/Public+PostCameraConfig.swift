@@ -10,6 +10,7 @@
 
 
 extension PostCameraConfig {
-    public func returnToCameraView(_ value: Bool) -> Self { shouldReturnToCameraView = value; return self  }
+    public func returnToCameraView(_ value: Bool) -> Self { shouldReturnToCameraView = value; return self }
+    public func closeCameraController(_ value: Bool) -> Self { shouldCloseCameraController = value; return self }
     public func custom(_ action: @escaping () -> ()) -> Self { customAction = action; return self }
 }
