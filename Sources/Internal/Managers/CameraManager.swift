@@ -28,6 +28,8 @@ public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attr
         var torchMode: CameraTorchMode = .off
         var cameraExposure: CameraExposure = .init()
         var hdrMode: CameraHDRMode = .auto
+        var resolution: AVCaptureSession.Preset = .hd1920x1080
+        var frameRate: Int32 = 30
         var mirrorOutput: Bool = false
         var isGridVisible: Bool = true
         var isRecording: Bool = false
@@ -155,9 +157,10 @@ extension CameraManager {
             try setupDeviceOutput()
             try setupFrameRecorder()
             try setupCameraAttributes()
+            try setupFrameRate()
 
             startCaptureSession()
-        } catch {}
+        } catch { print("CANNOT SETUP CAMERA: \(error)") }
     }
 }
 private extension CameraManager {
@@ -173,6 +176,7 @@ private extension CameraManager {
     }}
     func initialiseCaptureSession() {
         captureSession = .init()
+        captureSession.sessionPreset = attributes.resolution
     }
     func initialiseMetal() {
         metalDevice = MTLCreateSystemDefaultDevice()
@@ -246,6 +250,10 @@ private extension CameraManager {
         attributes.cameraExposure.mode = device.exposureMode
         attributes.hdrMode = device.hdrMode
     }}}
+    func setupFrameRate() throws { if let device = getDevice(attributes.cameraPosition) {
+        try checkNewFrameRate(attributes.frameRate, device)
+        try updateFrameRate(attributes.frameRate, device)
+    }}
     func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
         captureSession.startRunning()
     }}
@@ -569,6 +577,36 @@ private extension CameraManager {
     }}
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
         attributes.hdrMode = newHDRMode
+    }
+}
+
+// MARK: - Changing Camera Resolution
+extension CameraManager {
+    func changeResolution(_ newResolution: AVCaptureSession.Preset) throws { if newResolution != attributes.resolution {
+        captureSession.sessionPreset = newResolution
+        attributes.resolution = newResolution
+    }}
+}
+
+// MARK: - Changing Frame Rate
+extension CameraManager {
+    func changeFrameRate(_ newFrameRate: Int32) throws { if let device = getDevice(attributes.cameraPosition), newFrameRate != attributes.frameRate {
+        try checkNewFrameRate(newFrameRate, device)
+        try updateFrameRate(newFrameRate, device)
+        updateFrameRate(newFrameRate)
+    }}
+}
+private extension CameraManager {
+    func checkNewFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.activeFormat.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
+        if newFrameRate < 15 { throw Error.incorrectFrameRate }
+        if newFrameRate > maxFrameRate { throw Error.incorrectFrameRate }
+    }
+    func updateFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+        device.activeVideoMinFrameDuration = .init(value: 1, timescale: newFrameRate)
+        device.activeVideoMaxFrameDuration = .init(value: 1, timescale: newFrameRate)
+    }}
+    func updateFrameRate(_ newFrameRate: Int32) {
+        attributes.frameRate = newFrameRate
     }
 }
 
@@ -919,4 +957,5 @@ private extension CameraManager {
 public extension CameraManager { enum Error: Swift.Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
+    case incorrectFrameRate
 }}

@@ -11,13 +11,14 @@
 
 import SwiftUI
 
-struct DefaultCameraView: MCameraView {
-    @ObservedObject var cameraManager: CameraManager
-    let namespace: Namespace.ID
-    let closeControllerAction: () -> ()
+public struct DefaultCameraView: MCameraView {
+    @ObservedObject public var cameraManager: CameraManager
+    public let namespace: Namespace.ID
+    public let closeControllerAction: () -> ()
+    var config: Config = .init()
 
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             createTopView()
             createContentView()
@@ -74,6 +75,7 @@ private extension DefaultCameraView {
         .mask(Capsule())
         .transition(.asymmetric(insertion: .opacity.animation(.defaultSpring.delay(1)), removal: .scale.combined(with: .opacity)))
         .isActive(!isRecording)
+        .isActive(config.outputTypePickerVisible)
         .frame(maxHeight: .infinity, alignment: .bottom)
         .padding(.bottom, 8)
     }
@@ -103,18 +105,22 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createGridButton() -> some View {
-        TopButton(icon: gridButtonIcon, action: changeGridVisibility).rotationEffect(iconAngle)
+        TopButton(icon: gridButtonIcon, action: changeGridVisibility)
+            .rotationEffect(iconAngle)
+            .isActiveStackElement(config.gridButtonVisible)
     }
     func createFlipOutputButton() -> some View {
         TopButton(icon: flipButtonIcon, action: changeMirrorOutput)
             .rotationEffect(iconAngle)
             .isActiveStackElement(cameraPosition == .front)
+            .isActiveStackElement(config.flipButtonVisible)
     }
     func createFlashButton() -> some View {
         TopButton(icon: flashButtonIcon, action: changeFlashMode)
             .rotationEffect(iconAngle)
             .isActiveStackElement(hasFlash)
             .isActiveStackElement(outputType == .photo)
+            .isActiveStackElement(config.flashButtonVisible)
     }
 }
 private extension DefaultCameraView {
@@ -124,9 +130,10 @@ private extension DefaultCameraView {
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(hasTorch)
+            .isActive(config.torchButtonVisible)
     }
     func createCaptureButton() -> some View {
-        CaptureButton(action: captureOutput, mode: outputType, isRecording: isRecording)
+        CaptureButton(action: captureOutput, mode: outputType, isRecording: isRecording).isActive(config.captureButtonVisible)
     }
     func createChangeCameraButton() -> some View {
         BottomButton(icon: "icon-change-camera", active: false, action: changeCameraPosition)
@@ -134,6 +141,7 @@ private extension DefaultCameraView {
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .isActive(!isRecording)
+            .isActive(config.changeCameraButtonVisible)
     }
     func createOutputTypeButton(_ cameraOutputType: CameraOutputType) -> some View {
         OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeCameraOutputType(cameraOutputType) })
@@ -184,6 +192,17 @@ private extension DefaultCameraView {
         catch {}
     }
 }
+
+// MARK: - Configurables
+extension DefaultCameraView { struct Config {
+    var outputTypePickerVisible: Bool = true
+    var torchButtonVisible: Bool = true
+    var captureButtonVisible: Bool = true
+    var changeCameraButtonVisible: Bool = true
+    var gridButtonVisible: Bool = true
+    var flipButtonVisible: Bool = true
+    var flashButtonVisible: Bool = true
+}}
 
 
 // MARK: - CloseButton

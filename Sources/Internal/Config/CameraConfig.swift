@@ -23,6 +23,6 @@ struct CameraConfig {
     // MARK: Actions
     var onImageCaptured: (UIImage) -> () = { _ in }
     var onVideoCaptured: (URL) -> () = { _ in }
-    var afterMediaCaptured: () -> () = {}
+    var afterMediaCaptured: (PostCameraConfig) -> (PostCameraConfig) = { _ in .init() }
     var onCloseController: () -> () = {}
 }

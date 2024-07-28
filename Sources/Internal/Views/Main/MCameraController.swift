@@ -71,12 +71,17 @@ private extension MCameraController {
     }
     func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
         notifyUserOfMediaCaptured(capturedMedia)
-        config.afterMediaCaptured()
+        performPostCameraAction()
     }}
 }
 private extension MCameraController {
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
         if let image = capturedMedia.image { config.onImageCaptured(image) }
         else if let video = capturedMedia.video { config.onVideoCaptured(video) }
+    }
+    func performPostCameraAction() { let afterMediaCaptured = config.afterMediaCaptured(.init())
+        afterMediaCaptured.shouldReturnToCameraView ? cameraManager.resetCapturedMedia() : ()
+        afterMediaCaptured.shouldCloseCameraController ? config.onCloseController() : ()
+        afterMediaCaptured.customAction()
     }
 }
