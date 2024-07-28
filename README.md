@@ -121,10 +121,12 @@ struct CameraView: View {
         outputType: .photo,
         cameraPosition: .back,
         cameraFilters: [.init(name: "CISepiaTone")!],
+        resolution: .hd4K3840x2160,
+        frameRate: 25,
         flashMode: .off,
         isGridVisible: true,
-        focusImageColor: .blue,
-        focusImageSize: 100
+        focusImageColor: .yellow,
+        focusImageSize: 92
     )
 
     (...)
@@ -170,8 +172,9 @@ struct CameraView: View {
             .onVideoCaptured { url in
                 print("VIDEO CAPTURED")
             }
-            .afterMediaCaptured {
-                print("IMAGE OR VIDEO WAS PROCESSED. WHAT'S NEXT?")
+            .afterMediaCaptured { $0
+                .closeCameraController(true)
+                .custom { print("Media object has been successfully captured") }
             }
             .onCloseController {
                 print("CLOSE THE CONTROLLER")
