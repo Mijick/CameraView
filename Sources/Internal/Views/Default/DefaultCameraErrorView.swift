@@ -35,7 +35,7 @@ struct DefaultCameraErrorView: MCameraErrorView {
 private extension DefaultCameraErrorView {
     func createCloseButton() -> some View {
         Button(action: closeControllerAction) {
-            Image("icon-cancel", bundle: .mijick)
+            Image("icon-cancel", bundle: .module)
                 .resizable()
                 .frame(width: 24, height: 24)
                 .foregroundColor(Color.white)
