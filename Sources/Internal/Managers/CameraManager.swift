@@ -305,18 +305,6 @@ extension CameraManager {
     }
 }
 
-// MARK: - Camera Rotation
-extension CameraManager {
-    func fixCameraRotation() { if !orientationLocked { 
-        redrawGrid()
-    }}
-}
-private extension CameraManager {
-    func redrawGrid() {
-        cameraGridView?.draw(.zero)
-    }
-}
-
 // MARK: - Changing Output Type
 extension CameraManager {
     func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
@@ -755,6 +743,7 @@ private extension CameraManager {
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
         updateFrameOrientation()
+        redrawGrid()
     }}
 }
 private extension CameraManager {
@@ -775,6 +764,9 @@ private extension CameraManager {
     func updateFrameOrientation() { if UIDevice.current.orientation != .portraitUpsideDown {
         let newFrameOrientation = getNewFrameOrientation(orientationLocked ? .portrait : UIDevice.current.orientation)
         updateFrameOrientation(newFrameOrientation)
+    }}
+    func redrawGrid() { if !orientationLocked {
+        cameraGridView?.draw(.zero)
     }}
 }
 private extension CameraManager {
