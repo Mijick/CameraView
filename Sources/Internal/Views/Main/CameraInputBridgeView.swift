@@ -14,8 +14,6 @@ import SwiftUI
 struct CameraInputBridgeView {
     let cameraManager: CameraManager
     let inputView: UIView = .init()
-
-    init(_ cameraManager: CameraManager) { self.cameraManager = cameraManager }
 }
 
 
@@ -39,11 +37,11 @@ private extension CameraInputBridgeView {
         cameraManager.setup(in: inputView)
     }
     func setupTapGesture(_ context: Context) {
-        let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleTapGesture))
+        let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
         inputView.addGestureRecognizer(tapRecognizer)
     }
     func setupPinchGesture(_ context: Context) {
-        let pinchRecognizer = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handlePinchGesture))
+        let pinchRecognizer = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onPinchGesture))
         inputView.addGestureRecognizer(pinchRecognizer)
     }
 }
@@ -55,36 +53,26 @@ extension CameraInputBridgeView: Equatable {
 
 
 // MARK: - LOGIC
-extension CameraInputBridgeView { class Coordinator: NSObject {
+extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: CameraInputBridgeView) { self.parent = parent }
     let parent: CameraInputBridgeView
-
-    init(_ parent: CameraInputBridgeView) { self.parent = parent }
 }}
 
 // MARK: On Tap
 extension CameraInputBridgeView.Coordinator {
-    @objc func handleTapGesture(_ tap: UITapGestureRecognizer) {
-        let touchPoint = tap.location(in: parent.inputView)
-        setCameraFocus(touchPoint)
-    }
-}
-private extension CameraInputBridgeView.Coordinator {
-    func setCameraFocus(_ touchPoint: CGPoint) {
-        do { try parent.cameraManager.setCameraFocus(touchPoint) }
-        catch {}
+    @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
+        do {
+            let touchPoint = tap.location(in: parent.inputView)
+            try parent.cameraManager.setCameraFocus(touchPoint)
+        } catch {}
     }
 }
 
 // MARK: On Pinch
 extension CameraInputBridgeView.Coordinator {
-    @objc func handlePinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
-        let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
-        changeZoomFactor(desiredZoomFactor)
+    @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
+        do {
+            let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
+            try parent.cameraManager.changeZoomFactor(desiredZoomFactor)
+        } catch {}
     }}
-}
-private extension CameraInputBridgeView.Coordinator {
-    func changeZoomFactor(_ desiredZoomFactor: CGFloat) {
-        do { try parent.cameraManager.changeZoomFactor(desiredZoomFactor) }
-        catch {}
-    }
 }

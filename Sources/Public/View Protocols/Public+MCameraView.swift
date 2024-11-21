@@ -21,7 +21,7 @@ public protocol MCameraView: View {
 
 // MARK: - Use-only View Methods
 public extension MCameraView {
-    func createCameraView() -> some View { CameraInputBridgeView(cameraManager).equatable() }
+    func createCameraView() -> some View { CameraInputBridgeView(cameraManager: cameraManager).equatable() }
 }
 
 // MARK: - Use-only Logic Methods
