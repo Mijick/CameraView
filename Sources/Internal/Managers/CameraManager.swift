@@ -398,7 +398,7 @@ private extension CameraManager {
         animateCameraFocusView()
     }}
     func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
-        let focusPoint = cameraLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
+        let focusPoint = convertTouchPointToFocusPoint(touchPoint)
         try configureCameraFocus(focusPoint, device)
     }
 }
@@ -417,6 +417,10 @@ private extension CameraManager {
             UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
         }
     }
+    func convertTouchPointToFocusPoint(_ touchPoint: CGPoint) -> CGPoint { .init(
+        x: touchPoint.x / cameraView.frame.width,
+        y: touchPoint.y / cameraView.frame.height
+    )}
     func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         setFocusPointOfInterest(focusPoint, device)
         setExposurePointOfInterest(focusPoint, device)
