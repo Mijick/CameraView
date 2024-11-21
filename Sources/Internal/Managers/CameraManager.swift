@@ -418,8 +418,8 @@ private extension CameraManager {
         }
     }
     func convertTouchPointToFocusPoint(_ touchPoint: CGPoint) -> CGPoint { .init(
-        x: touchPoint.x / cameraView.frame.width,
-        y: touchPoint.y / cameraView.frame.height
+        x: touchPoint.y / cameraView.frame.height,
+        y: 1 - touchPoint.x / cameraView.frame.width
     )}
     func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         setFocusPointOfInterest(focusPoint, device)
