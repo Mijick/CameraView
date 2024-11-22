@@ -676,7 +676,22 @@ private extension CameraManager {
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        attributes.capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: attributes.cameraFilters)
+        attributes.capturedMedia = .create(imageData: photo, orientation: fixedFrameOrientation(), filters: attributes.cameraFilters)
+    }
+}
+private extension CameraManager {
+    func fixedFrameOrientation() -> CGImagePropertyOrientation { guard UIDevice.current.orientation != attributes.deviceOrientation.toDeviceOrientation() else { return frameOrientation }
+        return switch (attributes.deviceOrientation, attributes.cameraPosition) {
+            case (.portrait, .front): .left
+            case (.portrait, .back): .right
+            case (.landscapeLeft, .back): .down
+            case (.landscapeRight, .back): .up
+            case (.landscapeLeft, .front) where attributes.mirrorOutput: .up
+            case (.landscapeLeft, .front): .upMirrored
+            case (.landscapeRight, .front) where attributes.mirrorOutput: .down
+            case (.landscapeRight, .front): .downMirrored
+            default: .right
+        }
     }
 }
 
