@@ -33,3 +33,14 @@ extension AVCaptureVideoOrientation {
         default: .up
     }}
 }
+
+// MARK: - To UIDeviceOrientation
+extension AVCaptureVideoOrientation {
+    func toDeviceOrientation() -> UIDeviceOrientation { switch self {
+        case .portrait: .portrait
+        case .portraitUpsideDown: .portraitUpsideDown
+        case .landscapeLeft: .landscapeLeft
+        case .landscapeRight: .landscapeRight
+        default: .portrait
+    }}
+}

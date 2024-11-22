@@ -11,84 +11,68 @@
 
 import SwiftUI
 
-struct CameraInputBridgeView: UIViewRepresentable {
+struct CameraInputBridgeView {
     let cameraManager: CameraManager
-    private var inputView: UICameraInputView = .init()
-
-    init(_ cameraManager: CameraManager) { self.cameraManager = cameraManager }
+    let inputView: UIView = .init()
 }
-extension CameraInputBridgeView {
+
+
+// MARK: - PROTOCOLS CONFORMANCE
+
+
+
+// MARK: UIViewRepresentable
+extension CameraInputBridgeView: UIViewRepresentable {
     func makeUIView(context: Context) -> some UIView {
-        inputView.cameraManager = cameraManager
-        return inputView.view
+        setupCameraManager()
+        setupTapGesture(context)
+        setupPinchGesture(context)
+        return inputView
     }
     func updateUIView(_ uiView: UIViewType, context: Context) {}
+    func makeCoordinator() -> Coordinator { .init(self) }
 }
-extension CameraInputBridgeView: Equatable {
-    static func == (lhs: Self, rhs: Self) -> Bool { true }
-}
-
-
-// MARK: - UIViewController
-fileprivate class UICameraInputView: UIViewController {
-    var cameraManager: CameraManager!
-
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupCameraManager()
-        setupTapGesture()
-        setupPinchGesture()
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        cameraManager.fixCameraRotation()
-    }
-}
-
-// MARK: - Setup
-private extension UICameraInputView {
+private extension CameraInputBridgeView {
     func setupCameraManager() {
-        cameraManager.setup(in: view)
+        cameraManager.setup(in: inputView)
     }
-    func setupTapGesture() {
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
-        view.addGestureRecognizer(tapRecognizer)
+    func setupTapGesture(_ context: Context) {
+        let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
+        inputView.addGestureRecognizer(tapRecognizer)
     }
-    func setupPinchGesture() {
-        let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture))
-        view.addGestureRecognizer(pinchRecognizer)
-    }
-}
-
-// MARK: - Gestures
-
-// MARK: Tap
-private extension UICameraInputView {
-    @objc func handleTapGesture(_ tap: UITapGestureRecognizer) {
-        let touchPoint = tap.location(in: view)
-        setCameraFocus(touchPoint)
-    }
-}
-private extension UICameraInputView {
-    func setCameraFocus(_ touchPoint: CGPoint) {
-        do { try cameraManager.setCameraFocus(touchPoint) }
-        catch {}
+    func setupPinchGesture(_ context: Context) {
+        let pinchRecognizer = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onPinchGesture))
+        inputView.addGestureRecognizer(pinchRecognizer)
     }
 }
 
-// MARK: Pinch
-private extension UICameraInputView {
-    @objc func handlePinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
-        let desiredZoomFactor = cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
-        changeZoomFactor(desiredZoomFactor)
+// MARK: Equatable
+extension CameraInputBridgeView: Equatable {
+    static func ==(lhs: Self, rhs: Self) -> Bool { true }
+}
+
+
+// MARK: - LOGIC
+extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: CameraInputBridgeView) { self.parent = parent }
+    let parent: CameraInputBridgeView
+}}
+
+// MARK: On Tap
+extension CameraInputBridgeView.Coordinator {
+    @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
+        do {
+            let touchPoint = tap.location(in: parent.inputView)
+            try parent.cameraManager.setCameraFocus(touchPoint)
+        } catch {}
+    }
+}
+
+// MARK: On Pinch
+extension CameraInputBridgeView.Coordinator {
+    @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
+        do {
+            let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
+            try parent.cameraManager.changeZoomFactor(desiredZoomFactor)
+        } catch {}
     }}
-}
-private extension UICameraInputView {
-    func changeZoomFactor(_ desiredZoomFactor: CGFloat) {
-        do { try cameraManager.changeZoomFactor(desiredZoomFactor) }
-        catch {}
-    }
 }

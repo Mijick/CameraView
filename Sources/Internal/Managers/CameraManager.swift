@@ -117,7 +117,7 @@ private extension CameraManager {
         cameraMetalView = nil
         cameraGridView = nil
         cameraBlurView = nil
-        cameraFocusView = .init()
+        cameraFocusView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
         motionManager = .init()
     }
     func removeObservers() {
@@ -305,18 +305,6 @@ extension CameraManager {
     }
 }
 
-// MARK: - Camera Rotation
-extension CameraManager {
-    func fixCameraRotation() { if !orientationLocked { 
-        redrawGrid()
-    }}
-}
-private extension CameraManager {
-    func redrawGrid() {
-        cameraGridView?.draw(.zero)
-    }
-}
-
 // MARK: - Changing Output Type
 extension CameraManager {
     func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
@@ -398,7 +386,7 @@ private extension CameraManager {
         animateCameraFocusView()
     }}
     func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
-        let focusPoint = cameraLayer.captureDevicePointConverted(fromLayerPoint: touchPoint)
+        let focusPoint = convertTouchPointToFocusPoint(touchPoint)
         try configureCameraFocus(focusPoint, device)
     }
 }
@@ -417,6 +405,10 @@ private extension CameraManager {
             UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
         }
     }
+    func convertTouchPointToFocusPoint(_ touchPoint: CGPoint) -> CGPoint { .init(
+        x: touchPoint.y / cameraView.frame.height,
+        y: 1 - touchPoint.x / cameraView.frame.width
+    )}
     func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         setFocusPointOfInterest(focusPoint, device)
         setExposurePointOfInterest(focusPoint, device)
@@ -684,7 +676,22 @@ private extension CameraManager {
 
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        attributes.capturedMedia = .create(imageData: photo, orientation: frameOrientation, filters: attributes.cameraFilters)
+        attributes.capturedMedia = .create(imageData: photo, orientation: fixedFrameOrientation(), filters: attributes.cameraFilters)
+    }
+}
+private extension CameraManager {
+    func fixedFrameOrientation() -> CGImagePropertyOrientation { guard UIDevice.current.orientation != attributes.deviceOrientation.toDeviceOrientation() else { return frameOrientation }
+        return switch (attributes.deviceOrientation, attributes.cameraPosition) {
+            case (.portrait, .front): .left
+            case (.portrait, .back): .right
+            case (.landscapeLeft, .back): .down
+            case (.landscapeRight, .back): .up
+            case (.landscapeLeft, .front) where attributes.mirrorOutput: .up
+            case (.landscapeLeft, .front): .upMirrored
+            case (.landscapeRight, .front) where attributes.mirrorOutput: .down
+            case (.landscapeRight, .front): .downMirrored
+            default: .right
+        }
     }
 }
 
@@ -751,6 +758,7 @@ private extension CameraManager {
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
         updateFrameOrientation()
+        redrawGrid()
     }}
 }
 private extension CameraManager {
@@ -771,6 +779,9 @@ private extension CameraManager {
     func updateFrameOrientation() { if UIDevice.current.orientation != .portraitUpsideDown {
         let newFrameOrientation = getNewFrameOrientation(orientationLocked ? .portrait : UIDevice.current.orientation)
         updateFrameOrientation(newFrameOrientation)
+    }}
+    func redrawGrid() { if !orientationLocked {
+        cameraGridView?.draw(.zero)
     }}
 }
 private extension CameraManager {
