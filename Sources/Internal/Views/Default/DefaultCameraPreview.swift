@@ -93,7 +93,7 @@ fileprivate struct BottomButton: View {
 }
 private extension BottomButton {
     func createButtonLabel() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(icon, bundle: .module)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
