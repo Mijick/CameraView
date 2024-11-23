@@ -59,31 +59,27 @@ private extension MCameraMedia {
 
 // MARK: - Video Initialiser
 extension MCameraMedia {
-    static func create(videoData: URL, filters: [CIFilter]) async -> Self? { await withCheckedContinuation { task in
-        if filters.isEmpty { return task.resume(returning: .init(data: videoData)) }
+    static func create(videoData: URL, filters: [CIFilter]) async throws -> Self? {
+        guard !filters.isEmpty else { return .init(data: videoData) }
 
-        let asset = AVAsset(url: videoData)
-        AVVideoComposition.applyFilters(
-            to: asset,
-            applyFiltersAction: { applyFiltersToVideo($0, filters) },
-            completionHandler: { onFiltersApplied(task, asset, $0, $1) }
-        )
-    }}
+        let asset = AVAsset(url: videoData),
+            videoComposition = try await AVVideoComposition.applyFilters(to: asset, applyFiltersAction: { applyFiltersToVideo($0, filters) }),
+            fileUrl = prepareFileUrl(),
+            exportSession = prepareAssetExportSession(asset, fileUrl, videoComposition)
+
+        try await exportVideo(exportSession, fileUrl)
+        return .init(data: fileUrl)
+    }
 }
 private extension MCameraMedia {
     static func applyFiltersToVideo(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) {
         let videoFrame = prepareVideoFrame(request, filters)
         request.finish(with: videoFrame, context: nil)
     }
-    static func onFiltersApplied(_ task: CheckedContinuation<MCameraMedia?, Never>, _ asset: AVAsset, _ composition: AVVideoComposition?, _ error: (any Error)?) {
-        guard error == nil,
-              let composition,
-              let fileUrl = prepareFileUrl(),
-              let exportSession = prepareAssetExportSession(asset, fileUrl, composition)
-        else { return task.resume(returning: nil) }
-
-        exportSession.exportAsynchronously { onAssetExported(task, fileUrl) }
-    }
+    static func exportVideo(_ exportSession: AVAssetExportSession?, _ fileUrl: URL?) async throws { if let fileUrl {
+        if #available(iOS 18, *) { try await exportSession?.export(to: fileUrl, as: .mov) }
+        else { await exportSession?.export() }
+    }}
 }
 private extension MCameraMedia {
     static func prepareVideoFrame(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) -> CIImage { request
