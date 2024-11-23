@@ -97,9 +97,6 @@ private extension MCameraMedia {
         export?.videoComposition = composition
         return export
     }
-    static func onAssetExported(_ task: CheckedContinuation<MCameraMedia?, Never>, _ fileUrl: URL) {
-        task.resume(returning: .init(data: fileUrl))
-    }
 }
 
 // MARK: - Equatable
