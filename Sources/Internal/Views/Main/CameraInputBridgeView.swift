@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct CameraInputBridgeView {
+struct CameraInputBridgeView: UIViewRepresentable {
     let cameraManager: CameraManager
     let inputView: UIView = .init()
 }
@@ -22,7 +22,7 @@ struct CameraInputBridgeView {
 
 
 // MARK: UIViewRepresentable
-extension CameraInputBridgeView: UIViewRepresentable {
+extension CameraInputBridgeView {
     func makeUIView(context: Context) -> some UIView {
         setupCameraManager()
         setupTapGesture(context)
@@ -48,7 +48,7 @@ private extension CameraInputBridgeView {
 
 // MARK: Equatable
 extension CameraInputBridgeView: Equatable {
-    static func ==(lhs: Self, rhs: Self) -> Bool { true }
+    nonisolated static func ==(lhs: Self, rhs: Self) -> Bool { true }
 }
 
 
