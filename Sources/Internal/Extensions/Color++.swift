@@ -12,16 +12,16 @@
 import SwiftUI
 
 extension Color {
-    static var accent: Color = .init(hex: 0x087F8C)
-    static var yellow: Color = .init(hex: 0xF0C808)
-    static var red: Color = .init(hex: 0xD52941)
-    static var background: Color = .init(hex: 0x040408)
+    static let accent: Color = .init(hex: 0x087F8C)
+    static let yellow: Color = .init(hex: 0xF0C808)
+    static let red: Color = .init(hex: 0xD52941)
+    static let background: Color = .init(hex: 0x040408)
 }
 extension UIColor {
-    static var accent: UIColor = .init(hex: 0x087F8C)
-    static var yellow: UIColor = .init(hex: 0xF0C808)
-    static var red: UIColor = .init(hex: 0xD52941)
-    static var background: UIColor = .init(hex: 0x040408)
+    static let accent: UIColor = .init(hex: 0x087F8C)
+    static let yellow: UIColor = .init(hex: 0xF0C808)
+    static let red: UIColor = .init(hex: 0xD52941)
+    static let background: UIColor = .init(hex: 0x040408)
 }
 
 

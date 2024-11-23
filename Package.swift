@@ -15,6 +15,7 @@ let package = Package(
         .package(url: "https://github.com/Mijick/Timer", from: "1.0.1")
     ],
     targets: [
-        .target(name: "MijickCamera", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources")
+        .target(name: "MijickCamera",
+                dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources", swiftSettings: [.enableExperimentalFeature("StrictConcurrency")])
     ]
 )
