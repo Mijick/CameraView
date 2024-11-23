@@ -59,7 +59,7 @@ extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: C
 
 // MARK: On Tap
 extension CameraInputBridgeView.Coordinator {
-    @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
+    @MainActor @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
         do {
             let touchPoint = tap.location(in: parent.inputView)
             try parent.cameraManager.setCameraFocus(touchPoint)
@@ -69,7 +69,7 @@ extension CameraInputBridgeView.Coordinator {
 
 // MARK: On Pinch
 extension CameraInputBridgeView.Coordinator {
-    @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
+    @MainActor @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
         do {
             let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
             try parent.cameraManager.changeZoomFactor(desiredZoomFactor)
