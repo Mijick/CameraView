@@ -36,8 +36,8 @@ struct DefaultCameraPreview: MCameraPreview {
 private extension DefaultCameraPreview {
     func createContentView() -> some View {
         ZStack {
-            if let image = capturedMedia.image { createImageView(image) }
-            else if let video = capturedMedia.video { createVideoView(video) }
+            if let image = capturedMedia.getImage() { createImageView(image) }
+            else if let video = capturedMedia.getVideo() { createVideoView(video) }
             else { EmptyView() }
         }
         .opacity(shouldShowContent ? 1 : 0)
