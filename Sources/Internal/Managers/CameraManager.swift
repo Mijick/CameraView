@@ -159,7 +159,7 @@ extension CameraManager {
             try setupCameraAttributes()
             try setupFrameRate()
 
-            startCaptureSession()
+            Task { await startCaptureSession() }
         } catch { print("CANNOT SETUP CAMERA: \(error)") }
     }
 }
@@ -254,9 +254,9 @@ private extension CameraManager {
         try checkNewFrameRate(attributes.frameRate, device)
         try updateFrameRate(attributes.frameRate, device)
     }}
-    func startCaptureSession() { DispatchQueue(label: "cameraSession").async { [self] in
-        captureSession.startRunning()
-    }}
+    nonisolated func startCaptureSession() async {
+        await captureSession.startRunning()
+    }
 }
 private extension CameraManager {
     func checkPermissions(_ mediaType: AVMediaType) async throws { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
@@ -674,7 +674,7 @@ private extension CameraManager {
     var captureAnimationDuration: Double { 0.1 }
 }
 
-extension CameraManager: AVCapturePhotoCaptureDelegate {
+extension CameraManager: @preconcurrency AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
         attributes.capturedMedia = .create(imageData: photo, orientation: fixedFrameOrientation(), filters: attributes.cameraFilters)
     }
@@ -745,8 +745,8 @@ private extension CameraManager {
     }
 }
 
-extension CameraManager: AVCaptureFileOutputRecordingDelegate {
-    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task { @MainActor in
+extension CameraManager: @preconcurrency AVCaptureFileOutputRecordingDelegate {
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task {
         attributes.capturedMedia = try await .create(videoData: outputFileURL, filters: attributes.cameraFilters)
     }}
 }
@@ -841,7 +841,7 @@ private extension CameraManager {
 }
 
 // MARK: - Capturing Live Frames
-extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension CameraManager: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch metalAnimation {
         case .none: changeDisplayedFrame(sampleBuffer)
         default: presentCameraAnimation()
