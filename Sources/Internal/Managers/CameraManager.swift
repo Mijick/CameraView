@@ -9,8 +9,8 @@
 //  Copyright ©2024 Mijick. Licensed under MIT License.
 
 
+@preconcurrency import AVKit
 import SwiftUI
-import AVKit
 import MetalKit
 import CoreMotion
 import MijickTimer

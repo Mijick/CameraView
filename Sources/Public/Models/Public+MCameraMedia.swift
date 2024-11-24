@@ -9,7 +9,7 @@
 //  Copyright ©2024 Mijick. Licensed under MIT License.
 
 
-import AVKit
+@preconcurrency import AVKit
 
 public struct MCameraMedia {
     private let data: Any
