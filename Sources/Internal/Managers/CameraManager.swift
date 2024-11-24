@@ -15,7 +15,7 @@ import MetalKit
 import CoreMotion
 import MijickTimer
 
-public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attributes) { self.initialAttributes = attributes; self.attributes = attributes }
+@MainActor public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attributes) { self.initialAttributes = attributes; self.attributes = attributes }
     // MARK: Attributes
     struct Attributes {
         var capturedMedia: MCameraMedia? = nil
