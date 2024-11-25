@@ -33,7 +33,7 @@ public extension CameraManager {
         if let focusImageSize { self.cameraFocusView.frame.size = .init(width: focusImageSize, height: focusImageSize) }
     }
 }
-private extension CameraManager.Attributes {
+private extension CameraManagerAttributes {
     init(_ outputType: CameraOutputType?, _ cameraPosition: CameraPosition?, _ cameraFilters: [CIFilter]?, _ resolution: AVCaptureSession.Preset?, _ frameRate: Int32?, _ flashMode: CameraFlashMode?, _ isGridVisible: Bool?) { self.init()
         if let outputType { self.outputType = outputType }
         if let cameraPosition { self.cameraPosition = cameraPosition }

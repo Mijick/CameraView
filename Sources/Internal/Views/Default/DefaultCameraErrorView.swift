@@ -12,7 +12,7 @@
 import SwiftUI
 
 struct DefaultCameraErrorView: MCameraErrorView {
-    let error: CameraManager.Error
+    let error: CameraManagerError
     let closeControllerAction: () -> ()
 
 

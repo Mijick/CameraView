@@ -15,34 +15,10 @@ import MetalKit
 import CoreMotion
 import MijickTimer
 
-@MainActor public class CameraManager: NSObject, ObservableObject { init(_ attributes: Attributes) { self.initialAttributes = attributes; self.attributes = attributes }
+@MainActor public class CameraManager: NSObject, ObservableObject { init(_ attributes: CameraManagerAttributes) { self.initialAttributes = attributes; self.attributes = attributes }
     // MARK: Attributes
-    struct Attributes {
-        var capturedMedia: MCameraMedia? = nil
-        var error: Error? = nil
-        var outputType: CameraOutputType = .photo
-        var cameraPosition: CameraPosition = .back
-        var cameraFilters: [CIFilter] = []
-        var zoomFactor: CGFloat = 1.0
-        var flashMode: CameraFlashMode = .off
-        var torchMode: CameraTorchMode = .off
-        var cameraExposure: CameraExposure = .init()
-        var hdrMode: CameraHDRMode = .auto
-        var resolution: AVCaptureSession.Preset = .hd1920x1080
-        var frameRate: Int32 = 30
-        var mirrorOutput: Bool = false
-        var isGridVisible: Bool = true
-        var isRecording: Bool = false
-        var recordingTime: MTime = .zero
-        var deviceOrientation: AVCaptureVideoOrientation = .portrait
-        var userBlockedScreenRotation: Bool = false
 
-
-        // tutaj trzeba dac funkcje change albo init
-        // pozostaje jeszcze kwestia initial values, co przydaje się przy resecie, ale raczej nie jest to juz potrzebne
-        // całość logiki w zasadzie można przeniesć do deinit i będzie działać
-    }
-    @Published var attributes: Attributes
+    @Published var attributes: CameraManagerAttributes
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
@@ -82,7 +58,7 @@ import MijickTimer
     private(set) var isRunning: Bool = false
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
     private(set) var orientationLocked: Bool = false
-    private(set) var initialAttributes: Attributes
+    private(set) var initialAttributes: CameraManagerAttributes
 }
 
 // MARK: - Cancellation
@@ -177,7 +153,7 @@ private extension CameraManager {
             try await checkPermissions(.video)
             try await checkPermissions(.audio)
             animateCameraViewEntrance()
-        } catch { attributes.error = error as? Error }
+        } catch { attributes.error = error as? CameraManagerError }
     }}
     func initialiseCaptureSession() {
         captureSession = .init()
@@ -282,7 +258,7 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func getPermissionsError(_ mediaType: AVMediaType) -> Error { switch mediaType {
+    func getPermissionsError(_ mediaType: AVMediaType) -> CameraManagerError { switch mediaType {
         case .audio: .microphonePermissionsNotGranted
         case .video: .cameraPermissionsNotGranted
         default: .cameraPermissionsNotGranted
@@ -290,14 +266,14 @@ private extension CameraManager {
     func setupInput(_ input: AVCaptureDeviceInput?) throws {
         guard let input,
               captureSession.canAddInput(input)
-        else { throw Error.cannotSetupInput }
+        else { throw CameraManagerError.cannotSetupInput }
 
         captureSession.addInput(input)
     }
     func setupOutput(_ output: AVCaptureOutput?) throws {
         guard let output,
               captureSession.canAddOutput(output)
-        else { throw Error.cannotSetupOutput }
+        else { throw CameraManagerError.cannotSetupOutput }
 
         captureSession.addOutput(output)
     }
@@ -595,8 +571,8 @@ extension CameraManager {
 }
 private extension CameraManager {
     func checkNewFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.activeFormat.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
-        if newFrameRate < 15 { throw Error.incorrectFrameRate }
-        if newFrameRate > maxFrameRate { throw Error.incorrectFrameRate }
+        if newFrameRate < 15 { throw CameraManagerError.incorrectFrameRate }
+        if newFrameRate > maxFrameRate { throw CameraManagerError.incorrectFrameRate }
     }
     func updateFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.activeVideoMinFrameDuration = .init(value: 1, timescale: newFrameRate)
@@ -970,8 +946,8 @@ private extension CameraManager {
 
 
 // MARK: - Errors
-public extension CameraManager { enum Error: Swift.Error {
+public enum CameraManagerError: Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
     case incorrectFrameRate
-}}
+}

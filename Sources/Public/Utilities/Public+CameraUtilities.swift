@@ -46,4 +46,4 @@ public enum CameraHDRMode: CaseIterable {
 // MARK: - Typealiases
 public typealias CameraViewBuilder = (CameraManager, Namespace.ID, _ closeControllerAction: @escaping () -> ()) -> any MCameraView
 public typealias PreviewViewBuilder = (MCameraMedia, Namespace.ID, _ retakeAction: @escaping () -> (), _ acceptMediaAction: @escaping () -> ()) -> any MCameraPreview
-public typealias ErrorViewBuilder = (CameraManager.Error, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView
+public typealias ErrorViewBuilder = (CameraManagerError, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView

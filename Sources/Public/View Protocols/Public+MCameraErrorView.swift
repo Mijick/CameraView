@@ -12,7 +12,7 @@
 import SwiftUI
 
 public protocol MCameraErrorView: View {
-    var error: CameraManager.Error { get }
+    var error: CameraManagerError { get }
     var closeControllerAction: () -> () { get }
 }
 
