@@ -55,6 +55,10 @@ public extension MCameraController {
 
 
 
+public extension MCameraController {
+    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.attributes.outputType = type } }
+}
+
 
 
 public extension MCameraController {

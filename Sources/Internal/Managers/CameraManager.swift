@@ -36,8 +36,11 @@ import MijickTimer
         var recordingTime: MTime = .zero
         var deviceOrientation: AVCaptureVideoOrientation = .portrait
         var userBlockedScreenRotation: Bool = false
+
+
+        // tutaj trzeba dac funkcje change albo init
     }
-    @Published private(set) var attributes: Attributes
+    @Published var attributes: Attributes
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
