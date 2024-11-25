@@ -10,6 +10,7 @@
 
 
 import SwiftUI
+import AVKit
 
 // MARK: - Initialiser
 public extension MCameraController {
@@ -56,7 +57,16 @@ public extension MCameraController {
 
 
 public extension MCameraController {
-    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.attributes.outputType = type } }
+    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(outputType: type) } }
+    func cameraPosition(_ position: CameraPosition) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(cameraPosition: position) } }
+    func cameraFilters(_ filters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(cameraFilters: filters) } }
+    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(resolution: resolution) } }
+    func frameRate(_ frameRate: Int32) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(frameRate: frameRate) } }
+    func flashMode(_ mode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(flashMode: mode) } }
+    func gridVisibility(_ isVisible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.attributes.set(gridVisible: isVisible) } }
+    func focusImage(_ image: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.cameraFocusView.image = image } }
+    func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.cameraFocusView.tintColor = color } }
+    func focusImageSize(_ size: CGSize) -> Self { setAndReturnSelf { $0.cameraManager.cameraFocusView.frame = .init(origin: .zero, size: size) } }
 }
 
 
