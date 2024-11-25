@@ -15,7 +15,7 @@ import MetalKit
 import CoreMotion
 import MijickTimer
 
-@MainActor public class CameraManager: NSObject, ObservableObject { init(_ attributes: CameraManagerAttributes) { self.initialAttributes = attributes; self.attributes = attributes }
+@MainActor public class CameraManager: NSObject, ObservableObject { init(_ attributes: CameraManagerAttributes) { self.attributes = attributes }
     // MARK: Attributes
 
     @Published var attributes: CameraManagerAttributes
@@ -58,14 +58,12 @@ import MijickTimer
     private(set) var isRunning: Bool = false
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
     private(set) var orientationLocked: Bool = false
-    private(set) var initialAttributes: CameraManagerAttributes
 }
 
 // MARK: - Cancellation
 extension CameraManager {
     func cancel() {
         cancelProcesses()
-        resetAttributes()
         resetOthers()
         removeObservers()
     }
@@ -75,9 +73,6 @@ private extension CameraManager {
         captureSession.stopRunning()
         motionManager.stopAccelerometerUpdates()
         timer.reset()
-    }
-    func resetAttributes() {
-        attributes = initialAttributes
     }
     func resetOthers() {
         frontCamera = nil
