@@ -65,5 +65,5 @@ public extension MCameraView {
     var recordingTime: MTime { cameraManager.attributes.recordingTime }
     var hasTorch: Bool { cameraManager.hasTorch }
     var hasFlash: Bool { cameraManager.hasFlash }
-    var isOrientationLocked: Bool { cameraManager.orientationLocked } // TODO: rozważyć usunięcie
+    var isOrientationLocked: Bool { cameraManager.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
 }

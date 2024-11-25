@@ -30,6 +30,7 @@ struct CameraManagerAttributes {
     var isRecording: Bool = false
     var recordingTime: MTime = .zero
     var deviceOrientation: AVCaptureVideoOrientation = .portrait
+    var userBlockedScreenRotation: Bool = false
 
 
     // tutaj trzeba dac funkcje change albo init
