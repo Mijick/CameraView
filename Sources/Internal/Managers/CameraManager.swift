@@ -62,7 +62,6 @@ import MijickTimer
 extension CameraManager {
     func cancel() {
         cancelProcesses()
-        resetOthers()
         removeObservers()
     }
 }
@@ -71,28 +70,6 @@ private extension CameraManager {
         captureSession.stopRunning()
         motionManager.stopAccelerometerUpdates()
         timer.reset()
-    }
-    func resetOthers() {
-        frontCamera = nil
-        backCamera = nil
-        microphone = nil
-        captureSession = nil
-        frontCameraInput = nil
-        backCameraInput = nil
-        audioInput = nil
-        photoOutput = nil
-        videoOutput = nil
-        metalDevice = nil
-        metalCommandQueue = nil
-        ciContext = nil
-        currentFrame = nil
-        firstRecordedFrame = nil
-        cameraLayer = nil
-        cameraMetalView = nil
-        cameraGridView = nil
-        cameraBlurView = nil
-        cameraFocusView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
-        motionManager = .init()
     }
     func removeObservers() {
         NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
