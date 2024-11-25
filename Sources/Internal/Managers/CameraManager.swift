@@ -15,10 +15,8 @@ import MetalKit
 import CoreMotion
 import MijickTimer
 
-@MainActor public class CameraManager: NSObject, ObservableObject { init(_ attributes: CameraManagerAttributes) { self.attributes = attributes }
-    // MARK: Attributes
-
-    @Published var attributes: CameraManagerAttributes
+@MainActor public class CameraManager: NSObject, ObservableObject {
+    @Published var attributes: CameraManagerAttributes = .init()
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
