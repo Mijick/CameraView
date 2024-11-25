@@ -39,6 +39,8 @@ import MijickTimer
 
 
         // tutaj trzeba dac funkcje change albo init
+        // pozostaje jeszcze kwestia initial values, co przydaje się przy resecie, ale raczej nie jest to juz potrzebne
+        // całość logiki w zasadzie można przeniesć do deinit i będzie działać
     }
     @Published var attributes: Attributes
 
