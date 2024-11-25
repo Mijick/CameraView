@@ -12,3 +12,15 @@
 import XCTest
 import SwiftUI
 @testable import MijickCamera
+
+@MainActor final class CameraManagerTests: XCTestCase {}
+
+
+// MARK: - TEST CASES
+
+
+
+// MARK: Camera Focus
+extension CameraManagerTests {
+    
+}

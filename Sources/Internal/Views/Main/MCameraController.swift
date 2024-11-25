@@ -12,10 +12,10 @@
 import SwiftUI
 
 public struct MCameraController: View {
-    @ObservedObject var cameraManager: CameraManager
+    @ObservedObject var cameraManager: CameraManager = .init()
     @Namespace var namespace
     var config: CameraConfig = .init()
-
+    public init() {}
     
     public var body: some View {
         ZStack { switch cameraManager.attributes.error {
