@@ -8,3 +8,4 @@ DerivedData/
 .netrc
 *.xcscheme
 *.plist
+.swiftpm/xcode/package.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
