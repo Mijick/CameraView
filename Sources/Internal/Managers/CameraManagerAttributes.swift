@@ -15,6 +15,7 @@ import MijickTimer
 struct CameraManagerAttributes {
     var capturedMedia: MCameraMedia? = nil
     var error: CameraManagerError? = nil
+
     var outputType: CameraOutputType = .photo
     var cameraPosition: CameraPosition = .back
     var cameraFilters: [CIFilter] = []
@@ -29,6 +30,7 @@ struct CameraManagerAttributes {
     var isGridVisible: Bool = true
     var isRecording: Bool = false
     var recordingTime: MTime = .zero
+
     var deviceOrientation: AVCaptureVideoOrientation = .portrait
     var userBlockedScreenRotation: Bool = false
 
