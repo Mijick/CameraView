@@ -17,7 +17,7 @@ public struct MCameraController: View {
     var config: CameraConfig = .init()
     public init() {}
     
-    public var body: some View {
+    public var body: some View { if config.isInitialised {
         ZStack { switch cameraManager.attributes.error {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
@@ -26,7 +26,7 @@ public struct MCameraController: View {
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)
-    }
+    }}
 }
 private extension MCameraController {
     func createErrorStateView(_ error: CameraManager.Error) -> some View {

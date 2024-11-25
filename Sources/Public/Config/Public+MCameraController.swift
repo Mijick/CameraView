@@ -52,3 +52,11 @@ public extension MCameraController {
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
 }
+
+
+
+
+
+public extension MCameraController {
+    func start() -> some View { setAndReturnSelf { $0.config.isInitialised = true } }
+}

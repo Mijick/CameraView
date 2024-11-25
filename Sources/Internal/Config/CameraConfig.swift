@@ -25,4 +25,7 @@ import SwiftUI
     var onVideoCaptured: (URL) -> () = { _ in }
     var afterMediaCaptured: (PostCameraConfig) -> (PostCameraConfig) = { _ in .init() }
     var onCloseController: () -> () = {}
+
+
+    var isInitialised: Bool = false
 }
