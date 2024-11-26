@@ -35,21 +35,5 @@ struct CameraManagerAttributes {
     var userBlockedScreenRotation: Bool = false
 
 
-    // tutaj trzeba dac funkcje change albo init
-    // pozostaje jeszcze kwestia initial values, co przydaje się przy resecie, ale raczej nie jest to juz potrzebne
-    // całość logiki w zasadzie można przeniesć do deinit i będzie działać
     // sens tego jest taki, że atrybuty tutaj zmieniane wpływają na odświeżanie się UI
-}
-
-
-extension CameraManagerAttributes {
-    mutating func set(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, resolution: AVCaptureSession.Preset? = nil, frameRate: Int32? = nil, flashMode: CameraFlashMode? = nil, gridVisible: Bool? = nil) {
-        if let outputType { self.outputType = outputType }
-        if let cameraPosition { self.cameraPosition = cameraPosition }
-        if let cameraFilters { self.cameraFilters = cameraFilters }
-        if let resolution { self.resolution = resolution }
-        if let frameRate { self.frameRate = frameRate }
-        if let flashMode { self.flashMode = flashMode }
-        if let gridVisible { self.isGridVisible = gridVisible }
-    }
 }

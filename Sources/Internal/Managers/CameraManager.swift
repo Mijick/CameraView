@@ -16,7 +16,7 @@ import CoreMotion
 import MijickTimer
 
 @MainActor public class CameraManager: NSObject, ObservableObject {
-    @Published var attributes: CameraManagerAttributes = .init()
+    @Published private(set) var attributes: CameraManagerAttributes = .init()
 
     // MARK: Devices
     private var frontCamera: AVCaptureDevice?
@@ -56,6 +56,18 @@ import MijickTimer
     private(set) var isRunning: Bool = false
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
     private(set) var orientationLocked: Bool = false
+}
+
+extension CameraManager {
+    func setAttributes(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, resolution: AVCaptureSession.Preset? = nil, frameRate: Int32? = nil, flashMode: CameraFlashMode? = nil, gridVisible: Bool? = nil) {
+        if let outputType { self.attributes.outputType = outputType }
+        if let cameraPosition { self.attributes.cameraPosition = cameraPosition }
+        if let cameraFilters { self.attributes.cameraFilters = cameraFilters }
+        if let resolution { self.attributes.resolution = resolution }
+        if let frameRate { self.attributes.frameRate = frameRate }
+        if let flashMode { self.attributes.flashMode = flashMode }
+        if let gridVisible { self.attributes.isGridVisible = gridVisible }
+    }
 }
 
 // MARK: - Cancellation
