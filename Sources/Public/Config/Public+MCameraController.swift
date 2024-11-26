@@ -64,9 +64,7 @@ public extension MCameraController {
     func frameRate(_ frameRate: Int32) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(frameRate: frameRate) } }
     func flashMode(_ mode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(flashMode: mode) } }
     func gridVisibility(_ isVisible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(gridVisible: isVisible) } }
-    func focusImage(_ image: UIImage) -> Self { setAndReturnSelf { $0.cameraManager.cameraFocusView.image = image } }
-    func focusImageColor(_ color: UIColor) -> Self { setAndReturnSelf { $0.cameraManager.cameraFocusView.tintColor = color } }
-    func focusImageSize(_ size: CGSize) -> Self { setAndReturnSelf { $0.cameraManager.cameraFocusView.frame = .init(origin: .zero, size: size) } }
+    func focusImageView(image: UIImage? = nil, color: UIColor? = nil, size: CGFloat? = nil) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(cameraFocusImage: image, cameraFocusImageColor: color, cameraFocusImageSize: size) } }
 }
 
 

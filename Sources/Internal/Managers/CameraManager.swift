@@ -59,7 +59,7 @@ import MijickTimer
 }
 
 extension CameraManager {
-    func setAttributes(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, resolution: AVCaptureSession.Preset? = nil, frameRate: Int32? = nil, flashMode: CameraFlashMode? = nil, gridVisible: Bool? = nil) {
+    func setAttributes(outputType: CameraOutputType? = nil, cameraPosition: CameraPosition? = nil, cameraFilters: [CIFilter]? = nil, resolution: AVCaptureSession.Preset? = nil, frameRate: Int32? = nil, flashMode: CameraFlashMode? = nil, gridVisible: Bool? = nil, cameraFocusImage: UIImage? = nil, cameraFocusImageColor: UIColor? = nil, cameraFocusImageSize: CGFloat? = nil) {
         if let outputType { self.attributes.outputType = outputType }
         if let cameraPosition { self.attributes.cameraPosition = cameraPosition }
         if let cameraFilters { self.attributes.cameraFilters = cameraFilters }
@@ -67,6 +67,9 @@ extension CameraManager {
         if let frameRate { self.attributes.frameRate = frameRate }
         if let flashMode { self.attributes.flashMode = flashMode }
         if let gridVisible { self.attributes.isGridVisible = gridVisible }
+        if let cameraFocusImage { self.cameraFocusView.image = cameraFocusImage }
+        if let cameraFocusImageColor { self.cameraFocusView.tintColor = cameraFocusImageColor }
+        if let cameraFocusImageSize { self.cameraFocusView.frame.size = .init(width: cameraFocusImageSize, height: cameraFocusImageSize) }
     }
 }
 
