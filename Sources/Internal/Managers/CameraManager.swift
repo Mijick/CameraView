@@ -198,7 +198,8 @@ private extension CameraManager {
         try setupInput(audioInput)
     }
     func setupDeviceOutput() throws {
-        try setupCameraOutput(attributes.outputType)
+        try setupOutput(photoOutput)
+        try setupOutput(videoOutput)
     }
     func setupFrameRecorder() throws {
         let captureVideoOutput = AVCaptureVideoDataOutput()
@@ -235,9 +236,6 @@ private extension CameraManager {
         case .front: try setupInput(frontCameraInput)
         case .back: try setupInput(backCameraInput)
     }}
-    func setupCameraOutput(_ outputType: CameraOutputType) throws { if let output = getOutput(outputType) {
-        try setupOutput(output)
-    }}
 }
 private extension CameraManager {
     func getPermissionsError(_ mediaType: AVMediaType) -> CameraManagerError { switch mediaType {
@@ -271,29 +269,14 @@ extension CameraManager {
 // MARK: - Changing Output Type
 extension CameraManager {
     func changeOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
-        captureCurrentFrameAndDelay(.blur) { [self] in
-            removeCameraOutput(attributes.outputType)
-            try setupCameraOutput(newOutputType)
-            updateCameraOutputType(newOutputType)
-
-            updateTorchMode(.off)
-            removeBlur()
-        }
+        updateCameraOutputType(newOutputType)
+        updateTorchMode(.off)
     }}
 }
 private extension CameraManager {
-    func removeCameraOutput(_ outputType: CameraOutputType) { if let output = getOutput(outputType) {
-        captureSession.removeOutput(output)
-    }}
     func updateCameraOutputType(_ cameraOutputType: CameraOutputType) {
         attributes.outputType = cameraOutputType
     }
-}
-private extension CameraManager {
-    func getOutput(_ outputType: CameraOutputType) -> AVCaptureOutput? { switch outputType {
-        case .photo: photoOutput
-        case .video: videoOutput
-    }}
 }
 
 // MARK: - Changing Camera Position
