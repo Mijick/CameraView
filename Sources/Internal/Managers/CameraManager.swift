@@ -11,7 +11,6 @@
 
 @preconcurrency import AVKit
 import SwiftUI
-import MetalKit
 import CoreMotion
 import MijickTimer
 

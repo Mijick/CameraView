@@ -9,6 +9,8 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
+import SwiftUI
+import MetalKit
 
 @MainActor class CameraMetalView: MTKView {
     var currentFrame: CIImage?
