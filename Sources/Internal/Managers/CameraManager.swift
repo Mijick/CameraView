@@ -29,16 +29,11 @@ import MijickTimer
     private var videoOutput: AVCaptureMovieFileOutput?
 
     // MARK: Metal
-    private var metalDevice: MTLDevice!
-    private var metalCommandQueue: MTLCommandQueue!
-    private var ciContext: CIContext!
-    private var currentFrame: CIImage?
     private var firstRecordedFrame: UIImage?
-    private var metalAnimation: MetalAnimation = .none
 
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
-    private(set) var cameraMetalView: MTKView!
+    private(set) var cameraMetalView: CameraMetalView!
     private(set) var cameraGridView: GridView!
     private(set) var cameraBlurView: UIImageView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
@@ -104,7 +99,6 @@ extension CameraManager {
             makeCameraViewInvisible(cameraView)
             checkPermissions()
             initialiseCaptureSession()
-            initialiseMetal()
             initialiseCameraLayer(cameraView)
             initialiseCameraMetalView()
             initialiseCameraGridView()
@@ -138,11 +132,6 @@ private extension CameraManager {
         captureSession = .init()
         captureSession.sessionPreset = attributes.resolution
     }
-    func initialiseMetal() {
-        metalDevice = MTLCreateSystemDefaultDevice()
-        metalCommandQueue = metalDevice.makeCommandQueue()
-        ciContext = CIContext(mtlDevice: metalDevice)
-    }
     func initialiseCameraLayer(_ cameraView: UIView) {
         cameraLayer = .init(session: captureSession)
         cameraLayer.videoGravity = .resizeAspectFill
@@ -152,16 +141,7 @@ private extension CameraManager {
     }
     func initialiseCameraMetalView() {
         cameraMetalView = .init()
-        cameraMetalView.delegate = self
-        cameraMetalView.device = metalDevice
-        cameraMetalView.isPaused = true
-        cameraMetalView.enableSetNeedsDisplay = false
-        cameraMetalView.framebufferOnly = false
-        cameraMetalView.autoResizeDrawable = false
-
-        cameraMetalView.contentMode = .scaleAspectFill
-        cameraMetalView.clipsToBounds = true
-        cameraMetalView.addToParent(cameraView)
+        cameraMetalView.setup(in: cameraView)
     }
     func initialiseCameraGridView() {
         cameraGridView?.removeFromSuperview()
@@ -662,7 +642,7 @@ private extension CameraManager {
     func storeLastFrame() {
         guard let texture = cameraMetalView.currentDrawable?.texture,
               let ciImage = CIImage(mtlTexture: texture, options: nil),
-              let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent)
+              let cgImage = cameraMetalView.ciContext.createCGImage(ciImage, from: ciImage.extent)
         else { return }
 
         firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: attributes.deviceOrientation.toImageOrientation())
@@ -780,7 +760,7 @@ private extension CameraManager {
 
 // MARK: - Capturing Live Frames
 extension CameraManager: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch metalAnimation {
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch cameraMetalView.animation {
         case .none: changeDisplayedFrame(sampleBuffer)
         default: presentCameraAnimation()
     }}
@@ -797,7 +777,7 @@ private extension CameraManager {
 
         insertBlurView(snapshot)
         animateBlurFlip()
-        metalAnimation = .none
+        cameraMetalView.animation = .none
     }
 }
 private extension CameraManager {
@@ -809,11 +789,11 @@ private extension CameraManager {
         currentFrame.applyingFilters(attributes.cameraFilters)
     }
     func redrawCameraView(_ frame: CIImage) {
-        currentFrame = frame
+        cameraMetalView.currentFrame = frame
         cameraMetalView.draw()
     }
     func createSnapshot() -> UIImage? {
-        guard let currentFrame else { return nil }
+        guard let currentFrame = cameraMetalView.currentFrame else { return nil }
 
         let image = UIImage(ciImage: currentFrame)
         return image
@@ -827,7 +807,7 @@ private extension CameraManager {
 
         cameraView.addSubview(cameraBlurView)
     }}
-    func animateBlurFlip() { if metalAnimation == .blurAndFlip {
+    func animateBlurFlip() { if cameraMetalView.animation == .blurAndFlip {
         UIView.transition(with: cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
     func removeBlur() { Task { @MainActor [self] in
@@ -841,36 +821,6 @@ private extension CameraManager {
     var flipAnimationDuration: Double { 0.44 }
     var flipAnimationTransition: UIView.AnimationOptions { attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
-private extension CameraManager {
-    enum MetalAnimation { case blurAndFlip, blur, none }
-}
-
-// MARK: - Metal Handlers
-extension CameraManager: MTKViewDelegate {
-    public func draw(in view: MTKView) {
-        guard let commandBuffer = metalCommandQueue.makeCommandBuffer(),
-              let ciImage = currentFrame,
-              let currentDrawable = view.currentDrawable
-        else { return }
-
-        changeDrawableSize(view, ciImage)
-        renderView(view, currentDrawable, commandBuffer, ciImage)
-        commitBuffer(currentDrawable, commandBuffer)
-    }
-    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
-}
-private extension CameraManager {
-    func changeDrawableSize(_ view: MTKView, _ ciImage: CIImage) {
-        view.drawableSize = ciImage.extent.size
-    }
-    func renderView(_ view: MTKView, _ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer, _ ciImage: CIImage) {
-        ciContext.render(ciImage, to: currentDrawable.texture, commandBuffer: commandBuffer, bounds: .init(origin: .zero, size: view.drawableSize), colorSpace: CGColorSpaceCreateDeviceRGB())
-    }
-    func commitBuffer(_ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer) {
-        commandBuffer.present(currentDrawable)
-        commandBuffer.commit()
-    }
-}
 
 // MARK: - Modifiers
 extension CameraManager {
@@ -880,8 +830,8 @@ extension CameraManager {
 
 // MARK: - Helpers
 private extension CameraManager {
-    func captureCurrentFrameAndDelay(_ type: MetalAnimation, _ action: @escaping () throws -> ()) { Task { @MainActor in
-        metalAnimation = type
+    func captureCurrentFrameAndDelay(_ type: CameraMetalView.Animation, _ action: @escaping () throws -> ()) { Task { @MainActor in
+        cameraMetalView.animation = type
         try await Task.sleep(nanoseconds: 150_000_000)
 
         try action()
@@ -907,4 +857,75 @@ public enum CameraManagerError: Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
     case incorrectFrameRate
+}
+
+
+
+
+
+
+
+
+@MainActor class CameraMetalView: MTKView {
+    var currentFrame: CIImage?
+    var ciContext: CIContext!
+    var animation: Animation = .none
+
+    private var metalDevice: MTLDevice!
+    private var metalCommandQueue: MTLCommandQueue!
+}
+
+extension CameraMetalView {
+    func setup(in view: UIView) {
+        metalDevice = MTLCreateSystemDefaultDevice()
+        metalCommandQueue = metalDevice.makeCommandQueue()
+        ciContext = CIContext(mtlDevice: metalDevice)
+
+        delegate = self
+        device = metalDevice
+        isPaused = true
+        enableSetNeedsDisplay = false
+        framebufferOnly = false
+        autoResizeDrawable = false
+
+        contentMode = .scaleAspectFill
+        clipsToBounds = true
+        addToParent(view)
+    }
+}
+
+
+
+
+
+extension CameraMetalView: MTKViewDelegate {
+    func draw(in view: MTKView) {
+        guard let commandBuffer = metalCommandQueue.makeCommandBuffer(),
+              let ciImage = currentFrame,
+              let currentDrawable = view.currentDrawable
+        else { return }
+
+        changeDrawableSize(view, ciImage)
+        renderView(view, currentDrawable, commandBuffer, ciImage)
+        commitBuffer(currentDrawable, commandBuffer)
+    }
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
+}
+private extension CameraMetalView {
+    func changeDrawableSize(_ view: MTKView, _ ciImage: CIImage) {
+        view.drawableSize = ciImage.extent.size
+    }
+    func renderView(_ view: MTKView, _ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer, _ ciImage: CIImage) {
+        ciContext.render(ciImage, to: currentDrawable.texture, commandBuffer: commandBuffer, bounds: .init(origin: .zero, size: view.drawableSize), colorSpace: CGColorSpaceCreateDeviceRGB())
+    }
+    func commitBuffer(_ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer) {
+        commandBuffer.present(currentDrawable)
+        commandBuffer.commit()
+    }
+}
+
+
+
+extension CameraMetalView {
+    enum Animation { case blurAndFlip, blur, none }
 }
