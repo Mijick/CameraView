@@ -857,11 +857,3 @@ public enum CameraManagerError: Error {
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
     case incorrectFrameRate
 }
-
-
-
-
-
-
-
-
