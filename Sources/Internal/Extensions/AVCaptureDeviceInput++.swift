@@ -12,8 +12,22 @@
 import AVKit
 
 extension AVCaptureDeviceInput {
-    convenience init?(_ device: AVCaptureDevice?) {
-        if let device { try? self.init(device: device) }
-        else { return nil }
+    static func get(for mediaType: AVMediaType, position: AVCaptureDevice.Position? = nil, _ deviceType: AVCaptureDevice.DeviceType? = nil) -> AVCaptureDeviceInput? {
+        guard let device = AVCaptureDevice.get(mediaType: mediaType, deviceType: deviceType, position: position) else { return nil }
+
+        let deviceInput = try? AVCaptureDeviceInput(device: device)
+        return deviceInput
+    }
+}
+
+
+
+
+
+
+fileprivate extension AVCaptureDevice {
+    static func get(mediaType: AVMediaType, deviceType: AVCaptureDevice.DeviceType?, position: AVCaptureDevice.Position?) -> AVCaptureDevice? {
+        guard let deviceType, let position else { return .default(for: mediaType) }
+        return .default(deviceType, for: mediaType, position: position)
     }
 }

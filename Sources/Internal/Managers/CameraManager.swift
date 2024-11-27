@@ -18,11 +18,6 @@ import MijickTimer
 @MainActor public class CameraManager: NSObject, ObservableObject {
     @Published private(set) var attributes: CameraManagerAttributes = .init()
 
-    // MARK: Devices
-    private var frontCamera: AVCaptureDevice?
-    private var backCamera: AVCaptureDevice?
-    private var microphone: AVCaptureDevice?
-
     // MARK: Input
     private var captureSession: AVCaptureSession!
     private var frontCameraInput: AVCaptureDeviceInput?
@@ -113,7 +108,6 @@ extension CameraManager {
             initialiseCameraLayer(cameraView)
             initialiseCameraMetalView()
             initialiseCameraGridView()
-            initialiseDevices()
             initialiseInputs()
             initialiseOutputs()
             initializeMotionManager()
@@ -175,15 +169,10 @@ private extension CameraManager {
         cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
     }
-    func initialiseDevices() {
-        frontCamera = .default(.builtInWideAngleCamera, for: .video, position: .front)
-        backCamera = .default(for: .video)
-        microphone = .default(for: .audio)
-    }
     func initialiseInputs() {
-        frontCameraInput = .init(frontCamera)
-        backCameraInput = .init(backCamera)
-        audioInput = .init(microphone)
+        frontCameraInput = .get(for: .video, position: .front, .builtInWideAngleCamera)
+        backCameraInput = .get(for: .video)
+        audioInput = .get(for: .audio)
     }
     func initialiseOutputs() {
         photoOutput = .init()
@@ -385,8 +374,8 @@ extension CameraManager {
 }
 private extension CameraManager {
     func getDevice(_ position: CameraPosition) -> AVCaptureDevice? { switch position {
-        case .front: frontCamera
-        case .back: backCamera
+        case .front: frontCameraInput?.device
+        case .back: backCameraInput?.device
     }}
     func calculateZoomFactor(_ value: CGFloat, _ device: AVCaptureDevice) -> CGFloat {
         min(max(value, getMinZoomLevel(device)), getMaxZoomLevel(device))
