@@ -57,14 +57,17 @@ public extension MCameraController {
 
 
 public extension MCameraController {
-    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(outputType: type) } }
-    func cameraPosition(_ position: CameraPosition) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(cameraPosition: position) } }
-    func cameraFilters(_ filters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(cameraFilters: filters) } }
-    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(resolution: resolution) } }
-    func frameRate(_ frameRate: Int32) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(frameRate: frameRate) } }
-    func flashMode(_ mode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(flashMode: mode) } }
-    func gridVisibility(_ isVisible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(gridVisible: isVisible) } }
-    func focusImageView(image: UIImage? = nil, color: UIColor? = nil, size: CGFloat? = nil) -> Self { setAndReturnSelf { $0.cameraManager.setAttributes(cameraFocusImage: image, cameraFocusImageColor: color, cameraFocusImageSize: size) } }
+    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.attributes.outputType = type } }
+    func cameraPosition(_ position: CameraPosition) -> Self { setAndReturnSelf { $0.cameraManager.attributes.cameraPosition = position } }
+    func cameraFilters(_ filters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.attributes.cameraFilters = filters } }
+    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { setAndReturnSelf { $0.cameraManager.attributes.resolution = resolution } }
+    func frameRate(_ frameRate: Int32) -> Self { setAndReturnSelf { $0.cameraManager.attributes.frameRate = frameRate } }
+    func flashMode(_ mode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.attributes.flashMode = mode } }
+    func gridVisibility(_ isVisible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.attributes.isGridVisible = isVisible } }
+
+    func focusImage(_ image: UIImage) -> Self {  setAndReturnSelf { $0.cameraManager.cameraFocusView.image = image } }
+    func focusImageColor(_ color: UIColor) -> Self {  setAndReturnSelf { $0.cameraManager.cameraFocusView.tintColor = color } }
+    func focusImageSize(_ size: CGFloat) -> Self {  setAndReturnSelf { $0.cameraManager.cameraFocusView.frame.size = .init(width: size, height: size) } }
 }
 
 
