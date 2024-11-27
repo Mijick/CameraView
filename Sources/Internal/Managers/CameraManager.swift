@@ -34,7 +34,6 @@ import MijickTimer
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
     private(set) var cameraMetalView: CameraMetalView!
     private(set) var cameraGridView: GridView!
-    private(set) var cameraBlurView: UIImageView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
     // MARK: Other Objects
@@ -140,7 +139,7 @@ private extension CameraManager {
     }
     func initialiseCameraMetalView() {
         cameraMetalView = .init()
-        cameraMetalView.setup(in: cameraView)
+        cameraMetalView.setup(self)
     }
     func initialiseCameraGridView() {
         cameraGridView?.removeFromSuperview()
@@ -174,7 +173,7 @@ private extension CameraManager {
     }
     func setupFrameRecorder() throws {
         let captureVideoOutput = AVCaptureVideoDataOutput()
-        captureVideoOutput.setSampleBufferDelegate(self, queue: DispatchQueue.main)
+        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
 
         if captureSession.canAddOutput(captureVideoOutput) { captureSession?.addOutput(captureVideoOutput) }
     }
@@ -253,13 +252,12 @@ private extension CameraManager {
 // MARK: - Changing Camera Position
 extension CameraManager {
     func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != attributes.cameraPosition && !isChanging {
-        captureCurrentFrameAndDelay(.blurAndFlip) { [self] in
+        cameraMetalView.captureCurrentFrameAndDelay(.blurAndFlip) { [self] in
             removeCameraInput(attributes.cameraPosition)
             try setupCameraInput(newPosition)
             updateCameraPosition(newPosition)
             
             updateTorchMode(.off)
-            removeBlur()
         }
     }}
 }
@@ -757,70 +755,6 @@ private extension CameraManager {
     }
 }
 
-// MARK: - Capturing Live Frames
-extension CameraManager: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch cameraMetalView.animation {
-        case .none: changeDisplayedFrame(sampleBuffer)
-        default: presentCameraAnimation()
-    }}
-}
-private extension CameraManager {
-    func changeDisplayedFrame(_ sampleBuffer: CMSampleBuffer) { if let cvImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-        let currentFrame = captureCurrentFrame(cvImageBuffer)
-        let currentFrameWithFiltersApplied = applyFiltersToCurrentFrame(currentFrame)
-
-        redrawCameraView(currentFrameWithFiltersApplied)
-    }}
-    func presentCameraAnimation() {
-        let snapshot = createSnapshot()
-
-        insertBlurView(snapshot)
-        animateBlurFlip()
-        cameraMetalView.animation = .none
-    }
-}
-private extension CameraManager {
-    func captureCurrentFrame(_ cvImageBuffer: CVImageBuffer) -> CIImage {
-        let currentFrame = CIImage(cvImageBuffer: cvImageBuffer)
-        return currentFrame.oriented(frameOrientation)
-    }
-    func applyFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage {
-        currentFrame.applyingFilters(attributes.cameraFilters)
-    }
-    func redrawCameraView(_ frame: CIImage) {
-        cameraMetalView.currentFrame = frame
-        cameraMetalView.draw()
-    }
-    func createSnapshot() -> UIImage? {
-        guard let currentFrame = cameraMetalView.currentFrame else { return nil }
-
-        let image = UIImage(ciImage: currentFrame)
-        return image
-    }
-    func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
-        cameraBlurView = UIImageView(image: snapshot)
-        cameraBlurView.frame = cameraView.frame
-        cameraBlurView.contentMode = .scaleAspectFill
-        cameraBlurView.clipsToBounds = true
-        cameraBlurView.applyBlurEffect(style: .regular, animationDuration: blurAnimationDuration)
-
-        cameraView.addSubview(cameraBlurView)
-    }}
-    func animateBlurFlip() { if cameraMetalView.animation == .blurAndFlip {
-        UIView.transition(with: cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
-    }}
-    func removeBlur() { Task { @MainActor [self] in
-        try await Task.sleep(nanoseconds: 100_000_000)
-        UIView.animate(withDuration: blurAnimationDuration) { self.cameraBlurView.alpha = 0 }
-    }}
-}
-private extension CameraManager {
-    var blurAnimationDuration: Double { 0.3 }
-
-    var flipAnimationDuration: Double { 0.44 }
-    var flipAnimationTransition: UIView.AnimationOptions { attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
-}
-
 // MARK: - Modifiers
 extension CameraManager {
     var hasFlash: Bool { getDevice(attributes.cameraPosition)?.hasFlash ?? false }
@@ -829,12 +763,6 @@ extension CameraManager {
 
 // MARK: - Helpers
 private extension CameraManager {
-    func captureCurrentFrameAndDelay(_ type: CameraMetalView.Animation, _ action: @escaping () throws -> ()) { Task { @MainActor in
-        cameraMetalView.animation = type
-        try await Task.sleep(nanoseconds: 150_000_000)
-
-        try action()
-    }}
     func configureOutput(_ output: AVCaptureOutput?) { if let connection = output?.connection(with: .video), connection.isVideoMirroringSupported {
         connection.isVideoMirrored = attributes.mirrorOutput ? attributes.cameraPosition != .front : attributes.cameraPosition == .front
         connection.videoOrientation = attributes.deviceOrientation
@@ -845,9 +773,9 @@ private extension CameraManager {
         device.unlockForConfiguration()
     }
 }
-private extension CameraManager {
+ extension CameraManager {
     var cameraView: UIView { cameraLayer.superview ?? .init() }
-    var isChanging: Bool { (cameraBlurView?.alpha ?? 0) > 0 }
+    var isChanging: Bool { cameraMetalView.isChanging }
 }
 
 
