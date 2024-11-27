@@ -35,3 +35,7 @@ private extension CameraManagerPhoto {
         }
     }
 }
+
+
+
+// zadaniem klasy jest otrzymanie zdjęcia z aparatu i jego obrobienie
