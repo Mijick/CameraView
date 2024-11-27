@@ -15,7 +15,7 @@ import CoreMotion
 import MijickTimer
 
 @MainActor public class CameraManager: NSObject, ObservableObject {
-    @Published private(set) var attributes: CameraManagerAttributes = .init()
+    @Published var attributes: CameraManagerAttributes = .init()
 
     // MARK: Input
     private var captureSession: AVCaptureSession!
@@ -26,6 +26,8 @@ import MijickTimer
     // MARK: Output
     private var photoOutput: AVCapturePhotoOutput?
     private var videoOutput: AVCaptureMovieFileOutput?
+
+    var d: CameraManagerPhoto = .init()
 
     // MARK: Metal
     private var firstRecordedFrame: UIImage?
@@ -553,8 +555,9 @@ private extension CameraManager {
     func capturePhoto() {
         let settings = getPhotoOutputSettings()
 
+        d.parent = self
         configureOutput(photoOutput)
-        photoOutput?.capturePhoto(with: settings, delegate: self)
+        photoOutput?.capturePhoto(with: settings, delegate: d)
         performCaptureAnimation()
     }
 }
@@ -587,27 +590,6 @@ private extension CameraManager {
 }
 private extension CameraManager {
     var captureAnimationDuration: Double { 0.1 }
-}
-
-extension CameraManager: @preconcurrency AVCapturePhotoCaptureDelegate {
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        attributes.capturedMedia = .create(imageData: photo, orientation: fixedFrameOrientation(), filters: attributes.cameraFilters)
-    }
-}
-private extension CameraManager {
-    func fixedFrameOrientation() -> CGImagePropertyOrientation { guard UIDevice.current.orientation != attributes.deviceOrientation.toDeviceOrientation() else { return frameOrientation }
-        return switch (attributes.deviceOrientation, attributes.cameraPosition) {
-            case (.portrait, .front): .left
-            case (.portrait, .back): .right
-            case (.landscapeLeft, .back): .down
-            case (.landscapeRight, .back): .up
-            case (.landscapeLeft, .front) where attributes.mirrorOutput: .up
-            case (.landscapeLeft, .front): .upMirrored
-            case (.landscapeRight, .front) where attributes.mirrorOutput: .down
-            case (.landscapeRight, .front): .downMirrored
-            default: .right
-        }
-    }
 }
 
 // MARK: Video
