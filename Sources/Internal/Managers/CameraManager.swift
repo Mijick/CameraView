@@ -14,14 +14,199 @@ import SwiftUI
 import CoreMotion
 import MijickTimer
 
+
+
+
+protocol CaptureSession {
+    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
+    func add(output: AVCaptureOutput?) throws(MijickCameraError)
+
+    func remove(input: (any CaptureDeviceInput)?)
+
+
+    func startRunning()
+    func stopRunning()
+
+
+    init()
+
+
+    var sessionPreset: AVCaptureSession.Preset { get set }
+}
+
+
+
+
+extension AVCaptureSession: @unchecked @retroactive Sendable {}
+extension AVCaptureSession: CaptureSession {
+    func remove(input: (any CaptureDeviceInput)?) {
+        fatalError()
+    }
+
+    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
+        guard let output, canAddOutput(output) else { throw MijickCameraError.cannotSetupOutput }
+        addOutput(output)
+    }
+
+
+
+    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
+        guard let input = input as? AVCaptureDeviceInput, canAddInput(input) else { throw MijickCameraError.cannotSetupInput }
+        addInput(input)
+    }
+
+
+}
+
+
+
+protocol CaptureDeviceInput: NSObject {
+    var device: AVCaptureDevice { get }
+
+
+    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self?
+}
+
+
+extension AVCaptureDeviceInput: CaptureDeviceInput {
+    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
+        let device = { switch mediaType {
+            case .audio: AVCaptureDevice.default(for: .audio)
+            case .video where position == .front: AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
+            case .video where position == .back: AVCaptureDevice.default(for: .video)
+            default: fatalError()
+        }}()
+
+        if let device, let deviceInput = try? Self(device: device) { return deviceInput }
+        else { return nil }
+    }
+}
+
+
+
+public enum MijickCameraError: Error {
+    case cannotSetupInput, cannotSetupOutput
+}
+
+
+
+
+
+
+extension AVCaptureVideoPreviewLayer {
+    convenience init<Session: CaptureSession>(session: Session?) {
+        if let session = session as? AVCaptureSession { self.init(session: session) }
+        else { self.init() }
+    }
+}
+
+
+
+
+
+
+
+
+extension MockCaptureSession: @unchecked Sendable {}
+
+class MockCaptureSession: NSObject, CaptureSession {
+    func remove(input: (any CaptureDeviceInput)?) {
+        fatalError()
+    }
+    required override init() {}
+
+    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
+        fatalError()
+    }
+    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
+        fatalError()
+    }
+
+    func startRunning() {
+        fatalError()
+    }
+
+    func stopRunning() {
+        fatalError()
+    }
+
+    var sessionPreset: AVCaptureSession.Preset = .cif352x288
+
+
+}
+
+
+
+
+class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {}
+    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
+        .init()
+    }
+
+    var device: AVCaptureDevice = .init(uniqueID: "mockDevice")!
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class MockedCameraManager: CameraManager {
+    init() { super.init(
+        captureSession: MockCaptureSession(),
+        fontCameraInput: MockDeviceInput.get(mediaType: .video, position: .front),
+        backCameraInput: MockDeviceInput.get(mediaType: .video, position: .back),
+        audioInput: MockDeviceInput.get(mediaType: .audio, position: .unspecified)
+    )}
+}
+
+
+class Dupock: CameraManager {
+    init() { super.init(
+        captureSession: AVCaptureSession(),
+        fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
+        backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
+        audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
+    )}
+}
+
+
+
+
 @MainActor public class CameraManager: NSObject, ObservableObject {
     @Published var attributes: CameraManagerAttributes = .init()
 
+
+
+
+    init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
+        self.captureSession = captureSession
+        self.frontCameraInput = fontCameraInput
+        self.backCameraInput = backCameraInput
+        self.audioInput = audioInput
+    }
+
+
+
     // MARK: Input
-    private var captureSession: AVCaptureSession!
-    private var frontCameraInput: AVCaptureDeviceInput?
-    private var backCameraInput: AVCaptureDeviceInput?
-    private var audioInput: AVCaptureDeviceInput?
+     var captureSession: any CaptureSession
+    private var frontCameraInput: (any CaptureDeviceInput)?
+    private var backCameraInput: (any CaptureDeviceInput)?
+    private var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
     private var photoOutput: AVCapturePhotoOutput?
@@ -88,7 +273,6 @@ extension CameraManager {
             initialiseCameraLayer(cameraView)
             initialiseCameraMetalView()
             initialiseCameraGridView()
-            initialiseInputs()
             initialiseOutputs()
             initializeMotionManager()
             initialiseObservers()
@@ -99,7 +283,7 @@ extension CameraManager {
             try setupCameraAttributes()
             try setupFrameRate()
 
-            Task { await startCaptureSession() }
+            startCaptureSession()
         } catch { print("CANNOT SETUP CAMERA: \(error)") }
     }
 }
@@ -115,7 +299,6 @@ private extension CameraManager {
         } catch { attributes.error = error as? CameraManagerError }
     }}
     func initialiseCaptureSession() {
-        captureSession = .init()
         captureSession.sessionPreset = attributes.resolution
     }
     func initialiseCameraLayer(_ cameraView: UIView) {
@@ -134,11 +317,6 @@ private extension CameraManager {
         cameraGridView = .init()
         cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
-    }
-    func initialiseInputs() {
-        frontCameraInput = .get(for: .video, position: .front, .builtInWideAngleCamera)
-        backCameraInput = .get(for: .video)
-        audioInput = .get(for: .audio)
     }
     func initialiseOutputs() {
         photoOutput = .init()
@@ -163,7 +341,7 @@ private extension CameraManager {
         let captureVideoOutput = AVCaptureVideoDataOutput()
         captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
 
-        if captureSession.canAddOutput(captureVideoOutput) { captureSession?.addOutput(captureVideoOutput) }
+        try captureSession.add(output: captureVideoOutput)
     }
     func setupCameraAttributes() throws { if let device = getDevice(attributes.cameraPosition) { DispatchQueue.main.async { [self] in
         attributes.cameraExposure.duration = device.exposureDuration
@@ -176,9 +354,9 @@ private extension CameraManager {
         try checkNewFrameRate(attributes.frameRate, device)
         try updateFrameRate(attributes.frameRate, device)
     }}
-    nonisolated func startCaptureSession() async {
-        await captureSession.startRunning()
-    }
+    func startCaptureSession() { Task {
+        captureSession.startRunning()
+    }}
 }
 private extension CameraManager {
     func checkPermissions(_ mediaType: AVMediaType) async throws { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
@@ -201,19 +379,11 @@ private extension CameraManager {
         case .video: .cameraPermissionsNotGranted
         default: .cameraPermissionsNotGranted
     }}
-    func setupInput(_ input: AVCaptureDeviceInput?) throws {
-        guard let input,
-              captureSession.canAddInput(input)
-        else { throw CameraManagerError.cannotSetupInput }
-
-        captureSession.addInput(input)
+    func setupInput(_ input: (any CaptureDeviceInput)?) throws {
+        try captureSession.add(input: input)
     }
     func setupOutput(_ output: AVCaptureOutput?) throws {
-        guard let output,
-              captureSession.canAddOutput(output)
-        else { throw CameraManagerError.cannotSetupOutput }
-
-        captureSession.addOutput(output)
+        try captureSession.add(output: output)
     }
 }
 
@@ -251,14 +421,14 @@ extension CameraManager {
 }
 private extension CameraManager {
     func removeCameraInput(_ position: CameraPosition) { if let input = getInput(position) {
-        captureSession.removeInput(input)
+        captureSession.remove(input: input)
     }}
     func updateCameraPosition(_ position: CameraPosition) {
         attributes.cameraPosition = position
     }
 }
 private extension CameraManager {
-    func getInput(_ position: CameraPosition) -> AVCaptureInput? { switch position {
+    func getInput(_ position: CameraPosition) -> (any CaptureDeviceInput)? { switch position {
         case .front: frontCameraInput
         case .back: backCameraInput
     }}
