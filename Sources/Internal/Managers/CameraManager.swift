@@ -28,6 +28,7 @@ import MijickTimer
     private var videoOutput: AVCaptureMovieFileOutput?
 
     var d: CameraManagerPhoto = .init()
+    var r: CameraManagerVideo = .init()
 
     // MARK: Metal
     private var firstRecordedFrame: UIImage?
@@ -601,8 +602,9 @@ private extension CameraManager {
 }
 private extension CameraManager {
     func startRecording() { if let url = prepareUrlForVideoRecording() {
+        r.parent = self
         configureOutput(videoOutput)
-        videoOutput?.startRecording(to: url, recordingDelegate: self)
+        videoOutput?.startRecording(to: url, recordingDelegate: r)
         storeLastFrame()
         updateIsRecording(true)
         startRecordingTimer()
@@ -640,12 +642,6 @@ private extension CameraManager {
     func stopRecordingTimer() {
         timer.reset()
     }
-}
-
-extension CameraManager: @preconcurrency AVCaptureFileOutputRecordingDelegate {
-    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task {
-        attributes.capturedMedia = try await .create(videoData: outputFileURL, filters: attributes.cameraFilters)
-    }}
 }
 
 // MARK: - Handling Device Rotation
