@@ -53,14 +53,11 @@ protocol CaptureDevice: NSObject {
 
 // MARK: REAL
 extension AVCaptureDevice: CaptureDevice {
-    var videoSupportedFrameRateRanges: [AVFrameRateRange] {
-        activeFormat.videoSupportedFrameRateRanges
-    }
-    var maxISO: Float { activeFormat.maxISO }
-    var minISO: Float { activeFormat.minISO }
-
     var minExposureDuration: CMTime { activeFormat.minExposureDuration }
     var maxExposureDuration: CMTime { activeFormat.maxExposureDuration }
+    var minISO: Float { activeFormat.minISO }
+    var maxISO: Float { activeFormat.maxISO }
+    var videoSupportedFrameRateRanges: [AVFrameRateRange] { activeFormat.videoSupportedFrameRateRanges }
 }
 
 
