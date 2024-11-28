@@ -17,56 +17,6 @@ import MijickTimer
 
 
 
-extension AVCaptureSession: @unchecked @retroactive Sendable {}
-extension AVCaptureSession: CaptureSession {
-    var deviceInputs: [any CaptureDeviceInput] {
-        inputs as? [any CaptureDeviceInput] ?? []
-    }
-
-
-
-
-    
-    func remove(input: (any CaptureDeviceInput)?) {
-        guard let input = input as? AVCaptureDeviceInput else { return }
-        removeInput(input)
-    }
-
-    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
-        guard let output, canAddOutput(output) else { throw MijickCameraError.cannotSetupOutput }
-        addOutput(output)
-    }
-
-
-
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        guard let input = input as? AVCaptureDeviceInput, canAddInput(input) else { throw MijickCameraError.cannotSetupInput }
-        addInput(input)
-    }
-
-
-}
-
-
-
-
-
-
-extension AVCaptureDeviceInput: CaptureDeviceInput {
-    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
-        let device = { switch mediaType {
-            case .audio: AVCaptureDevice.default(for: .audio)
-            case .video where position == .front: AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
-            case .video where position == .back: AVCaptureDevice.default(for: .video)
-            default: fatalError()
-        }}()
-
-        if let device, let deviceInput = try? Self(device: device) { return deviceInput }
-        else { return nil }
-    }
-}
-
-
 
 public enum MijickCameraError: Error {
     case cannotSetupInput, cannotSetupOutput
@@ -82,65 +32,6 @@ extension AVCaptureVideoPreviewLayer {
         if let session = session as? AVCaptureSession { self.init(session: session) }
         else { self.init() }
     }
-}
-
-
-
-
-
-
-
-
-extension MockCaptureSession: @unchecked Sendable {}
-
-class MockCaptureSession: NSObject, CaptureSession {
-    var deviceInputs: [any CaptureDeviceInput] { _inputs }
-
-    var outputs: [AVCaptureOutput] { _outputs }
-
-    var isRunning: Bool { _isRunning }
-
-
-    
-
-    var captureInputs: [any CaptureDeviceInput] = []
-    private var _outputs: [AVCaptureOutput] = []
-    private var _inputs: [any CaptureDeviceInput] = []
-    private var _isRunning: Bool = false
-
-
-
-
-    func remove(input: (any CaptureDeviceInput)?) {
-        //guard let input = input as? MockDeviceInput, let index = inputs.firstIndex(of: input) else { return }
-
-
-
-
-        fatalError()
-    }
-    required override init() {}
-
-    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
-        guard let output, !outputs.contains(output) else { throw MijickCameraError.cannotSetupOutput }
-        _outputs.append(output)
-    }
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        guard let input = input as? MockDeviceInput, !captureInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
-        captureInputs.append(input)
-    }
-
-    func startRunning() {
-        _isRunning = true
-    }
-
-    func stopRunning() {
-        _isRunning = false
-    }
-
-    var sessionPreset: AVCaptureSession.Preset = .cif352x288
-
-
 }
 
 
