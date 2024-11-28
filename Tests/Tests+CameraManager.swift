@@ -9,18 +9,20 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
-import XCTest
+import Testing
 import SwiftUI
 @testable import MijickCamera
 
-@MainActor final class CameraManagerTests: XCTestCase {}
+@MainActor @Suite("Camera Manager Tests") struct CameraManagerTests {
+    var cameraManager: MockedCameraManager = .init()
+}
 
-
-// MARK: - TEST CASES
-
-
-
-// MARK: Camera Focus
+// MARK: Setup
 extension CameraManagerTests {
-    
+    @Test("Setup") func setup() {
+        cameraManager.setup(in: .init())
+
+        #expect(cameraManager.captureSession.isRunning)
+        #expect(cameraManager.captureSession.outputs.count == 2)
+    }
 }
