@@ -12,8 +12,8 @@
 import AVKit
 
 protocol CaptureDevice: NSObject {
+    // MARK: Read Only
     var uniqueID: String { get }
-
     var hasFlash: Bool { get }
     var hasTorch: Bool { get }
     var exposureDuration: CMTime { get }
@@ -31,7 +31,7 @@ protocol CaptureDevice: NSObject {
     var minExposureDuration: CMTime { get }
     var maxExposureDuration: CMTime { get }
 
-
+    // MARK: Changable
     var videoZoomFactor: CGFloat { get set }
     var exposureMode: AVCaptureDevice.ExposureMode { get set }
     var hdrMode: CameraHDRMode { get set }
@@ -42,7 +42,7 @@ protocol CaptureDevice: NSObject {
     var focusPointOfInterest: CGPoint { get set }
     var exposurePointOfInterest: CGPoint { get set }
 
-
+    // MARK: Methods
     func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?)
