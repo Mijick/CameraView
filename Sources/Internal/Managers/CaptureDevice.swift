@@ -32,6 +32,12 @@ protocol CaptureDevice: NSObject {
     var minAvailableVideoZoomFactor: CGFloat { get }
     var maxAvailableVideoZoomFactor: CGFloat { get }
 
+    var videoSupportedFrameRateRanges: [AVFrameRateRange] { get }
+    var minISO: Float { get }
+    var maxISO: Float { get }
+    var minExposureDuration: CMTime { get }
+    var maxExposureDuration: CMTime { get }
+
     var focusPointOfInterest: CGPoint { get set }
     var exposurePointOfInterest: CGPoint { get set }
 
@@ -48,6 +54,14 @@ protocol CaptureDevice: NSObject {
 
 // MARK: REAL
 extension AVCaptureDevice: CaptureDevice {
+    var videoSupportedFrameRateRanges: [AVFrameRateRange] {
+        activeFormat.videoSupportedFrameRateRanges
+    }
+    var maxISO: Float { activeFormat.maxISO }
+    var minISO: Float { activeFormat.minISO }
+
+    var minExposureDuration: CMTime { activeFormat.minExposureDuration }
+    var maxExposureDuration: CMTime { activeFormat.maxExposureDuration }
 }
 
 
