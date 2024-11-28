@@ -81,10 +81,21 @@ class MockCaptureDevice: CaptureDevice {
     let maxAvailableVideoZoomFactor: CGFloat = 0
     let videoSupportedFrameRateRanges: [AVFrameRateRange] = []
 
+    var focusMode: AVCaptureDevice.FocusMode = .autoFocus
+    var torchMode: AVCaptureDevice.TorchMode = .auto
+    var exposureMode: AVCaptureDevice.ExposureMode = .continuousAutoExposure
+    var hdrMode: CameraHDRMode = .auto
+    var focusPointOfInterest: CGPoint = .zero
+    var exposurePointOfInterest: CGPoint = .zero
+    var videoZoomFactor: CGFloat = 0
+    var activeVideoMinFrameDuration: CMTime = .init()
+    var activeVideoMaxFrameDuration: CMTime = .init()
+
+
+
+
     
-    var hdrMode: CameraHDRMode
-    
-    var videoZoomFactor: CGFloat
+
     
     func lockForConfiguration() throws {
         <#code#>
@@ -108,20 +119,11 @@ class MockCaptureDevice: CaptureDevice {
 
 
 
-    var focusMode: AVCaptureDevice.FocusMode
-    
-    var torchMode: AVCaptureDevice.TorchMode
-    
-    var exposureMode: AVCaptureDevice.ExposureMode
-    
-    var focusPointOfInterest: CGPoint
-    
-    var exposurePointOfInterest: CGPoint
-    
-    var activeVideoMinFrameDuration: CMTime
-    
-    var activeVideoMaxFrameDuration: CMTime
-    
+
+
+
+
+
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?) {
         <#code#>
     }
