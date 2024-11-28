@@ -62,8 +62,8 @@ extension AVCaptureDevice: CaptureDevice {
 
 
 // MARK: MOCK
-class MockCaptureDevice: CaptureDevice {
-    var uniqueID: String
+class MockCaptureDevice: NSObject, CaptureDevice {
+    let uniqueID: String = UUID().uuidString
     let hasFlash: Bool = true
     let hasTorch: Bool = true
     let exposureDuration: CMTime = .init()
@@ -91,55 +91,9 @@ class MockCaptureDevice: CaptureDevice {
     var activeVideoMinFrameDuration: CMTime = .init()
     var activeVideoMaxFrameDuration: CMTime = .init()
 
-
-
-
-    
-
-    
-    func lockForConfiguration() throws {
-        <#code#>
-    }
-    
-    func unlockForConfiguration() {
-        <#code#>
-    }
-    
-    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool {
-        <#code#>
-    }
-    
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?) {
-        <#code#>
-    }
-    
-    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?) {
-        <#code#>
-    }
-    
-
-    
-
-
-
-
-
-
-
-    init(uniqueID: String) { self.uniqueID = uniqueID }
+    func lockForConfiguration() throws { return }
+    func unlockForConfiguration() { return }
+    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
+    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?) { return }
+    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?) { return }
 }
