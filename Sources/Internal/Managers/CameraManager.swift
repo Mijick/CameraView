@@ -204,9 +204,9 @@ private extension CameraManager {
         try checkNewFrameRate(attributes.frameRate, device)
         try updateFrameRate(attributes.frameRate, device)
     }}
-    func startCaptureSession() { Task {
+    func startCaptureSession() {
         captureSession.startRunning()
-    }}
+    }
 }
 private extension CameraManager {
     func checkPermissions(_ mediaType: AVMediaType) async throws { switch AVCaptureDevice.authorizationStatus(for: mediaType) {

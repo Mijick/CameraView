@@ -23,6 +23,6 @@ extension CameraManagerTests {
         cameraManager.setup(in: .init())
 
         #expect(cameraManager.captureSession.isRunning)
-        #expect(cameraManager.captureSession.outputs.count == 2)
+        #expect(cameraManager.captureSession.outputs.count == 3)
     }
 }
