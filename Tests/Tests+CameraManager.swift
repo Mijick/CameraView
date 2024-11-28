@@ -19,7 +19,7 @@ import SwiftUI
 
 // MARK: Setup
 extension CameraManagerTests {
-    @Test("Setup with default attributes") func setupWithDefaultAttributes() async {
+    @Test("Setup: Default Attributes") func setupWithDefaultAttributes() async {
         cameraManager.setup(in: .init())
 
         #expect(!cameraManager.isRunning)
@@ -32,11 +32,10 @@ extension CameraManagerTests {
 
         #expect(cameraManager.isRunning)
     }
-    @Test("Setup with custom attributes") func setupWithCustomAttributes() {
+    @Test("Setup: Custom Attributes (1)") func setupWithCustomAttributes_1() {
     }
-
-
-    // sprawdzić czy się inicjalizuje z customowymi wartościami
+    @Test("Setup: Custom Attributes (2)") func setupWithCustomAttributes_2() {
+    }
 }
 
 
