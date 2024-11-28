@@ -31,8 +31,6 @@ protocol CaptureDevice: NSObject {
     var maxAvailableVideoZoomFactor: CGFloat { get }
     var videoSupportedFrameRateRanges: [AVFrameRateRange] { get }
 
-
-
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
     var torchMode: AVCaptureDevice.TorchMode { get set }
@@ -47,11 +45,13 @@ protocol CaptureDevice: NSObject {
 
 
     // MARK: Methods
+    func lockForConfiguration() throws
+    func unlockForConfiguration()
+
     func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?)
-    func lockForConfiguration() throws
-    func unlockForConfiguration()
+
 }
 
 
