@@ -17,45 +17,8 @@ import MijickTimer
 
 
 
-protocol CaptureSession {
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
-    func add(output: AVCaptureOutput?) throws(MijickCameraError)
-
-    func remove(input: (any CaptureDeviceInput)?)
-
-
-    func startRunning()
-    func stopRunning()
-
-
-    init()
-
-
-    var sessionPreset: AVCaptureSession.Preset { get set }
-    var isRunning: Bool { get }
-
-
-    var deviceInputs: [any CaptureDeviceInput] { get }
-    var outputs: [AVCaptureOutput] { get }
-}
-
-protocol CaptureDeviceInput: NSObject {
-    var device: AVCaptureDevice { get }
-
-
-    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self?
-}
-
-
-
-
-
-
-
 extension AVCaptureSession: @unchecked @retroactive Sendable {}
 extension AVCaptureSession: CaptureSession {
-    typealias S = AVCaptureDeviceInput
-
     var deviceInputs: [any CaptureDeviceInput] {
         inputs as? [any CaptureDeviceInput] ?? []
     }
@@ -188,7 +151,7 @@ class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {
         .init()
     }
 
-    var device: AVCaptureDevice = .init(uniqueID: "mockDevice")!
+    var device: AVCaptureDevice = .init(uniqueID: UUID().uuidString)!
 }
 
 
@@ -205,10 +168,31 @@ extension MockDeviceInput {
 
 
 
+protocol CaptureDevice {
+    var uniqueID: String { get }
+    var hasFlash: Bool { get }
+    var hasTorch: Bool { get }
+    var exposureDuration: CMTime { get }
+
+}
 
 
+extension AVCaptureDevice: CaptureDevice {
+}
 
 
+class MockCaptureDevice: CaptureDevice {
+    var hasFlash: Bool { true }
+    var hasTorch: Bool { true }
+
+    var uniqueID: String
+    var exposureDuration: CMTime { .init() }
+
+
+    init(uniqueID: String) {
+        self.uniqueID = uniqueID
+    }
+}
 
 
 
