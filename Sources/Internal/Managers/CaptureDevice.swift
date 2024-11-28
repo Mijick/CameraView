@@ -13,40 +13,39 @@ import AVKit
 
 protocol CaptureDevice: NSObject {
     var uniqueID: String { get }
+
     var hasFlash: Bool { get }
     var hasTorch: Bool { get }
     var exposureDuration: CMTime { get }
-    var videoZoomFactor: CGFloat { get set }
     var iso: Float { get }
     var exposureTargetBias: Float { get }
-    var exposureMode: AVCaptureDevice.ExposureMode { get set }
-    var hdrMode: CameraHDRMode { get set }
     var maxExposureTargetBias: Float { get }
     var minExposureTargetBias: Float { get }
-    var activeVideoMinFrameDuration: CMTime { get set }
-    var activeVideoMaxFrameDuration: CMTime { get set }
-    var torchMode: AVCaptureDevice.TorchMode { get set }
     var isFocusPointOfInterestSupported: Bool { get }
-    var isExposurePointOfInterestSupported: Bool { get }
-    var focusMode: AVCaptureDevice.FocusMode { get set }
     var minAvailableVideoZoomFactor: CGFloat { get }
     var maxAvailableVideoZoomFactor: CGFloat { get }
-
+    var isExposurePointOfInterestSupported: Bool { get }
     var videoSupportedFrameRateRanges: [AVFrameRateRange] { get }
     var minISO: Float { get }
     var maxISO: Float { get }
     var minExposureDuration: CMTime { get }
     var maxExposureDuration: CMTime { get }
 
+
+    var videoZoomFactor: CGFloat { get set }
+    var exposureMode: AVCaptureDevice.ExposureMode { get set }
+    var hdrMode: CameraHDRMode { get set }
+    var activeVideoMinFrameDuration: CMTime { get set }
+    var activeVideoMaxFrameDuration: CMTime { get set }
+    var torchMode: AVCaptureDevice.TorchMode { get set }
+    var focusMode: AVCaptureDevice.FocusMode { get set }
     var focusPointOfInterest: CGPoint { get set }
     var exposurePointOfInterest: CGPoint { get set }
 
-    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
 
+    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?)
-
-
     func lockForConfiguration() throws
     func unlockForConfiguration()
 }
