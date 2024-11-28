@@ -46,7 +46,7 @@ class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {
         .init()
     }
 
-    var device: AVCaptureDevice = .init(uniqueID: UUID().uuidString)!
+    var device: MockCaptureDevice = .init()
 }
 extension MockDeviceInput {
     static func == (lhs: MockDeviceInput, rhs: MockDeviceInput) -> Bool {
