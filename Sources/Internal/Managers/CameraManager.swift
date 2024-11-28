@@ -32,6 +32,11 @@ protocol CaptureSession {
 
 
     var sessionPreset: AVCaptureSession.Preset { get set }
+    var isRunning: Bool { get }
+
+
+    var deviceInputs: [any CaptureDeviceInput] { get }
+    var outputs: [AVCaptureOutput] { get }
 }
 
 protocol CaptureDeviceInput: NSObject {
@@ -49,6 +54,16 @@ protocol CaptureDeviceInput: NSObject {
 
 extension AVCaptureSession: @unchecked @retroactive Sendable {}
 extension AVCaptureSession: CaptureSession {
+    typealias S = AVCaptureDeviceInput
+
+    var deviceInputs: [any CaptureDeviceInput] {
+        inputs as? [any CaptureDeviceInput] ?? []
+    }
+
+
+
+
+    
     func remove(input: (any CaptureDeviceInput)?) {
         guard let input = input as? AVCaptureDeviceInput else { return }
         removeInput(input)
@@ -116,24 +131,48 @@ extension AVCaptureVideoPreviewLayer {
 extension MockCaptureSession: @unchecked Sendable {}
 
 class MockCaptureSession: NSObject, CaptureSession {
+    var deviceInputs: [any CaptureDeviceInput] { _inputs }
+
+    var outputs: [AVCaptureOutput] { _outputs }
+
+    var isRunning: Bool { _isRunning }
+
+
+    
+
+    var captureInputs: [any CaptureDeviceInput] = []
+    private var _outputs: [AVCaptureOutput] = []
+    private var _inputs: [any CaptureDeviceInput] = []
+    private var _isRunning: Bool = false
+
+
+
+
     func remove(input: (any CaptureDeviceInput)?) {
+        //guard let input = input as? MockDeviceInput, let index = inputs.firstIndex(of: input) else { return }
+
+
+
+
         fatalError()
     }
     required override init() {}
 
     func add(output: AVCaptureOutput?) throws(MijickCameraError) {
-        fatalError()
+        guard let output, !outputs.contains(output) else { throw MijickCameraError.cannotSetupOutput }
+        _outputs.append(output)
     }
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        fatalError()
+        guard let input = input as? MockDeviceInput, !captureInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
+        captureInputs.append(input)
     }
 
     func startRunning() {
-        fatalError()
+        _isRunning = true
     }
 
     func stopRunning() {
-        fatalError()
+        _isRunning = false
     }
 
     var sessionPreset: AVCaptureSession.Preset = .cif352x288
@@ -154,7 +193,11 @@ class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {
 
 
 
-
+extension MockDeviceInput {
+    static func == (lhs: MockDeviceInput, rhs: MockDeviceInput) -> Bool {
+        lhs.device.uniqueID == rhs.device.uniqueID
+    }
+}
 
 
 
