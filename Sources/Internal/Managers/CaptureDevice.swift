@@ -42,16 +42,12 @@ protocol CaptureDevice: NSObject {
     var activeVideoMinFrameDuration: CMTime { get set }
     var activeVideoMaxFrameDuration: CMTime { get set }
 
-
-
     // MARK: Methods
     func lockForConfiguration() throws
     func unlockForConfiguration()
-
-    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?)
-
+    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
 }
 
 
