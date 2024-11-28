@@ -308,7 +308,7 @@ private extension CameraManager {
         insertNewCameraFocusView(touchPoint)
         animateCameraFocusView()
     }}
-    func setCameraFocus(_ touchPoint: CGPoint, _ device: AVCaptureDevice) throws {
+    func setCameraFocus(_ touchPoint: CGPoint, _ device: any CaptureDevice) throws {
         let focusPoint = convertTouchPointToFocusPoint(touchPoint)
         try configureCameraFocus(focusPoint, device)
     }
@@ -332,17 +332,17 @@ private extension CameraManager {
         x: touchPoint.y / cameraView.frame.height,
         y: 1 - touchPoint.x / cameraView.frame.width
     )}
-    func configureCameraFocus(_ focusPoint: CGPoint, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func configureCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         setFocusPointOfInterest(focusPoint, device)
         setExposurePointOfInterest(focusPoint, device)
     }}
 }
 private extension CameraManager {
-    func setFocusPointOfInterest(_ focusPoint: CGPoint, _ device: AVCaptureDevice) { if device.isFocusPointOfInterestSupported {
+    func setFocusPointOfInterest(_ focusPoint: CGPoint, _ device: any CaptureDevice) { if device.isFocusPointOfInterestSupported {
         device.focusPointOfInterest = focusPoint
         device.focusMode = .autoFocus
     }}
-    func setExposurePointOfInterest(_ focusPoint: CGPoint, _ device: AVCaptureDevice) { if device.isExposurePointOfInterestSupported {
+    func setExposurePointOfInterest(_ focusPoint: CGPoint, _ device: any CaptureDevice) { if device.isExposurePointOfInterestSupported {
         device.exposurePointOfInterest = focusPoint
         device.exposureMode = .autoExpose
     }}
@@ -358,14 +358,14 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func getDevice(_ position: CameraPosition) -> AVCaptureDevice? { switch position {
+    func getDevice(_ position: CameraPosition) -> (any CaptureDevice)? { switch position {
         case .front: frontCameraInput?.device
         case .back: backCameraInput?.device
     }}
-    func calculateZoomFactor(_ value: CGFloat, _ device: AVCaptureDevice) -> CGFloat {
+    func calculateZoomFactor(_ value: CGFloat, _ device: any CaptureDevice) -> CGFloat {
         min(max(value, getMinZoomLevel(device)), getMaxZoomLevel(device))
     }
-    func setVideoZoomFactor(_ zoomFactor: CGFloat, _ device: AVCaptureDevice) throws  { try withLockingDeviceForConfiguration(device) { device in
+    func setVideoZoomFactor(_ zoomFactor: CGFloat, _ device: any CaptureDevice) throws  { try withLockingDeviceForConfiguration(device) { device in
         device.videoZoomFactor = zoomFactor
     }}
     func updateZoomFactor(_ value: CGFloat) {
@@ -373,10 +373,10 @@ private extension CameraManager {
     }
 }
 private extension CameraManager {
-    func getMinZoomLevel(_ device: AVCaptureDevice) -> CGFloat {
+    func getMinZoomLevel(_ device: any CaptureDevice) -> CGFloat {
         device.minAvailableVideoZoomFactor
     }
-    func getMaxZoomLevel(_ device: AVCaptureDevice) -> CGFloat {
+    func getMaxZoomLevel(_ device: any CaptureDevice) -> CGFloat {
         min(device.maxAvailableVideoZoomFactor, 3)
     }
 }
@@ -401,7 +401,7 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeTorchMode(_ device: AVCaptureDevice, _ mode: CameraTorchMode) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeTorchMode(_ device: any CaptureDevice, _ mode: CameraTorchMode) throws { try withLockingDeviceForConfiguration(device) { device in
         device.torchMode = mode.get()
     }}
     func updateTorchMode(_ value: CameraTorchMode) {
@@ -417,7 +417,7 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.exposureMode = newExposureMode
     }}
     func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
@@ -428,15 +428,15 @@ private extension CameraManager {
 // MARK: - Changing Exposure Duration
 extension CameraManager {
     func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newExposureDuration != attributes.cameraExposure.duration {
-        let newExposureDuration = min(max(newExposureDuration, device.activeFormat.minExposureDuration), device.activeFormat.maxExposureDuration)
+        let newExposureDuration = min(max(newExposureDuration, device.minExposureDuration), device.maxExposureDuration)
 
         try changeExposureDuration(newExposureDuration, device)
         updateExposureDuration(newExposureDuration)
     }}
 }
 private extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureModeCustom(duration: newExposureDuration, iso: attributes.cameraExposure.iso)
+    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+        device.setExposureModeCustom(duration: newExposureDuration, iso: attributes.cameraExposure.iso, completionHandler: nil)
     }}
     func updateExposureDuration(_ newExposureDuration: CMTime) {
         attributes.cameraExposure.duration = newExposureDuration
@@ -446,15 +446,15 @@ private extension CameraManager {
 // MARK: - Changing ISO
 extension CameraManager {
     func changeISO(_ newISO: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newISO != attributes.cameraExposure.iso {
-        let newISO = min(max(newISO, device.activeFormat.minISO), device.activeFormat.maxISO)
+        let newISO = min(max(newISO, device.minISO), device.maxISO)
 
         try changeISO(newISO, device)
         updateISO(newISO)
     }}
 }
 private extension CameraManager {
-    func changeISO(_ newISO: Float, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureModeCustom(duration: attributes.cameraExposure.duration, iso: newISO)
+    func changeISO(_ newISO: Float, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+        device.setExposureModeCustom(duration: attributes.cameraExposure.duration, iso: newISO, completionHandler: nil)
     }}
     func updateISO(_ newISO: Float) {
         attributes.cameraExposure.iso = newISO
@@ -471,8 +471,8 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.setExposureTargetBias(newExposureTargetBias)
+    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+        device.setExposureTargetBias(newExposureTargetBias, completionHandler: nil)
     }}
     func updateExposureTargetBias(_ newExposureTargetBias: Float) {
         attributes.cameraExposure.targetBias = newExposureTargetBias
@@ -487,7 +487,7 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.hdrMode = newHDRMode
     }}
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
@@ -512,11 +512,11 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func checkNewFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.activeFormat.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
+    func checkNewFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
         if newFrameRate < 15 { throw CameraManagerError.incorrectFrameRate }
         if newFrameRate > maxFrameRate { throw CameraManagerError.incorrectFrameRate }
     }
-    func updateFrameRate(_ newFrameRate: Int32, _ device: AVCaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func updateFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.activeVideoMinFrameDuration = .init(value: 1, timescale: newFrameRate)
         device.activeVideoMaxFrameDuration = .init(value: 1, timescale: newFrameRate)
     }}
@@ -750,7 +750,7 @@ private extension CameraManager {
         connection.isVideoMirrored = attributes.mirrorOutput ? attributes.cameraPosition != .front : attributes.cameraPosition == .front
         connection.videoOrientation = attributes.deviceOrientation
     }}
-    func withLockingDeviceForConfiguration(_ device: AVCaptureDevice, _ action: (AVCaptureDevice) -> ()) throws {
+    func withLockingDeviceForConfiguration(_ device: any CaptureDevice, _ action: (any CaptureDevice) -> ()) throws {
         try device.lockForConfiguration()
         action(device)
         device.unlockForConfiguration()
