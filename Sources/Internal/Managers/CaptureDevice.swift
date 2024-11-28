@@ -63,43 +63,81 @@ extension AVCaptureDevice: CaptureDevice {
 
 // MARK: MOCK
 class MockCaptureDevice: CaptureDevice {
-    var maxExposureTargetBias: Float { 0 }
+    var uniqueID: String
+    let hasFlash: Bool = true
+    let hasTorch: Bool = true
+    let exposureDuration: CMTime = .init()
+    let minExposureDuration: CMTime = .init()
+    let maxExposureDuration: CMTime = .init()
+    let exposureTargetBias: Float = 0
+    let minExposureTargetBias: Float = 0
+    let maxExposureTargetBias: Float = 0
+    let iso: Float = 0
+    let minISO: Float = 0
+    let maxISO: Float = 0
+    let isExposurePointOfInterestSupported: Bool = true
+    let isFocusPointOfInterestSupported: Bool = true
+    let minAvailableVideoZoomFactor: CGFloat = 0
+    let maxAvailableVideoZoomFactor: CGFloat = 0
+    let videoSupportedFrameRateRanges: [AVFrameRateRange] = []
 
-    var minExposureTargetBias: Float { 0 }
-
-    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool {
-        true
+    
+    var hdrMode: CameraHDRMode
+    
+    var videoZoomFactor: CGFloat
+    
+    func lockForConfiguration() throws {
+        <#code#>
     }
     
-    var hdrMode: CameraHDRMode = .auto
-
-    var exposureMode: AVCaptureDevice.ExposureMode { .autoExpose }
-
-    var exposureTargetBias: Float { 0 }
-
-    var iso: Float { 0 }
-
-    var videoZoomFactor: CGFloat = 0
-
-    func lockForConfiguration() throws {
-        return
-    }
     func unlockForConfiguration() {
-        return
+        <#code#>
     }
-
-    var hasFlash: Bool { true }
-    var hasTorch: Bool { true }
-
-    var uniqueID: String
-    var exposureDuration: CMTime { .init() }
-
-    func setExposureTargetBias(_ bias: Float) async -> CMTime {
-        .init()
+    
+    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool {
+        <#code#>
     }
+    
 
 
-    init(uniqueID: String) {
-        self.uniqueID = uniqueID
+
+    
+
+
+
+
+
+
+    var focusMode: AVCaptureDevice.FocusMode
+    
+    var torchMode: AVCaptureDevice.TorchMode
+    
+    var exposureMode: AVCaptureDevice.ExposureMode
+    
+    var focusPointOfInterest: CGPoint
+    
+    var exposurePointOfInterest: CGPoint
+    
+    var activeVideoMinFrameDuration: CMTime
+    
+    var activeVideoMaxFrameDuration: CMTime
+    
+    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?) {
+        <#code#>
     }
+    
+    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?) {
+        <#code#>
+    }
+    
+
+    
+
+
+
+
+
+
+
+    init(uniqueID: String) { self.uniqueID = uniqueID }
 }
