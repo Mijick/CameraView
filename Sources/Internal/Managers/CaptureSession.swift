@@ -74,7 +74,6 @@ class MockCaptureSession: NSObject, CaptureSession {
 
 
 
-    var captureInputs: [any CaptureDeviceInput] = []
     private var _outputs: [AVCaptureOutput] = []
     private var _inputs: [any CaptureDeviceInput] = []
     private var _isRunning: Bool = false
@@ -95,8 +94,8 @@ class MockCaptureSession: NSObject, CaptureSession {
         _outputs.append(output)
     }
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        guard let input = input as? MockDeviceInput, !captureInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
-        captureInputs.append(input)
+        guard let input = input as? MockDeviceInput, !_inputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
+        _inputs.append(input)
     }
 
     func startRunning() {

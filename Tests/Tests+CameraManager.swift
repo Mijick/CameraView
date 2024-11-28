@@ -24,5 +24,6 @@ extension CameraManagerTests {
 
         #expect(cameraManager.captureSession.isRunning)
         #expect(cameraManager.captureSession.outputs.count == 3)
+        #expect(cameraManager.captureSession.deviceInputs.count == 3)
     }
 }
