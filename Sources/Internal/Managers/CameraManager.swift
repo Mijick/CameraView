@@ -59,8 +59,8 @@ class Dupock: CameraManager {
     private var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
-    private var photoOutput: AVCapturePhotoOutput?
-    private var videoOutput: AVCaptureMovieFileOutput?
+    private var photoOutput: AVCapturePhotoOutput = .init()
+    private var videoOutput: AVCaptureMovieFileOutput = .init()
 
     var d: CameraManagerPhoto = .init()
     var r: CameraManagerVideo = .init()
@@ -75,7 +75,7 @@ class Dupock: CameraManager {
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
     // MARK: Other Objects
-    private var motionManager: CMMotionManager = .init()
+     var motionManager: CMMotionManager = .init()
     private var timer: MTimer = .createNewInstance()
 
     // MARK: Other Attributes
@@ -123,7 +123,6 @@ extension CameraManager {
             initialiseCameraLayer(cameraView)
             initialiseCameraMetalView()
             initialiseCameraGridView()
-            initialiseOutputs()
             initializeMotionManager()
             initialiseObservers()
 
@@ -167,10 +166,6 @@ private extension CameraManager {
         cameraGridView = .init()
         cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
-    }
-    func initialiseOutputs() {
-        photoOutput = .init()
-        videoOutput = .init()
     }
     func initializeMotionManager() {
         motionManager.accelerometerUpdateInterval = 0.05
@@ -563,7 +558,7 @@ private extension CameraManager {
 
         d.parent = self
         configureOutput(photoOutput)
-        photoOutput?.capturePhoto(with: settings, delegate: d)
+        photoOutput.capturePhoto(with: settings, delegate: d)
         performCaptureAnimation()
     }
 }
@@ -600,7 +595,7 @@ private extension CameraManager {
 
 // MARK: Video
 private extension CameraManager {
-    func toggleVideoRecording() { switch videoOutput?.isRecording {
+    func toggleVideoRecording() { switch videoOutput.isRecording {
         case false: startRecording()
         default: stopRecording()
     }}
@@ -609,14 +604,14 @@ private extension CameraManager {
     func startRecording() { if let url = prepareUrlForVideoRecording() {
         r.parent = self
         configureOutput(videoOutput)
-        videoOutput?.startRecording(to: url, recordingDelegate: r)
+        videoOutput.startRecording(to: url, recordingDelegate: r)
         storeLastFrame()
         updateIsRecording(true)
         startRecordingTimer()
     }}
     func stopRecording() {
         presentLastFrame()
-        videoOutput?.stopRecording()
+        videoOutput.stopRecording()
         updateIsRecording(false)
         stopRecordingTimer()
     }
