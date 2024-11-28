@@ -24,3 +24,12 @@ extension AVCaptureDevice {
         }
     }
 }
+
+
+
+extension AVCaptureVideoPreviewLayer {
+    convenience init<Session: CaptureSession>(session: Session?) {
+        if let session = session as? AVCaptureSession { self.init(session: session) }
+        else { self.init() }
+    }
+}

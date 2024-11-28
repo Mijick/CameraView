@@ -21,6 +21,8 @@ protocol CaptureDeviceInput: NSObject {
     static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self?
 }
 
+
+// MARK: REAL
 extension AVCaptureDeviceInput: CaptureDeviceInput {
     static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
         let device = { switch mediaType {
@@ -32,5 +34,22 @@ extension AVCaptureDeviceInput: CaptureDeviceInput {
 
         if let device, let deviceInput = try? Self(device: device) { return deviceInput }
         else { return nil }
+    }
+}
+
+
+
+
+// MARK: MOCK
+class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {}
+    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
+        .init()
+    }
+
+    var device: AVCaptureDevice = .init(uniqueID: UUID().uuidString)!
+}
+extension MockDeviceInput {
+    static func == (lhs: MockDeviceInput, rhs: MockDeviceInput) -> Bool {
+        lhs.device.uniqueID == rhs.device.uniqueID
     }
 }

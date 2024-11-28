@@ -15,80 +15,6 @@ import CoreMotion
 import MijickTimer
 
 
-
-
-
-public enum MijickCameraError: Error {
-    case cannotSetupInput, cannotSetupOutput
-}
-
-
-
-
-
-
-extension AVCaptureVideoPreviewLayer {
-    convenience init<Session: CaptureSession>(session: Session?) {
-        if let session = session as? AVCaptureSession { self.init(session: session) }
-        else { self.init() }
-    }
-}
-
-
-
-
-class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {}
-    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
-        .init()
-    }
-
-    var device: AVCaptureDevice = .init(uniqueID: UUID().uuidString)!
-}
-
-
-
-extension MockDeviceInput {
-    static func == (lhs: MockDeviceInput, rhs: MockDeviceInput) -> Bool {
-        lhs.device.uniqueID == rhs.device.uniqueID
-    }
-}
-
-
-
-
-
-
-
-protocol CaptureDevice {
-    var uniqueID: String { get }
-    var hasFlash: Bool { get }
-    var hasTorch: Bool { get }
-    var exposureDuration: CMTime { get }
-
-}
-
-
-extension AVCaptureDevice: CaptureDevice {
-}
-
-
-class MockCaptureDevice: CaptureDevice {
-    var hasFlash: Bool { true }
-    var hasTorch: Bool { true }
-
-    var uniqueID: String
-    var exposureDuration: CMTime { .init() }
-
-
-    init(uniqueID: String) {
-        self.uniqueID = uniqueID
-    }
-}
-
-
-
-
-
 class MockedCameraManager: CameraManager {
     init() { super.init(
         captureSession: MockCaptureSession(),
@@ -841,4 +767,7 @@ public enum CameraManagerError: Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
     case incorrectFrameRate
+}
+public enum MijickCameraError: Error {
+    case cannotSetupInput, cannotSetupOutput
 }
