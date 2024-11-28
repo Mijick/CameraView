@@ -14,28 +14,21 @@ import AVKit
 protocol CaptureDevice: NSObject {
     // MARK: Read Only
     var uniqueID: String { get }
-
     var hasFlash: Bool { get }
     var hasTorch: Bool { get }
-
     var exposureDuration: CMTime { get }
     var minExposureDuration: CMTime { get }
     var maxExposureDuration: CMTime { get }
-
     var exposureTargetBias: Float { get }
     var minExposureTargetBias: Float { get }
     var maxExposureTargetBias: Float { get }
-
     var iso: Float { get }
     var minISO: Float { get }
     var maxISO: Float { get }
-
     var isExposurePointOfInterestSupported: Bool { get }
     var isFocusPointOfInterestSupported: Bool { get }
-
     var minAvailableVideoZoomFactor: CGFloat { get }
     var maxAvailableVideoZoomFactor: CGFloat { get }
-
     var videoSupportedFrameRateRanges: [AVFrameRateRange] { get }
 
 
