@@ -41,10 +41,10 @@ protocol CaptureDevice: NSObject {
     var focusPointOfInterest: CGPoint { get set }
     var exposurePointOfInterest: CGPoint { get set }
 
-    func setExposureTargetBias(_ bias: Float) async -> CMTime
+    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
 
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
-    func setExposureModeCustom(duration: CMTime, iso: Float) async -> CMTime
+    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?)
 
 
     func lockForConfiguration() throws
