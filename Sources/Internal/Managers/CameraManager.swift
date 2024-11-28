@@ -34,13 +34,24 @@ protocol CaptureSession {
     var sessionPreset: AVCaptureSession.Preset { get set }
 }
 
+protocol CaptureDeviceInput: NSObject {
+    var device: AVCaptureDevice { get }
+
+
+    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self?
+}
+
+
+
+
 
 
 
 extension AVCaptureSession: @unchecked @retroactive Sendable {}
 extension AVCaptureSession: CaptureSession {
     func remove(input: (any CaptureDeviceInput)?) {
-        fatalError()
+        guard let input = input as? AVCaptureDeviceInput else { return }
+        removeInput(input)
     }
 
     func add(output: AVCaptureOutput?) throws(MijickCameraError) {
@@ -60,12 +71,7 @@ extension AVCaptureSession: CaptureSession {
 
 
 
-protocol CaptureDeviceInput: NSObject {
-    var device: AVCaptureDevice { get }
 
-
-    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self?
-}
 
 
 extension AVCaptureDeviceInput: CaptureDeviceInput {
