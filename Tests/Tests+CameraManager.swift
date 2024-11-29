@@ -14,7 +14,7 @@ import SwiftUI
 @testable import MijickCamera
 
 @MainActor @Suite("Camera Manager Tests") struct CameraManagerTests {
-    var cameraManager: MockedCameraManager = .init()
+    var cameraManager: MockCameraManager = .init()
 }
 
 // MARK: Setup
@@ -46,4 +46,15 @@ extension Task where Success == Never, Failure == Never {
     static func sleep(seconds: CGFloat) async {
         try! await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
     }
+}
+
+
+
+class MockCameraManager: CameraManager {
+    init() { super.init(
+        captureSession: MockCaptureSession(),
+        fontCameraInput: MockDeviceInput.get(mediaType: .video, position: .front),
+        backCameraInput: MockDeviceInput.get(mediaType: .video, position: .back),
+        audioInput: MockDeviceInput.get(mediaType: .audio, position: .unspecified)
+    )}
 }

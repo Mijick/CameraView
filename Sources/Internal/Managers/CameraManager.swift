@@ -15,14 +15,7 @@ import CoreMotion
 import MijickTimer
 
 
-class MockedCameraManager: CameraManager {
-    init() { super.init(
-        captureSession: MockCaptureSession(),
-        fontCameraInput: MockDeviceInput.get(mediaType: .video, position: .front),
-        backCameraInput: MockDeviceInput.get(mediaType: .video, position: .back),
-        audioInput: MockDeviceInput.get(mediaType: .audio, position: .unspecified)
-    )}
-}
+
 
 
 class Dupock: CameraManager {
