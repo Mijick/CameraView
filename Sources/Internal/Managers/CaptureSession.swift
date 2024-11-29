@@ -11,7 +11,7 @@
 
 import AVKit
 
-protocol CaptureSession {
+protocol CaptureSession: Sendable {
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
     func add(output: AVCaptureOutput?) throws(MijickCameraError)
 
@@ -48,13 +48,13 @@ extension AVCaptureSession: CaptureSession {
     }
 
     func add(output: AVCaptureOutput?) throws(MijickCameraError) {
-        guard let output, canAddOutput(output) else { throw MijickCameraError.cannotSetupOutput }
-        addOutput(output)
+        guard let output else { throw MijickCameraError.cannotSetupOutput }
+        if canAddOutput(output) { addOutput(output) }
     }
 
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        guard let input = input as? AVCaptureDeviceInput, canAddInput(input) else { throw MijickCameraError.cannotSetupInput }
-        addInput(input)
+        guard let input = input as? AVCaptureDeviceInput else { throw MijickCameraError.cannotSetupInput }
+        if canAddInput(input) { addInput(input) }
     }
 }
 

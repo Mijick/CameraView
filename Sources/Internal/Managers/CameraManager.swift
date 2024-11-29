@@ -115,7 +115,7 @@ extension CameraManager {
             try setupCameraAttributes()
             try setupFrameRate()
 
-            startCaptureSession()
+            Task { await startCaptureSession() }
         } catch { print("CANNOT SETUP CAMERA: \(error)") }
     }
 }
@@ -182,8 +182,8 @@ private extension CameraManager {
         try checkNewFrameRate(attributes.frameRate, device)
         try updateFrameRate(attributes.frameRate, device)
     }}
-    func startCaptureSession() {
-        captureSession.startRunning()
+    nonisolated func startCaptureSession() async {
+        await captureSession.startRunning()
     }
 }
 private extension CameraManager {
