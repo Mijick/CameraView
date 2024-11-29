@@ -195,10 +195,6 @@ private extension CameraManager {
         case .notDetermined: let granted = await AVCaptureDevice.requestAccess(for: mediaType); if !granted { throw getPermissionsError(mediaType) }
         default: return
     }}
-    func animateCameraViewEntrance() {
-//        UIView.animate(withDuration: 0.3, delay: 1.2) { [self] in cameraView.alpha = 1 }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) { [self] in isRunning = true }
-    }
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
         case .back: try setupInput(backCameraInput)
@@ -207,7 +203,6 @@ private extension CameraManager {
 private extension CameraManager {
     func getPermissionsError(_ mediaType: AVMediaType) -> CameraManagerError { switch mediaType {
         case .audio: .microphonePermissionsNotGranted
-        case .video: .cameraPermissionsNotGranted
         default: .cameraPermissionsNotGranted
     }}
     func setupInput(_ input: (any CaptureDeviceInput)?) throws {
