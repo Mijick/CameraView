@@ -62,7 +62,6 @@ import MijickTimer
     private var timer: MTimer = .createNewInstance()
 
     // MARK: Other Attributes
-    private(set) var isRunning: Bool = false
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
     private(set) var orientationLocked: Bool = false
 }
@@ -127,7 +126,6 @@ private extension CameraManager {
         do {
             try await checkPermissions(.video)
             try await checkPermissions(.audio)
-            animateCameraViewEntrance()
         } catch { attributes.error = error as? CameraManagerError }
     }}
     func initialiseCaptureSession() {
@@ -184,6 +182,11 @@ private extension CameraManager {
     }}
     nonisolated func startCaptureSession() async {
         await captureSession.startRunning()
+
+        Task { @MainActor in
+            UIView.animate(withDuration: 0.3) { [self] in cameraView.alpha = 1 }
+        }
+
     }
 }
 private extension CameraManager {
@@ -193,8 +196,8 @@ private extension CameraManager {
         default: return
     }}
     func animateCameraViewEntrance() {
-        UIView.animate(withDuration: 0.3, delay: 1.2) { [self] in cameraView.alpha = 1 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) { [self] in isRunning = true }
+//        UIView.animate(withDuration: 0.3, delay: 1.2) { [self] in cameraView.alpha = 1 }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) { [self] in isRunning = true }
     }
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
@@ -673,7 +676,7 @@ private extension CameraManager {
         case .front: getNewFrameOrientationForFrontCamera(orientation)
     }}
     func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != frameOrientation {
-        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation) && isRunning
+        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
 
         animateFrameOrientationChangeIfNeeded(shouldAnimate)
         changeFrameOrientation(shouldAnimate, newFrameOrientation)
