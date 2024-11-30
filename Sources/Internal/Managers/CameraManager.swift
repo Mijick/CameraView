@@ -53,7 +53,7 @@ import MijickTimer
 
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
-    private(set) var cameraMetalView: CameraMetalView!
+    private(set) var cameraMetalView: CameraMetalView = .init()
     private(set) var cameraGridView: GridView!
     private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
@@ -103,7 +103,7 @@ extension CameraManager {
             checkPermissions()
             initialiseCaptureSession()
             initialiseCameraLayer(cameraView)
-            initialiseCameraMetalView()
+            try initialiseCameraMetalView()
             initialiseCameraGridView()
             initializeMotionManager()
             initialiseObservers()
@@ -139,9 +139,8 @@ private extension CameraManager {
 
         cameraView.layer.addSublayer(cameraLayer)
     }
-    func initialiseCameraMetalView() {
-        cameraMetalView = .init()
-        cameraMetalView.setup(self)
+    func initialiseCameraMetalView() throws {
+        try cameraMetalView.setup(parent: self)
     }
     func initialiseCameraGridView() {
         cameraGridView?.removeFromSuperview()
@@ -757,4 +756,5 @@ public enum CameraManagerError: Error {
 }
 public enum MijickCameraError: Error {
     case cannotSetupInput, cannotSetupOutput
+    case cannotCreateMetalDevice
 }
