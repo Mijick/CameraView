@@ -57,7 +57,7 @@ private extension CameraMetalView {
 
 
 extension CameraMetalView {
-    var isChanging: Bool { (blurView?.alpha ?? 0) > 0 }
+    var isChanging: Bool { animation == .pending }
 
 
 
@@ -103,7 +103,7 @@ private extension CameraMetalView {
 
 
 extension CameraMetalView {
-    enum Animation { case blurAndFlip }
+    enum Animation { case blurAndFlip, pending }
 }
 
 
@@ -122,7 +122,7 @@ extension CameraMetalView {
 // MARK: - Capturing Live Frames
 extension CameraMetalView: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch animation {
-        case nil: changeDisplayedFrame(sampleBuffer)
+        case nil, .pending: changeDisplayedFrame(sampleBuffer)
         default: presentCameraAnimation()
     }}
 }
@@ -138,7 +138,7 @@ private extension CameraMetalView {
 
         insertBlurView(snapshot)
         animateBlurFlip()
-        animation = nil
+        animation = .pending
     }
 }
 private extension CameraMetalView {
@@ -172,7 +172,10 @@ private extension CameraMetalView {
         UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
     func removeBlur() {
-        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1) { self.blurView.alpha = 0 }
+        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { self.blurView.alpha = 0 }) {
+            guard $0 else { return }
+            self.animation = nil
+        }
     }
 }
 private extension CameraMetalView {
