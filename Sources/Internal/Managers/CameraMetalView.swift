@@ -147,18 +147,27 @@ private extension CameraMetalView {
     var cameraOrientationAnimationDelay: Double { 0.1 }
 }
 
+
+
+
+
 // MARK: Camera Flip
 extension CameraMetalView {
     func beginCameraFlipAnimation() async {
-        isAnimating = true
-
         let snapshot = createSnapshot()
+        isAnimating = true
         insertBlurView(snapshot)
         animateBlurFlip()
 
-        await Task.sleep(seconds: 0.15)
+        await Task.sleep(seconds: 0.01)
     }
     func finishCameraFlipAnimation() {
+        guard let blurView = parent.cameraView.viewWithTag(2137) else { return }
+
+        
+
+
+
         removeBlur()
     }
 }
