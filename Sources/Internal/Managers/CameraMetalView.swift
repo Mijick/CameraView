@@ -22,7 +22,6 @@ import MetalKit
     private var parent: CameraManager!
     private var animation: Animation?
     private var currentFrame: CIImage?
-    private var blurView: UIImageView!
 }
 
 // MARK: Setup
@@ -160,10 +159,11 @@ private extension CameraMetalView {
         return image
     }
     func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
-        blurView = UIImageView(image: snapshot)
+        let blurView = UIImageView(image: snapshot)
         blurView.frame = parent.cameraView.frame
         blurView.contentMode = .scaleAspectFill
         blurView.clipsToBounds = true
+        blurView.tag = 2137
         blurView.applyBlurEffect(style: .regular, animationDuration: blurAnimationDuration)
 
         parent.cameraView.addSubview(blurView)
@@ -171,12 +171,13 @@ private extension CameraMetalView {
     func animateBlurFlip() { if animation == .blurAndFlip {
         UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
-    func removeBlur() {
-        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { self.blurView.alpha = 0 }) {
+    func removeBlur() { if let blurView = parent.cameraView.viewWithTag(2137) {
+        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { blurView.alpha = 0 }) {
             guard $0 else { return }
             self.animation = nil
+            blurView.removeFromSuperview()
         }
-    }
+    }}
 }
 private extension CameraMetalView {
     var blurAnimationDuration: Double { 0.3 }
