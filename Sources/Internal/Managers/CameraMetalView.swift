@@ -17,9 +17,9 @@ import AVKit
     var ciContext: CIContext!
 
     private(set) var parent: CameraManager!
+    private(set) var currentFrame: CIImage?
     private(set) var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
     private(set) var isAnimating: Bool = false
-    private(set) var currentFrame: CIImage?
 }
 
 // MARK: Setup
