@@ -158,7 +158,6 @@ extension CameraMetalView {
 
 
 extension CameraMetalView {
-    var isChanging: Bool { animationStatus == .pending }
 
 
 

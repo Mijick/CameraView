@@ -678,7 +678,7 @@ private extension CameraManager {
 }
  extension CameraManager {
     var cameraView: UIView { cameraLayer.superview ?? .init() }
-    var isChanging: Bool { cameraMetalView.isChanging }
+    var isChanging: Bool { cameraMetalView.animationStatus != .stopped }
 }
 
 
