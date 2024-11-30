@@ -154,6 +154,12 @@ extension CameraMetalView {
     func finishCameraFlipAnimation() {
     }
 }
+private extension CameraMetalView {
+
+}
+private extension CameraMetalView {
+
+}
 
 
 
