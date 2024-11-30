@@ -22,7 +22,6 @@ import MetalKit
     private(set) var parent: CameraManager!
     private(set) var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
     private(set) var isAnimating: Bool = false
-    private(set) var animationStatus: AnimationStatus = .stopped
     private(set) var currentFrame: CIImage?
 }
 
@@ -191,7 +190,7 @@ private extension CameraMetalView {
     func removeBlur() { if let blurView = parent.cameraView.viewWithTag(2137) {
         UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { blurView.alpha = 0 }) {
             guard $0 else { return }
-            self.animationStatus = .stopped
+            self.isAnimating = false
             blurView.removeFromSuperview()
         }
     }}
@@ -205,20 +204,6 @@ private extension CameraMetalView {
 
     var flipAnimationDuration: Double { 0.44 }
     var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
-}
-
-
-extension CameraMetalView {
-
-
-
-//    func captureCurrentFrameAndDelay(_ action: @escaping () throws -> ()) { Task {
-//        animationStatus = .launched
-//        await Task.sleep(seconds: 0.15)
-//
-//        try action()
-//        removeBlur()
-//    }}
 }
 
 
@@ -250,14 +235,6 @@ private extension CameraMetalView {
         commandBuffer.commit()
     }
 }
-
-
-
-extension CameraMetalView {
-    enum AnimationStatus { case launched, pending, stopped }
-}
-
-
 
 
 

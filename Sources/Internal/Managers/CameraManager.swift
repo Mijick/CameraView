@@ -228,15 +228,15 @@ private extension CameraManager {
 
 // MARK: - Changing Camera Position
 extension CameraManager {
-    func changeCamera(_ newPosition: CameraPosition) throws { if newPosition != attributes.cameraPosition && !isChanging {
-        cameraMetalView.captureCurrentFrameAndDelay(.blurAndFlip) { [self] in
-            removeCameraInput(attributes.cameraPosition)
-            try setupCameraInput(newPosition)
-            updateCameraPosition(newPosition)
-            
-            updateTorchMode(.off)
-        }
-    }}
+    func changeCamera(_ newPosition: CameraPosition) throws { Task { if newPosition != attributes.cameraPosition && !isChanging {
+        await cameraMetalView.beginCameraFlipAnimation()
+        
+        removeCameraInput(attributes.cameraPosition)
+        try setupCameraInput(newPosition)
+        updateCameraPosition(newPosition)
+        updateTorchMode(.off)
+        cameraMetalView.finishCameraFlipAnimation()
+    }}}
 }
 private extension CameraManager {
     func removeCameraInput(_ position: CameraPosition) { if let input = getInput(position) {
@@ -678,7 +678,7 @@ private extension CameraManager {
 }
  extension CameraManager {
     var cameraView: UIView { cameraLayer.superview ?? .init() }
-    var isChanging: Bool { cameraMetalView.animationStatus != .stopped }
+    var isChanging: Bool { cameraMetalView.isAnimating }
 }
 
 
