@@ -66,6 +66,17 @@ extension CameraMetalView {
     }}
 }
 
+// MARK: Camera Focus
+extension CameraMetalView {
+
+}
+private extension CameraMetalView {
+    
+}
+
+
+
+
 
 extension CameraMetalView {
     var isChanging: Bool { animation == .pending }
