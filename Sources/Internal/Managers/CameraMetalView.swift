@@ -151,15 +151,15 @@ private extension CameraMetalView {
 extension CameraMetalView {
     func beginCameraFlipAnimation() async {
         isAnimating = true
-        let snapshot = createSnapshot()
 
+        let snapshot = createSnapshot()
         insertBlurView(snapshot)
         animateBlurFlip()
+
         await Task.sleep(seconds: 0.15)
     }
     func finishCameraFlipAnimation() {
         removeBlur()
-        isAnimating = false
     }
 }
 private extension CameraMetalView {
@@ -182,11 +182,6 @@ private extension CameraMetalView {
     func animateBlurFlip() {
         UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }
-}
-private extension CameraMetalView {
-
-
-
     func removeBlur() { if let blurView = parent.cameraView.viewWithTag(2137) {
         UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { blurView.alpha = 0 }) {
             guard $0 else { return }
@@ -194,10 +189,6 @@ private extension CameraMetalView {
             blurView.removeFromSuperview()
         }
     }}
-
-
-
-
 }
 private extension CameraMetalView {
     var blurAnimationDuration: Double { 0.3 }
