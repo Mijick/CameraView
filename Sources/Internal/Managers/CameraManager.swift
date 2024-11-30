@@ -511,7 +511,7 @@ private extension CameraManager {
         d.parent = self
         configureOutput(photoOutput)
         photoOutput.capturePhoto(with: settings, delegate: d)
-        performCaptureAnimation()
+        cameraMetalView.performImageCaptureAnimation()
     }
 }
 private extension CameraManager {
@@ -520,33 +520,6 @@ private extension CameraManager {
         settings.flashMode = attributes.flashMode.get()
         return settings
     }
-    func performCaptureAnimation() {
-        // TODO: Animacja (8)
-        let view = createCaptureAnimationView()
-        cameraView.addSubview(view)
-
-        animateCaptureView(view)
-    }
-}
-private extension CameraManager {
-    func createCaptureAnimationView() -> UIView {
-        let view = UIView()
-        view.frame = cameraView.frame
-        view.backgroundColor = .black
-        view.alpha = 0
-        return view
-    }
-    func animateCaptureView(_ view: UIView) {
-        // TODO: Animacja (9)
-        UIView.animate(withDuration: self.captureAnimationDuration, animations: { view.alpha = 1 }) { _ in
-            UIView.animate(withDuration: self.captureAnimationDuration, animations: { view.alpha = 0 }) { _ in
-                view.removeFromSuperview()
-            }
-        }
-    }
-}
-private extension CameraManager {
-    var captureAnimationDuration: Double { 0.12 }
 }
 
 // MARK: Video
