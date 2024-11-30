@@ -192,9 +192,8 @@ private extension CameraMetalView {
     }
 }
 private extension CameraMetalView {
-    var blurAnimationDuration: Double { 0.3 }
-
-    var flipAnimationDuration: Double { 0.44 }
+    var flipAnimationDuration: Double { 0.4 }
+    var blurAnimationDuration: Double { 0.2 }
     var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
 
