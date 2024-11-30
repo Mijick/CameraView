@@ -20,13 +20,36 @@ import MetalKit
     var ciContext: CIContext!
 
     private var parent: CameraManager!
+    private var animation: Animation?
     private var currentFrame: CIImage?
-    private var animation: Animation = .none
-    private var metalDevice: MTLDevice!
-    private var metalCommandQueue: MTLCommandQueue!
     private var blurView: UIImageView!
 }
 
+extension CameraMetalView {
+    func setup(parent: CameraManager) throws(MijickCameraError) {
+        guard let metalDevice = MTLCreateSystemDefaultDevice() else { throw .cannotCreateMetalDevice }
+
+        self.parent = parent
+        self.ciContext = CIContext(mtlDevice: metalDevice)
+
+        self.delegate = self
+        self.device = metalDevice
+        self.isPaused = true
+        self.enableSetNeedsDisplay = false
+        self.framebufferOnly = false
+        self.autoResizeDrawable = false
+        self.contentMode = .scaleAspectFill
+        self.clipsToBounds = true
+
+        self.addToParent(parent.cameraView)
+    }
+}
+private extension CameraMetalView {
+    func configureMetalProperties() {
+
+
+    }
+}
 
 
 
