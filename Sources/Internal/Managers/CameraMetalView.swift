@@ -25,13 +25,22 @@ import MetalKit
     private var blurView: UIImageView!
 }
 
+// MARK: Setup
 extension CameraMetalView {
     func setup(parent: CameraManager) throws(MijickCameraError) {
         guard let metalDevice = MTLCreateSystemDefaultDevice() else { throw .cannotCreateMetalDevice }
 
+        self.assignInitialValues(parent: parent, metalDevice: metalDevice)
+        self.configureMetalView(metalDevice: metalDevice)
+        self.addToParent(parent.cameraView)
+    }
+}
+private extension CameraMetalView {
+    func assignInitialValues(parent: CameraManager, metalDevice: MTLDevice) {
         self.parent = parent
         self.ciContext = CIContext(mtlDevice: metalDevice)
-
+    }
+    func configureMetalView(metalDevice: MTLDevice) {
         self.delegate = self
         self.device = metalDevice
         self.isPaused = true
@@ -40,14 +49,6 @@ extension CameraMetalView {
         self.autoResizeDrawable = false
         self.contentMode = .scaleAspectFill
         self.clipsToBounds = true
-
-        self.addToParent(parent.cameraView)
-    }
-}
-private extension CameraMetalView {
-    func configureMetalProperties() {
-
-
     }
 }
 
@@ -67,29 +68,6 @@ extension CameraMetalView {
         try action()
         removeBlur()
     }}
-
-
-
-
-//    func setup(_ parent: CameraManager) {
-//        self.parent = parent
-//
-//
-//
-//        metalDevice = MTLCreateSystemDefaultDevice()
-//        metalCommandQueue = metalDevice.makeCommandQueue()
-//        ciContext = CIContext(mtlDevice: metalDevice)
-//
-//        delegate = self
-//        device = metalDevice
-//        isPaused = true
-//        enableSetNeedsDisplay = false
-//        framebufferOnly = false
-//        autoResizeDrawable = false
-//        contentMode = .scaleAspectFill
-//        clipsToBounds = true
-//        addToParent(parent.cameraView)
-//    }
 }
 
 
