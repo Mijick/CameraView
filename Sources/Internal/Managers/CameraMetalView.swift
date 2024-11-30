@@ -11,11 +11,8 @@
 
 import SwiftUI
 import MetalKit
-@preconcurrency import AVKit
+import AVKit
 
-
-
-// klasa ta ma odpowiadać docelowo za wszystkie animacje związane z kamerą
 @MainActor class CameraMetalView: MTKView {
     var ciContext: CIContext!
 
