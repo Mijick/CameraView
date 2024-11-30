@@ -60,3 +60,13 @@ private extension GridView {
         return shapeLayer
     }
 }
+
+// MARK: Visibility Animation
+extension GridView {
+    func animateVisibilityChange(_ isVisible: Bool) { UIView.animate(withDuration: visibilityAnimationDuration) {
+        self.alpha = isVisible ? 1 : 0
+    }}
+}
+private extension GridView {
+    var visibilityAnimationDuration: Double { 0.24 }
+}
