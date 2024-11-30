@@ -52,7 +52,19 @@ private extension CameraMetalView {
 }
 
 
+// MARK: - ANIMATIONS
 
+
+
+// MARK: Camera Entrance
+extension CameraMetalView {
+    func beginCameraEntranceAnimation() {
+        parent.cameraView.alpha = 0
+    }
+    func finishCameraEntranceAnimation() { UIView.animate(withDuration: blurAnimationDuration) { [self] in
+        parent.cameraView.alpha = 1
+    }}
+}
 
 
 extension CameraMetalView {

@@ -99,7 +99,6 @@ extension CameraManager {
 extension CameraManager {
     func setup(in cameraView: UIView) {
         do {
-            makeCameraViewInvisible(cameraView)
             checkPermissions()
             initialiseCaptureSession()
             initialiseCameraLayer(cameraView)
@@ -114,15 +113,15 @@ extension CameraManager {
             try setupCameraAttributes()
             try setupFrameRate()
 
-            Task { await startCaptureSession() }
+            Task {
+                cameraMetalView.beginCameraEntranceAnimation()
+                await startCaptureSession()
+                cameraMetalView.finishCameraEntranceAnimation()
+            }
         } catch { print("CANNOT SETUP CAMERA: \(error)") }
     }
 }
 private extension CameraManager {
-    func makeCameraViewInvisible(_ view: UIView) {
-        // TODO: Animacja (1)
-        view.alpha = 0
-    }
     func checkPermissions() { Task { @MainActor in
         do {
             try await checkPermissions(.video)
@@ -182,12 +181,6 @@ private extension CameraManager {
     }}
     nonisolated func startCaptureSession() async {
         await captureSession.startRunning()
-
-        // TODO: Animacja (2)
-        Task { @MainActor in
-            UIView.animate(withDuration: 0.3) { [self] in cameraView.alpha = 1 }
-        }
-
     }
 }
 private extension CameraManager {
