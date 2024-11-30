@@ -13,7 +13,7 @@ import SwiftUI
 
 class GridView: UIView {}
 
-// MARK: - Draw
+// MARK: Draw
 extension GridView {
     override func draw(_ rect: CGRect) {
         clearOldLayersBeforeDraw()

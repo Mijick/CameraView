@@ -486,10 +486,9 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func animateGridVisibilityChange(_ shouldShowGrid: Bool) { UIView.animate(withDuration: 0.32) { [self] in
-        // TODO: Animacja (7)
-        cameraGridView.alpha = shouldShowGrid ? 1 : 0
-    }}
+    func animateGridVisibilityChange(_ shouldShowGrid: Bool) {
+        cameraGridView.animateVisibilityChange(shouldShowGrid)
+    }
     func updateGridVisibility(_ shouldShowGrid: Bool) {
         attributes.isGridVisible = shouldShowGrid
     }
