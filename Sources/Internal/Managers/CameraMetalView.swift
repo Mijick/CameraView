@@ -181,11 +181,3 @@ private extension CameraMetalView {
     var flipAnimationDuration: Double { 0.44 }
     var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
-
-
-
-extension Task where Success == Never, Failure == Never {
-    static func sleep(seconds: CGFloat) async {
-        try! await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
-    }
-}
