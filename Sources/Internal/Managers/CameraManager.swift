@@ -538,13 +538,15 @@ private extension CameraManager {
     }
     func animateCaptureView(_ view: UIView) {
         // TODO: Animacja (9)
-        UIView.animate(withDuration: captureAnimationDuration) { view.alpha = 1 }
-        UIView.animate(withDuration: captureAnimationDuration, delay: captureAnimationDuration) { view.alpha = 0 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2 * captureAnimationDuration) { view.removeFromSuperview() }
+        UIView.animate(withDuration: self.captureAnimationDuration, animations: { view.alpha = 1 }) { _ in
+            UIView.animate(withDuration: self.captureAnimationDuration, animations: { view.alpha = 0 }) { _ in
+                view.removeFromSuperview()
+            }
+        }
     }
 }
 private extension CameraManager {
-    var captureAnimationDuration: Double { 0.1 }
+    var captureAnimationDuration: Double { 0.12 }
 }
 
 // MARK: Video
