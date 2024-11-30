@@ -17,19 +17,20 @@ import MetalKit
 
 // klasa ta ma odpowiadać docelowo za wszystkie animacje związane z kamerą
 @MainActor class CameraMetalView: MTKView {
-    var parent: CameraManager!
-
-
-
-
-    var currentFrame: CIImage?
     var ciContext: CIContext!
-    var animation: Animation = .none
 
+    private var parent: CameraManager!
+    private var currentFrame: CIImage?
+    private var animation: Animation = .none
     private var metalDevice: MTLDevice!
     private var metalCommandQueue: MTLCommandQueue!
     private var blurView: UIImageView!
 }
+
+
+
+
+
 
 extension CameraMetalView {
     var isChanging: Bool { (blurView?.alpha ?? 0) > 0 }
