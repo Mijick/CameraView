@@ -193,9 +193,10 @@ private extension CameraMetalView {
 }
 
 
+// MARK: - CAPTURING FRAMES
 
 
-
+// MARK: Draw
 extension CameraMetalView: MTKViewDelegate {
     func draw(in view: MTKView) {
         guard let commandBuffer = view.device?.makeCommandQueue()?.makeCommandBuffer(),
@@ -213,9 +214,13 @@ private extension CameraMetalView {
     func changeDrawableSize(_ view: MTKView, _ ciImage: CIImage) {
         view.drawableSize = ciImage.extent.size
     }
-    func renderView(_ view: MTKView, _ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer, _ ciImage: CIImage) {
-        ciContext.render(ciImage, to: currentDrawable.texture, commandBuffer: commandBuffer, bounds: .init(origin: .zero, size: view.drawableSize), colorSpace: CGColorSpaceCreateDeviceRGB())
-    }
+    func renderView(_ view: MTKView, _ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer, _ ciImage: CIImage) { ciContext.render(
+        ciImage,
+        to: currentDrawable.texture,
+        commandBuffer: commandBuffer,
+        bounds: .init(origin: .zero, size: view.drawableSize),
+        colorSpace: CGColorSpaceCreateDeviceRGB()
+    )}
     func commitBuffer(_ currentDrawable: any CAMetalDrawable, _ commandBuffer: any MTLCommandBuffer) {
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
