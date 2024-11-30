@@ -264,43 +264,17 @@ extension CameraManager {
 // MARK: - Camera Focusing
 extension CameraManager {
     func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(attributes.cameraPosition) {
-        removeCameraFocusAnimations()
-        insertCameraFocus(touchPoint)
-
         try setCameraFocus(touchPoint, device)
+        cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
     }}
 }
 private extension CameraManager {
-    func removeCameraFocusAnimations() {
-        // TODO: Animacja (3)
-        cameraFocusView.layer.removeAllAnimations()
-    }
-    func insertCameraFocus(_ touchPoint: CGPoint) { DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [self] in
-        insertNewCameraFocusView(touchPoint)
-        animateCameraFocusView()
-    }}
     func setCameraFocus(_ touchPoint: CGPoint, _ device: any CaptureDevice) throws {
         let focusPoint = convertTouchPointToFocusPoint(touchPoint)
         try configureCameraFocus(focusPoint, device)
     }
 }
 private extension CameraManager {
-    func insertNewCameraFocusView(_ touchPoint: CGPoint) {
-        // TODO: Animacja (4)
-        cameraFocusView.frame.origin.x = touchPoint.x - cameraFocusView.frame.size.width / 2
-        cameraFocusView.frame.origin.y = touchPoint.y - cameraFocusView.frame.size.height / 2
-        cameraFocusView.transform = .init(scaleX: 0, y: 0)
-        cameraFocusView.alpha = 1
-
-        cameraView.addSubview(cameraFocusView)
-    }
-    func animateCameraFocusView() {
-        // TODO: Animacja (5)
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0) { [self] in cameraFocusView.transform = .init(scaleX: 1, y: 1) }
-        UIView.animate(withDuration: 0.5, delay: 1.5) { [self] in cameraFocusView.alpha = 0.2 } completion: { _ in
-            UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
-        }
-    }
     func convertTouchPointToFocusPoint(_ touchPoint: CGPoint) -> CGPoint { .init(
         x: touchPoint.y / cameraView.frame.height,
         y: 1 - touchPoint.x / cameraView.frame.width
