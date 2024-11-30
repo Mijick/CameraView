@@ -238,7 +238,7 @@ private extension CameraMetalView {
 
 
 
-// MARK: - Capturing Live Frames
+// MARK: Capture
 extension CameraMetalView: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         changeDisplayedFrame(sampleBuffer)
