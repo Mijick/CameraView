@@ -60,10 +60,10 @@ private extension CameraMetalView {
 // MARK: Camera Entrance
 extension CameraMetalView {
     func beginCameraEntranceAnimation() {
-        self.parent.cameraView.alpha = 0
+        parent.cameraView.alpha = 0
     }
-    func finishCameraEntranceAnimation() { UIView.animate(withDuration: cameraEntranceAnimationDuration) {
-        self.parent.cameraView.alpha = 1
+    func finishCameraEntranceAnimation() { UIView.animate(withDuration: cameraEntranceAnimationDuration) { [self] in
+        parent.cameraView.alpha = 1
     }}
 }
 private extension CameraMetalView {
@@ -92,15 +92,15 @@ private extension CameraMetalView {
     }
     func animateFocusIndicator() {
         UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { self.focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
-            UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorDelay, animations: { self.focusIndicator.alpha = 0.2 }) { _ in
-                UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorDelay, animations: { self.focusIndicator.alpha = 0 })
+            UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorAnimationDelay, animations: { self.focusIndicator.alpha = 0.2 }) { _ in
+                UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorAnimationDelay, animations: { self.focusIndicator.alpha = 0 })
             }
         }
     }
 }
 private extension CameraMetalView {
     var focusIndicatorAnimationDuration: Double { 0.44 }
-    var focusIndicatorDelay: Double { 1.44 }
+    var focusIndicatorAnimationDelay: Double { 1.44 }
 }
 
 // MARK: Image Capture
@@ -132,7 +132,20 @@ private extension CameraMetalView {
     var imageCaptureAnimationDuration: Double { 0.13 }
 }
 
-
+// MARK: Camera Orientation
+extension CameraMetalView {
+    func beginCameraOrientationAnimation(if shouldAnimate: Bool) async { if shouldAnimate {
+        parent.cameraView.alpha = 0
+        await Task.sleep(seconds: cameraOrientationAnimationDelay)
+    }}
+    func finishCameraOrientationAnimation(if shouldAnimate: Bool) { if shouldAnimate {
+        UIView.animate(withDuration: cameraOrientationAnimationDuration, delay: cameraOrientationAnimationDelay) { self.parent.cameraView.alpha = 1 }
+    }}
+}
+private extension CameraMetalView {
+    var cameraOrientationAnimationDuration: Double { 0.2 }
+    var cameraOrientationAnimationDelay: Double { 0.1 }
+}
 
 
 

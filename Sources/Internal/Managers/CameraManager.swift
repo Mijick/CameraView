@@ -619,13 +619,13 @@ private extension CameraManager {
         case .back: getNewFrameOrientationForBackCamera(orientation)
         case .front: getNewFrameOrientationForFrontCamera(orientation)
     }}
-    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != frameOrientation {
-        // TODO: Animacja (11)
+    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { Task { if newFrameOrientation != frameOrientation {
         let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
 
-        animateFrameOrientationChangeIfNeeded(shouldAnimate)
+        await cameraMetalView.beginCameraOrientationAnimation(if: shouldAnimate)
         changeFrameOrientation(shouldAnimate, newFrameOrientation)
-    }}
+        cameraMetalView.finishCameraOrientationAnimation(if: shouldAnimate)
+    }}}
 }
 private extension CameraManager {
     func getNewFrameOrientationForBackCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
@@ -646,14 +646,9 @@ private extension CameraManager {
         return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(frameOrientation))
             || (frontCameraOrientations.contains(frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
     }
-    func animateFrameOrientationChangeIfNeeded(_ shouldAnimate: Bool) { if shouldAnimate {
-        // TODO: Animacja (12)
-        UIView.animate(withDuration: 0.2) { [self] in cameraView.alpha = 0 }
-        UIView.animate(withDuration: 0.3, delay: 0.2) { [self] in cameraView.alpha = 1 }
-    }}
-    func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) { DispatchQueue.main.asyncAfter(deadline: .now() + (shouldAnimate ? 0.1 : 0)) { [self] in
+    func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) {
         frameOrientation = newFrameOrientation
-    }}
+    }
 }
 
 // MARK: - Handling Observers
