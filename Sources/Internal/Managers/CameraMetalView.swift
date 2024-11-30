@@ -71,26 +71,25 @@ extension CameraMetalView {
 
 
 
-    func setup(_ parent: CameraManager) {
-        self.parent = parent
-
-
-
-        metalDevice = MTLCreateSystemDefaultDevice()
-        metalCommandQueue = metalDevice.makeCommandQueue()
-        ciContext = CIContext(mtlDevice: metalDevice)
-
-        delegate = self
-        device = metalDevice
-        isPaused = true
-        enableSetNeedsDisplay = false
-        framebufferOnly = false
-        autoResizeDrawable = false
-
-        contentMode = .scaleAspectFill
-        clipsToBounds = true
-        addToParent(parent.cameraView)
-    }
+//    func setup(_ parent: CameraManager) {
+//        self.parent = parent
+//
+//
+//
+//        metalDevice = MTLCreateSystemDefaultDevice()
+//        metalCommandQueue = metalDevice.makeCommandQueue()
+//        ciContext = CIContext(mtlDevice: metalDevice)
+//
+//        delegate = self
+//        device = metalDevice
+//        isPaused = true
+//        enableSetNeedsDisplay = false
+//        framebufferOnly = false
+//        autoResizeDrawable = false
+//        contentMode = .scaleAspectFill
+//        clipsToBounds = true
+//        addToParent(parent.cameraView)
+//    }
 }
 
 
@@ -99,7 +98,7 @@ extension CameraMetalView {
 
 extension CameraMetalView: MTKViewDelegate {
     func draw(in view: MTKView) {
-        guard let commandBuffer = metalCommandQueue.makeCommandBuffer(),
+        guard let commandBuffer = view.device?.makeCommandQueue()?.makeCommandBuffer(),
               let ciImage = currentFrame,
               let currentDrawable = view.currentDrawable
         else { return }
