@@ -62,15 +62,20 @@ extension CameraMetalView {
     func beginCameraEntranceAnimation() {
         self.parent.cameraView.alpha = 0
     }
-    func finishCameraEntranceAnimation() { UIView.animate(withDuration: blurAnimationDuration) {
+    func finishCameraEntranceAnimation() { UIView.animate(withDuration: cameraEntranceAnimationDuration) {
         self.parent.cameraView.alpha = 1
     }}
+}
+private extension CameraMetalView {
+    var cameraEntranceAnimationDuration: Double { 0.33 }
 }
 
 // MARK: Camera Focus
 extension CameraMetalView {
     func performCameraFocusAnimation(touchPoint: CGPoint) {
-
+        removeExistingFocusIndicatorAnimations()
+        insertFocusIndicatorToCameraView(touchPoint: touchPoint)
+        animateFocusIndicator()
     }
 }
 private extension CameraMetalView {
@@ -86,14 +91,17 @@ private extension CameraMetalView {
         parent.cameraView.addSubview(focusIndicator)
     }
     func animateFocusIndicator() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0) { [self] in focusIndicator.transform = .init(scaleX: 1, y: 1) }
-        UIView.animate(withDuration: 0.5, delay: 1.5) { [self] in focusIndicator.alpha = 0.2 } completion: { _ in
-            UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in focusIndicator.alpha = 0 }
+        UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { self.focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
+            UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorDelay, animations: { self.focusIndicator.alpha = 0.2 }) { _ in
+                UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorDelay, animations: { self.focusIndicator.alpha = 0 })
+            }
         }
     }
 }
-
-
+private extension CameraMetalView {
+    var focusIndicatorAnimationDuration: Double { 0.44 }
+    var focusIndicatorDelay: Double { 1.44 }
+}
 
 
 
