@@ -20,6 +20,7 @@ import MetalKit
     var ciContext: CIContext!
 
     private var parent: CameraManager!
+    private var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
     private var animation: Animation?
     private var currentFrame: CIImage?
 }
@@ -68,10 +69,28 @@ extension CameraMetalView {
 
 // MARK: Camera Focus
 extension CameraMetalView {
+    func performCameraFocusAnimation(touchPoint: CGPoint) {
 
+    }
 }
 private extension CameraMetalView {
-    
+    func removeExistingFocusIndicatorAnimations() {
+        focusIndicator.layer.removeAllAnimations()
+    }
+    func insertFocusIndicatorToCameraView(touchPoint: CGPoint) {
+        focusIndicator.frame.origin.x = touchPoint.x - focusIndicator.frame.size.width / 2
+        focusIndicator.frame.origin.y = touchPoint.y - focusIndicator.frame.size.height / 2
+        focusIndicator.transform = .init(scaleX: 0, y: 0)
+        focusIndicator.alpha = 1
+
+        parent.cameraView.addSubview(focusIndicator)
+    }
+    func animateFocusIndicator() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0) { [self] in focusIndicator.transform = .init(scaleX: 1, y: 1) }
+        UIView.animate(withDuration: 0.5, delay: 1.5) { [self] in focusIndicator.alpha = 0.2 } completion: { _ in
+            UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in focusIndicator.alpha = 0 }
+        }
+    }
 }
 
 
