@@ -66,7 +66,7 @@ extension CameraMetalView {
         await Task.sleep(seconds: 0.15)
 
         try action()
-        await removeBlur()
+        removeBlur()
     }}
 }
 
@@ -171,9 +171,8 @@ private extension CameraMetalView {
     func animateBlurFlip() { if animation == .blurAndFlip {
         UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
-    func removeBlur() async {
-        await Task.sleep(seconds: 0.1)
-        UIView.animate(withDuration: blurAnimationDuration) { self.blurView.alpha = 0 }
+    func removeBlur() {
+        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1) { self.blurView.alpha = 0 }
     }
 }
 private extension CameraMetalView {
