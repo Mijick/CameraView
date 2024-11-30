@@ -121,7 +121,7 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func checkPermissions() { Task { @MainActor in
+    func checkPermissions() { Task {
         do {
             try await checkPermissions(.video)
             try await checkPermissions(.audio)
