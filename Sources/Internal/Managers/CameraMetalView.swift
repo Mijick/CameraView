@@ -63,10 +63,10 @@ extension CameraMetalView {
 
     func captureCurrentFrameAndDelay(_ type: CameraMetalView.Animation, _ action: @escaping () throws -> ()) { Task { @MainActor in
         animation = type
-        try await Task.sleep(nanoseconds: 150_000_000)
+        await Task.sleep(seconds: 0.15)
 
         try action()
-        removeBlur()
+        await removeBlur()
     }}
 }
 
@@ -171,14 +171,22 @@ private extension CameraMetalView {
     func animateBlurFlip() { if animation == .blurAndFlip {
         UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }}
-    func removeBlur() { Task { @MainActor [self] in
-        try await Task.sleep(nanoseconds: 100_000_000)
+    func removeBlur() async {
+        await Task.sleep(seconds: 0.1)
         UIView.animate(withDuration: blurAnimationDuration) { self.blurView.alpha = 0 }
-    }}
+    }
 }
 private extension CameraMetalView {
     var blurAnimationDuration: Double { 0.3 }
 
     var flipAnimationDuration: Double { 0.44 }
     var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
+}
+
+
+
+extension Task where Success == Never, Failure == Never {
+    static func sleep(seconds: CGFloat) async {
+        try! await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+    }
 }
