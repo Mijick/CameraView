@@ -28,8 +28,8 @@ extension AVCaptureDevice {
 
 
 extension AVCaptureVideoPreviewLayer {
-    convenience init<Session: CaptureSession>(session: Session?) {
-        if let session = session as? AVCaptureSession { self.init(session: session) }
-        else { self.init() }
+    convenience init(session: any CaptureSession) {
+        self.init()
+        self.session = session as? AVCaptureSession
     }
 }

@@ -120,6 +120,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func makeCameraViewInvisible(_ view: UIView) {
+        // TODO: Animacja (1)
         view.alpha = 0
     }
     func checkPermissions() { Task { @MainActor in
@@ -183,6 +184,7 @@ private extension CameraManager {
     nonisolated func startCaptureSession() async {
         await captureSession.startRunning()
 
+        // TODO: Animacja (2)
         Task { @MainActor in
             UIView.animate(withDuration: 0.3) { [self] in cameraView.alpha = 1 }
         }
@@ -278,6 +280,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func removeCameraFocusAnimations() {
+        // TODO: Animacja (3)
         cameraFocusView.layer.removeAllAnimations()
     }
     func insertCameraFocus(_ touchPoint: CGPoint) { DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [self] in
@@ -291,6 +294,7 @@ private extension CameraManager {
 }
 private extension CameraManager {
     func insertNewCameraFocusView(_ touchPoint: CGPoint) {
+        // TODO: Animacja (4)
         cameraFocusView.frame.origin.x = touchPoint.x - cameraFocusView.frame.size.width / 2
         cameraFocusView.frame.origin.y = touchPoint.y - cameraFocusView.frame.size.height / 2
         cameraFocusView.transform = .init(scaleX: 0, y: 0)
@@ -299,6 +303,7 @@ private extension CameraManager {
         cameraView.addSubview(cameraFocusView)
     }
     func animateCameraFocusView() {
+        // TODO: Animacja (5)
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0) { [self] in cameraFocusView.transform = .init(scaleX: 1, y: 1) }
         UIView.animate(withDuration: 0.5, delay: 1.5) { [self] in cameraFocusView.alpha = 0.2 } completion: { _ in
             UIView.animate(withDuration: 0.5, delay: 3.5) { [self] in cameraFocusView.alpha = 0 }
@@ -517,6 +522,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func animateGridVisibilityChange(_ shouldShowGrid: Bool) { UIView.animate(withDuration: 0.32) { [self] in
+        // TODO: Animacja (7)
         cameraGridView.alpha = shouldShowGrid ? 1 : 0
     }}
     func updateGridVisibility(_ shouldShowGrid: Bool) {
@@ -550,6 +556,7 @@ private extension CameraManager {
         return settings
     }
     func performCaptureAnimation() {
+        // TODO: Animacja (8)
         let view = createCaptureAnimationView()
         cameraView.addSubview(view)
 
@@ -565,6 +572,7 @@ private extension CameraManager {
         return view
     }
     func animateCaptureView(_ view: UIView) {
+        // TODO: Animacja (9)
         UIView.animate(withDuration: captureAnimationDuration) { view.alpha = 1 }
         UIView.animate(withDuration: captureAnimationDuration, delay: captureAnimationDuration) { view.alpha = 0 }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2 * captureAnimationDuration) { view.removeFromSuperview() }
@@ -607,6 +615,7 @@ private extension CameraManager {
               let cgImage = cameraMetalView.ciContext.createCGImage(ciImage, from: ciImage.extent)
         else { return }
 
+        // TODO: Animacja (10)
         firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: attributes.deviceOrientation.toImageOrientation())
     }
     func updateIsRecording(_ value: Bool) {
@@ -671,6 +680,7 @@ private extension CameraManager {
         case .front: getNewFrameOrientationForFrontCamera(orientation)
     }}
     func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != frameOrientation {
+        // TODO: Animacja (11)
         let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
 
         animateFrameOrientationChangeIfNeeded(shouldAnimate)
@@ -697,6 +707,7 @@ private extension CameraManager {
             || (frontCameraOrientations.contains(frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
     }
     func animateFrameOrientationChangeIfNeeded(_ shouldAnimate: Bool) { if shouldAnimate {
+        // TODO: Animacja (12)
         UIView.animate(withDuration: 0.2) { [self] in cameraView.alpha = 0 }
         UIView.animate(withDuration: 0.3, delay: 0.2) { [self] in cameraView.alpha = 1 }
     }}
