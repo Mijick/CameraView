@@ -21,6 +21,7 @@ import MetalKit
 
     private(set) var parent: CameraManager!
     private(set) var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
+    private(set) var isAnimating: Bool = false
     private(set) var animationStatus: AnimationStatus = .stopped
     private(set) var currentFrame: CIImage?
 }
@@ -149,31 +150,75 @@ private extension CameraMetalView {
 
 // MARK: Camera Flip
 extension CameraMetalView {
-    func beginCameraFlipAnimation() {
+    func beginCameraFlipAnimation() async {
+        isAnimating = true
+        let snapshot = createSnapshot()
+
+        insertBlurView(snapshot)
+        animateBlurFlip()
+        await Task.sleep(seconds: 0.15)
     }
     func finishCameraFlipAnimation() {
+        removeBlur()
+        isAnimating = false
+    }
+}
+private extension CameraMetalView {
+    func createSnapshot() -> UIImage? {
+        guard let currentFrame else { return nil }
+
+        let image = UIImage(ciImage: currentFrame)
+        return image
+    }
+    func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
+        let blurView = UIImageView(image: snapshot)
+        blurView.frame = parent.cameraView.frame
+        blurView.contentMode = .scaleAspectFill
+        blurView.clipsToBounds = true
+        blurView.tag = 2137
+        blurView.applyBlurEffect(style: .regular, animationDuration: blurAnimationDuration)
+
+        parent.cameraView.addSubview(blurView)
+    }}
+    func animateBlurFlip() {
+        UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
     }
 }
 private extension CameraMetalView {
 
+
+
+    func removeBlur() { if let blurView = parent.cameraView.viewWithTag(2137) {
+        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { blurView.alpha = 0 }) {
+            guard $0 else { return }
+            self.animationStatus = .stopped
+            blurView.removeFromSuperview()
+        }
+    }}
+
+
+
+
 }
 private extension CameraMetalView {
+    var blurAnimationDuration: Double { 0.3 }
 
+    var flipAnimationDuration: Double { 0.44 }
+    var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
-
 
 
 extension CameraMetalView {
 
 
 
-    func captureCurrentFrameAndDelay(_ action: @escaping () throws -> ()) { Task {
-        animationStatus = .launched
-        await Task.sleep(seconds: 0.15)
-
-        try action()
-        removeBlur()
-    }}
+//    func captureCurrentFrameAndDelay(_ action: @escaping () throws -> ()) { Task {
+//        animationStatus = .launched
+//        await Task.sleep(seconds: 0.15)
+//
+//        try action()
+//        removeBlur()
+//    }}
 }
 
 
@@ -227,10 +272,14 @@ extension CameraMetalView {
 
 // MARK: - Capturing Live Frames
 extension CameraMetalView: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch animationStatus {
-        case .stopped, .pending: changeDisplayedFrame(sampleBuffer)
-        case .launched: presentCameraAnimation()
-    }}
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        changeDisplayedFrame(sampleBuffer)
+
+//        switch animationStatus {
+//            case .stopped, .pending: changeDisplayedFrame(sampleBuffer)
+//            case .launched: presentCameraAnimation()
+//        }
+    }
 }
 private extension CameraMetalView {
     func changeDisplayedFrame(_ sampleBuffer: CMSampleBuffer) { if let cvImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
@@ -239,13 +288,7 @@ private extension CameraMetalView {
 
         redrawCameraView(currentFrameWithFiltersApplied)
     }}
-    func presentCameraAnimation() {
-        let snapshot = createSnapshot()
 
-        insertBlurView(snapshot)
-        animateBlurFlip()
-        animationStatus = .pending
-    }
 }
 private extension CameraMetalView {
     func captureCurrentFrame(_ cvImageBuffer: CVImageBuffer) -> CIImage {
@@ -259,36 +302,4 @@ private extension CameraMetalView {
         currentFrame = frame
         draw()
     }
-    func createSnapshot() -> UIImage? {
-        guard let currentFrame else { return nil }
-
-        let image = UIImage(ciImage: currentFrame)
-        return image
-    }
-    func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
-        let blurView = UIImageView(image: snapshot)
-        blurView.frame = parent.cameraView.frame
-        blurView.contentMode = .scaleAspectFill
-        blurView.clipsToBounds = true
-        blurView.tag = 2137
-        blurView.applyBlurEffect(style: .regular, animationDuration: blurAnimationDuration)
-
-        parent.cameraView.addSubview(blurView)
-    }}
-    func animateBlurFlip() {
-        UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
-    }
-    func removeBlur() { if let blurView = parent.cameraView.viewWithTag(2137) {
-        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { blurView.alpha = 0 }) {
-            guard $0 else { return }
-            self.animationStatus = .stopped
-            blurView.removeFromSuperview()
-        }
-    }}
-}
-private extension CameraMetalView {
-    var blurAnimationDuration: Double { 0.3 }
-
-    var flipAnimationDuration: Double { 0.44 }
-    var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
