@@ -61,7 +61,7 @@ extension CameraMetalView {
 
 
 
-    func captureCurrentFrameAndDelay(_ type: CameraMetalView.Animation, _ action: @escaping () throws -> ()) { Task { @MainActor in
+    func captureCurrentFrameAndDelay(_ type: CameraMetalView.Animation, _ action: @escaping () throws -> ()) { Task {
         animation = type
         await Task.sleep(seconds: 0.15)
 
