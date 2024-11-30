@@ -55,7 +55,7 @@ import MijickTimer
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
     private(set) var cameraMetalView: CameraMetalView = .init()
     private(set) var cameraGridView: GridView!
-    private(set) var cameraFocusView: UIImageView = .create(image: .iconCrosshair, tintColor: .yellow, size: 92)
+    private(set) var cameraFocusView: UIImageView  = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
 
     // MARK: Other Objects
      var motionManager: CMMotionManager = .init()

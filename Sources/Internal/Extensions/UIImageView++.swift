@@ -12,10 +12,9 @@
 import SwiftUI
 
 extension UIImageView {
-    static func create(image: ImageResource, tintColor: UIColor, size: CGFloat) -> UIImageView {
-        let imageView = UIImageView(image: .init(resource: image))
-        imageView.tintColor = tintColor
-        imageView.frame.size = .init(width: size, height: size)
-        return imageView
+    convenience init(image: ImageResource, tintColor: UIColor, size: CGFloat) {
+        self.init(image: .init(resource: image))
+        self.tintColor = tintColor
+        self.frame.size = .init(width: size, height: size)
     }
 }
