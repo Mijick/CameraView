@@ -103,7 +103,7 @@ private extension CameraMetalView {
 
 
 extension CameraMetalView {
-    enum Animation { case blurAndFlip, blur }
+    enum Animation { case blurAndFlip }
 }
 
 
