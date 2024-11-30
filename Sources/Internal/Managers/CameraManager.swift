@@ -555,7 +555,6 @@ private extension CameraManager {
               let cgImage = cameraMetalView.ciContext.createCGImage(ciImage, from: ciImage.extent)
         else { return }
 
-        // TODO: Animacja (10)
         firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: attributes.deviceOrientation.toImageOrientation())
     }
     func updateIsRecording(_ value: Bool) {
