@@ -147,10 +147,6 @@ private extension CameraMetalView {
     var cameraOrientationAnimationDelay: Double { 0.1 }
 }
 
-
-
-
-
 // MARK: Camera Flip
 extension CameraMetalView {
     func beginCameraFlipAnimation() async {
@@ -164,7 +160,7 @@ extension CameraMetalView {
     func finishCameraFlipAnimation() {
         guard let blurView = parent.cameraView.viewWithTag(2137) else { return }
 
-        UIView.animate(withDuration: blurAnimationDuration, delay: 0.1, animations: { blurView.alpha = 0 }) { [self] _ in
+        UIView.animate(withDuration: cameraFlipBlurAnimationDuration, delay: cameraFlipBlurAnimationDelay, animations: { blurView.alpha = 0 }) { [self] _ in
             blurView.removeFromSuperview()
             isAnimating = false
         }
@@ -183,18 +179,20 @@ private extension CameraMetalView {
         blurView.contentMode = .scaleAspectFill
         blurView.clipsToBounds = true
         blurView.tag = 2137
-        blurView.applyBlurEffect(style: .regular, animationDuration: blurAnimationDuration)
+        blurView.applyBlurEffect(style: .regular, animationDuration: cameraFlipBlurAnimationDelay)
 
         parent.cameraView.addSubview(blurView)
     }}
     func animateBlurFlip() {
-        UIView.transition(with: parent.cameraView, duration: flipAnimationDuration, options: flipAnimationTransition) {}
+        UIView.transition(with: parent.cameraView, duration: cameraFlipAnimationDuration, options: cameraFlipAnimationTransition) {}
     }
 }
 private extension CameraMetalView {
-    var flipAnimationDuration: Double { 0.4 }
-    var blurAnimationDuration: Double { 0.2 }
-    var flipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
+    var cameraFlipBlurAnimationDuration: Double { 0.33 }
+    var cameraFlipBlurAnimationDelay: Double { 0.16 }
+
+    var cameraFlipAnimationDuration: Double { 0.44 }
+    var cameraFlipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
 
 
