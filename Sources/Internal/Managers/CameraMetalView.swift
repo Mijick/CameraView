@@ -103,6 +103,37 @@ private extension CameraMetalView {
     var focusIndicatorDelay: Double { 1.44 }
 }
 
+// MARK: Image Capture
+extension CameraMetalView {
+    func performImageCaptureAnimation() {
+        let blackMatte = createBlackMatte()
+
+        parent.cameraView.addSubview(blackMatte)
+        animateBlackMatte(blackMatte)
+    }
+}
+private extension CameraMetalView {
+    func createBlackMatte() -> UIView {
+        let view = UIView()
+        view.frame = parent.cameraView.frame
+        view.backgroundColor = .black
+        view.alpha = 0
+        return view
+    }
+    func animateBlackMatte(_ blackMatte: UIView) {
+        UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { blackMatte.alpha = 1 }) { _ in
+            UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { blackMatte.alpha = 0 }) { _ in
+                blackMatte.removeFromSuperview()
+            }
+        }
+    }
+}
+private extension CameraMetalView {
+    var imageCaptureAnimationDuration: Double { 0.13 }
+}
+
+
+
 
 
 extension CameraMetalView {
