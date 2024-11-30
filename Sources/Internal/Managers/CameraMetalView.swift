@@ -120,10 +120,10 @@ private extension CameraMetalView {
         view.alpha = 0
         return view
     }
-    func animateBlackMatte(_ blackMatte: UIView) {
-        UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { blackMatte.alpha = 1 }) { _ in
-            UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { blackMatte.alpha = 0 }) { _ in
-                blackMatte.removeFromSuperview()
+    func animateBlackMatte(_ view: UIView) {
+        UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { view.alpha = 1 }) { _ in
+            UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { view.alpha = 0 }) { _ in
+                view.removeFromSuperview()
             }
         }
     }
