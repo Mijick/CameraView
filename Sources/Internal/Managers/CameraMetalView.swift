@@ -19,10 +19,10 @@ import MetalKit
 @MainActor class CameraMetalView: MTKView {
     var ciContext: CIContext!
 
-    private var parent: CameraManager!
-    private var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
-    private var animation: Animation?
-    private var currentFrame: CIImage?
+    private(set) var parent: CameraManager!
+    private(set) var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
+    private(set) var animation: Animation?
+    private(set) var currentFrame: CIImage?
 }
 
 // MARK: Setup
