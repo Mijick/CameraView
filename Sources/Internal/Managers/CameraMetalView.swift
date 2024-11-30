@@ -103,7 +103,7 @@ private extension CameraMetalView {
 
 
 extension CameraMetalView {
-    enum Animation { case blurAndFlip, blur, none }
+    enum Animation { case blurAndFlip, blur }
 }
 
 
@@ -122,7 +122,7 @@ extension CameraMetalView {
 // MARK: - Capturing Live Frames
 extension CameraMetalView: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) { switch animation {
-        case .none: changeDisplayedFrame(sampleBuffer)
+        case nil: changeDisplayedFrame(sampleBuffer)
         default: presentCameraAnimation()
     }}
 }
@@ -138,7 +138,7 @@ private extension CameraMetalView {
 
         insertBlurView(snapshot)
         animateBlurFlip()
-        animation = .none
+        animation = nil
     }
 }
 private extension CameraMetalView {
