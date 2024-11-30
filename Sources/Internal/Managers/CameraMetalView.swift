@@ -179,7 +179,7 @@ private extension CameraMetalView {
         blurView.contentMode = .scaleAspectFill
         blurView.clipsToBounds = true
         blurView.tag = 2137
-        blurView.applyBlurEffect(style: .regular, animationDuration: cameraFlipBlurAnimationDelay)
+        blurView.applyBlurEffect(style: .regular)
 
         parent.cameraView.addSubview(blurView)
     }}
