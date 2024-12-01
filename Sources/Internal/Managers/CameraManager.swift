@@ -36,10 +36,10 @@ import MijickTimer
 
 
     // MARK: Input
-     var captureSession: any CaptureSession
-    private var frontCameraInput: (any CaptureDeviceInput)?
-    private var backCameraInput: (any CaptureDeviceInput)?
-    private var audioInput: (any CaptureDeviceInput)?
+    private(set) var captureSession: any CaptureSession
+    private(set) var frontCameraInput: (any CaptureDeviceInput)?
+    private(set) var backCameraInput: (any CaptureDeviceInput)?
+    private(set) var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
     private(set) var photoOutput: CameraManagerPhoto = .init()
@@ -51,7 +51,7 @@ import MijickTimer
     private(set) var cameraGridView: GridView!
 
     // MARK: Other Objects
-     var motionManager: CMMotionManager = .init()
+    private(set) var motionManager: CMMotionManager = .init()
 
     // MARK: Other Attributes
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
