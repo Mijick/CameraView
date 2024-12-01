@@ -18,7 +18,10 @@ import AVKit
 
 // MARK: Setup
 extension CameraManagerVideo {
-
+    func setup(parent: CameraManager) throws {
+        self.parent = parent
+        try parent.captureSession.add(output: videoOutput)
+    }
 }
 
 

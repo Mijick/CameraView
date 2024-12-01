@@ -42,10 +42,8 @@ import MijickTimer
     private var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
-    private var videoOutput: AVCaptureMovieFileOutput = .init()
-
     var photoOutput: CameraManagerPhoto = .init()
-    var r: CameraManagerVideo = .init()
+    var videoOutput: CameraManagerVideo = .init()
 
     // MARK: Metal
     private var firstRecordedFrame: UIImage?
@@ -158,7 +156,7 @@ private extension CameraManager {
     }
     func setupDeviceOutput() throws {
         try photoOutput.setup(parent: self)
-        try setupOutput(videoOutput)
+        try videoOutput.setup(parent: self)
     }
     func setupFrameRecorder() throws {
         let captureVideoOutput = AVCaptureVideoDataOutput()
@@ -199,9 +197,6 @@ private extension CameraManager {
     }}
     func setupInput(_ input: (any CaptureDeviceInput)?) throws {
         try captureSession.add(input: input)
-    }
-    func setupOutput(_ output: AVCaptureOutput?) throws {
-        try captureSession.add(output: output)
     }
 }
 
