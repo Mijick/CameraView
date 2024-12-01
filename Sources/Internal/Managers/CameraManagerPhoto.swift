@@ -62,7 +62,7 @@ extension CameraManagerPhoto: @preconcurrency AVCapturePhotoCaptureDelegate {
 
         let capturedCIImage = prepareCIImage(ciImage, parent.attributes.cameraFilters)
         let capturedCGImage = prepareCGImage(capturedCIImage)
-        let capturedUIImage = prepareUIImage(capturedCGImage, fixedFrameOrientation())
+        let capturedUIImage = prepareUIImage(capturedCGImage)
         let capturedMedia = MCameraMedia(data: capturedUIImage)
 
         parent.attributes.capturedMedia = capturedMedia
@@ -75,16 +75,17 @@ private extension CameraManagerPhoto {
     func prepareCGImage(_ ciImage: CIImage) -> CGImage? {
         CIContext().createCGImage(ciImage, from: ciImage.extent)
     }
-    func prepareUIImage(_ cgImage: CGImage?, _ orientation: CGImagePropertyOrientation) -> UIImage? {
+    func prepareUIImage(_ cgImage: CGImage?) -> UIImage? {
         guard let cgImage else { return nil }
 
-        let orientation = UIImage.Orientation(orientation)
+        let frameOrientation = getFixedFrameOrientation()
+        let orientation = UIImage.Orientation(frameOrientation)
         let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
         return uiImage
     }
 }
 private extension CameraManagerPhoto {
-    func fixedFrameOrientation() -> CGImagePropertyOrientation {
+    func getFixedFrameOrientation() -> CGImagePropertyOrientation {
         guard UIDevice.current.orientation != parent.attributes.deviceOrientation.toDeviceOrientation() else { return parent.frameOrientation }
 
         return switch (parent.attributes.deviceOrientation, parent.attributes.cameraPosition) {
