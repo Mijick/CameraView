@@ -19,10 +19,7 @@ protocol CaptureSession: Sendable {
 
 
     func startRunning()
-    func stopRunning()
-
-
-    init()
+    func stopRunningAndReturnNewInstance() -> CaptureSession
 
 
     var sessionPreset: AVCaptureSession.Preset { get set }
@@ -38,6 +35,12 @@ protocol CaptureSession: Sendable {
 // MARK: REAL
 extension AVCaptureSession: @unchecked @retroactive Sendable {}
 extension AVCaptureSession: CaptureSession {
+    func stopRunningAndReturnNewInstance() -> any CaptureSession {
+        self.stopRunning()
+        return AVCaptureSession()
+    }
+
+
     var deviceInputs: [any CaptureDeviceInput] {
         inputs as? [any CaptureDeviceInput] ?? []
     }
@@ -65,6 +68,11 @@ extension AVCaptureSession: CaptureSession {
 // MARK: MOCK
 extension MockCaptureSession: @unchecked Sendable {}
 class MockCaptureSession: NSObject, CaptureSession {
+    func stopRunningAndReturnNewInstance() -> any CaptureSession {
+        _isRunning = false
+        return MockCaptureSession()
+    }
+    
     var deviceInputs: [any CaptureDeviceInput] { _inputs }
 
     var outputs: [AVCaptureOutput] { _outputs }
@@ -102,9 +110,6 @@ class MockCaptureSession: NSObject, CaptureSession {
         _isRunning = true
     }
 
-    func stopRunning() {
-        _isRunning = false
-    }
 
     var sessionPreset: AVCaptureSession.Preset = .cif352x288
 }

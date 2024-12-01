@@ -67,7 +67,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func cancelProcesses() {
-        captureSession.stopRunning()
+        captureSession = captureSession.stopRunningAndReturnNewInstance()
         motionManager.stopAccelerometerUpdates()
         videoOutput.reset()
     }
@@ -124,7 +124,7 @@ private extension CameraManager {
         captureSession.sessionPreset = attributes.resolution
     }
     func initialiseCameraLayer(_ cameraView: UIView) {
-        cameraLayer.session = cameraLayer.session ?? captureSession as? AVCaptureSession
+        cameraLayer.session = captureSession as? AVCaptureSession
         cameraLayer.videoGravity = .resizeAspectFill
         cameraLayer.isHidden = true
 
