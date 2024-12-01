@@ -13,14 +13,14 @@ import AVKit
 
 @MainActor class CameraManagerPhoto: NSObject {
     private(set) var parent: CameraManager!
-    private(set) var photoOutput: AVCapturePhotoOutput = .init()
+    private(set) var output: AVCapturePhotoOutput = .init()
 }
 
 // MARK: Setup
 extension CameraManagerPhoto {
     func setup(parent: CameraManager) throws {
         self.parent = parent
-        try self.parent.captureSession.add(output: photoOutput)
+        try self.parent.captureSession.add(output: output)
     }
 }
 
@@ -35,7 +35,7 @@ extension CameraManagerPhoto {
         let settings = getPhotoOutputSettings()
 
         configureOutput()
-        photoOutput.capturePhoto(with: settings, delegate: self)
+        output.capturePhoto(with: settings, delegate: self)
         parent.cameraMetalView.performImageCaptureAnimation()
     }
 }
@@ -46,7 +46,7 @@ private extension CameraManagerPhoto {
         return settings
     }
     func configureOutput() {
-        guard let connection = photoOutput.connection(with: .video), connection.isVideoMirroringSupported else { return }
+        guard let connection = output.connection(with: .video), connection.isVideoMirroringSupported else { return }
 
         connection.isVideoMirrored = parent.attributes.mirrorOutput ? parent.attributes.cameraPosition != .front : parent.attributes.cameraPosition == .front
         connection.videoOrientation = parent.attributes.deviceOrientation

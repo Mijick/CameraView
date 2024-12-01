@@ -13,10 +13,9 @@ import AVKit
 import MijickTimer
 
 @MainActor class CameraManagerVideo: NSObject {
-    @Published private(set) var isRecording: Bool = false
-    @Published private(set) var recordingTime: MTime = .zero
+    private(set) var recordingTime: MTime = .zero
     private(set) var parent: CameraManager!
-    private(set) var videoOutput: AVCaptureMovieFileOutput = .init()
+    private(set) var output: AVCaptureMovieFileOutput = .init()
     private(set) var timer: MTimer = .createNewInstance()
     private(set) var firstRecordedFrame: UIImage?
 }
@@ -25,7 +24,7 @@ import MijickTimer
 extension CameraManagerVideo {
     func setup(parent: CameraManager) throws {
         self.parent = parent
-        try parent.captureSession.add(output: videoOutput)
+        try parent.captureSession.add(output: output)
     }
 }
 
@@ -43,7 +42,7 @@ extension CameraManagerVideo {
 
 // MARK: Toggle
 extension CameraManagerVideo {
-    func toggleRecording() { switch videoOutput.isRecording {
+    func toggleRecording() { switch output.isRecording {
         case true: stopRecording()
         case false: startRecording()
     }}
@@ -56,8 +55,7 @@ private extension CameraManagerVideo {
 
         configureOutput()
         storeLastFrame()
-        videoOutput.startRecording(to: url, recordingDelegate: self)
-        isRecording = true
+        output.startRecording(to: url, recordingDelegate: self)
         startRecordingTimer()
     }
 }
@@ -66,7 +64,7 @@ private extension CameraManagerVideo {
         FileManager.prepareURLForVideoOutput()
     }
     func configureOutput() {
-        guard let connection = videoOutput.connection(with: .video), connection.isVideoMirroringSupported else { return }
+        guard let connection = output.connection(with: .video), connection.isVideoMirroringSupported else { return }
 
         connection.isVideoMirrored = parent.attributes.mirrorOutput ? parent.attributes.cameraPosition != .front : parent.attributes.cameraPosition == .front
         connection.videoOrientation = parent.attributes.deviceOrientation
@@ -80,8 +78,12 @@ private extension CameraManagerVideo {
         firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: parent.attributes.deviceOrientation.toImageOrientation())
     }
     func startRecordingTimer() {
+        parent.objectWillChange.send()
         try? timer
-            .publish(every: 1) { [self] in recordingTime = $0 }
+            .publish(every: 1) { [self] in
+                recordingTime = $0
+                parent.objectWillChange.send()
+            }
             .start()
     }
 }
