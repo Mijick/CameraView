@@ -12,9 +12,31 @@
 import AVKit
 
 @MainActor class CameraManagerVideo: NSObject {
-    var parent: CameraManager!
+    private(set) var parent: CameraManager!
+    private(set) var videoOutput: AVCaptureMovieFileOutput = .init()
 }
 
+// MARK: Setup
+extension CameraManagerVideo {
+
+}
+
+
+// MARK: - CAPTURE VIDEO
+
+
+
+// MARK: Start
+extension CameraManagerVideo {
+
+}
+
+// MARK: Stop
+extension CameraManagerVideo {
+
+}
+
+// MARK: Receive
 extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task {
         parent.attributes.capturedMedia = try await .create(videoData: outputFileURL, filters: parent.attributes.cameraFilters)
