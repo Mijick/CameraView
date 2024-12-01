@@ -27,37 +27,6 @@ public extension MCameraMedia {
     func getVideo() -> URL? { video }
 }
 
-// MARK: - Image Initialiser
-extension MCameraMedia {
-    static func create(imageData: AVCapturePhoto, orientation: CGImagePropertyOrientation, filters: [CIFilter]) -> Self? {
-        guard let imageData = imageData.fileDataRepresentation(),
-              let ciImage = CIImage(data: imageData)
-        else { return nil }
-
-        let capturedCIImage = prepareCIImage(ciImage, filters)
-        let capturedCGImage = prepareCGImage(capturedCIImage)
-        let capturedUIImage = prepareUIImage(capturedCGImage, orientation)
-
-        let capturedMedia = MCameraMedia(data: capturedUIImage)
-        return capturedMedia
-    }
-}
-private extension MCameraMedia {
-    static func prepareCIImage(_ ciImage: CIImage, _ filters: [CIFilter]) -> CIImage {
-        ciImage.applyingFilters(filters)
-    }
-    static func prepareCGImage(_ ciImage: CIImage) -> CGImage? {
-        CIContext().createCGImage(ciImage, from: ciImage.extent)
-    }
-    static func prepareUIImage(_ cgImage: CGImage?, _ orientation: CGImagePropertyOrientation) -> UIImage? {
-        guard let cgImage else { return nil }
-
-        let orientation = UIImage.Orientation(orientation)
-        let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
-        return uiImage
-    }
-}
-
 // MARK: - Video Initialiser
 extension MCameraMedia {
     static func create(videoData: URL, filters: [CIFilter]) async throws -> Self? {
