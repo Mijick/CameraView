@@ -104,69 +104,52 @@ private extension CameraManagerVideo {
 // MARK: Receive Data
 extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Swift.Error)?) { Task {
-        parent.attributes.capturedMedia = try await .create(videoData: outputFileURL, filters: parent.attributes.cameraFilters)
+        let videoURL = try await prepareVideo(outputFileURL: outputFileURL, cameraFilters: parent.attributes.cameraFilters)
+        let capturedVideo = MCameraMedia(data: videoURL)
+
+        parent.attributes.capturedMedia = capturedVideo
     }}
 }
 private extension CameraManagerVideo {
+    func prepareVideo(outputFileURL: URL, cameraFilters: [CIFilter]) async throws -> URL {
+        if cameraFilters.isEmpty { return outputFileURL }
 
-}
-private extension CameraManagerVideo {
-
-}
-private extension CameraManagerVideo {
-
-}
-private extension CameraManagerVideo {
-
-}
-
-
-// MARK: - HELPERS
-fileprivate extension MTimerID {
-    static let camera: MTimerID = .init(rawValue: "mijick-camera")
-}
-
-
-
-
-
-extension MCameraMedia {
-    static func create(videoData: URL, filters: [CIFilter]) async throws -> Self? {
-        guard !filters.isEmpty else { return .init(data: videoData) }
-
-        let asset = AVAsset(url: videoData),
-            videoComposition = try await AVVideoComposition.applyFilters(to: asset, applyFiltersAction: { applyFiltersToVideo($0, filters) }),
-            fileUrl = prepareFileUrl(),
+        let asset = AVAsset(url: outputFileURL),
+            videoComposition = try await AVVideoComposition.applyFilters(to: asset) { self.applyFiltersToVideo($0, cameraFilters) },
+            fileUrl = FileManager.prepareURLForVideoOutput(),
             exportSession = prepareAssetExportSession(asset, fileUrl, videoComposition)
 
         try await exportVideo(exportSession, fileUrl)
-        return .init(data: fileUrl)
+        return fileUrl ?? outputFileURL
     }
 }
-private extension MCameraMedia {
-    static func applyFiltersToVideo(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) {
+private extension CameraManagerVideo {
+    nonisolated func applyFiltersToVideo(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) {
         let videoFrame = prepareVideoFrame(request, filters)
         request.finish(with: videoFrame, context: nil)
     }
-    static func exportVideo(_ exportSession: AVAssetExportSession?, _ fileUrl: URL?) async throws { if let fileUrl {
+    nonisolated func exportVideo(_ exportSession: AVAssetExportSession?, _ fileUrl: URL?) async throws { if let fileUrl {
         if #available(iOS 18, *) { try await exportSession?.export(to: fileUrl, as: .mov) }
         else { await exportSession?.export() }
     }}
 }
-private extension MCameraMedia {
-    static func prepareVideoFrame(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) -> CIImage { request
+private extension CameraManagerVideo {
+    nonisolated func prepareVideoFrame(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) -> CIImage { request
         .sourceImage
         .clampedToExtent()
         .applyingFilters(filters)
     }
-    static func prepareFileUrl() -> URL? {
-        FileManager.prepareURLForVideoOutput()
-    }
-    static func prepareAssetExportSession(_ asset: AVAsset, _ fileUrl: URL?, _ composition: AVVideoComposition?) -> AVAssetExportSession? {
+    nonisolated func prepareAssetExportSession(_ asset: AVAsset, _ fileUrl: URL?, _ composition: AVVideoComposition?) -> AVAssetExportSession? {
         let export = AVAssetExportSession(asset: asset, presetName: AVAssetExportPreset1920x1080)
         export?.outputFileType = .mov
         export?.outputURL = fileUrl
         export?.videoComposition = composition
         return export
     }
+}
+
+
+// MARK: - HELPERS
+fileprivate extension MTimerID {
+    static let camera: MTimerID = .init(rawValue: "mijick-camera")
 }
