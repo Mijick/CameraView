@@ -585,10 +585,6 @@ extension CameraManager {
 
 // MARK: - Helpers
 private extension CameraManager {
-    func configureOutput(_ output: AVCaptureOutput?) { if let connection = output?.connection(with: .video), connection.isVideoMirroringSupported {
-        connection.isVideoMirrored = attributes.mirrorOutput ? attributes.cameraPosition != .front : attributes.cameraPosition == .front
-        connection.videoOrientation = attributes.deviceOrientation
-    }}
     func withLockingDeviceForConfiguration(_ device: any CaptureDevice, _ action: (any CaptureDevice) -> ()) throws {
         try device.lockForConfiguration()
         action(device)
