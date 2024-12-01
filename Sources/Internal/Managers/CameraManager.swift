@@ -55,7 +55,6 @@ import MijickTimer
 
     // MARK: Other Objects
      var motionManager: CMMotionManager = .init()
-    private var timer: MTimer = .createNewInstance()
 
     // MARK: Other Attributes
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
@@ -73,7 +72,7 @@ private extension CameraManager {
     func cancelProcesses() {
         captureSession.stopRunning()
         motionManager.stopAccelerometerUpdates()
-        timer.reset()
+        videoOutput.reset()
     }
     func removeObservers() {
         NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
