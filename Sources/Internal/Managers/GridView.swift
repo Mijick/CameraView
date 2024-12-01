@@ -13,6 +13,14 @@ import SwiftUI
 
 class GridView: UIView {}
 
+// MARK: Setup
+extension GridView {
+    func setup(parent: CameraManager) {
+        alpha = parent.attributes.isGridVisible ? 1 : 0
+        addToParent(parent.cameraView)
+    }
+}
+
 // MARK: Draw
 extension GridView {
     override func draw(_ rect: CGRect) {

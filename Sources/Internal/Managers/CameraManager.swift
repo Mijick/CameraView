@@ -134,8 +134,7 @@ private extension CameraManager {
         try cameraMetalView.setup(parent: self)
     }
     func initialiseCameraGridView() {
-        cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
-        cameraGridView.addToParent(cameraView)
+        cameraGridView.setup(parent: self)
     }
     func initializeMotionManager() {
         motionManager.accelerometerUpdateInterval = 0.05
