@@ -29,9 +29,9 @@ extension CameraManagerPhoto {
 
 
 
-// MARK: Trigger
+// MARK: Capture
 extension CameraManagerPhoto {
-    func capturePhoto() {
+    func capture() {
         let settings = getPhotoOutputSettings()
 
         configureOutput()

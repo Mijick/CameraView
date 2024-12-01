@@ -42,10 +42,9 @@ import MijickTimer
     private var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
-    private var photoOutput: AVCapturePhotoOutput = .init()
     private var videoOutput: AVCaptureMovieFileOutput = .init()
 
-    var d: CameraManagerPhoto = .init()
+    var photoOutput: CameraManagerPhoto = .init()
     var r: CameraManagerVideo = .init()
 
     // MARK: Metal
@@ -158,7 +157,7 @@ private extension CameraManager {
         try setupInput(audioInput)
     }
     func setupDeviceOutput() throws {
-        try setupOutput(photoOutput)
+        try photoOutput.setup(parent: self)
         try setupOutput(videoOutput)
     }
     func setupFrameRecorder() throws {
@@ -497,28 +496,9 @@ private extension CameraManager {
 // MARK: - Capturing Output
 extension CameraManager {
     func captureOutput() { if !isChanging { switch attributes.outputType {
-        case .photo: capturePhoto()
+        case .photo: photoOutput.capture()
         case .video: toggleVideoRecording()
     }}}
-}
-
-// MARK: Photo
-private extension CameraManager {
-    func capturePhoto() {
-        let settings = getPhotoOutputSettings()
-
-        d.parent = self
-        configureOutput(photoOutput)
-        photoOutput.capturePhoto(with: settings, delegate: d)
-        cameraMetalView.performImageCaptureAnimation()
-    }
-}
-private extension CameraManager {
-    func getPhotoOutputSettings() -> AVCapturePhotoSettings {
-        let settings = AVCapturePhotoSettings()
-        settings.flashMode = attributes.flashMode.get()
-        return settings
-    }
 }
 
 // MARK: Video
