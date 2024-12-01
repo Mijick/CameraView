@@ -492,7 +492,7 @@ private extension CameraManager {
 extension CameraManager {
     func captureOutput() { if !isChanging { switch attributes.outputType {
         case .photo: photoOutput.capture()
-        case .video: toggleVideoRecording()
+        case .video: videoOutput.toggleRecording()
     }}}
 }
 

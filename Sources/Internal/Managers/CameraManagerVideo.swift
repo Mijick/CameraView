@@ -29,9 +29,9 @@ extension CameraManagerVideo {
 
 
 
-// MARK: Start
+// MARK: Toggle
 extension CameraManagerVideo {
-    func startRecording() {
+    func toggleRecording() {
 
     }
 }
@@ -43,13 +43,6 @@ private extension CameraManagerVideo {
 }
 private extension CameraManagerVideo {
 
-}
-
-// MARK: Stop
-extension CameraManagerVideo {
-    func stopRecording() {
-
-    }
 }
 private extension CameraManagerVideo {
 
