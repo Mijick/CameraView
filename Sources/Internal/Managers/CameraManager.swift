@@ -48,7 +48,7 @@ import MijickTimer
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer = .init()
     private(set) var cameraMetalView: CameraMetalView = .init()
-    private(set) var cameraGridView: GridView!
+    private(set) var cameraGridView: GridView = .init()
 
     // MARK: Other Objects
     private(set) var motionManager: CMMotionManager = .init()
@@ -134,8 +134,6 @@ private extension CameraManager {
         try cameraMetalView.setup(parent: self)
     }
     func initialiseCameraGridView() {
-        cameraGridView?.removeFromSuperview()
-        cameraGridView = .init()
         cameraGridView.alpha = attributes.isGridVisible ? 1 : 0
         cameraGridView.addToParent(cameraView)
     }
@@ -522,7 +520,7 @@ private extension CameraManager {
         updateFrameOrientation(newFrameOrientation)
     }}
     func redrawGrid() { if !orientationLocked {
-        cameraGridView?.draw(.zero)
+        cameraGridView.draw(.zero)
     }}
 }
 private extension CameraManager {
