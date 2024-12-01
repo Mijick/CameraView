@@ -55,7 +55,6 @@ import MijickTimer
 
     // MARK: Other Attributes
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
-    private(set) var orientationLocked: Bool = false
 }
 
 // MARK: - Cancellation
@@ -190,13 +189,6 @@ private extension CameraManager {
     }}
     func setupInput(_ input: (any CaptureDeviceInput)?) throws {
         try captureSession.add(input: input)
-    }
-}
-
-// MARK: - Locking Camera Orientation
-extension CameraManager {
-    func lockOrientation() {
-        orientationLocked = true
     }
 }
 

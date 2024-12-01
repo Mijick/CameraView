@@ -51,7 +51,7 @@ public extension MCameraController {
 public extension MCameraController {
     /// Locks the camera interface in portrait orientation (even if device screen rotation is enabled).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.attributes.orientationLocked = true } }
 }
 
 

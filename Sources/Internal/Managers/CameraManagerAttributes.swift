@@ -29,8 +29,6 @@ struct CameraManagerAttributes {
     var isGridVisible: Bool = true
 
     var deviceOrientation: AVCaptureVideoOrientation = .portrait
+    var orientationLocked: Bool = false
     var userBlockedScreenRotation: Bool = false
-
-
-    // sens tego jest taki, że atrybuty tutaj zmieniane wpływają na odświeżanie się UI
 }
