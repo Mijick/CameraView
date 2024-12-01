@@ -16,7 +16,7 @@ import MijickTimer
     private(set) var recordingTime: MTime = .zero
     private(set) var parent: CameraManager!
     private(set) var output: AVCaptureMovieFileOutput = .init()
-    private(set) var timer: MTimer = .createNewInstance()
+    private(set) var timer: MTimer = .init(.camera)
     private(set) var firstRecordedFrame: UIImage?
 }
 
@@ -57,6 +57,7 @@ private extension CameraManagerVideo {
         storeLastFrame()
         output.startRecording(to: url, recordingDelegate: self)
         startRecordingTimer()
+        parent.objectWillChange.send()
     }
 }
 private extension CameraManagerVideo {
@@ -77,14 +78,12 @@ private extension CameraManagerVideo {
 
         firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: parent.attributes.deviceOrientation.toImageOrientation())
     }
-    func startRecordingTimer() {
-        parent.objectWillChange.send()
-        try? timer
-            .publish(every: 1) { [self] in
-                recordingTime = $0
-                parent.objectWillChange.send()
-            }
-            .start()
+    func startRecordingTimer() { try? timer
+        .publish(every: 1) { [self] in
+            recordingTime = $0
+            parent.objectWillChange.send()
+        }
+        .start()
     }
 }
 private extension CameraManagerVideo {
