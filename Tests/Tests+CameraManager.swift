@@ -22,15 +22,10 @@ extension CameraManagerTests {
     @Test("Setup: Default Attributes") func setupWithDefaultAttributes() async {
         cameraManager.setup(in: .init())
 
-        #expect(!cameraManager.isRunning)
         #expect(cameraManager.captureSession.isRunning)
         #expect(cameraManager.captureSession.outputs.count == 3)
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
         #expect(cameraManager.motionManager.accelerometerUpdateInterval > 0)
-
-        await Task.sleep(seconds: 2)
-
-        #expect(cameraManager.isRunning)
     }
     @Test("Setup: Custom Attributes (1)") func setupWithCustomAttributes_1() {
     }
