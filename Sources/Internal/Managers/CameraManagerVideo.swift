@@ -127,3 +127,9 @@ private extension CameraManagerVideo {
 private extension CameraManagerVideo {
 
 }
+
+
+// MARK: - HELPERS
+extension MTimerID {
+    static let camera: MTimerID = .init(rawValue: "mijick-camera")
+}
