@@ -55,13 +55,23 @@ private extension CameraManagerPhoto {
 
 // MARK: Receive Data
 extension CameraManagerPhoto: @preconcurrency AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Swift.Error)?) {
-        parent.attributes.capturedMedia = .create(imageData: photo, orientation: fixedFrameOrientation(), filters: parent.attributes.cameraFilters)
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
+        guard let imageData = photo.fileDataRepresentation(),
+              let ciImage = CIImage(data: imageData)
+        else { return }
+
+        let capturedCIImage = prepareCIImage(ciImage, parent.attributes.cameraFilters)
+        let capturedCGImage = prepareCGImage(capturedCIImage)
+        let capturedUIImage = prepareUIImage(capturedCGImage, fixedFrameOrientation())
+        let capturedMedia = MCameraMedia(data: capturedUIImage)
+
+        parent.attributes.capturedMedia = capturedMedia
     }
 }
 private extension CameraManagerPhoto {
     func fixedFrameOrientation() -> CGImagePropertyOrientation {
         guard UIDevice.current.orientation != parent.attributes.deviceOrientation.toDeviceOrientation() else { return parent.frameOrientation }
+
         return switch (parent.attributes.deviceOrientation, parent.attributes.cameraPosition) {
             case (.portrait, .front): .left
             case (.portrait, .back): .right
@@ -73,5 +83,20 @@ private extension CameraManagerPhoto {
             case (.landscapeRight, .front): .downMirrored
             default: .right
         }
+    }
+}
+private extension CameraManagerPhoto {
+    func prepareCIImage(_ ciImage: CIImage, _ filters: [CIFilter]) -> CIImage {
+        ciImage.applyingFilters(filters)
+    }
+    func prepareCGImage(_ ciImage: CIImage) -> CGImage? {
+        CIContext().createCGImage(ciImage, from: ciImage.extent)
+    }
+    func prepareUIImage(_ cgImage: CGImage?, _ orientation: CGImagePropertyOrientation) -> UIImage? {
+        guard let cgImage else { return nil }
+
+        let orientation = UIImage.Orientation(orientation)
+        let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
+        return uiImage
     }
 }
