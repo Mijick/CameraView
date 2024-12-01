@@ -31,9 +31,10 @@ extension CameraManagerVideo {
 
 // MARK: Toggle
 extension CameraManagerVideo {
-    func toggleRecording() {
-
-    }
+    func toggleRecording() { switch videoOutput.isRecording {
+        case true: stopRecording()
+        case false: startRecording()
+    }}
 }
 
 // MARK: Start Recording
@@ -43,7 +44,12 @@ private extension CameraManagerVideo {
     }
 }
 private extension CameraManagerVideo {
+    func configureOutput() {
+        guard let connection = videoOutput.connection(with: .video), connection.isVideoMirroringSupported else { return }
 
+        connection.isVideoMirrored = parent.attributes.mirrorOutput ? parent.attributes.cameraPosition != .front : parent.attributes.cameraPosition == .front
+        connection.videoOrientation = parent.attributes.deviceOrientation
+    }
 }
 private extension CameraManagerVideo {
 

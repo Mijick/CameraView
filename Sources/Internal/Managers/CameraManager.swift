@@ -498,14 +498,8 @@ extension CameraManager {
 
 // MARK: Video
 private extension CameraManager {
-    func toggleVideoRecording() { switch videoOutput.isRecording {
-        case false: startRecording()
-        default: stopRecording()
-    }}
-}
-private extension CameraManager {
     func startRecording() { if let url = prepareUrlForVideoRecording() {
-        r.parent = self
+        //r.parent = self
         configureOutput(videoOutput)
         videoOutput.startRecording(to: url, recordingDelegate: r)
         storeLastFrame()
