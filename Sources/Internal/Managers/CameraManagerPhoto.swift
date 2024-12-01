@@ -69,6 +69,21 @@ extension CameraManagerPhoto: @preconcurrency AVCapturePhotoCaptureDelegate {
     }
 }
 private extension CameraManagerPhoto {
+    func prepareCIImage(_ ciImage: CIImage, _ filters: [CIFilter]) -> CIImage {
+        ciImage.applyingFilters(filters)
+    }
+    func prepareCGImage(_ ciImage: CIImage) -> CGImage? {
+        CIContext().createCGImage(ciImage, from: ciImage.extent)
+    }
+    func prepareUIImage(_ cgImage: CGImage?, _ orientation: CGImagePropertyOrientation) -> UIImage? {
+        guard let cgImage else { return nil }
+
+        let orientation = UIImage.Orientation(orientation)
+        let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
+        return uiImage
+    }
+}
+private extension CameraManagerPhoto {
     func fixedFrameOrientation() -> CGImagePropertyOrientation {
         guard UIDevice.current.orientation != parent.attributes.deviceOrientation.toDeviceOrientation() else { return parent.frameOrientation }
 
@@ -83,20 +98,5 @@ private extension CameraManagerPhoto {
             case (.landscapeRight, .front): .downMirrored
             default: .right
         }
-    }
-}
-private extension CameraManagerPhoto {
-    func prepareCIImage(_ ciImage: CIImage, _ filters: [CIFilter]) -> CIImage {
-        ciImage.applyingFilters(filters)
-    }
-    func prepareCGImage(_ ciImage: CIImage) -> CGImage? {
-        CIContext().createCGImage(ciImage, from: ciImage.extent)
-    }
-    func prepareUIImage(_ cgImage: CGImage?, _ orientation: CGImagePropertyOrientation) -> UIImage? {
-        guard let cgImage else { return nil }
-
-        let orientation = UIImage.Orientation(orientation)
-        let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
-        return uiImage
     }
 }
