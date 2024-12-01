@@ -13,11 +13,12 @@ import AVKit
 import MijickTimer
 
 @MainActor class CameraManagerVideo: NSObject {
+    @Published private(set) var isRecording: Bool = false
+    @Published private(set) var recordingTime: MTime = .zero
     private(set) var parent: CameraManager!
     private(set) var videoOutput: AVCaptureMovieFileOutput = .init()
+    private(set) var timer: MTimer = .createNewInstance()
     private(set) var firstRecordedFrame: UIImage?
-
-    private var timer: MTimer = .createNewInstance()
 }
 
 // MARK: Setup
@@ -78,12 +79,9 @@ private extension CameraManagerVideo {
 
         firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: parent.attributes.deviceOrientation.toImageOrientation())
     }
-    func updateIsRecording(_ value: Bool) {
-        parent.attributes.isRecording = value
-    }
     func startRecordingTimer() {
         try? timer
-            .publish(every: 1) { [self] in parent.attributes.recordingTime = $0 }
+            .publish(every: 1) { [self] in recordingTime = $0 }
             .start()
     }
 }
