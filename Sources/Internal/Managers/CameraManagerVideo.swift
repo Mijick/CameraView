@@ -115,10 +115,10 @@ private extension CameraManagerVideo {
     func prepareVideo(outputFileURL: URL, cameraFilters: [CIFilter]) async throws -> URL {
         if cameraFilters.isEmpty { return outputFileURL }
 
-        let asset = AVAsset(url: outputFileURL),
-            videoComposition = try await AVVideoComposition.applyFilters(to: asset) { self.applyFiltersToVideo($0, cameraFilters) },
-            fileUrl = FileManager.prepareURLForVideoOutput(),
-            exportSession = prepareAssetExportSession(asset, fileUrl, videoComposition)
+        let asset = AVAsset(url: outputFileURL)
+        let videoComposition = try await AVVideoComposition.applyFilters(to: asset) { self.applyFiltersToVideo($0, cameraFilters) }
+        let fileUrl = FileManager.prepareURLForVideoOutput()
+        let exportSession = prepareAssetExportSession(asset, fileUrl, videoComposition)
 
         try await exportVideo(exportSession, fileUrl)
         return fileUrl ?? outputFileURL
