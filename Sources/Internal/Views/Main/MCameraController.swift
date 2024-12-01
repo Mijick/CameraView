@@ -29,7 +29,7 @@ public struct MCameraController: View {
     }}
 }
 private extension MCameraController {
-    func createErrorStateView(_ error: CameraManagerError) -> some View {
+    func createErrorStateView(_ error: MijickCameraError) -> some View {
         config.cameraErrorView(error, config.onCloseController).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch cameraManager.attributes.capturedMedia {

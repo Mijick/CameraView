@@ -118,7 +118,7 @@ private extension CameraManager {
         do {
             try await checkPermissions(.video)
             try await checkPermissions(.audio)
-        } catch { attributes.error = error as? CameraManagerError }
+        } catch { attributes.error = error as? MijickCameraError }
     }}
     func initialiseCaptureSession() {
         captureSession.sessionPreset = attributes.resolution
@@ -184,7 +184,7 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func getPermissionsError(_ mediaType: AVMediaType) -> CameraManagerError { switch mediaType {
+    func getPermissionsError(_ mediaType: AVMediaType) -> MijickCameraError { switch mediaType {
         case .audio: .microphonePermissionsNotGranted
         default: .cameraPermissionsNotGranted
     }}
@@ -446,8 +446,8 @@ extension CameraManager {
 }
 private extension CameraManager {
     func checkNewFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
-        if newFrameRate < 15 { throw CameraManagerError.incorrectFrameRate }
-        if newFrameRate > maxFrameRate { throw CameraManagerError.incorrectFrameRate }
+        if newFrameRate < 15 { throw MijickCameraError.incorrectFrameRate }
+        if newFrameRate > maxFrameRate { throw MijickCameraError.incorrectFrameRate }
     }
     func updateFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
         device.activeVideoMinFrameDuration = .init(value: 1, timescale: newFrameRate)
@@ -595,12 +595,9 @@ private extension CameraManager {
 
 
 // MARK: - Errors
-public enum CameraManagerError: Error {
-    case microphonePermissionsNotGranted, cameraPermissionsNotGranted
-    case cannotSetupInput, cannotSetupOutput, capturedPhotoCannotBeFetched
-    case incorrectFrameRate
-}
 public enum MijickCameraError: Error {
+    case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput
     case cannotCreateMetalDevice
+    case incorrectFrameRate
 }
