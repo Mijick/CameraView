@@ -86,21 +86,19 @@ private extension CameraManagerVideo {
         .start()
     }
 }
-private extension CameraManagerVideo {
-
-}
-private extension CameraManagerVideo {
-
-}
 
 // MARK: Stop Recording
 private extension CameraManagerVideo {
     func stopRecording() {
-
+        presentLastFrame()
+        output.stopRecording()
+        timer.reset()
     }
 }
 private extension CameraManagerVideo {
-
+    func presentLastFrame() {
+        parent.attributes.capturedMedia = .init(data: firstRecordedFrame)
+    }
 }
 private extension CameraManagerVideo {
 

@@ -45,9 +45,6 @@ import MijickTimer
     private(set) var photoOutput: CameraManagerPhoto = .init()
     private(set) var videoOutput: CameraManagerVideo = .init()
 
-    // MARK: Metal
-    private var firstRecordedFrame: UIImage?
-
     // MARK: UI Elements
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
     private(set) var cameraMetalView: CameraMetalView = .init()
@@ -495,51 +492,6 @@ extension CameraManager {
     }}}
 }
 
-// MARK: Video
-private extension CameraManager {
-    func startRecording() { if let url = prepareUrlForVideoRecording() {
-        //r.parent = self
-        configureOutput(videoOutput)
-        videoOutput.startRecording(to: url, recordingDelegate: r)
-        storeLastFrame()
-        updateIsRecording(true)
-        startRecordingTimer()
-    }}
-    func stopRecording() {
-        presentLastFrame()
-        videoOutput.stopRecording()
-        updateIsRecording(false)
-        stopRecordingTimer()
-    }
-}
-private extension CameraManager {
-    func prepareUrlForVideoRecording() -> URL? {
-        FileManager.prepareURLForVideoOutput()
-    }
-    func storeLastFrame() {
-        guard let texture = cameraMetalView.currentDrawable?.texture,
-              let ciImage = CIImage(mtlTexture: texture, options: nil),
-              let cgImage = cameraMetalView.ciContext.createCGImage(ciImage, from: ciImage.extent)
-        else { return }
-
-        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: attributes.deviceOrientation.toImageOrientation())
-    }
-    func updateIsRecording(_ value: Bool) {
-        attributes.isRecording = value
-    }
-    func startRecordingTimer() {
-        try? timer
-            .publish(every: 1) { [self] in attributes.recordingTime = $0 }
-            .start()
-    }
-    func presentLastFrame() {
-        attributes.capturedMedia = .init(data: firstRecordedFrame)
-    }
-    func stopRecordingTimer() {
-        timer.reset()
-    }
-}
-
 // MARK: - Handling Device Rotation
 private extension CameraManager {
     func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Swift.Error?) { if let data, error == nil {
@@ -621,8 +573,7 @@ private extension CameraManager {
 private extension CameraManager {
     @objc func handleSessionWasInterrupted() {
         attributes.torchMode = .off
-        updateIsRecording(false)
-        stopRecordingTimer()
+        videoOutput.reset()
     }
 }
 
