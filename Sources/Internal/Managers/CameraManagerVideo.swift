@@ -9,7 +9,7 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
-import AVKit
+@preconcurrency import AVKit
 import MijickTimer
 
 @MainActor class CameraManagerVideo: NSObject {
