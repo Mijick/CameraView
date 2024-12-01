@@ -35,14 +35,28 @@ extension CameraManagerVideo {
 
     }
 }
-private extension CameraManagerVideo {
 
+// MARK: Start Recording
+private extension CameraManagerVideo {
+    func startRecording() {
+
+    }
 }
 private extension CameraManagerVideo {
 
 }
 private extension CameraManagerVideo {
 
+}
+private extension CameraManagerVideo {
+
+}
+
+// MARK: Stop Recording
+private extension CameraManagerVideo {
+    func stopRecording() {
+
+    }
 }
 private extension CameraManagerVideo {
 
