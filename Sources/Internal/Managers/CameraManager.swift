@@ -46,7 +46,7 @@ import MijickTimer
     private(set) var videoOutput: CameraManagerVideo = .init()
 
     // MARK: UI Elements
-    private(set) var cameraLayer: AVCaptureVideoPreviewLayer!
+    private(set) var cameraLayer: AVCaptureVideoPreviewLayer = .init()
     private(set) var cameraMetalView: CameraMetalView = .init()
     private(set) var cameraGridView: GridView!
 
@@ -124,7 +124,7 @@ private extension CameraManager {
         captureSession.sessionPreset = attributes.resolution
     }
     func initialiseCameraLayer(_ cameraView: UIView) {
-        cameraLayer = .init(session: captureSession)
+        cameraLayer.session = cameraLayer.session ?? captureSession as? AVCaptureSession
         cameraLayer.videoGravity = .resizeAspectFill
         cameraLayer.isHidden = true
 
