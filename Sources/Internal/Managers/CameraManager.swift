@@ -17,18 +17,6 @@ import MijickTimer
 @MainActor public class CameraManager: NSObject, ObservableObject {
     @Published var attributes: CameraManagerAttributes = .init()
 
-
-
-
-    init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
-        self.captureSession = captureSession
-        self.frontCameraInput = fontCameraInput
-        self.backCameraInput = backCameraInput
-        self.audioInput = audioInput
-    }
-
-
-
     // MARK: Input
     private(set) var captureSession: any CaptureSession
     private(set) var frontCameraInput: (any CaptureDeviceInput)?
@@ -49,6 +37,14 @@ import MijickTimer
 
     // MARK: Other Attributes
     private(set) var frameOrientation: CGImagePropertyOrientation = .right
+
+    // MARK: Initializer
+    init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
+        self.captureSession = captureSession
+        self.frontCameraInput = fontCameraInput
+        self.backCameraInput = backCameraInput
+        self.audioInput = audioInput
+    }
 }
 
 // MARK: - Cancellation
