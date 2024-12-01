@@ -60,17 +60,9 @@ import MijickTimer
 // MARK: - Cancellation
 extension CameraManager {
     func cancel() {
-        cancelProcesses()
-        removeObservers()
-    }
-}
-private extension CameraManager {
-    func cancelProcesses() {
         captureSession = captureSession.stopRunningAndReturnNewInstance()
         motionManager.stopAccelerometerUpdates()
         videoOutput.reset()
-    }
-    func removeObservers() {
         NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
     }
 }
