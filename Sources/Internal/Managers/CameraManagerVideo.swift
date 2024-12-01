@@ -109,7 +109,6 @@ extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelega
 
         parent.cancel()
         parent.attributes.capturedMedia = capturedVideo
-
     }}
 }
 private extension CameraManagerVideo {

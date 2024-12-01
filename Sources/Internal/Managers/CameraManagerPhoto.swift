@@ -65,6 +65,7 @@ extension CameraManagerPhoto: @preconcurrency AVCapturePhotoCaptureDelegate {
         let capturedUIImage = prepareUIImage(capturedCGImage)
         let capturedMedia = MCameraMedia(data: capturedUIImage)
 
+        parent.cancel()
         parent.attributes.capturedMedia = capturedMedia
     }
 }
