@@ -42,8 +42,8 @@ import MijickTimer
     private var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
-    var photoOutput: CameraManagerPhoto = .init()
-    var videoOutput: CameraManagerVideo = .init()
+    private(set) var photoOutput: CameraManagerPhoto = .init()
+    private(set) var videoOutput: CameraManagerVideo = .init()
 
     // MARK: Metal
     private var firstRecordedFrame: UIImage?
