@@ -494,7 +494,7 @@ extension CameraManager {
 
 // MARK: - Handling Device Rotation
 private extension CameraManager {
-    func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Swift.Error?) { if let data, error == nil {
+    func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Error?) { if let data, error == nil {
         let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
