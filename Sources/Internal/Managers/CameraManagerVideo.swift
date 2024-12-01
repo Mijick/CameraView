@@ -10,10 +10,14 @@
 
 
 import AVKit
+import MijickTimer
 
 @MainActor class CameraManagerVideo: NSObject {
     private(set) var parent: CameraManager!
     private(set) var videoOutput: AVCaptureMovieFileOutput = .init()
+    private(set) var firstRecordedFrame: UIImage?
+
+    private var timer: MTimer = .createNewInstance()
 }
 
 // MARK: Setup
@@ -40,15 +44,40 @@ extension CameraManagerVideo {
 // MARK: Start Recording
 private extension CameraManagerVideo {
     func startRecording() {
+        guard let url = prepareUrlForVideoRecording() else { return }
 
+        configureOutput()
+        storeLastFrame()
+        videoOutput.startRecording(to: url, recordingDelegate: self)
+        updateIsRecording(true)
+        startRecordingTimer()
     }
 }
 private extension CameraManagerVideo {
+    func prepareUrlForVideoRecording() -> URL? {
+        FileManager.prepareURLForVideoOutput()
+    }
     func configureOutput() {
         guard let connection = videoOutput.connection(with: .video), connection.isVideoMirroringSupported else { return }
 
         connection.isVideoMirrored = parent.attributes.mirrorOutput ? parent.attributes.cameraPosition != .front : parent.attributes.cameraPosition == .front
         connection.videoOrientation = parent.attributes.deviceOrientation
+    }
+    func storeLastFrame() {
+        guard let texture = parent.cameraMetalView.currentDrawable?.texture,
+              let ciImage = CIImage(mtlTexture: texture, options: nil),
+              let cgImage = parent.cameraMetalView.ciContext.createCGImage(ciImage, from: ciImage.extent)
+        else { return }
+
+        firstRecordedFrame = UIImage(cgImage: cgImage, scale: 1.0, orientation: parent.attributes.deviceOrientation.toImageOrientation())
+    }
+    func updateIsRecording(_ value: Bool) {
+        parent.attributes.isRecording = value
+    }
+    func startRecordingTimer() {
+        try? timer
+            .publish(every: 1) { [self] in parent.attributes.recordingTime = $0 }
+            .start()
     }
 }
 private extension CameraManagerVideo {
