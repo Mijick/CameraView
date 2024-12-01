@@ -10,9 +10,15 @@
 
 
 import SwiftUI
+import AVKit
 
 public struct MCameraController: View {
-    @ObservedObject var cameraManager: CameraManager = .init()
+    @ObservedObject var cameraManager: CameraManager = .init(
+        captureSession: AVCaptureSession(),
+        fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
+        backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
+        audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
+    )
     @Namespace var namespace
     var config: CameraConfig = .init()
     public init() {}

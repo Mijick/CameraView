@@ -26,12 +26,6 @@ import MijickTimer
         self.backCameraInput = backCameraInput
         self.audioInput = audioInput
     }
-    override convenience init() { self.init(
-        captureSession: AVCaptureSession(),
-        fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
-        backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
-        audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
-    )}
 
 
 
