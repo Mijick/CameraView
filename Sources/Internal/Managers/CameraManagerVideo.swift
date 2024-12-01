@@ -28,6 +28,13 @@ extension CameraManagerVideo {
     }
 }
 
+// MARK: Reset
+extension CameraManagerVideo {
+    func reset() {
+        timer.reset()
+    }
+}
+
 
 // MARK: - CAPTURE VIDEO
 
@@ -49,7 +56,7 @@ private extension CameraManagerVideo {
         configureOutput()
         storeLastFrame()
         videoOutput.startRecording(to: url, recordingDelegate: self)
-        updateIsRecording(true)
+        isRecording = true
         startRecordingTimer()
     }
 }
