@@ -12,7 +12,6 @@
 import SwiftUI
 import AVKit
 import CoreMotion
-import MijickTimer
 
 @MainActor public class CameraManager: NSObject, ObservableObject {
     @Published var attributes: CameraManagerAttributes = .init()
@@ -34,6 +33,7 @@ import MijickTimer
 
     // MARK: Other Objects
     private(set) var motionManager: CMMotionManager = .init()
+    private(set) var notificationCenter: CameraManagerNotificationCenter = .init()
 
     // MARK: Initializer
     init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
@@ -50,11 +50,10 @@ extension CameraManager {
         captureSession = captureSession.stopRunningAndReturnNewInstance()
         motionManager.stopAccelerometerUpdates()
         videoOutput.reset()
-        NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
+        notificationCenter.reset()
 
 
 
-        // notification center do osobnej klasy
         // motion manager do osobnej klasy
         // refaktoryzacja tej klasy
         // refaktoryzacja klas pomocniczych
@@ -127,7 +126,7 @@ private extension CameraManager {
         motionManager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
     }
     func initialiseObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleSessionWasInterrupted), name: .AVCaptureSessionWasInterrupted, object: captureSession)
+        notificationCenter.setup(parent: self)
     }
     func setupDeviceInputs() throws {
         try setupCameraInput(attributes.cameraPosition)
@@ -542,14 +541,6 @@ private extension CameraManager {
     }
     func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) {
         attributes.frameOrientation = newFrameOrientation
-    }
-}
-
-// MARK: - Handling Observers
-private extension CameraManager {
-    @objc func handleSessionWasInterrupted() {
-        attributes.torchMode = .off
-        videoOutput.reset()
     }
 }
 
