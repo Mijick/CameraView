@@ -12,7 +12,7 @@
 import CoreMotion
 import AVKit
 
-class CameraManagerMotionManager {
+@MainActor class CameraManagerMotionManager {
     private(set) var parent: CameraManager!
     private(set) var motionManager: CMMotionManager = .init()
 }
@@ -37,7 +37,13 @@ private extension CameraManagerMotionManager {
     }
 }
 private extension CameraManagerMotionManager {
-
+    func fetchDeviceOrientation(_ acceleration: CMAcceleration) -> AVCaptureVideoOrientation { switch acceleration {
+        case let acceleration where acceleration.x >= 0.75: .landscapeLeft
+        case let acceleration where acceleration.x <= -0.75: .landscapeRight
+        case let acceleration where acceleration.y <= -0.75: .portrait
+        case let acceleration where acceleration.y >= 0.75: .portraitUpsideDown
+        default: parent.attributes.deviceOrientation
+    }}
 }
 private extension CameraManagerMotionManager {
 
@@ -60,13 +66,6 @@ extension CameraManagerMotionManager {
 
 
 private extension CameraManager {
-    func fetchDeviceOrientation(_ acceleration: CMAcceleration) -> AVCaptureVideoOrientation { switch acceleration {
-        case let acceleration where acceleration.x >= 0.75: .landscapeLeft
-        case let acceleration where acceleration.x <= -0.75: .landscapeRight
-        case let acceleration where acceleration.y <= -0.75: .portrait
-        case let acceleration where acceleration.y >= 0.75: .portraitUpsideDown
-        default: attributes.deviceOrientation
-    }}
     func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != attributes.deviceOrientation {
         attributes.deviceOrientation = newDeviceOrientation
     }}
