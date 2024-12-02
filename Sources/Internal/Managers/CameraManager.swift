@@ -51,6 +51,14 @@ extension CameraManager {
         motionManager.stopAccelerometerUpdates()
         videoOutput.reset()
         NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: captureSession)
+
+
+
+        // notification center do osobnej klasy
+        // motion manager do osobnej klasy
+        // refaktoryzacja tej klasy
+        // refaktoryzacja klas pomocniczych
+
     }
 }
 
