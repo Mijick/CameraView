@@ -26,7 +26,15 @@ extension CameraManagerMotionManager {
     }
 }
 private extension CameraManagerMotionManager {
+    func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Error?) {
+        guard let data, error == nil else { return }
 
+        let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
+        updateDeviceOrientation(newDeviceOrientation)
+        updateUserBlockedScreenRotation()
+        updateFrameOrientation()
+        redrawGrid()
+    }
 }
 private extension CameraManagerMotionManager {
 
