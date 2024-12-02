@@ -87,7 +87,7 @@ private extension CameraManagerPhoto {
 }
 private extension CameraManagerPhoto {
     func getFixedFrameOrientation() -> CGImagePropertyOrientation {
-        guard UIDevice.current.orientation != parent.attributes.deviceOrientation.toDeviceOrientation() else { return parent.frameOrientation }
+        guard UIDevice.current.orientation != parent.attributes.deviceOrientation.toDeviceOrientation() else { return parent.attributes.frameOrientation }
 
         return switch (parent.attributes.deviceOrientation, parent.attributes.cameraPosition) {
             case (.portrait, .front): .left

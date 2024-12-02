@@ -35,9 +35,6 @@ import MijickTimer
     // MARK: Other Objects
     private(set) var motionManager: CMMotionManager = .init()
 
-    // MARK: Other Attributes
-    private(set) var frameOrientation: CGImagePropertyOrientation = .right
-
     // MARK: Initializer
     init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
         self.captureSession = captureSession
@@ -508,7 +505,7 @@ private extension CameraManager {
         case .back: getNewFrameOrientationForBackCamera(orientation)
         case .front: getNewFrameOrientationForFrontCamera(orientation)
     }}
-    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { Task { if newFrameOrientation != frameOrientation {
+    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { Task { if newFrameOrientation != attributes.frameOrientation {
         let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
 
         await cameraMetalView.beginCameraOrientationAnimation(if: shouldAnimate)
@@ -532,11 +529,11 @@ private extension CameraManager {
     func shouldAnimateFrameOrientationChange(_ newFrameOrientation: CGImagePropertyOrientation) -> Bool {
         let backCameraOrientations: [CGImagePropertyOrientation] = [.left, .right, .up, .down],
             frontCameraOrientations: [CGImagePropertyOrientation] = [.leftMirrored, .rightMirrored, .upMirrored, .downMirrored]
-        return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(frameOrientation))
-            || (frontCameraOrientations.contains(frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
+        return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(attributes.frameOrientation))
+        || (frontCameraOrientations.contains(attributes.frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
     }
     func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) {
-        frameOrientation = newFrameOrientation
+        attributes.frameOrientation = newFrameOrientation
     }
 }
 

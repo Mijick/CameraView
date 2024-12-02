@@ -209,7 +209,7 @@ extension CameraMetalView: @preconcurrency AVCaptureVideoDataOutputSampleBufferD
 private extension CameraMetalView {
     func captureCurrentFrame(_ cvImageBuffer: CVImageBuffer) -> CIImage {
         let currentFrame = CIImage(cvImageBuffer: cvImageBuffer)
-        return currentFrame.oriented(parent.frameOrientation)
+        return currentFrame.oriented(parent.attributes.frameOrientation)
     }
     func applyingFiltersToCurrentFrame(_ currentFrame: CIImage) -> CIImage {
         currentFrame.applyingFilters(parent.attributes.cameraFilters)
