@@ -122,7 +122,7 @@ extension CameraManager {
 
 
 
-// MARK: Output Type
+// MARK: Change Output
 extension CameraManager {
     func setOutputType(_ outputType: CameraOutputType) throws {
         guard outputType != attributes.outputType, !isChanging else { return }
@@ -130,9 +130,15 @@ extension CameraManager {
     }
 }
 
-// MARK: Camera Input
+// MARK: Change Camera Position
 extension CameraManager {
-    
+    func changeCameraPosition(_ position: CameraPosition) throws {
+
+    }
+}
+private extension CameraManager {
+}
+private extension CameraManager {
 }
 
 
