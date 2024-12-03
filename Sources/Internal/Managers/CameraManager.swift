@@ -53,16 +53,6 @@ private extension CameraManager {
         try setupCameraInput(attributes.cameraPosition)
         try setupInput(audioInput)
     }
-    func setupDeviceOutput() throws {
-        try photoOutput.setup(parent: self)
-        try videoOutput.setup(parent: self)
-    }
-    func setupFrameRecorder() throws {
-        let captureVideoOutput = AVCaptureVideoDataOutput()
-        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
-
-        try captureSession.add(output: captureVideoOutput)
-    }
     func setupDevice() throws {
         guard let device = getDevice(attributes.cameraPosition) else { return }
 
@@ -72,6 +62,16 @@ private extension CameraManager {
         device.setFrameRate(attributes.frameRate)
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
+    }
+    func setupDeviceOutput() throws {
+        try photoOutput.setup(parent: self)
+        try videoOutput.setup(parent: self)
+    }
+    func setupFrameRecorder() throws {
+        let captureVideoOutput = AVCaptureVideoDataOutput()
+        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
+
+        try captureSession.add(output: captureVideoOutput)
     }
 }
 private extension CameraManager {
