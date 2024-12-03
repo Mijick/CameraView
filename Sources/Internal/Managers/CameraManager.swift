@@ -215,25 +215,25 @@ extension CameraManager {
 
 // MARK: Set Flash Mode
 extension CameraManager {
-    func setFlashMode(_ mode: CameraFlashMode) {
-        guard let device = getCameraInput()?.device, device.hasFlash, !isChanging else { return }
-        attributes.flashMode = mode
+    func setFlashMode(_ flashMode: CameraFlashMode) {
+        guard let device = getCameraInput()?.device, device.hasFlash, flashMode != attributes.flashMode, !isChanging else { return }
+        attributes.flashMode = flashMode
     }
 }
 
 // MARK: Set Torch Mode
 extension CameraManager {
-    func setTorchMode(_ mode: CameraTorchMode) throws {
-        guard let device = getCameraInput()?.device, device.hasTorch, !isChanging else { return }
+    func setTorchMode(_ torchMode: CameraTorchMode) throws {
+        guard let device = getCameraInput()?.device, device.hasTorch, torchMode != attributes.torchMode, !isChanging else { return }
 
-        try setDeviceTorchMode(device, mode)
-        attributes.torchMode = mode
+        try setDeviceTorchMode(device, torchMode)
+        attributes.torchMode = torchMode
     }
 }
 private extension CameraManager {
-    func setDeviceTorchMode(_ device: any CaptureDevice, _ mode: CameraTorchMode) throws {
+    func setDeviceTorchMode(_ device: any CaptureDevice, _ torchMode: CameraTorchMode) throws {
         try device.lockForConfiguration()
-        device.torchMode = mode.get()
+        device.torchMode = torchMode.get()
         device.unlockForConfiguration()
     }
 }
