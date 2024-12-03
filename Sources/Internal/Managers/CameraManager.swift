@@ -230,19 +230,19 @@ private extension CameraManager {
     }
 }
 
-// MARK: Set Mirror Mode
+// MARK: Set Mirror Output
 extension CameraManager {
-    func setMirrorMode(_ shouldMirror: Bool) {
-        guard !isChanging else { return }
-        attributes.mirrorOutput = shouldMirror
+    func setMirrorOutput(_ mirrorOutput: Bool) {
+        guard mirrorOutput != attributes.mirrorOutput, !isChanging else { return }
+        attributes.mirrorOutput = mirrorOutput
     }
 }
 
 // MARK: Set Grid Mode
 extension CameraManager {
-    func setGridVisibility(_ shouldShowGrid: Bool) {
-        guard !isChanging else { return }
-        cameraGridView.setVisibility(shouldShowGrid)
+    func setGridVisibility(_ isGridVisible: Bool) {
+        guard isGridVisible != attributes.isGridVisible, !isChanging else { return }
+        cameraGridView.setVisibility(isGridVisible)
     }
 }
 
