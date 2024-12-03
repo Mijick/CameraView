@@ -288,9 +288,11 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
         device.setExposureMode(.custom, duration: newExposureDuration, iso: attributes.cameraExposure.iso)
-    }}
+        device.unlockForConfiguration()
+    }
     func updateExposureDuration(_ newExposureDuration: CMTime) {
         attributes.cameraExposure.duration = newExposureDuration
     }
@@ -304,9 +306,11 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeISO(_ newISO: Float, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeISO(_ newISO: Float, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
         device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: newISO)
-    }}
+        device.unlockForConfiguration()
+    }
     func updateISO(_ newISO: Float) {
         attributes.cameraExposure.iso = newISO
     }
@@ -320,9 +324,11 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
         device.setExposureTargetBias(newExposureTargetBias)
-    }}
+        device.unlockForConfiguration()
+    }
     func updateExposureTargetBias(_ newExposureTargetBias: Float) {
         attributes.cameraExposure.targetBias = newExposureTargetBias
     }
