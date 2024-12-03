@@ -32,7 +32,7 @@ private extension CameraManagerMotionManager {
         let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
-        //updateFrameOrientation()
+        updateFrameOrientation()
         //redrawGrid()
     }
 }
@@ -65,6 +65,13 @@ private extension CameraManagerMotionManager {
         case .back: getNewFrameOrientationForBackCamera(orientation)
         case .front: getNewFrameOrientationForFrontCamera(orientation)
     }}
+    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { Task { if newFrameOrientation != parent.attributes.frameOrientation {
+        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
+
+        await parent.cameraMetalView.beginCameraOrientationAnimation(if: shouldAnimate)
+        parent.attributes.frameOrientation = newFrameOrientation
+        parent.cameraMetalView.finishCameraOrientationAnimation(if: shouldAnimate)
+    }}}
 }
 private extension CameraManagerMotionManager {
     func getNewFrameOrientationForBackCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
@@ -79,6 +86,13 @@ private extension CameraManagerMotionManager {
         case .landscapeRight: parent.attributes.mirrorOutput ? .up : .upMirrored
         default: parent.attributes.mirrorOutput ? .right : .leftMirrored
     }}
+    func shouldAnimateFrameOrientationChange(_ newFrameOrientation: CGImagePropertyOrientation) -> Bool {
+        let backCameraOrientations: [CGImagePropertyOrientation] = [.left, .right, .up, .down],
+            frontCameraOrientations: [CGImagePropertyOrientation] = [.leftMirrored, .rightMirrored, .upMirrored, .downMirrored]
+
+        return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(parent.attributes.frameOrientation)) ||
+        (frontCameraOrientations.contains(parent.attributes.frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
+    }
 }
 
 // MARK: Reset
@@ -100,27 +114,4 @@ private extension CameraManager {
     func redrawGrid() { if !attributes.orientationLocked {
         cameraGridView.draw(.zero)
     }}
-}
-private extension CameraManager {
-
-
-    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { Task { if newFrameOrientation != attributes.frameOrientation {
-        let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
-
-        await cameraMetalView.beginCameraOrientationAnimation(if: shouldAnimate)
-        changeFrameOrientation(shouldAnimate, newFrameOrientation)
-        cameraMetalView.finishCameraOrientationAnimation(if: shouldAnimate)
-    }}}
-}
-private extension CameraManager {
-
-    func shouldAnimateFrameOrientationChange(_ newFrameOrientation: CGImagePropertyOrientation) -> Bool {
-        let backCameraOrientations: [CGImagePropertyOrientation] = [.left, .right, .up, .down],
-            frontCameraOrientations: [CGImagePropertyOrientation] = [.leftMirrored, .rightMirrored, .upMirrored, .downMirrored]
-        return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(attributes.frameOrientation))
-        || (frontCameraOrientations.contains(attributes.frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
-    }
-    func changeFrameOrientation(_ shouldAnimate: Bool, _ newFrameOrientation: CGImagePropertyOrientation) {
-        attributes.frameOrientation = newFrameOrientation
-    }
 }
