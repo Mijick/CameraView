@@ -29,7 +29,7 @@ private extension CameraManagerMotionManager {
     func handleAccelerometerUpdates(_ data: CMAccelerometerData?, _ error: Error?) {
         guard let data, error == nil else { return }
 
-        let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
+        let newDeviceOrientation = getDeviceOrientation(data.acceleration)
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
         updateFrameOrientation()
@@ -37,7 +37,7 @@ private extension CameraManagerMotionManager {
     }
 }
 private extension CameraManagerMotionManager {
-    func fetchDeviceOrientation(_ acceleration: CMAcceleration) -> AVCaptureVideoOrientation { switch acceleration {
+    func getDeviceOrientation(_ acceleration: CMAcceleration) -> AVCaptureVideoOrientation { switch acceleration {
         case let acceleration where acceleration.x >= 0.75: .landscapeLeft
         case let acceleration where acceleration.x <= -0.75: .landscapeRight
         case let acceleration where acceleration.y <= -0.75: .portrait
