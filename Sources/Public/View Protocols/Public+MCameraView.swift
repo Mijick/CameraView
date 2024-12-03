@@ -27,8 +27,8 @@ public extension MCameraView {
 // MARK: - Use-only Logic Methods
 public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
-    func changeOutputType(_ type: CameraOutputType) throws { try cameraManager.setOutputType(type) }
-    func changeCamera(_ position: CameraPosition) throws { try cameraManager.changeCamera(position) }
+    func changeOutputType(_ type: CameraOutputType) { cameraManager.setOutputType(type) }
+    func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.changeCameraPosition(position) }
     func changeCameraFilters(_ filters: [CIFilter]) throws { try cameraManager.changeCameraFilters(filters) }
     func changeResolution(_ resolution: AVCaptureSession.Preset) throws { try cameraManager.changeResolution(resolution) }
     func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.changeFrameRate(frameRate) }

@@ -183,13 +183,12 @@ private extension DefaultCameraView {
         do { try changeTorchMode(torchMode.next()) }
         catch {}
     }
-    func changeCameraPosition() {
-        do { try changeCamera(cameraPosition.next()) }
+    func changeCameraPosition() { Task {
+        do { try await changeCamera(cameraPosition.next()) }
         catch {}
-    }
+    }}
     func changeCameraOutputType(_ type: CameraOutputType) {
-        do { try changeOutputType(type) }
-        catch {}
+        changeOutputType(type)
     }
 }
 
