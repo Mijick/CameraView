@@ -243,8 +243,104 @@ private extension CameraManager {
     }
 }
 
+// MARK: Exposure Duration
+extension CameraManager {
 
+}
+private extension CameraManager {
 
+}
+private extension CameraManager {
+
+}
+
+// MARK: ISO
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Exposure Target Bias
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: HDR Mode
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Camera Resolution
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Frame Rate
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Mirror Mode
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Grid Mode
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Capturing Output
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
 
 
 
