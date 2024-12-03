@@ -201,18 +201,24 @@ extension CameraManager {
     }
 }
 
-
-// MARK: - Changing Flash Mode
+// MARK: Flash Mode
 extension CameraManager {
-    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getCameraInput()?.device, device.hasFlash, !isChanging {
-        updateFlashMode(mode)
-    }}
-}
-private extension CameraManager {
-    func updateFlashMode(_ value: CameraFlashMode) {
-        attributes.flashMode = value
+    func changeFlashMode(_ mode: CameraFlashMode) {
+        guard let device = getCameraInput()?.device, device.hasFlash, !isChanging else { return }
+        attributes.flashMode = mode
     }
 }
+
+// MARK: Torch Mode
+extension CameraManager {
+
+}
+
+
+
+
+
+
 
 // MARK: - Changing Torch Mode
 extension CameraManager {
