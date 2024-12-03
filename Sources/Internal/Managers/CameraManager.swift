@@ -334,13 +334,10 @@ private extension CameraManager {
 
 // MARK: Set Grid Mode
 extension CameraManager {
-
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setGridVisibility(_ shouldShowGrid: Bool) {
+        guard !isChanging else { return }
+        cameraGridView.changeVisibility(shouldShowGrid)
+    }
 }
 
 
@@ -451,18 +448,6 @@ extension CameraManager {
     func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
         attributes.mirrorOutput = shouldMirror
     }}
-}
-
-// MARK: - Changing Grid Mode
-extension CameraManager {
-    func changeGridVisibility(_ shouldShowGrid: Bool) { if !isChanging {
-        cameraGridView.changeVisibility(shouldShowGrid)
-    }}
-}
-
-// MARK: - Capturing Output
-extension CameraManager {
-
 }
 
 // MARK: - Modifiers
