@@ -32,8 +32,8 @@ private extension CameraManagerMotionManager {
         let newDeviceOrientation = fetchDeviceOrientation(data.acceleration)
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
-        updateFrameOrientation()
-        redrawGrid()
+        //updateFrameOrientation()
+        //redrawGrid()
     }
 }
 private extension CameraManagerMotionManager {
@@ -47,9 +47,15 @@ private extension CameraManagerMotionManager {
     func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != parent.attributes.deviceOrientation {
         parent.attributes.deviceOrientation = newDeviceOrientation
     }}
+    func updateUserBlockedScreenRotation() {
+        let newUserBlockedScreenRotation = getNewUserBlockedScreenRotation()
+        if newUserBlockedScreenRotation != parent.attributes.userBlockedScreenRotation { parent.attributes.userBlockedScreenRotation = newUserBlockedScreenRotation }
+    }
 }
 private extension CameraManagerMotionManager {
-
+    func getNewUserBlockedScreenRotation() -> Bool {
+        parent.attributes.deviceOrientation.rawValue == UIDevice.current.orientation.rawValue ? false : !parent.attributes.orientationLocked
+    }
 }
 private extension CameraManagerMotionManager {
 
@@ -69,10 +75,7 @@ extension CameraManagerMotionManager {
 
 
 private extension CameraManager {
-    func updateUserBlockedScreenRotation() {
-        let newUserBlockedScreenRotation = getNewUserBlockedScreenRotation()
-        updateUserBlockedScreenRotation(newUserBlockedScreenRotation)
-    }
+
     func updateFrameOrientation() { if UIDevice.current.orientation != .portraitUpsideDown {
         let newFrameOrientation = getNewFrameOrientation(attributes.orientationLocked ? .portrait : UIDevice.current.orientation)
         updateFrameOrientation(newFrameOrientation)
@@ -82,13 +85,7 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func getNewUserBlockedScreenRotation() -> Bool { switch attributes.deviceOrientation.rawValue == UIDevice.current.orientation.rawValue {
-        case true: false
-        case false: !attributes.orientationLocked
-    }}
-    func updateUserBlockedScreenRotation(_ newUserBlockedScreenRotation: Bool) { if newUserBlockedScreenRotation != attributes.userBlockedScreenRotation {
-        attributes.userBlockedScreenRotation = newUserBlockedScreenRotation
-    }}
+
     func getNewFrameOrientation(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch attributes.cameraPosition {
         case .back: getNewFrameOrientationForBackCamera(orientation)
         case .front: getNewFrameOrientationForFrontCamera(orientation)
