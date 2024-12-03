@@ -268,13 +268,19 @@ private extension CameraManager {
 
 // MARK: Set ISO
 extension CameraManager {
+    func setISO(_ iso: Float) throws {
+        guard let device = getCameraInput()?.device, iso != attributes.cameraExposure.iso else { return }
 
+        try setDeviceISO(iso, device)
+        attributes.cameraExposure.iso = iso
+    }
 }
 private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setDeviceISO(_ iso: Float, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        try device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: iso)
+        device.unlockForConfiguration()
+    }
 }
 
 // MARK: Set Exposure Target Bias
@@ -356,24 +362,6 @@ private extension CameraManager {
     }
     func updateExposureDuration(_ newExposureDuration: CMTime) {
         attributes.cameraExposure.duration = newExposureDuration
-    }
-}
-
-// MARK: - Changing ISO
-extension CameraManager {
-    func changeISO(_ newISO: Float) throws { if let device = getCameraInput()?.device, newISO != attributes.cameraExposure.iso {
-        try changeISO(newISO, device)
-        updateISO(newISO)
-    }}
-}
-private extension CameraManager {
-    func changeISO(_ newISO: Float, _ device: any CaptureDevice) throws {
-        try device.lockForConfiguration()
-        try device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: newISO)
-        device.unlockForConfiguration()
-    }
-    func updateISO(_ newISO: Float) {
-        attributes.cameraExposure.iso = newISO
     }
 }
 
