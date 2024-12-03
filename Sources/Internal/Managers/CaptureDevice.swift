@@ -77,14 +77,8 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let hasFlash: Bool = true
     let hasTorch: Bool = true
     let exposureDuration: CMTime = .init()
-    let minExposureDuration: CMTime = .init()
-    let maxExposureDuration: CMTime = .init()
     let exposureTargetBias: Float = 0
-    let minExposureTargetBias: Float = 0
-    let maxExposureTargetBias: Float = 0
     let iso: Float = 0
-    let minISO: Float = 0
-    let maxISO: Float = 0
     let isExposurePointOfInterestSupported: Bool = true
     let isFocusPointOfInterestSupported: Bool = true
     let minAvailableVideoZoomFactor: CGFloat = 0
@@ -103,7 +97,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
 
     func lockForConfiguration() throws { return }
     func unlockForConfiguration() { return }
-    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { return }
     func setExposureTargetBias(_ bias: Float) { return }
 }
