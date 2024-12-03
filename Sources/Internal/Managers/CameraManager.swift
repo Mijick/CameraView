@@ -90,6 +90,11 @@ extension CameraManager {
 extension CameraManager {
     func setup(in cameraView: UIView) async throws {
         await permissionsManager.requestAccess(parent: self)
+
+
+
+        
+
         initialiseCaptureSession()
         initialiseCameraLayer(cameraView)
         try initialiseCameraMetalView()
