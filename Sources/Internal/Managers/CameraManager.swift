@@ -205,14 +205,6 @@ private extension CameraManager {
     }
 }
 
-// MARK: Set Filters
-extension CameraManager {
-    func setCameraFilters(_ cameraFilters: [CIFilter]) {
-        guard cameraFilters != attributes.cameraFilters, !isChanging else { return }
-        attributes.cameraFilters = cameraFilters
-    }
-}
-
 // MARK: Set Flash Mode
 extension CameraManager {
     func setFlashMode(_ flashMode: CameraFlashMode) {
@@ -235,6 +227,30 @@ private extension CameraManager {
         try device.lockForConfiguration()
         device.torchMode = torchMode.get()
         device.unlockForConfiguration()
+    }
+}
+
+// MARK: Set Mirror Mode
+extension CameraManager {
+    func setMirrorMode(_ shouldMirror: Bool) {
+        guard !isChanging else { return }
+        attributes.mirrorOutput = shouldMirror
+    }
+}
+
+// MARK: Set Grid Mode
+extension CameraManager {
+    func setGridVisibility(_ shouldShowGrid: Bool) {
+        guard !isChanging else { return }
+        cameraGridView.setVisibility(shouldShowGrid)
+    }
+}
+
+// MARK: Set Filters
+extension CameraManager {
+    func setCameraFilters(_ cameraFilters: [CIFilter]) {
+        guard cameraFilters != attributes.cameraFilters, !isChanging else { return }
+        attributes.cameraFilters = cameraFilters
     }
 }
 
@@ -347,22 +363,6 @@ private extension CameraManager {
         try device.lockForConfiguration()
         try device.setFrameRate(frameRate)
         device.unlockForConfiguration()
-    }
-}
-
-// MARK: Set Mirror Mode
-extension CameraManager {
-    func setMirrorMode(_ shouldMirror: Bool) {
-        guard !isChanging else { return }
-        attributes.mirrorOutput = shouldMirror
-    }
-}
-
-// MARK: Set Grid Mode
-extension CameraManager {
-    func setGridVisibility(_ shouldShowGrid: Bool) {
-        guard !isChanging else { return }
-        cameraGridView.setVisibility(shouldShowGrid)
     }
 }
 
