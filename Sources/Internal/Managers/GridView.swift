@@ -75,7 +75,7 @@ private extension GridView {
 // MARK: Visibility Animation
 extension GridView {
     func changeVisibility(_ isVisible: Bool) {
-        UIView.animate(withDuration: 0.22) { self.alpha = isVisible ? 1 : 0 }
+        UIView.animate(withDuration: 0.2) { self.alpha = isVisible ? 1 : 0 }
         parent.attributes.isGridVisible = isVisible
     }
 }
