@@ -28,13 +28,13 @@ public extension MCameraView {
 public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
     func changeOutputType(_ type: CameraOutputType) { cameraManager.setOutputType(type) }
-    func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.changeCameraPosition(position) }
-    func changeCameraFilters(_ filters: [CIFilter]) { cameraManager.changeCameraFilters(filters) }
+    func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.setCameraPosition(position) }
+    func changeCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
     func changeResolution(_ resolution: AVCaptureSession.Preset) throws { try cameraManager.changeResolution(resolution) }
     func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.changeFrameRate(frameRate) }
-    func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.changeCameraZoomFactor(value) }
-    func changeFlashMode(_ mode: CameraFlashMode) { cameraManager.changeFlashMode(mode) }
-    func changeTorchMode(_ mode: CameraTorchMode) throws { try cameraManager.changeTorchMode(mode) }
+    func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.setCameraZoomFactor(value) }
+    func changeFlashMode(_ mode: CameraFlashMode) { cameraManager.setFlashMode(mode) }
+    func changeTorchMode(_ mode: CameraTorchMode) throws { try cameraManager.setTorchMode(mode) }
     func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.changeExposureMode(exposureMode) }
     func changeExposureDuration(_ value: CMTime) throws { try cameraManager.changeExposureDuration(value) }
     func changeISO(_ value: Float) throws { try cameraManager.changeISO(value) }
