@@ -301,13 +301,12 @@ private extension CameraManager {
 
 // MARK: Set Resolution
 extension CameraManager {
+    func setResolution(_ resolution: AVCaptureSession.Preset) {
+        guard resolution != attributes.resolution, !isChanging else { return }
 
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
+        captureSession.sessionPreset = resolution
+        attributes.resolution = resolution
+    }
 }
 
 // MARK: Set Frame Rate
@@ -415,14 +414,6 @@ private extension CameraManager {
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
         attributes.hdrMode = newHDRMode
     }
-}
-
-// MARK: - Changing Camera Resolution
-extension CameraManager {
-    func changeResolution(_ newResolution: AVCaptureSession.Preset) throws { if newResolution != attributes.resolution {
-        captureSession.sessionPreset = newResolution
-        attributes.resolution = newResolution
-    }}
 }
 
 // MARK: - Changing Frame Rate
