@@ -49,7 +49,20 @@ extension CameraManager {
 
 }
 private extension CameraManager {
+    func setupDeviceInputs() throws {
+        try setupCameraInput(attributes.cameraPosition)
+        try setupInput(audioInput)
+    }
+    func setupDeviceOutput() throws {
+        try photoOutput.setup(parent: self)
+        try videoOutput.setup(parent: self)
+    }
+    func setupFrameRecorder() throws {
+        let captureVideoOutput = AVCaptureVideoDataOutput()
+        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
 
+        try captureSession.add(output: captureVideoOutput)
+    }
 }
 private extension CameraManager {
 
@@ -121,20 +134,7 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func setupDeviceInputs() throws {
-        try setupCameraInput(attributes.cameraPosition)
-        try setupInput(audioInput)
-    }
-    func setupDeviceOutput() throws {
-        try photoOutput.setup(parent: self)
-        try videoOutput.setup(parent: self)
-    }
-    func setupFrameRecorder() throws {
-        let captureVideoOutput = AVCaptureVideoDataOutput()
-        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
 
-        try captureSession.add(output: captureVideoOutput)
-    }
 
 
     func setupCameraLayer(_ cameraView: UIView) {
