@@ -32,8 +32,6 @@ protocol CaptureDevice: NSObject {
     var focusPointOfInterest: CGPoint { get set }
     var exposurePointOfInterest: CGPoint { get set }
     var videoZoomFactor: CGFloat { get set }
-    var activeVideoMinFrameDuration: CMTime { get set }
-    var activeVideoMaxFrameDuration: CMTime { get set }
 
     // MARK: Methods
     func lockForConfiguration() throws
@@ -87,7 +85,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let isFocusPointOfInterestSupported: Bool = true
     let minAvailableVideoZoomFactor: CGFloat = 0
     let maxAvailableVideoZoomFactor: CGFloat = 0
-    let videoSupportedFrameRateRanges: [AVFrameRateRange] = []
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
     var torchMode: AVCaptureDevice.TorchMode = .auto
@@ -96,8 +93,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     var focusPointOfInterest: CGPoint = .zero
     var exposurePointOfInterest: CGPoint = .zero
     var videoZoomFactor: CGFloat = 0
-    var activeVideoMinFrameDuration: CMTime = .init()
-    var activeVideoMaxFrameDuration: CMTime = .init()
 
     func lockForConfiguration() throws { return }
     func unlockForConfiguration() { return }
