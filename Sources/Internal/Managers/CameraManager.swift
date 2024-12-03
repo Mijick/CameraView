@@ -49,13 +49,13 @@ extension CameraManager {
     func setup(in cameraView: UIView) async throws {
         await permissionsManager.requestAccess(parent: self)
 
+        setupCameraLayer(cameraView)
         try setupDeviceInputs()
         try setupDevice()
         try setupDeviceOutput()
         try setupFrameRecorder()
         notificationCenterManager.setup(parent: self)
         motionManager.setup(parent: self)
-        setupCameraLayer(cameraView)
         try cameraMetalView.setup(parent: self)
         cameraGridView.setup(parent: self)
 
@@ -67,6 +67,14 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
+    func setupCameraLayer(_ cameraView: UIView) {
+        captureSession.sessionPreset = attributes.resolution
+
+        cameraLayer.session = captureSession as? AVCaptureSession
+        cameraLayer.videoGravity = .resizeAspectFill
+        cameraLayer.isHidden = true
+        cameraView.layer.addSublayer(cameraLayer)
+    }
     func setupDeviceInputs() throws {
         try captureSession.add(input: currentCameraInput)
         if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
@@ -90,14 +98,6 @@ private extension CameraManager {
         captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
 
         try captureSession.add(output: captureVideoOutput)
-    }
-    func setupCameraLayer(_ cameraView: UIView) {
-        captureSession.sessionPreset = attributes.resolution
-
-        cameraLayer.session = captureSession as? AVCaptureSession
-        cameraLayer.videoGravity = .resizeAspectFill
-        cameraLayer.isHidden = true
-        cameraView.layer.addSublayer(cameraLayer)
     }
     nonisolated func startCaptureSession() async {
         await captureSession.startRunning()
