@@ -120,7 +120,6 @@ extension CameraManager {
 extension CameraManager {
     func setOutputType(_ outputType: CameraOutputType) throws {
         guard outputType != attributes.outputType, !isChanging else { return }
-
         attributes.outputType = outputType
     }
 }
