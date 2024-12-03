@@ -60,7 +60,11 @@ extension CameraManager {
         try cameraMetalView.setup(parent: self)
         cameraGridView.setup(parent: self)
 
-        Task { await startCaptureSession() }
+        Task {
+            cameraMetalView.beginCameraEntranceAnimation()
+            await startCaptureSession()
+            cameraMetalView.finishCameraEntranceAnimation()
+        }
     }
 }
 private extension CameraManager {
@@ -97,9 +101,7 @@ private extension CameraManager {
         cameraView.layer.addSublayer(cameraLayer)
     }
     nonisolated func startCaptureSession() async {
-        await cameraMetalView.beginCameraEntranceAnimation()
         await captureSession.startRunning()
-        await cameraMetalView.finishCameraEntranceAnimation()
     }
 }
 
