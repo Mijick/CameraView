@@ -76,7 +76,7 @@ private extension CameraManager {
         if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
     }
     func setupDevice() throws {
-        guard let device = getDevice(attributes.cameraPosition) else { return }
+        guard let device = currentCameraInput?.device else { return }
 
         try device.lockForConfiguration()
         device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
@@ -167,7 +167,7 @@ extension CameraManager {
 
 // MARK: - Camera Focusing
 extension CameraManager {
-    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getDevice(attributes.cameraPosition) {
+    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = currentCameraInput?.device {
         try setCameraFocus(touchPoint, device)
         cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
     }}
@@ -201,7 +201,7 @@ private extension CameraManager {
 
 // MARK: - Changing Zoom Factor
 extension CameraManager {
-    func changeZoomFactor(_ value: CGFloat) throws { if let device = getDevice(attributes.cameraPosition), !isChanging {
+    func changeZoomFactor(_ value: CGFloat) throws { if let device = currentCameraInput?.device, !isChanging {
         let zoomFactor = calculateZoomFactor(value, device)
 
         try setVideoZoomFactor(zoomFactor, device)
@@ -209,10 +209,6 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func getDevice(_ position: CameraPosition) -> (any CaptureDevice)? { switch position {
-        case .front: frontCameraInput?.device
-        case .back: backCameraInput?.device
-    }}
     func calculateZoomFactor(_ value: CGFloat, _ device: any CaptureDevice) -> CGFloat {
         min(max(value, getMinZoomLevel(device)), getMaxZoomLevel(device))
     }
