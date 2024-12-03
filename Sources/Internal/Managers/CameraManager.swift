@@ -127,17 +127,6 @@ private extension CameraManager {
 
 
 
-// MARK: - Changing Attributes
-extension CameraManager {
-    func resetCapturedMedia() {
-        attributes.capturedMedia = nil
-    }
-    func resetZoomAndTorch() {
-        attributes.zoomFactor = 1.0
-        attributes.torchMode = .off
-    }
-}
-
 // MARK: - Initialising Camera
 private extension CameraManager {
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {

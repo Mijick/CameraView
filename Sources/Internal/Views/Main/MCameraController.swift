@@ -45,7 +45,7 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func createCameraPreview(_ media: MCameraMedia) -> some View {
-        config.mediaPreviewView?(media, namespace, cameraManager.resetCapturedMedia, performAfterMediaCapturedAction).erased()
+        config.mediaPreviewView?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
         config.cameraView(cameraManager, namespace, config.onCloseController).erased()
@@ -62,7 +62,7 @@ private extension MCameraController {
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
-            case true: cameraManager.resetZoomAndTorch()
+            case true: cacaca()
             case false: performAfterMediaCapturedAction()
         }
     }}
@@ -75,6 +75,14 @@ private extension MCameraController {
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
     }
+    func cacaca() {
+        cameraManager.cancel()
+        cameraManager.attributes.zoomFactor = 1.0
+        cameraManager.attributes.torchMode = .off
+    }
+    func resetCapturedMedia() {
+        cameraManager.attributes.capturedMedia = nil
+    }
     func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
         notifyUserOfMediaCaptured(capturedMedia)
         performPostCameraAction()
@@ -86,7 +94,7 @@ private extension MCameraController {
         else if let video = capturedMedia.getVideo() { config.onVideoCaptured(video) }
     }
     func performPostCameraAction() { let afterMediaCaptured = config.afterMediaCaptured(.init())
-        afterMediaCaptured.shouldReturnToCameraView ? cameraManager.resetCapturedMedia() : ()
+        afterMediaCaptured.shouldReturnToCameraView ? resetCapturedMedia() : ()
         afterMediaCaptured.shouldCloseCameraController ? config.onCloseController() : ()
         afterMediaCaptured.customAction()
     }
