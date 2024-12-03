@@ -367,15 +367,15 @@ extension CameraManager {
 }
 
 
+// MARK: - HELPERS
 
 
 
-
-
-// MARK: - Modifiers
+// MARK: Attributes
 extension CameraManager {
     var hasFlash: Bool { getCameraInput()?.device.hasFlash ?? false }
     var hasTorch: Bool { getCameraInput()?.device.hasTorch ?? false }
+    var isChanging: Bool { cameraMetalView.isAnimating }
 }
 
 // MARK: - Helpers
@@ -385,7 +385,7 @@ extension CameraManager {
         case .back: backCameraInput
     }}
     var cameraView: UIView { cameraLayer.superview ?? .init() }
-    var isChanging: Bool { cameraMetalView.isAnimating }
+
 }
 
 
