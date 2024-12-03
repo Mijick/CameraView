@@ -226,12 +226,12 @@ extension CameraManager {
     func setTorchMode(_ torchMode: CameraTorchMode) throws {
         guard let device = getCameraInput()?.device, device.hasTorch, torchMode != attributes.torchMode, !isChanging else { return }
 
-        try setDeviceTorchMode(device, torchMode)
+        try setDeviceTorchMode(torchMode, device)
         attributes.torchMode = torchMode
     }
 }
 private extension CameraManager {
-    func setDeviceTorchMode(_ device: any CaptureDevice, _ torchMode: CameraTorchMode) throws {
+    func setDeviceTorchMode(_ torchMode: CameraTorchMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         device.torchMode = torchMode.get()
         device.unlockForConfiguration()
