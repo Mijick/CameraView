@@ -58,6 +58,23 @@ extension AVCaptureDevice: CaptureDevice {
     var minISO: Float { activeFormat.minISO }
     var maxISO: Float { activeFormat.maxISO }
     var videoSupportedFrameRateRanges: [AVFrameRateRange] { activeFormat.videoSupportedFrameRateRanges }
+
+
+
+    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { if isExposureModeSupported(mode) {
+        exposureMode = mode
+
+        guard mode == .custom else { return }
+
+        let duration = max(min(duration, activeFormat.maxExposureDuration), activeFormat.minExposureDuration)
+        let iso = max(min(iso, activeFormat.maxISO), activeFormat.minISO)
+
+        setExposureModeCustom(duration: duration, iso: iso, completionHandler: nil)
+    }}
+    func setExposureTargetBias(_ bias: Float) {
+        let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
+        setExposureTargetBias(bias, completionHandler: nil)
+    }
 }
 
 
