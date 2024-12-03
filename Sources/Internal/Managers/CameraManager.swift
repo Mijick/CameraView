@@ -101,7 +101,15 @@ private extension CameraManager {
     }}
 }
 
-
+// MARK: Cancel
+extension CameraManager {
+    func cancel() {
+        captureSession = captureSession.stopRunningAndReturnNewInstance()
+        motionManager.reset()
+        videoOutput.reset()
+        notificationCenterManager.reset()
+    }
+}
 
 
 
@@ -113,15 +121,7 @@ private extension CameraManager {
     }}
 }
 
-// MARK: Cancel
-extension CameraManager {
-    func cancel() {
-        captureSession = captureSession.stopRunningAndReturnNewInstance()
-        motionManager.reset()
-        videoOutput.reset()
-        notificationCenterManager.reset()
-    }
-}
+
 
 
 
