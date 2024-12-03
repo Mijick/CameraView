@@ -240,7 +240,7 @@ private extension CameraManager {
 
 // MARK: Set Exposure Mode
 extension CameraManager {
-    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws {
+    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws {
         guard let device = getCameraInput()?.device, exposureMode != attributes.cameraExposure.mode, !isChanging else { return }
 
         try setDeviceExposureMode(exposureMode, device)
@@ -394,19 +394,18 @@ private extension CameraManager {
 
 // MARK: - Changing Frame Rate
 extension CameraManager {
-    func changeFrameRate(_ newFrameRate: Int32) throws { if let device = getCameraInput()?.device, newFrameRate != attributes.frameRate {
-        try updateFrameRate(newFrameRate, device)
-        updateFrameRate(newFrameRate)
-    }}
+    func setFrameRate(_ frameRate: Int32) throws {
+        guard let device = getCameraInput()?.device, frameRate != attributes.frameRate, !isChanging else { return }
+
+        try setDeviceFrameRate(frameRate, device)
+        attributes.frameRate = frameRate
+    }
 }
 private extension CameraManager {
-    func updateFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws {
+    func setDeviceFrameRate(_ frameRate: Int32, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setFrameRate(newFrameRate)
+        try device.setFrameRate(frameRate)
         device.unlockForConfiguration()
-    }
-    func updateFrameRate(_ newFrameRate: Int32) {
-        attributes.frameRate = newFrameRate
     }
 }
 
