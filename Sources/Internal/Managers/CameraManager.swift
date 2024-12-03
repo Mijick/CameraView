@@ -172,39 +172,12 @@ private extension CameraManager {
 
 // MARK: Camera Focus
 extension CameraManager {
+    func setCameraFocus(at touchPoint: CGPoint) async throws {
+        guard let device = getCameraInput()?.device, !isChanging else { return }
 
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
-}
-
-
-
-
-// MARK: - Changing Camera Filters
-extension CameraManager {
-    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != attributes.cameraFilters {
-        attributes.cameraFilters = newCameraFilters
-    }}
-}
-
-// MARK: - Camera Focusing
-extension CameraManager {
-    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getCameraInput()?.device {
-        try setCameraFocus(touchPoint, device)
-        cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
-    }}
-}
-private extension CameraManager {
-    func setCameraFocus(_ touchPoint: CGPoint, _ device: any CaptureDevice) throws {
         let focusPoint = convertTouchPointToFocusPoint(touchPoint)
         try configureCameraFocus(focusPoint, device)
+        cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
     }
 }
 private extension CameraManager {
@@ -219,6 +192,8 @@ private extension CameraManager {
         device.unlockForConfiguration()
     }
 }
+
+
 private extension CameraManager {
     func setFocusPointOfInterest(_ focusPoint: CGPoint, _ device: any CaptureDevice) { if device.isFocusPointOfInterestSupported {
         device.focusPointOfInterest = focusPoint
@@ -227,6 +202,19 @@ private extension CameraManager {
     func setExposurePointOfInterest(_ focusPoint: CGPoint, _ device: any CaptureDevice) { if device.isExposurePointOfInterestSupported {
         device.exposurePointOfInterest = focusPoint
         device.exposureMode = .autoExpose
+    }}
+}
+private extension CameraManager {
+
+}
+
+
+
+
+// MARK: - Changing Camera Filters
+extension CameraManager {
+    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != attributes.cameraFilters {
+        attributes.cameraFilters = newCameraFilters
     }}
 }
 
