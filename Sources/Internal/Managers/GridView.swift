@@ -24,9 +24,9 @@ extension GridView {
     }
 }
 
-// MARK: Change Visibility
+// MARK: Set Visibility
 extension GridView {
-    func changeVisibility(_ isVisible: Bool) {
+    func setVisibility(_ isVisible: Bool) {
         UIView.animate(withDuration: 0.2) { self.alpha = isVisible ? 1 : 0 }
         parent.attributes.isGridVisible = isVisible
     }

@@ -350,7 +350,7 @@ extension CameraManager {
 extension CameraManager {
     func setGridVisibility(_ shouldShowGrid: Bool) {
         guard !isChanging else { return }
-        cameraGridView.changeVisibility(shouldShowGrid)
+        cameraGridView.setVisibility(shouldShowGrid)
     }
 }
 
@@ -361,19 +361,18 @@ extension CameraManager {
 
 // MARK: - Changing Exposure Duration
 extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getCameraInput()?.device, newExposureDuration != attributes.cameraExposure.duration {
-        try changeExposureDuration(newExposureDuration, device)
-        updateExposureDuration(newExposureDuration)
-    }}
+    func setExposureDuration(_ exposureDuration: CMTime) throws {
+        guard let device = getCameraInput()?.device, exposureDuration != attributes.cameraExposure.duration, !isChanging else { return }
+
+        try setDeviceExposureDuration(exposureDuration, device)
+        attributes.cameraExposure.duration = exposureDuration
+    }
 }
 private extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime, _ device: any CaptureDevice) throws {
+    func setDeviceExposureDuration(_ exposureDuration: CMTime, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureMode(.custom, duration: newExposureDuration, iso: attributes.cameraExposure.iso)
+        try device.setExposureMode(.custom, duration: exposureDuration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
-    }
-    func updateExposureDuration(_ newExposureDuration: CMTime) {
-        attributes.cameraExposure.duration = newExposureDuration
     }
 }
 
