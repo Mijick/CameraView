@@ -388,12 +388,3 @@ private extension CameraManager {
         case .back: backCameraInput
     }}
 }
-
-
-
-// MARK: - Errors
-public enum MijickCameraError: Error {
-    case microphonePermissionsNotGranted, cameraPermissionsNotGranted
-    case cannotSetupInput, cannotSetupOutput
-    case cannotCreateMetalDevice
-}
