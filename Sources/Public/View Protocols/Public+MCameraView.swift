@@ -40,7 +40,7 @@ public extension MCameraView {
     func changeISO(_ value: Float) throws { try cameraManager.setISO(value) }
     func changeExposureTargetBias(_ value: Float) throws { try cameraManager.setExposureTargetBias(value) }
     func changeHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.setHDRMode(mode) }
-    func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.setMirrorMode(shouldMirror) }
+    func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
     func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
 }
 
