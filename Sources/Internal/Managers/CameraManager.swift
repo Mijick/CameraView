@@ -124,7 +124,7 @@ extension CameraManager {
 
 // MARK: Change Output
 extension CameraManager {
-    func setOutputType(_ outputType: CameraOutputType) throws {
+    func setOutputType(_ outputType: CameraOutputType) {
         guard outputType != attributes.outputType, !isChanging else { return }
         attributes.outputType = outputType
     }
@@ -176,6 +176,17 @@ private extension CameraManager {
         case .front: frontCameraInput
         case .back: backCameraInput
     }}
+}
+private extension CameraManager {
+    func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
+        case .front: try setupInput(frontCameraInput)
+        case .back: try setupInput(backCameraInput)
+    }}
+}
+private extension CameraManager {
+    func setupInput(_ input: (any CaptureDeviceInput)?) throws {
+        try captureSession.add(input: input)
+    }
 }
 
 // MARK: - Changing Camera Filters
@@ -436,17 +447,7 @@ public enum MijickCameraError: Error {
 
 
 // MARK: - Initialising Camera
-private extension CameraManager {
-    func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
-        case .front: try setupInput(frontCameraInput)
-        case .back: try setupInput(backCameraInput)
-    }}
-}
-private extension CameraManager {
-    func setupInput(_ input: (any CaptureDeviceInput)?) throws {
-        try captureSession.add(input: input)
-    }
-}
+
 
 
 
