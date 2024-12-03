@@ -17,7 +17,7 @@ import AVKit
     private(set) var parent: CameraManager!
     private(set) var ciContext: CIContext!
     private(set) var currentFrame: CIImage?
-    private(set) var focusIndicator: UIImageView = .init(image: .iconCrosshair, tintColor: .yellow, size: 92)
+    private(set) var focusIndicatorConfig: FocusIndicatorConfig = .init()
     private(set) var isAnimating: Bool = false
 }
 
@@ -66,26 +66,30 @@ extension CameraMetalView {
 extension CameraMetalView {
     func performCameraFocusAnimation(touchPoint: CGPoint) {
         removeExistingFocusIndicatorAnimations()
-        insertFocusIndicatorToCameraView(touchPoint: touchPoint)
-        animateFocusIndicator()
+
+        let focusIndicator = createFocusIndicator(at: touchPoint)
+        parent.cameraView.addSubview(focusIndicator)
+        animateFocusIndicator(focusIndicator)
     }
 }
 private extension CameraMetalView {
-    func removeExistingFocusIndicatorAnimations() {
-        focusIndicator.layer.removeAllAnimations()
-    }
-    func insertFocusIndicatorToCameraView(touchPoint: CGPoint) {
+    func removeExistingFocusIndicatorAnimations() { if let view = parent.cameraView.viewWithTag(29) {
+        view.removeFromSuperview()
+    }}
+    func createFocusIndicator(at touchPoint: CGPoint) -> UIImageView {
+        let focusIndicator = UIImageView(image: focusIndicatorConfig.image)
+        focusIndicator.tintColor = focusIndicatorConfig.tintColor
+        focusIndicator.frame.size = .init(width: focusIndicatorConfig.size, height: focusIndicatorConfig.size)
         focusIndicator.frame.origin.x = touchPoint.x - focusIndicator.frame.size.width / 2
         focusIndicator.frame.origin.y = touchPoint.y - focusIndicator.frame.size.height / 2
         focusIndicator.transform = .init(scaleX: 0, y: 0)
-        focusIndicator.alpha = 1
-
-        parent.cameraView.addSubview(focusIndicator)
+        focusIndicator.tag = 29
+        return focusIndicator
     }
-    func animateFocusIndicator() {
-        UIView.animate(withDuration: 0.44, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { self.focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
-            UIView.animate(withDuration: 0.44, delay: 1.44, animations: { self.focusIndicator.alpha = 0.2 }) { _ in
-                UIView.animate(withDuration: 0.44, delay: 1.44, animations: { self.focusIndicator.alpha = 0 })
+    func animateFocusIndicator(_ focusIndicator: UIImageView) {
+        UIView.animate(withDuration: 0.44, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
+            UIView.animate(withDuration: 0.44, delay: 1.44, animations: { focusIndicator.alpha = 0.2 }) { _ in
+                UIView.animate(withDuration: 0.44, delay: 1.44, animations: { focusIndicator.alpha = 0 })
             }
         }
     }
