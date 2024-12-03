@@ -61,7 +61,9 @@ extension AVCaptureDevice: CaptureDevice {
 
 
 
-    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { if isExposureModeSupported(mode) {
+    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
+        guard isExposureModeSupported(mode) else { return }
+
         exposureMode = mode
 
         guard mode == .custom else { return }
@@ -70,7 +72,7 @@ extension AVCaptureDevice: CaptureDevice {
         let iso = max(min(iso, activeFormat.maxISO), activeFormat.minISO)
 
         setExposureModeCustom(duration: duration, iso: iso, completionHandler: nil)
-    }}
+    }
     func setExposureTargetBias(_ bias: Float) {
         let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
         setExposureTargetBias(bias, completionHandler: nil)
