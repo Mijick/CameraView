@@ -91,12 +91,13 @@ extension CameraManager {
     func setup(in cameraView: UIView) async throws {
         await permissionsManager.requestAccess(parent: self)
 
-        captureSession.setup(parent: self)
-
-        
-
-
         initialiseCameraLayer(cameraView)
+
+
+
+
+
+
         try initialiseCameraMetalView()
         initialiseCameraGridView()
         initializeMotionManager()
@@ -117,10 +118,11 @@ extension CameraManager {
 }
 private extension CameraManager {
     func initialiseCameraLayer(_ cameraView: UIView) {
+        captureSession.sessionPreset = attributes.resolution
+
         cameraLayer.session = captureSession as? AVCaptureSession
         cameraLayer.videoGravity = .resizeAspectFill
         cameraLayer.isHidden = true
-
         cameraView.layer.addSublayer(cameraLayer)
     }
     func initialiseCameraMetalView() throws {

@@ -21,8 +21,6 @@ import AVKit
     func startRunning()
     func stopRunningAndReturnNewInstance() -> CaptureSession
 
-    func setup(parent: CameraManager)
-
 
     var sessionPreset: AVCaptureSession.Preset { get set }
     var isRunning: Bool { get }
@@ -37,12 +35,6 @@ import AVKit
 // MARK: REAL
 extension AVCaptureSession: @unchecked @retroactive Sendable {}
 extension AVCaptureSession: CaptureSession {
-    func setup(parent: CameraManager) {
-        sessionPreset = parent.attributes.resolution
-    }
-
-
-
     func stopRunningAndReturnNewInstance() -> any CaptureSession {
         self.stopRunning()
         return AVCaptureSession()
@@ -76,10 +68,6 @@ extension AVCaptureSession: CaptureSession {
 // MARK: MOCK
 extension MockCaptureSession: @unchecked Sendable {}
 class MockCaptureSession: NSObject, CaptureSession {
-    func setup(parent: CameraManager) {
-        sessionPreset = parent.attributes.resolution
-    }
-    
     func stopRunningAndReturnNewInstance() -> any CaptureSession {
         _isRunning = false
         return MockCaptureSession()
