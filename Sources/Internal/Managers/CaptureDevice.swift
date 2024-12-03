@@ -17,14 +17,8 @@ protocol CaptureDevice: NSObject {
     var hasFlash: Bool { get }
     var hasTorch: Bool { get }
     var exposureDuration: CMTime { get }
-    var minExposureDuration: CMTime { get }
-    var maxExposureDuration: CMTime { get }
     var exposureTargetBias: Float { get }
-    var minExposureTargetBias: Float { get }
-    var maxExposureTargetBias: Float { get }
     var iso: Float { get }
-    var minISO: Float { get }
-    var maxISO: Float { get }
     var isExposurePointOfInterestSupported: Bool { get }
     var isFocusPointOfInterestSupported: Bool { get }
     var minAvailableVideoZoomFactor: CGFloat { get }
@@ -45,7 +39,6 @@ protocol CaptureDevice: NSObject {
     // MARK: Methods
     func lockForConfiguration() throws
     func unlockForConfiguration()
-    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float)
     func setExposureTargetBias(_ bias: Float)
 }
@@ -53,10 +46,6 @@ protocol CaptureDevice: NSObject {
 
 // MARK: REAL
 extension AVCaptureDevice: CaptureDevice {
-    var minExposureDuration: CMTime { activeFormat.minExposureDuration }
-    var maxExposureDuration: CMTime { activeFormat.maxExposureDuration }
-    var minISO: Float { activeFormat.minISO }
-    var maxISO: Float { activeFormat.maxISO }
     var videoSupportedFrameRateRanges: [AVFrameRateRange] { activeFormat.videoSupportedFrameRateRanges }
 
 
@@ -74,6 +63,8 @@ extension AVCaptureDevice: CaptureDevice {
         setExposureModeCustom(duration: duration, iso: iso, completionHandler: nil)
     }
     func setExposureTargetBias(_ bias: Float) {
+        guard isExposureModeSupported(.custom) else { return }
+
         let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
         setExposureTargetBias(bias, completionHandler: nil)
     }
