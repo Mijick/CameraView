@@ -63,7 +63,7 @@ extension CameraInputBridgeView.Coordinator {
     @MainActor @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
         do {
             let touchPoint = tap.location(in: parent.inputView)
-            try parent.cameraManager.setCameraFocus(touchPoint)
+            try parent.cameraManager.setCameraFocus(at: touchPoint)
         } catch {}
     }
 }

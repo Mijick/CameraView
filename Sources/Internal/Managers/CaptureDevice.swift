@@ -19,10 +19,6 @@ protocol CaptureDevice: NSObject {
     var exposureDuration: CMTime { get }
     var exposureTargetBias: Float { get }
     var iso: Float { get }
-    var isExposurePointOfInterestSupported: Bool { get }
-    var isFocusPointOfInterestSupported: Bool { get }
-    var minAvailableVideoZoomFactor: CGFloat { get }
-    var maxAvailableVideoZoomFactor: CGFloat { get }
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
@@ -40,6 +36,8 @@ protocol CaptureDevice: NSObject {
     func setExposureTargetBias(_ bias: Float) throws
     func setFrameRate(_ frameRate: Int32) throws
     func setZoomFactor(_ factor: CGFloat) throws
+    func setFocusPointOfInterest(_ point: CGPoint) throws
+    func setExposurePointOfInterest(_ point: CGPoint) throws
 }
 
 
@@ -75,6 +73,18 @@ extension AVCaptureDevice: CaptureDevice {
         let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
         videoZoomFactor = factor
     }
+    func setFocusPointOfInterest(_ point: CGPoint) {
+        guard isFocusPointOfInterestSupported else { return }
+        
+        focusPointOfInterest = point
+        focusMode = .autoFocus
+    }
+    func setExposurePointOfInterest(_ point: CGPoint) {
+        guard isExposurePointOfInterestSupported else { return }
+
+        exposurePointOfInterest = point
+        exposureMode = .autoExpose
+    }
 }
 
 
@@ -86,10 +96,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let exposureDuration: CMTime = .init()
     let exposureTargetBias: Float = 0
     let iso: Float = 0
-    let isExposurePointOfInterestSupported: Bool = true
-    let isFocusPointOfInterestSupported: Bool = true
-    let minAvailableVideoZoomFactor: CGFloat = 0
-    let maxAvailableVideoZoomFactor: CGFloat = 0
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
     var torchMode: AVCaptureDevice.TorchMode = .auto
@@ -105,4 +111,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     func setExposureTargetBias(_ bias: Float) { return }
     func setFrameRate(_ frameRate: Int32) { return }
     func setZoomFactor(_ factor: CGFloat) { return }
+    func setFocusPointOfInterest(_ point: CGPoint) throws { return }
+    func setExposurePointOfInterest(_ point: CGPoint) throws { return }
 }

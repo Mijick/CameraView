@@ -172,7 +172,7 @@ private extension CameraManager {
 
 // MARK: Camera Focus
 extension CameraManager {
-    func setCameraFocus(at touchPoint: CGPoint) async throws {
+    func setCameraFocus(at touchPoint: CGPoint) throws {
         guard let device = getCameraInput()?.device, !isChanging else { return }
 
         let focusPoint = convertTouchPointToFocusPoint(touchPoint)
@@ -187,25 +187,10 @@ private extension CameraManager {
     )}
     func configureCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        setFocusPointOfInterest(focusPoint, device)
-        setExposurePointOfInterest(focusPoint, device)
+        try device.setFocusPointOfInterest(focusPoint)
+        try device.setExposurePointOfInterest(focusPoint)
         device.unlockForConfiguration()
     }
-}
-
-
-private extension CameraManager {
-    func setFocusPointOfInterest(_ focusPoint: CGPoint, _ device: any CaptureDevice) { if device.isFocusPointOfInterestSupported {
-        device.focusPointOfInterest = focusPoint
-        device.focusMode = .autoFocus
-    }}
-    func setExposurePointOfInterest(_ focusPoint: CGPoint, _ device: any CaptureDevice) { if device.isExposurePointOfInterestSupported {
-        device.exposurePointOfInterest = focusPoint
-        device.exposureMode = .autoExpose
-    }}
-}
-private extension CameraManager {
-
 }
 
 
