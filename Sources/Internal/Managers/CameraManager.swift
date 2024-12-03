@@ -153,7 +153,7 @@ private extension CameraManager {
     }
 }
 
-// MARK: Zoom Factor
+// MARK: Camera Zoom
 extension CameraManager {
     func changeCameraZoomFactor(_ factor: CGFloat) throws {
         guard let device = getCameraInput()?.device, !isChanging else { return }
@@ -170,6 +170,19 @@ private extension CameraManager {
     }
 }
 
+// MARK: Camera Focus
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
 
 
 
@@ -216,8 +229,6 @@ private extension CameraManager {
         device.exposureMode = .autoExpose
     }}
 }
-
-// MARK: - Changing Zoom Factor
 
 
 // MARK: - Changing Flash Mode
@@ -411,14 +422,3 @@ public enum MijickCameraError: Error {
     case cannotSetupInput, cannotSetupOutput
     case cannotCreateMetalDevice
 }
-
-
-
-
-// MARK: - Initialising Camera
-
-
-
-
-
-// Dodać możliwe błędy przy set exposure, itd.
