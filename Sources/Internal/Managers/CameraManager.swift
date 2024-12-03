@@ -291,13 +291,19 @@ private extension CameraManager {
 
 // MARK: Set Exposure Target Bias
 extension CameraManager {
+    func setExposureTargetBias(_ exposureTargetBias: Float) throws {
+        guard let device = getCameraInput()?.device, exposureTargetBias != attributes.cameraExposure.targetBias, !isChanging else { return }
 
+        try setDeviceExposureTargetBias(exposureTargetBias, device)
+        attributes.cameraExposure.targetBias = exposureTargetBias
+    }
 }
 private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setDeviceExposureTargetBias(_ exposureTargetBias: Float, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        try device.setExposureTargetBias(exposureTargetBias)
+        device.unlockForConfiguration()
+    }
 }
 
 // MARK: Set HDR Mode
@@ -364,26 +370,6 @@ extension CameraManager {
 
 
 
-
-// MARK: - Changing Exposure Duration
-
-
-// MARK: - Changing Exposure Target Bias
-extension CameraManager {
-    func setExposureTargetBias(_ exposureTargetBias: Float) throws {
-        guard let device = getCameraInput()?.device, exposureTargetBias != attributes.cameraExposure.targetBias, !isChanging else { return }
-
-        try setDeviceExposureTargetBias(exposureTargetBias, device)
-        attributes.cameraExposure.targetBias = exposureTargetBias
-    }
-}
-private extension CameraManager {
-    func setDeviceExposureTargetBias(_ exposureTargetBias: Float, _ device: any CaptureDevice) throws {
-        try device.lockForConfiguration()
-        try device.setExposureTargetBias(exposureTargetBias)
-        device.unlockForConfiguration()
-    }
-}
 
 
 // MARK: - Modifiers
