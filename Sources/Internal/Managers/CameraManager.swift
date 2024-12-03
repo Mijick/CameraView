@@ -395,11 +395,6 @@ private extension CameraManager {
     }
 }
 
-// MARK: - Changing Camera HDR Mode
-
-
-// MARK: - Changing Frame Rate
-
 
 // MARK: - Modifiers
 extension CameraManager {
