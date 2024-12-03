@@ -91,7 +91,7 @@ extension CameraManager {
     func setup(in cameraView: UIView) async throws {
         await permissionsManager.requestAccess(parent: self)
 
-        initialiseCameraLayer(cameraView)
+        setupCameraLayer(cameraView)
 
 
 
@@ -117,7 +117,7 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func initialiseCameraLayer(_ cameraView: UIView) {
+    func setupCameraLayer(_ cameraView: UIView) {
         captureSession.sessionPreset = attributes.resolution
 
         cameraLayer.session = captureSession as? AVCaptureSession
