@@ -132,8 +132,15 @@ extension CameraManager {
 
 // MARK: Change Camera Position
 extension CameraManager {
-    func changeCameraPosition(_ position: CameraPosition) throws {
+    func changeCameraPosition(_ position: CameraPosition) async throws {
+        guard position != attributes.cameraPosition, !isChanging else { return }
 
+        await cameraMetalView.beginCameraFlipAnimation()
+
+
+
+
+        cameraMetalView.finishCameraFlipAnimation()
     }
 }
 private extension CameraManager {
