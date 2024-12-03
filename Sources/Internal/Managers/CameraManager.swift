@@ -63,6 +63,16 @@ private extension CameraManager {
 
         try captureSession.add(output: captureVideoOutput)
     }
+    func setupDevice() throws {
+        guard let device = getDevice(attributes.cameraPosition) else { return }
+
+        try device.lockForConfiguration()
+        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
+        device.setFrameRate(attributes.frameRate)
+        device.hdrMode = attributes.hdrMode
+        device.unlockForConfiguration()
+    }
 }
 private extension CameraManager {
 
@@ -125,8 +135,6 @@ extension CameraManager {
 
 
 
-        //try setupCameraAttributes()
-        //try setupFrameRate()
 
         Task {
             cameraMetalView.beginCameraEntranceAnimation()
@@ -136,16 +144,7 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func setupDevice() throws {
-        guard let device = getDevice(attributes.cameraPosition) else { return }
 
-        try device.lockForConfiguration()
-        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
-        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
-        device.setFrameRate(attributes.frameRate)
-        device.hdrMode = attributes.hdrMode
-        device.unlockForConfiguration()
-    }
 
 
 
@@ -173,18 +172,6 @@ private extension CameraManager {
     func initialiseObservers() {
         notificationCenterManager.setup(parent: self)
     }
-
-    func setupCameraAttributes() throws { if let device = getDevice(attributes.cameraPosition) { DispatchQueue.main.async { [self] in
-        attributes.cameraExposure.duration = device.exposureDuration
-        attributes.cameraExposure.iso = device.iso
-        attributes.cameraExposure.targetBias = device.exposureTargetBias
-        attributes.cameraExposure.mode = device.exposureMode
-        attributes.hdrMode = device.hdrMode
-    }}}
-    func setupFrameRate() throws { if let device = getDevice(attributes.cameraPosition) {
-        try checkNewFrameRate(attributes.frameRate, device)
-        try updateFrameRate(attributes.frameRate, device)
-    }}
     nonisolated func startCaptureSession() async {
         await captureSession.startRunning()
     }
