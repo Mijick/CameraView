@@ -269,7 +269,7 @@ private extension CameraManager {
 // MARK: Set ISO
 extension CameraManager {
     func setISO(_ iso: Float) throws {
-        guard let device = getCameraInput()?.device, iso != attributes.cameraExposure.iso else { return }
+        guard let device = getCameraInput()?.device, iso != attributes.cameraExposure.iso, !isChanging else { return }
 
         try setDeviceISO(iso, device)
         attributes.cameraExposure.iso = iso
@@ -385,19 +385,18 @@ private extension CameraManager {
 
 // MARK: - Changing Camera HDR Mode
 extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getCameraInput()?.device, newHDRMode != attributes.hdrMode {
-        try changeHDRMode(newHDRMode, device)
-        updateHDRMode(newHDRMode)
-    }}
+    func setHDRMode(_ hdrMode: CameraHDRMode) throws {
+        guard let device = getCameraInput()?.device, hdrMode != attributes.hdrMode, !isChanging else { return }
+
+        try setDeviceHDRMode(hdrMode, device)
+        attributes.hdrMode = hdrMode
+    }
 }
 private extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: any CaptureDevice) throws {
+    func setDeviceHDRMode(_ hdrMode: CameraHDRMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.hdrMode = newHDRMode
+        device.hdrMode = hdrMode
         device.unlockForConfiguration()
-    }
-    func updateHDRMode(_ newHDRMode: CameraHDRMode) {
-        attributes.hdrMode = newHDRMode
     }
 }
 
