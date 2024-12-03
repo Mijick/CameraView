@@ -124,6 +124,10 @@ extension CameraManager {
     }
 }
 
+// MARK: Camera Input
+extension CameraManager {
+    
+}
 
 
 
