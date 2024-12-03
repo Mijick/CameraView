@@ -331,15 +331,16 @@ private extension CameraManager {
 
 }
 
-// MARK: Capturing Output
+// MARK: Capture Output
 extension CameraManager {
+    func captureOutput() {
+        guard !isChanging else { return }
 
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
+        switch attributes.outputType {
+            case .photo: photoOutput.capture()
+            case .video: videoOutput.toggleRecording()
+        }
+    }
 }
 
 
@@ -461,10 +462,7 @@ extension CameraManager {
 
 // MARK: - Capturing Output
 extension CameraManager {
-    func captureOutput() { if !isChanging { switch attributes.outputType {
-        case .photo: photoOutput.capture()
-        case .video: videoOutput.toggleRecording()
-    }}}
+
 }
 
 // MARK: - Modifiers
