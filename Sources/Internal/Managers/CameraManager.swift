@@ -44,7 +44,24 @@ import AVKit
     }
 }
 
-// MARK: - Cancellation
+// MARK: Setup
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+
+// MARK: Cancel
 extension CameraManager {
     func cancel() {
         captureSession = captureSession.stopRunningAndReturnNewInstance()
@@ -53,6 +70,10 @@ extension CameraManager {
         notificationCenterManager.reset()
     }
 }
+
+
+
+
 
 // MARK: - Changing Attributes
 extension CameraManager {
