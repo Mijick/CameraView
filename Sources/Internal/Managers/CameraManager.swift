@@ -102,10 +102,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func checkPermissions() async {
-        do {
-            try await CameraManagerPermissionsManager.getAuthorizationStatus(for: .video)
-            try await CameraManagerPermissionsManager.getAuthorizationStatus(for: .audio)
-        } catch { attributes.error = error }
+        await CameraManagerPermissionsManager.requestAccess(parent: self)
     }
     func initialiseCaptureSession() {
         captureSession.sessionPreset = attributes.resolution
