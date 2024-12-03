@@ -238,7 +238,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Set Grid Mode
+// MARK: Set Grid Visibility
 extension CameraManager {
     func setGridVisibility(_ isGridVisible: Bool) {
         guard isGridVisible != attributes.isGridVisible, !isChanging else { return }
@@ -246,7 +246,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Set Filters
+// MARK: Set Camera Filters
 extension CameraManager {
     func setCameraFilters(_ cameraFilters: [CIFilter]) {
         guard cameraFilters != attributes.cameraFilters, !isChanging else { return }
