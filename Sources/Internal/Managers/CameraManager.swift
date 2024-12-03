@@ -97,10 +97,10 @@ private extension CameraManager {
         guard let device = getCameraInput()?.device else { return }
 
         try device.lockForConfiguration()
-        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
-        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
-        device.setFrameRate(attributes.frameRate)
-        device.setZoomFactor(attributes.zoomFactor)
+        try device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        try device.setExposureTargetBias(attributes.cameraExposure.targetBias)
+        try device.setFrameRate(attributes.frameRate)
+        try device.setZoomFactor(attributes.zoomFactor)
         device.torchMode = attributes.torchMode.get()
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
@@ -155,16 +155,19 @@ private extension CameraManager {
 
 // MARK: Zoom Factor
 extension CameraManager {
+    func changeCameraZoomFactor(_ factor: CGFloat) throws {
+        guard let device = getCameraInput()?.device, !isChanging else { return }
 
+        try changeDeviceZoomFactor(factor, device)
+        attributes.zoomFactor = factor
+    }
 }
 private extension CameraManager {
-
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func changeDeviceZoomFactor(_ factor: CGFloat, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        try device.setZoomFactor(factor)
+        device.unlockForConfiguration()
+    }
 }
 
 
@@ -215,22 +218,7 @@ private extension CameraManager {
 }
 
 // MARK: - Changing Zoom Factor
-extension CameraManager {
-    func changeZoomFactor(_ factor: CGFloat) throws { if let device = getCameraInput()?.device, !isChanging {
-        try setVideoZoomFactor(factor, device)
-        updateZoomFactor(factor)
-    }}
-}
-private extension CameraManager {
-    func setVideoZoomFactor(_ zoomFactor: CGFloat, _ device: any CaptureDevice) throws  {
-        try device.lockForConfiguration()
-        device.setZoomFactor(zoomFactor)
-        device.unlockForConfiguration()
-    }
-    func updateZoomFactor(_ value: CGFloat) {
-        attributes.zoomFactor = value
-    }
-}
+
 
 // MARK: - Changing Flash Mode
 extension CameraManager {
@@ -272,7 +260,7 @@ extension CameraManager {
 private extension CameraManager {
     func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.setExposureMode(newExposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        try device.setExposureMode(newExposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
     }
     func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
@@ -290,7 +278,7 @@ extension CameraManager {
 private extension CameraManager {
     func changeExposureDuration(_ newExposureDuration: CMTime, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.setExposureMode(.custom, duration: newExposureDuration, iso: attributes.cameraExposure.iso)
+        try device.setExposureMode(.custom, duration: newExposureDuration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
     }
     func updateExposureDuration(_ newExposureDuration: CMTime) {
@@ -308,7 +296,7 @@ extension CameraManager {
 private extension CameraManager {
     func changeISO(_ newISO: Float, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: newISO)
+        try device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: newISO)
         device.unlockForConfiguration()
     }
     func updateISO(_ newISO: Float) {
@@ -326,7 +314,7 @@ extension CameraManager {
 private extension CameraManager {
     func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.setExposureTargetBias(newExposureTargetBias)
+        try device.setExposureTargetBias(newExposureTargetBias)
         device.unlockForConfiguration()
     }
     func updateExposureTargetBias(_ newExposureTargetBias: Float) {
@@ -370,7 +358,7 @@ extension CameraManager {
 private extension CameraManager {
     func updateFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.setFrameRate(newFrameRate)
+        try device.setFrameRate(newFrameRate)
         device.unlockForConfiguration()
     }
     func updateFrameRate(_ newFrameRate: Int32) {
@@ -422,7 +410,6 @@ public enum MijickCameraError: Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput
     case cannotCreateMetalDevice
-    case incorrectFrameRate
 }
 
 

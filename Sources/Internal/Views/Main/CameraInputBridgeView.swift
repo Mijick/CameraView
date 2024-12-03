@@ -73,7 +73,7 @@ extension CameraInputBridgeView.Coordinator {
     @MainActor @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
         do {
             let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
-            try parent.cameraManager.changeZoomFactor(desiredZoomFactor)
+            try parent.cameraManager.changeCameraZoomFactor(desiredZoomFactor)
         } catch {}
     }}
 }

@@ -36,10 +36,10 @@ protocol CaptureDevice: NSObject {
     // MARK: Methods
     func lockForConfiguration() throws
     func unlockForConfiguration()
-    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float)
-    func setExposureTargetBias(_ bias: Float)
-    func setFrameRate(_ frameRate: Int32)
-    func setZoomFactor(_ factor: CGFloat)
+    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) throws
+    func setExposureTargetBias(_ bias: Float) throws
+    func setFrameRate(_ frameRate: Int32) throws
+    func setZoomFactor(_ factor: CGFloat) throws
 }
 
 
