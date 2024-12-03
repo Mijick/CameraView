@@ -158,12 +158,12 @@ extension CameraManager {
     func changeCameraZoomFactor(_ factor: CGFloat) throws {
         guard let device = getCameraInput()?.device, !isChanging else { return }
 
-        try changeDeviceZoomFactor(factor, device)
+        try setDeviceZoomFactor(factor, device)
         attributes.zoomFactor = factor
     }
 }
 private extension CameraManager {
-    func changeDeviceZoomFactor(_ factor: CGFloat, _ device: any CaptureDevice) throws {
+    func setDeviceZoomFactor(_ factor: CGFloat, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         try device.setZoomFactor(factor)
         device.unlockForConfiguration()
@@ -176,7 +176,7 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, !isChanging else { return }
 
         let focusPoint = convertTouchPointToFocusPoint(touchPoint)
-        try configureCameraFocus(focusPoint, device)
+        try setCameraFocus(focusPoint, device)
         cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
     }
 }
@@ -185,7 +185,7 @@ private extension CameraManager {
         x: touchPoint.y / cameraView.frame.height,
         y: 1 - touchPoint.x / cameraView.frame.width
     )}
-    func configureCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws {
+    func setCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         try device.setFocusPointOfInterest(focusPoint)
         try device.setExposurePointOfInterest(focusPoint)
@@ -211,32 +211,28 @@ extension CameraManager {
 
 // MARK: Torch Mode
 extension CameraManager {
+    func changeTorchMode(_ mode: CameraTorchMode) throws {
+        guard let device = getCameraInput()?.device, device.hasTorch, !isChanging else { return }
 
-}
-
-
-
-
-
-
-
-// MARK: - Changing Torch Mode
-extension CameraManager {
-    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getCameraInput()?.device, device.hasTorch, !isChanging {
-        try changeTorchMode(device, mode)
-        updateTorchMode(mode)
-    }}
+        try setTorchMode(device, mode)
+        attributes.torchMode = mode
+    }
 }
 private extension CameraManager {
-    func changeTorchMode(_ device: any CaptureDevice, _ mode: CameraTorchMode) throws {
+    func setTorchMode(_ device: any CaptureDevice, _ mode: CameraTorchMode) throws {
         try device.lockForConfiguration()
         device.torchMode = mode.get()
         device.unlockForConfiguration()
     }
-    func updateTorchMode(_ value: CameraTorchMode) {
-        attributes.torchMode = value
-    }
 }
+
+
+
+
+
+
+
+
 
 // MARK: - Changing Exposure Mode
 extension CameraManager {
