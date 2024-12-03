@@ -322,13 +322,10 @@ private extension CameraManager {
 
 // MARK: Set Mirror Mode
 extension CameraManager {
-
-}
-private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setMirrorMode(_ shouldMirror: Bool) {
+        guard !isChanging else { return }
+        attributes.mirrorOutput = shouldMirror
+    }
 }
 
 // MARK: Set Grid Mode
@@ -432,13 +429,6 @@ private extension CameraManager {
     func updateFrameRate(_ newFrameRate: Int32) {
         attributes.frameRate = newFrameRate
     }
-}
-
-// MARK: - Changing Mirror Mode
-extension CameraManager {
-    func changeMirrorMode(_ shouldMirror: Bool) { if !isChanging {
-        attributes.mirrorOutput = shouldMirror
-    }}
 }
 
 // MARK: - Modifiers
