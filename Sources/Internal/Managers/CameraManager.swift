@@ -134,7 +134,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Change Camera Output
+// MARK: Set Camera Output
 extension CameraManager {
     func setOutputType(_ outputType: CameraOutputType) {
         guard outputType != attributes.outputType, !isChanging else { return }
@@ -142,9 +142,9 @@ extension CameraManager {
     }
 }
 
-// MARK: Change Camera Position
+// MARK: Set Camera Position
 extension CameraManager {
-    func changeCameraPosition(_ position: CameraPosition) async throws {
+    func setCameraPosition(_ position: CameraPosition) async throws {
         guard position != attributes.cameraPosition, !isChanging else { return }
 
         await cameraMetalView.beginCameraFlipAnimation()
@@ -167,7 +167,7 @@ private extension CameraManager {
 
 // MARK: Set Camera Zoom
 extension CameraManager {
-    func changeCameraZoomFactor(_ factor: CGFloat) throws {
+    func setCameraZoomFactor(_ factor: CGFloat) throws {
         guard let device = getCameraInput()?.device, !isChanging else { return }
 
         try setDeviceZoomFactor(factor, device)
@@ -207,7 +207,7 @@ private extension CameraManager {
 
 // MARK: Set Filters
 extension CameraManager {
-    func changeCameraFilters(_ cameraFilters: [CIFilter]) {
+    func setCameraFilters(_ cameraFilters: [CIFilter]) {
         guard cameraFilters != attributes.cameraFilters, !isChanging else { return }
         attributes.cameraFilters = cameraFilters
     }
@@ -215,7 +215,7 @@ extension CameraManager {
 
 // MARK: Set Flash Mode
 extension CameraManager {
-    func changeFlashMode(_ mode: CameraFlashMode) {
+    func setFlashMode(_ mode: CameraFlashMode) {
         guard let device = getCameraInput()?.device, device.hasFlash, !isChanging else { return }
         attributes.flashMode = mode
     }
@@ -223,7 +223,7 @@ extension CameraManager {
 
 // MARK: Set Torch Mode
 extension CameraManager {
-    func changeTorchMode(_ mode: CameraTorchMode) throws {
+    func setTorchMode(_ mode: CameraTorchMode) throws {
         guard let device = getCameraInput()?.device, device.hasTorch, !isChanging else { return }
 
         try setTorchMode(device, mode)
