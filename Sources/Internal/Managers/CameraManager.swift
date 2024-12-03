@@ -122,7 +122,7 @@ extension CameraManager {
 
 
 
-// MARK: Change Output
+// MARK: Camera Output
 extension CameraManager {
     func setOutputType(_ outputType: CameraOutputType) {
         guard outputType != attributes.outputType, !isChanging else { return }
@@ -130,7 +130,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Change Camera Position
+// MARK: Camera Position
 extension CameraManager {
     func changeCameraPosition(_ position: CameraPosition) async throws {
         guard position != attributes.cameraPosition, !isChanging else { return }
@@ -153,6 +153,19 @@ private extension CameraManager {
     }
 }
 
+// MARK: Zoom Factor
+extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
+private extension CameraManager {
+
+}
 
 
 
