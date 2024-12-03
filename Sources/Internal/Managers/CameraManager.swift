@@ -54,7 +54,6 @@ extension CameraManager {
 
 
         // permissions do osobnej klasy
-        // grid zrefaktoryzować
         // refaktoryzacja tej klasy
         // refaktoryzacja klas pomocniczych
 

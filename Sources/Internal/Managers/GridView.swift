@@ -24,6 +24,14 @@ extension GridView {
     }
 }
 
+// MARK: Change Visibility
+extension GridView {
+    func changeVisibility(_ isVisible: Bool) {
+        UIView.animate(withDuration: 0.2) { self.alpha = isVisible ? 1 : 0 }
+        parent.attributes.isGridVisible = isVisible
+    }
+}
+
 // MARK: Draw
 extension GridView {
     override func draw(_ rect: CGRect) {
@@ -69,13 +77,5 @@ private extension GridView {
         shapeLayer.frame = bounds
         shapeLayer.fillColor = nil
         return shapeLayer
-    }
-}
-
-// MARK: Visibility Animation
-extension GridView {
-    func changeVisibility(_ isVisible: Bool) {
-        UIView.animate(withDuration: 0.2) { self.alpha = isVisible ? 1 : 0 }
-        parent.attributes.isGridVisible = isVisible
     }
 }
