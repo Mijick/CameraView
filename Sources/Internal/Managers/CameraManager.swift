@@ -326,7 +326,7 @@ private extension CameraManager {
 // MARK: Set Resolution
 extension CameraManager {
     func setResolution(_ resolution: AVCaptureSession.Preset) {
-        guard resolution != attributes.resolution, !isChanging else { return }
+        guard resolution != attributes.resolution, resolution != attributes.resolution, !isChanging else { return }
 
         captureSession.sessionPreset = resolution
         attributes.resolution = resolution
