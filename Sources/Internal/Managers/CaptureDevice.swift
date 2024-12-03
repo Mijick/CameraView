@@ -41,6 +41,7 @@ protocol CaptureDevice: NSObject {
     func unlockForConfiguration()
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float)
     func setExposureTargetBias(_ bias: Float)
+    func setFrameRate(_ frameRate: Int32)
 }
 
 
@@ -67,6 +68,14 @@ extension AVCaptureDevice: CaptureDevice {
 
         let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
         setExposureTargetBias(bias, completionHandler: nil)
+    }
+    func setFrameRate(_ frameRate: Int32) {
+        guard let range = activeFormat.videoSupportedFrameRateRanges.first,
+              frameRate > Int32(range.minFrameRate), frameRate < Int32(range.maxFrameRate)
+        else { return }
+
+        activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
+        activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
     }
 }
 
@@ -99,4 +108,5 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     func unlockForConfiguration() { return }
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { return }
     func setExposureTargetBias(_ bias: Float) { return }
+    func setFrameRate(_ frameRate: Int32) { return }
 }
