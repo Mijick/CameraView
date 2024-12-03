@@ -93,6 +93,7 @@ extension CameraManager {
 
         try setupDeviceInputs()
         try setupDeviceOutput()
+        try setupFrameRecorder()
 
         setupCameraLayer(cameraView)
 
@@ -108,7 +109,7 @@ extension CameraManager {
 
 
 
-        try setupFrameRecorder()
+
         try setupCameraAttributes()
         try setupFrameRate()
 
@@ -120,26 +121,6 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func setupCameraLayer(_ cameraView: UIView) {
-        captureSession.sessionPreset = attributes.resolution
-
-        cameraLayer.session = captureSession as? AVCaptureSession
-        cameraLayer.videoGravity = .resizeAspectFill
-        cameraLayer.isHidden = true
-        cameraView.layer.addSublayer(cameraLayer)
-    }
-    func initialiseCameraMetalView() throws {
-        try cameraMetalView.setup(parent: self)
-    }
-    func initialiseCameraGridView() {
-        cameraGridView.setup(parent: self)
-    }
-    func initializeMotionManager() {
-        motionManager.setup(parent: self)
-    }
-    func initialiseObservers() {
-        notificationCenterManager.setup(parent: self)
-    }
     func setupDeviceInputs() throws {
         try setupCameraInput(attributes.cameraPosition)
         try setupInput(audioInput)
@@ -154,6 +135,33 @@ private extension CameraManager {
 
         try captureSession.add(output: captureVideoOutput)
     }
+
+
+    func setupCameraLayer(_ cameraView: UIView) {
+        captureSession.sessionPreset = attributes.resolution
+
+        cameraLayer.session = captureSession as? AVCaptureSession
+        cameraLayer.videoGravity = .resizeAspectFill
+        cameraLayer.isHidden = true
+        cameraView.layer.addSublayer(cameraLayer)
+    }
+
+
+
+
+    func initialiseCameraMetalView() throws {
+        try cameraMetalView.setup(parent: self)
+    }
+    func initialiseCameraGridView() {
+        cameraGridView.setup(parent: self)
+    }
+    func initializeMotionManager() {
+        motionManager.setup(parent: self)
+    }
+    func initialiseObservers() {
+        notificationCenterManager.setup(parent: self)
+    }
+
     func setupCameraAttributes() throws { if let device = getDevice(attributes.cameraPosition) { DispatchQueue.main.async { [self] in
         attributes.cameraExposure.duration = device.exposureDuration
         attributes.cameraExposure.iso = device.iso
