@@ -29,7 +29,7 @@ public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
     func changeOutputType(_ type: CameraOutputType) { cameraManager.setOutputType(type) }
     func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.changeCameraPosition(position) }
-    func changeCameraFilters(_ filters: [CIFilter]) throws { try cameraManager.changeCameraFilters(filters) }
+    func changeCameraFilters(_ filters: [CIFilter]) { cameraManager.changeCameraFilters(filters) }
     func changeResolution(_ resolution: AVCaptureSession.Preset) throws { try cameraManager.changeResolution(resolution) }
     func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.changeFrameRate(frameRate) }
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.changeCameraZoomFactor(value) }

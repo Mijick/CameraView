@@ -193,14 +193,12 @@ private extension CameraManager {
     }
 }
 
-
-
-
-// MARK: - Changing Camera Filters
+// MARK: Camera Filters
 extension CameraManager {
-    func changeCameraFilters(_ newCameraFilters: [CIFilter]) throws { if newCameraFilters != attributes.cameraFilters {
-        attributes.cameraFilters = newCameraFilters
-    }}
+    func changeCameraFilters(_ cameraFilters: [CIFilter]) {
+        guard cameraFilters != attributes.cameraFilters, !isChanging else { return }
+        attributes.cameraFilters = cameraFilters
+    }
 }
 
 
