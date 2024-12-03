@@ -203,32 +203,19 @@ private extension CameraManager {
 
 // MARK: - Changing Zoom Factor
 extension CameraManager {
-    func changeZoomFactor(_ value: CGFloat) throws { if let device = currentCameraInput?.device, !isChanging {
-        let zoomFactor = calculateZoomFactor(value, device)
-
-        try setVideoZoomFactor(zoomFactor, device)
-        updateZoomFactor(zoomFactor)
+    func changeZoomFactor(_ factor: CGFloat) throws { if let device = currentCameraInput?.device, !isChanging {
+        try setVideoZoomFactor(factor, device)
+        updateZoomFactor(factor)
     }}
 }
 private extension CameraManager {
-    func calculateZoomFactor(_ value: CGFloat, _ device: any CaptureDevice) -> CGFloat {
-        min(max(value, getMinZoomLevel(device)), getMaxZoomLevel(device))
-    }
     func setVideoZoomFactor(_ zoomFactor: CGFloat, _ device: any CaptureDevice) throws  {
         try device.lockForConfiguration()
-        device.videoZoomFactor = zoomFactor
+        device.setZoomFactor(zoomFactor)
         device.unlockForConfiguration()
     }
     func updateZoomFactor(_ value: CGFloat) {
         attributes.zoomFactor = value
-    }
-}
-private extension CameraManager {
-    func getMinZoomLevel(_ device: any CaptureDevice) -> CGFloat {
-        device.minAvailableVideoZoomFactor
-    }
-    func getMaxZoomLevel(_ device: any CaptureDevice) -> CGFloat {
-        min(device.maxAvailableVideoZoomFactor, 3)
     }
 }
 
