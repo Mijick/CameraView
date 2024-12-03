@@ -31,6 +31,7 @@ import AVKit
     private(set) var cameraGridView: GridView = .init()
 
     // MARK: Other Objects
+    private(set) var permissions: CameraManagerPermissionsManager = .init()
     private(set) var motionManager: CameraManagerMotionManager = .init()
     private(set) var notificationCenter: CameraManagerNotificationCenter = .init()
 
@@ -102,7 +103,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func checkPermissions() async {
-        await CameraManagerPermissionsManager.requestAccess(parent: self)
+        await permissions.requestAccess(parent: self)
     }
     func initialiseCaptureSession() {
         captureSession.sessionPreset = attributes.resolution

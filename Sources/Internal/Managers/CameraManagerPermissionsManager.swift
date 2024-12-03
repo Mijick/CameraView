@@ -11,22 +11,31 @@
 
 import AVKit
 
-class CameraManagerPermissionsManager {}
+@MainActor class CameraManagerPermissionsManager {}
 
-// MARK: Get Authorization Status
+// MARK: Request Access
 extension CameraManagerPermissionsManager {
-    static func getAuthorizationStatus(for mediaType: AVMediaType) async throws(MijickCameraError) { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
+    func requestAccess(parent: CameraManager) async {
+        do {
+            try await getAuthorizationStatus(for: .video)
+            if parent.attributes.isAudioSourceAvailable { try await getAuthorizationStatus(for: .audio) }
+        }
+        catch { parent.attributes.error = error }
+    }
+}
+private extension CameraManagerPermissionsManager {
+    func getAuthorizationStatus(for mediaType: AVMediaType) async throws(MijickCameraError) { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
         case .denied, .restricted: throw getPermissionsError(mediaType)
         case .notDetermined: try await requestAccess(for: mediaType)
         default: return
     }}
 }
 private extension CameraManagerPermissionsManager {
-    static func requestAccess(for mediaType: AVMediaType) async throws(MijickCameraError) {
+    func requestAccess(for mediaType: AVMediaType) async throws(MijickCameraError) {
         let isGranted = await AVCaptureDevice.requestAccess(for: mediaType)
         if !isGranted { throw getPermissionsError(mediaType) }
     }
-    static func getPermissionsError(_ mediaType: AVMediaType) -> MijickCameraError { switch mediaType {
+    func getPermissionsError(_ mediaType: AVMediaType) -> MijickCameraError { switch mediaType {
         case .audio: .microphonePermissionsNotGranted
         case .video: .cameraPermissionsNotGranted
         default: fatalError()
