@@ -427,3 +427,8 @@ private extension CameraManager {
         try captureSession.add(input: input)
     }
 }
+
+
+
+
+// Dodać możliwe błędy przy set exposure, itd.
