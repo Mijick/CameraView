@@ -31,6 +31,8 @@ extension CameraManagerTests {
     }
     @Test("Setup: Custom Attributes (2)") func setupWithCustomAttributes_2() {
     }
+
+    // co się stanei gdy audio source nie jest dostępne?
 }
 
 

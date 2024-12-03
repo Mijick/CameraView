@@ -167,17 +167,17 @@ private extension CameraManager {
 
 // MARK: Set Camera Zoom
 extension CameraManager {
-    func setCameraZoomFactor(_ factor: CGFloat) throws {
-        guard let device = getCameraInput()?.device, !isChanging else { return }
+    func setCameraZoomFactor(_ zoomFactor: CGFloat) throws {
+        guard let device = getCameraInput()?.device, zoomFactor != attributes.zoomFactor, !isChanging else { return }
 
-        try setDeviceZoomFactor(factor, device)
-        attributes.zoomFactor = factor
+        try setDeviceZoomFactor(zoomFactor, device)
+        attributes.zoomFactor = zoomFactor
     }
 }
 private extension CameraManager {
-    func setDeviceZoomFactor(_ factor: CGFloat, _ device: any CaptureDevice) throws {
+    func setDeviceZoomFactor(_ zoomFactor: CGFloat, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setZoomFactor(factor)
+        try device.setZoomFactor(zoomFactor)
         device.unlockForConfiguration()
     }
 }
