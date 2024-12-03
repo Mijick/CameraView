@@ -89,7 +89,7 @@ extension CameraManager {
 // MARK: - Initialising Camera
 extension CameraManager {
     func setup(in cameraView: UIView) async throws {
-        await checkPermissions()
+        await permissionsManager.requestAccess(parent: self)
         initialiseCaptureSession()
         initialiseCameraLayer(cameraView)
         try initialiseCameraMetalView()
@@ -111,9 +111,6 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func checkPermissions() async {
-        await permissionsManager.requestAccess(parent: self)
-    }
     func initialiseCaptureSession() {
         captureSession.sessionPreset = attributes.resolution
     }
