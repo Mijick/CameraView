@@ -119,6 +119,10 @@ extension CameraManager {
         try setupDeviceOutput()
         try setupFrameRecorder()
 
+        notificationCenterManager.setup(parent: self)
+        motionManager.setup(parent: self)
+
+
 
         setupCameraLayer(cameraView)
 
@@ -129,8 +133,6 @@ extension CameraManager {
 
         try initialiseCameraMetalView()
         initialiseCameraGridView()
-        initializeMotionManager()
-        initialiseObservers()
 
 
 
@@ -165,12 +167,6 @@ private extension CameraManager {
     }
     func initialiseCameraGridView() {
         cameraGridView.setup(parent: self)
-    }
-    func initializeMotionManager() {
-        motionManager.setup(parent: self)
-    }
-    func initialiseObservers() {
-        notificationCenterManager.setup(parent: self)
     }
     nonisolated func startCaptureSession() async {
         await captureSession.startRunning()
