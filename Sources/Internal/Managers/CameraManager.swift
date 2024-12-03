@@ -122,7 +122,6 @@ extension CameraManager {
         guard outputType != attributes.outputType, !isChanging else { return }
 
         attributes.outputType = outputType
-        attributes.torchMode = .off
     }
 }
 
