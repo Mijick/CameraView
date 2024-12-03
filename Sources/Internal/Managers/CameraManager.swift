@@ -198,7 +198,7 @@ extension CameraManager {
 
 // MARK: - Camera Focusing
 extension CameraManager {
-    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = currentCameraInput?.device {
+    func setCameraFocus(_ touchPoint: CGPoint) throws { if let device = getCameraInput()?.device {
         try setCameraFocus(touchPoint, device)
         cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
     }}
@@ -234,7 +234,7 @@ private extension CameraManager {
 
 // MARK: - Changing Zoom Factor
 extension CameraManager {
-    func changeZoomFactor(_ factor: CGFloat) throws { if let device = currentCameraInput?.device, !isChanging {
+    func changeZoomFactor(_ factor: CGFloat) throws { if let device = getCameraInput()?.device, !isChanging {
         try setVideoZoomFactor(factor, device)
         updateZoomFactor(factor)
     }}
@@ -252,7 +252,7 @@ private extension CameraManager {
 
 // MARK: - Changing Flash Mode
 extension CameraManager {
-    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = currentCameraInput?.device, device.hasFlash, !isChanging {
+    func changeFlashMode(_ mode: CameraFlashMode) throws { if let device = getCameraInput()?.device, device.hasFlash, !isChanging {
         updateFlashMode(mode)
     }}
 }
@@ -264,7 +264,7 @@ private extension CameraManager {
 
 // MARK: - Changing Torch Mode
 extension CameraManager {
-    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = currentCameraInput?.device, device.hasTorch, !isChanging {
+    func changeTorchMode(_ mode: CameraTorchMode) throws { if let device = getCameraInput()?.device, device.hasTorch, !isChanging {
         try changeTorchMode(device, mode)
         updateTorchMode(mode)
     }}
@@ -282,7 +282,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Mode
 extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = currentCameraInput?.device, newExposureMode != attributes.cameraExposure.mode {
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getCameraInput()?.device, newExposureMode != attributes.cameraExposure.mode {
         try changeExposureMode(newExposureMode, device)
         updateExposureMode(newExposureMode)
     }}
@@ -300,7 +300,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Duration
 extension CameraManager {
-    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = currentCameraInput?.device, newExposureDuration != attributes.cameraExposure.duration {
+    func changeExposureDuration(_ newExposureDuration: CMTime) throws { if let device = getCameraInput()?.device, newExposureDuration != attributes.cameraExposure.duration {
         try changeExposureDuration(newExposureDuration, device)
         updateExposureDuration(newExposureDuration)
     }}
@@ -318,7 +318,7 @@ private extension CameraManager {
 
 // MARK: - Changing ISO
 extension CameraManager {
-    func changeISO(_ newISO: Float) throws { if let device = currentCameraInput?.device, newISO != attributes.cameraExposure.iso {
+    func changeISO(_ newISO: Float) throws { if let device = getCameraInput()?.device, newISO != attributes.cameraExposure.iso {
         try changeISO(newISO, device)
         updateISO(newISO)
     }}
@@ -336,7 +336,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Target Bias
 extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = currentCameraInput?.device, newExposureTargetBias != attributes.cameraExposure.targetBias {
+    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getCameraInput()?.device, newExposureTargetBias != attributes.cameraExposure.targetBias {
         try changeExposureTargetBias(newExposureTargetBias, device)
         updateExposureTargetBias(newExposureTargetBias)
     }}
@@ -354,7 +354,7 @@ private extension CameraManager {
 
 // MARK: - Changing Camera HDR Mode
 extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = currentCameraInput?.device, newHDRMode != attributes.hdrMode {
+    func changeHDRMode(_ newHDRMode: CameraHDRMode) throws { if let device = getCameraInput()?.device, newHDRMode != attributes.hdrMode {
         try changeHDRMode(newHDRMode, device)
         updateHDRMode(newHDRMode)
     }}
@@ -380,7 +380,7 @@ extension CameraManager {
 
 // MARK: - Changing Frame Rate
 extension CameraManager {
-    func changeFrameRate(_ newFrameRate: Int32) throws { if let device = currentCameraInput?.device, newFrameRate != attributes.frameRate {
+    func changeFrameRate(_ newFrameRate: Int32) throws { if let device = getCameraInput()?.device, newFrameRate != attributes.frameRate {
         try updateFrameRate(newFrameRate, device)
         updateFrameRate(newFrameRate)
     }}
@@ -420,13 +420,13 @@ extension CameraManager {
 
 // MARK: - Modifiers
 extension CameraManager {
-    var hasFlash: Bool { currentCameraInput?.device.hasFlash ?? false }
-    var hasTorch: Bool { currentCameraInput?.device.hasTorch ?? false }
+    var hasFlash: Bool { getCameraInput()?.device.hasFlash ?? false }
+    var hasTorch: Bool { getCameraInput()?.device.hasTorch ?? false }
 }
 
 // MARK: - Helpers
 extension CameraManager {
-    var currentCameraInput: (any CaptureDeviceInput)? { switch attributes.cameraPosition {
+    func getCameraInput(_ position: CameraPosition? = nil) -> (any CaptureDeviceInput)? { switch position ?? attributes.cameraPosition {
         case .front: frontCameraInput
         case .back: backCameraInput
     }}
