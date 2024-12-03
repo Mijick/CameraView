@@ -76,9 +76,7 @@ private extension MCameraController {
         config.appDelegate?.orientationLock = .all
     }
     func cacaca() {
-        cameraManager.cancel()
-        cameraManager.attributes.zoomFactor = 1.0
-        cameraManager.attributes.torchMode = .off
+
     }
     func resetCapturedMedia() {
         cameraManager.attributes.capturedMedia = nil

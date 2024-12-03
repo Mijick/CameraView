@@ -51,7 +51,6 @@ extension CameraManager {
 
         setupCameraLayer(cameraView)
         try setupDeviceInputs()
-        try setupDevice()
         try setupDeviceOutput()
         try setupFrameRecorder()
         notificationCenterManager.setup(parent: self)
@@ -59,7 +58,10 @@ extension CameraManager {
         try cameraMetalView.setup(parent: self)
         cameraGridView.setup(parent: self)
 
-        startSession()
+        Task {
+            try await startSession()
+            cameraMetalView.performCameraEntranceAnimation()
+        }
     }
 }
 private extension CameraManager {
@@ -75,16 +77,6 @@ private extension CameraManager {
         try captureSession.add(input: currentCameraInput)
         if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
     }
-    func setupDevice() throws {
-        guard let device = currentCameraInput?.device else { return }
-
-        try device.lockForConfiguration()
-        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
-        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
-        device.setFrameRate(attributes.frameRate)
-        device.hdrMode = attributes.hdrMode
-        device.unlockForConfiguration()
-    }
     func setupDeviceOutput() throws {
         try photoOutput.setup(parent: self)
         try videoOutput.setup(parent: self)
@@ -95,10 +87,24 @@ private extension CameraManager {
 
         try captureSession.add(output: captureVideoOutput)
     }
-    func startSession() { Task.detached { [self] in
+    nonisolated func startSession() async throws {
         await captureSession.startRunning()
-        await cameraMetalView.performCameraEntranceAnimation()
-    }}
+        try await setupDevice()
+    }
+}
+private extension CameraManager {
+    func setupDevice() throws {
+        guard let device = currentCameraInput?.device else { return }
+
+        try device.lockForConfiguration()
+        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
+        device.setFrameRate(attributes.frameRate)
+        device.setZoomFactor(attributes.zoomFactor)
+        device.torchMode = attributes.torchMode.get()
+        device.hdrMode = attributes.hdrMode
+        device.unlockForConfiguration()
+    }
 }
 
 // MARK: Cancel

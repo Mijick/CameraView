@@ -107,6 +107,7 @@ extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelega
         let videoURL = try await prepareVideo(outputFileURL: outputFileURL, cameraFilters: parent.attributes.cameraFilters)
         let capturedVideo = MCameraMedia(data: videoURL)
 
+        parent.cancel()
         parent.attributes.capturedMedia = capturedVideo
     }}
 }
