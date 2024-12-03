@@ -46,8 +46,8 @@ protocol CaptureDevice: NSObject {
     func lockForConfiguration() throws
     func unlockForConfiguration()
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
-    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?)
-    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?)
+    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float)
+    func setExposureTargetBias(_ bias: Float)
 }
 
 
@@ -113,6 +113,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     func lockForConfiguration() throws { return }
     func unlockForConfiguration() { return }
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
-    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> ())?) { return }
-    func setExposureTargetBias(_ bias: Float, completionHandler: ((CMTime) -> ())?) { return }
+    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { return }
+    func setExposureTargetBias(_ bias: Float) { return }
 }
