@@ -299,7 +299,7 @@ private extension CameraManager {
 
 }
 
-// MARK: Set Camera Resolution
+// MARK: Set Resolution
 extension CameraManager {
 
 }
@@ -310,7 +310,7 @@ private extension CameraManager {
 
 }
 
-// MARK: Frame Rate
+// MARK: Set Frame Rate
 extension CameraManager {
 
 }
@@ -321,7 +321,7 @@ private extension CameraManager {
 
 }
 
-// MARK: Mirror Mode
+// MARK: Set Mirror Mode
 extension CameraManager {
 
 }
@@ -332,7 +332,7 @@ private extension CameraManager {
 
 }
 
-// MARK: Grid Mode
+// MARK: Set Grid Mode
 extension CameraManager {
 
 }
