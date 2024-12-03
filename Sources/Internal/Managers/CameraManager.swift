@@ -118,31 +118,14 @@ extension CameraManager {
         try setupDevice()
         try setupDeviceOutput()
         try setupFrameRecorder()
-
         notificationCenterManager.setup(parent: self)
         motionManager.setup(parent: self)
 
-
-
         setupCameraLayer(cameraView)
+        try cameraMetalView.setup(parent: self)
+        cameraGridView.setup(parent: self)
 
-
-
-
-
-
-        try initialiseCameraMetalView()
-        initialiseCameraGridView()
-
-
-
-
-
-        Task {
-            cameraMetalView.beginCameraEntranceAnimation()
-            await startCaptureSession()
-            cameraMetalView.finishCameraEntranceAnimation()
-        }
+        Task { await startCaptureSession() }
     }
 }
 private extension CameraManager {
@@ -160,16 +143,10 @@ private extension CameraManager {
     }
 
 
-
-
-    func initialiseCameraMetalView() throws {
-        try cameraMetalView.setup(parent: self)
-    }
-    func initialiseCameraGridView() {
-        cameraGridView.setup(parent: self)
-    }
     nonisolated func startCaptureSession() async {
+        await cameraMetalView.beginCameraEntranceAnimation()
         await captureSession.startRunning()
+        await cameraMetalView.finishCameraEntranceAnimation()
     }
 }
 private extension CameraManager {
