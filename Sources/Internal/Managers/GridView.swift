@@ -11,13 +11,16 @@
 
 import SwiftUI
 
-class GridView: UIView {}
+class GridView: UIView {
+    var parent: CameraManager!
+}
 
 // MARK: Setup
 extension GridView {
     func setup(parent: CameraManager) {
-        alpha = parent.attributes.isGridVisible ? 1 : 0
-        addToParent(parent.cameraView)
+        self.parent = parent
+        self.alpha = parent.attributes.isGridVisible ? 1 : 0
+        self.addToParent(parent.cameraView)
     }
 }
 
@@ -71,9 +74,10 @@ private extension GridView {
 
 // MARK: Visibility Animation
 extension GridView {
-    func animateVisibilityChange(_ isVisible: Bool) { UIView.animate(withDuration: visibilityAnimationDuration) { [self] in
-        alpha = isVisible ? 1 : 0
-    }}
+    func changeVisibility(_ isVisible: Bool) {
+        UIView.animate(withDuration: visibilityAnimationDuration) { self.alpha = isVisible ? 1 : 0 }
+        parent.attributes.isGridVisible = isVisible
+    }
 }
 private extension GridView {
     var visibilityAnimationDuration: Double { 0.24 }

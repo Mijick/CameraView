@@ -445,17 +445,8 @@ extension CameraManager {
 // MARK: - Changing Grid Mode
 extension CameraManager {
     func changeGridVisibility(_ shouldShowGrid: Bool) { if !isChanging {
-        animateGridVisibilityChange(shouldShowGrid)
-        updateGridVisibility(shouldShowGrid)
+        cameraGridView.changeVisibility(shouldShowGrid)
     }}
-}
-private extension CameraManager {
-    func animateGridVisibilityChange(_ shouldShowGrid: Bool) {
-        cameraGridView.animateVisibilityChange(shouldShowGrid)
-    }
-    func updateGridVisibility(_ shouldShowGrid: Bool) {
-        attributes.isGridVisible = shouldShowGrid
-    }
 }
 
 // MARK: - Capturing Output
