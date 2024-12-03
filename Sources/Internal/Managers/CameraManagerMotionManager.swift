@@ -33,7 +33,7 @@ private extension CameraManagerMotionManager {
         updateDeviceOrientation(newDeviceOrientation)
         updateUserBlockedScreenRotation()
         updateFrameOrientation()
-        //redrawGrid()
+        redrawGrid()
     }
 }
 private extension CameraManagerMotionManager {
@@ -54,6 +54,9 @@ private extension CameraManagerMotionManager {
     func updateFrameOrientation() { if UIDevice.current.orientation != .portraitUpsideDown {
         let newFrameOrientation = getNewFrameOrientation(parent.attributes.orientationLocked ? .portrait : UIDevice.current.orientation)
         updateFrameOrientation(newFrameOrientation)
+    }}
+    func redrawGrid() { if !parent.attributes.orientationLocked {
+        parent.cameraGridView.draw(.zero)
     }}
 }
 private extension CameraManagerMotionManager {
@@ -102,18 +105,4 @@ extension CameraManagerMotionManager {
     func reset() {
         motionManager.stopAccelerometerUpdates()
     }
-}
-
-
-
-
-
-
-
-private extension CameraManager {
-
-
-    func redrawGrid() { if !attributes.orientationLocked {
-        cameraGridView.draw(.zero)
-    }}
 }
