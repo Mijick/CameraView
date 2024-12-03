@@ -65,13 +65,10 @@ private extension CameraManagerMotionManager {
         case .back: getNewFrameOrientationForBackCamera(orientation)
         case .front: getNewFrameOrientationForFrontCamera(orientation)
     }}
-    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { Task { if newFrameOrientation != parent.attributes.frameOrientation {
+    func updateFrameOrientation(_ newFrameOrientation: CGImagePropertyOrientation) { if newFrameOrientation != parent.attributes.frameOrientation {
         let shouldAnimate = shouldAnimateFrameOrientationChange(newFrameOrientation)
-
-        await parent.cameraMetalView.beginCameraOrientationAnimation(if: shouldAnimate)
-        parent.attributes.frameOrientation = newFrameOrientation
-        parent.cameraMetalView.finishCameraOrientationAnimation(if: shouldAnimate)
-    }}}
+        updateFrameOrientation(withAnimation: shouldAnimate, newFrameOrientation: newFrameOrientation)
+    }}
 }
 private extension CameraManagerMotionManager {
     func getNewFrameOrientationForBackCamera(_ orientation: UIDeviceOrientation) -> CGImagePropertyOrientation { switch orientation {
@@ -93,6 +90,11 @@ private extension CameraManagerMotionManager {
         return (backCameraOrientations.contains(newFrameOrientation) && backCameraOrientations.contains(parent.attributes.frameOrientation)) ||
         (frontCameraOrientations.contains(parent.attributes.frameOrientation) && frontCameraOrientations.contains(newFrameOrientation))
     }
+    func updateFrameOrientation(withAnimation shouldAnimate: Bool, newFrameOrientation: CGImagePropertyOrientation) { Task {
+        await parent.cameraMetalView.beginCameraOrientationAnimation(if: shouldAnimate)
+        parent.attributes.frameOrientation = newFrameOrientation
+        parent.cameraMetalView.finishCameraOrientationAnimation(if: shouldAnimate)
+    }}
 }
 
 // MARK: Reset
