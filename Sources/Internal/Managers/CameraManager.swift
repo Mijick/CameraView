@@ -257,13 +257,19 @@ private extension CameraManager {
 
 // MARK: Set Exposure Duration
 extension CameraManager {
+    func setExposureDuration(_ exposureDuration: CMTime) throws {
+        guard let device = getCameraInput()?.device, exposureDuration != attributes.cameraExposure.duration, !isChanging else { return }
 
+        try setDeviceExposureDuration(exposureDuration, device)
+        attributes.cameraExposure.duration = exposureDuration
+    }
 }
 private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setDeviceExposureDuration(_ exposureDuration: CMTime, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        try device.setExposureMode(.custom, duration: exposureDuration, iso: attributes.cameraExposure.iso)
+        device.unlockForConfiguration()
+    }
 }
 
 // MARK: Set ISO
@@ -360,21 +366,7 @@ extension CameraManager {
 
 
 // MARK: - Changing Exposure Duration
-extension CameraManager {
-    func setExposureDuration(_ exposureDuration: CMTime) throws {
-        guard let device = getCameraInput()?.device, exposureDuration != attributes.cameraExposure.duration, !isChanging else { return }
 
-        try setDeviceExposureDuration(exposureDuration, device)
-        attributes.cameraExposure.duration = exposureDuration
-    }
-}
-private extension CameraManager {
-    func setDeviceExposureDuration(_ exposureDuration: CMTime, _ device: any CaptureDevice) throws {
-        try device.lockForConfiguration()
-        try device.setExposureMode(.custom, duration: exposureDuration, iso: attributes.cameraExposure.iso)
-        device.unlockForConfiguration()
-    }
-}
 
 // MARK: - Changing Exposure Target Bias
 extension CameraManager {
