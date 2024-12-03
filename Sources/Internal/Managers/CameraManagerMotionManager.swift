@@ -14,15 +14,15 @@ import AVKit
 
 @MainActor class CameraManagerMotionManager {
     private(set) var parent: CameraManager!
-    private(set) var motionManager: CMMotionManager = .init()
+    private(set) var manager: CMMotionManager = .init()
 }
 
 // MARK: Setup
 extension CameraManagerMotionManager {
     func setup(parent: CameraManager) {
         self.parent = parent
-        motionManager.accelerometerUpdateInterval = 0.05
-        motionManager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
+        manager.accelerometerUpdateInterval = 0.05
+        manager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
     }
 }
 private extension CameraManagerMotionManager {
@@ -103,6 +103,6 @@ private extension CameraManagerMotionManager {
 // MARK: Reset
 extension CameraManagerMotionManager {
     func reset() {
-        motionManager.stopAccelerometerUpdates()
+        manager.stopAccelerometerUpdates()
     }
 }
