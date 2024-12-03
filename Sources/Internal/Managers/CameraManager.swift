@@ -114,31 +114,9 @@ extension CameraManager {
 
 
 
-private extension CameraManager {
-    var currentCameraInput: (any CaptureDeviceInput)? { switch attributes.cameraPosition {
-        case .front: frontCameraInput
-        case .back: backCameraInput
-    }}
-}
 
 
 
-
-
-
-
-// MARK: - Initialising Camera
-private extension CameraManager {
-    func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
-        case .front: try setupInput(frontCameraInput)
-        case .back: try setupInput(backCameraInput)
-    }}
-}
-private extension CameraManager {
-    func setupInput(_ input: (any CaptureDeviceInput)?) throws {
-        try captureSession.add(input: input)
-    }
-}
 
 // MARK: - Changing Output Type
 extension CameraManager {
@@ -428,7 +406,11 @@ private extension CameraManager {
         device.unlockForConfiguration()
     }
 }
- extension CameraManager {
+extension CameraManager {
+    var currentCameraInput: (any CaptureDeviceInput)? { switch attributes.cameraPosition {
+        case .front: frontCameraInput
+        case .back: backCameraInput
+    }}
     var cameraView: UIView { cameraLayer.superview ?? .init() }
     var isChanging: Bool { cameraMetalView.isAnimating }
 }
@@ -440,4 +422,20 @@ public enum MijickCameraError: Error {
     case cannotSetupInput, cannotSetupOutput
     case cannotCreateMetalDevice
     case incorrectFrameRate
+}
+
+
+
+
+// MARK: - Initialising Camera
+private extension CameraManager {
+    func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
+        case .front: try setupInput(frontCameraInput)
+        case .back: try setupInput(backCameraInput)
+    }}
+}
+private extension CameraManager {
+    func setupInput(_ input: (any CaptureDeviceInput)?) throws {
+        try captureSession.add(input: input)
+    }
 }
