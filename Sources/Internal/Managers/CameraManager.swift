@@ -74,7 +74,7 @@ private extension CameraManager {
         cameraView.layer.addSublayer(cameraLayer)
     }
     func setupDeviceInputs() throws {
-        try captureSession.add(input: currentCameraInput)
+        try captureSession.add(input: getCameraInput())
         if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
     }
     func setupDeviceOutput() throws {
@@ -94,7 +94,7 @@ private extension CameraManager {
 }
 private extension CameraManager {
     func setupDevice() throws {
-        guard let device = currentCameraInput?.device else { return }
+        guard let device = getCameraInput()?.device else { return }
 
         try device.lockForConfiguration()
         device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
@@ -136,58 +136,27 @@ extension CameraManager {
         guard position != attributes.cameraPosition, !isChanging else { return }
 
         await cameraMetalView.beginCameraFlipAnimation()
-
-
-
-
+        try changeCameraInput(position)
+        resetAttributesWhenChangingCamera(position)
         cameraMetalView.finishCameraFlipAnimation()
     }
 }
 private extension CameraManager {
-}
-private extension CameraManager {
-}
-
-
-
-
-// MARK: - Changing Camera Position
-extension CameraManager {
-    func changeCamera(_ newPosition: CameraPosition) throws { Task { if newPosition != attributes.cameraPosition && !isChanging {
-        await cameraMetalView.beginCameraFlipAnimation()
-        
-        removeCameraInput(attributes.cameraPosition)
-        try setupCameraInput(newPosition)
-        updateCameraPosition(newPosition)
-        updateTorchMode(.off)
-        cameraMetalView.finishCameraFlipAnimation()
-    }}}
-}
-private extension CameraManager {
-    func removeCameraInput(_ position: CameraPosition) { if let input = getInput(position) {
-        captureSession.remove(input: input)
-    }}
-    func updateCameraPosition(_ position: CameraPosition) {
+    func changeCameraInput(_ position: CameraPosition) throws {
+        if let input = getCameraInput() { captureSession.remove(input: input) }
+        try captureSession.add(input: getCameraInput(position))
+    }
+    func resetAttributesWhenChangingCamera(_ position: CameraPosition) {
         attributes.cameraPosition = position
+        attributes.zoomFactor = 1
+        attributes.torchMode = .off
     }
 }
-private extension CameraManager {
-    func getInput(_ position: CameraPosition) -> (any CaptureDeviceInput)? { switch position {
-        case .front: frontCameraInput
-        case .back: backCameraInput
-    }}
-}
-private extension CameraManager {
-    func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
-        case .front: try setupInput(frontCameraInput)
-        case .back: try setupInput(backCameraInput)
-    }}
-}
-private extension CameraManager {
-    func setupInput(_ input: (any CaptureDeviceInput)?) throws {
-        try captureSession.add(input: input)
-    }
-}
+
+
+
+
+
 
 // MARK: - Changing Camera Filters
 extension CameraManager {
