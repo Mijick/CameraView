@@ -333,14 +333,14 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Mode
 extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(newExposureMode), newExposureMode != attributes.cameraExposure.mode {
+    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws { if let device = getDevice(attributes.cameraPosition), newExposureMode != attributes.cameraExposure.mode {
         try changeExposureMode(newExposureMode, device)
         updateExposureMode(newExposureMode)
     }}
 }
 private extension CameraManager {
     func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.exposureMode = newExposureMode
+        device.setExposureMode(newExposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
     }}
     func updateExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) {
         attributes.cameraExposure.mode = newExposureMode
@@ -365,7 +365,7 @@ private extension CameraManager {
 
 // MARK: - Changing ISO
 extension CameraManager {
-    func changeISO(_ newISO: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newISO != attributes.cameraExposure.iso {
+    func changeISO(_ newISO: Float) throws { if let device = getDevice(attributes.cameraPosition), newISO != attributes.cameraExposure.iso {
         try changeISO(newISO, device)
         updateISO(newISO)
     }}
@@ -381,7 +381,7 @@ private extension CameraManager {
 
 // MARK: - Changing Exposure Target Bias
 extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getDevice(attributes.cameraPosition), device.isExposureModeSupported(.custom), newExposureTargetBias != attributes.cameraExposure.targetBias {
+    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getDevice(attributes.cameraPosition), newExposureTargetBias != attributes.cameraExposure.targetBias {
         try changeExposureTargetBias(newExposureTargetBias, device)
         updateExposureTargetBias(newExposureTargetBias)
     }}
