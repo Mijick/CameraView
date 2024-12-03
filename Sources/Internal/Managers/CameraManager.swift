@@ -73,6 +73,19 @@ private extension CameraManager {
 
         try captureSession.add(output: captureVideoOutput)
     }
+    func setupCameraLayer(_ cameraView: UIView) {
+        captureSession.sessionPreset = attributes.resolution
+
+        cameraLayer.session = captureSession as? AVCaptureSession
+        cameraLayer.videoGravity = .resizeAspectFill
+        cameraLayer.isHidden = true
+        cameraView.layer.addSublayer(cameraLayer)
+    }
+    nonisolated func startCaptureSession() async {
+        await cameraMetalView.beginCameraEntranceAnimation()
+        await captureSession.startRunning()
+        await cameraMetalView.finishCameraEntranceAnimation()
+    }
 }
 private extension CameraManager {
 
@@ -130,24 +143,6 @@ extension CameraManager {
 }
 private extension CameraManager {
 
-
-
-
-    func setupCameraLayer(_ cameraView: UIView) {
-        captureSession.sessionPreset = attributes.resolution
-
-        cameraLayer.session = captureSession as? AVCaptureSession
-        cameraLayer.videoGravity = .resizeAspectFill
-        cameraLayer.isHidden = true
-        cameraView.layer.addSublayer(cameraLayer)
-    }
-
-
-    nonisolated func startCaptureSession() async {
-        await cameraMetalView.beginCameraEntranceAnimation()
-        await captureSession.startRunning()
-        await cameraMetalView.finishCameraEntranceAnimation()
-    }
 }
 private extension CameraManager {
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
