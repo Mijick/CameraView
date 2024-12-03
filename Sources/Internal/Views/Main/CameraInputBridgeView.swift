@@ -34,7 +34,8 @@ extension CameraInputBridgeView {
 }
 private extension CameraInputBridgeView {
     func setupCameraManager() { Task {
-        await cameraManager.setup(in: inputView)
+        do { try await cameraManager.setup(in: inputView) }
+        catch { print("CANNOT SETUP CAMERA: \(error)") }
     }}
     func setupTapGesture(_ context: Context) {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))

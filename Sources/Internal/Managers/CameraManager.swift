@@ -67,23 +67,20 @@ extension CameraManager {
 
 // MARK: - Initialising Camera
 extension CameraManager {
-    func setup(in cameraView: UIView) async {
-        do {
-            await checkPermissions()
-            initialiseCaptureSession()
-            initialiseCameraLayer(cameraView)
-            try initialiseCameraMetalView()
-            initialiseCameraGridView()
-            initializeMotionManager()
-            initialiseObservers()
+    func setup(in cameraView: UIView) async throws {
+        await checkPermissions()
+        initialiseCaptureSession()
+        initialiseCameraLayer(cameraView)
+        try initialiseCameraMetalView()
+        initialiseCameraGridView()
+        initializeMotionManager()
+        initialiseObservers()
 
-            try setupDeviceInputs()
-            try setupDeviceOutput()
-            try setupFrameRecorder()
-            try setupCameraAttributes()
-            try setupFrameRate()
-
-        } catch { print("CANNOT SETUP CAMERA: \(error)") }
+        try setupDeviceInputs()
+        try setupDeviceOutput()
+        try setupFrameRecorder()
+        try setupCameraAttributes()
+        try setupFrameRate()
 
         Task {
             cameraMetalView.beginCameraEntranceAnimation()
