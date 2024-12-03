@@ -373,20 +373,22 @@ extension CameraManager {
 
 // MARK: Attributes
 extension CameraManager {
+    var cameraView: UIView { cameraLayer.superview ?? .init() }
     var hasFlash: Bool { getCameraInput()?.device.hasFlash ?? false }
     var hasTorch: Bool { getCameraInput()?.device.hasTorch ?? false }
+}
+private extension CameraManager {
     var isChanging: Bool { cameraMetalView.isAnimating }
 }
 
-// MARK: - Helpers
-extension CameraManager {
+// MARK: Methods
+private extension CameraManager {
     func getCameraInput(_ position: CameraPosition? = nil) -> (any CaptureDeviceInput)? { switch position ?? attributes.cameraPosition {
         case .front: frontCameraInput
         case .back: backCameraInput
     }}
-    var cameraView: UIView { cameraLayer.superview ?? .init() }
-
 }
+
 
 
 // MARK: - Errors
