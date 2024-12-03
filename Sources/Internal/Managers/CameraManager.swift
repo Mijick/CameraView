@@ -363,20 +363,16 @@ extension CameraManager {
 // MARK: - Changing Frame Rate
 extension CameraManager {
     func changeFrameRate(_ newFrameRate: Int32) throws { if let device = currentCameraInput?.device, newFrameRate != attributes.frameRate {
-        try checkNewFrameRate(newFrameRate, device)
         try updateFrameRate(newFrameRate, device)
         updateFrameRate(newFrameRate)
     }}
 }
 private extension CameraManager {
-    func checkNewFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws { let newFrameRate = Double(newFrameRate), maxFrameRate = device.videoSupportedFrameRateRanges.first?.maxFrameRate ?? 60
-        if newFrameRate < 15 { throw MijickCameraError.incorrectFrameRate }
-        if newFrameRate > maxFrameRate { throw MijickCameraError.incorrectFrameRate }
+    func updateFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        device.setFrameRate(newFrameRate)
+        device.unlockForConfiguration()
     }
-    func updateFrameRate(_ newFrameRate: Int32, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
-        device.activeVideoMinFrameDuration = .init(value: 1, timescale: newFrameRate)
-        device.activeVideoMaxFrameDuration = .init(value: 1, timescale: newFrameRate)
-    }}
     func updateFrameRate(_ newFrameRate: Int32) {
         attributes.frameRate = newFrameRate
     }
@@ -411,13 +407,6 @@ extension CameraManager {
 }
 
 // MARK: - Helpers
-private extension CameraManager {
-    func withLockingDeviceForConfiguration(_ device: any CaptureDevice, _ action: (any CaptureDevice) -> ()) throws {
-        try device.lockForConfiguration()
-        action(device)
-        device.unlockForConfiguration()
-    }
-}
 extension CameraManager {
     var currentCameraInput: (any CaptureDeviceInput)? { switch attributes.cameraPosition {
         case .front: frontCameraInput

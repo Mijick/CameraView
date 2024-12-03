@@ -23,7 +23,6 @@ protocol CaptureDevice: NSObject {
     var isFocusPointOfInterestSupported: Bool { get }
     var minAvailableVideoZoomFactor: CGFloat { get }
     var maxAvailableVideoZoomFactor: CGFloat { get }
-    var videoSupportedFrameRateRanges: [AVFrameRateRange] { get }
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
@@ -47,10 +46,6 @@ protocol CaptureDevice: NSObject {
 
 // MARK: REAL
 extension AVCaptureDevice: CaptureDevice {
-    var videoSupportedFrameRateRanges: [AVFrameRateRange] { activeFormat.videoSupportedFrameRateRanges }
-
-
-
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
         guard isExposureModeSupported(mode) else { return }
 
