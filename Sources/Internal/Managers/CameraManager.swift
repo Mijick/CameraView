@@ -228,17 +228,17 @@ private extension CameraManager {
 
 // MARK: Exposure Mode
 extension CameraManager {
-    func changeExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode) throws {
-        guard let device = getCameraInput()?.device, newExposureMode != attributes.cameraExposure.mode, !isChanging else { return }
+    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws {
+        guard let device = getCameraInput()?.device, exposureMode != attributes.cameraExposure.mode, !isChanging else { return }
 
-        try setExposureMode(newExposureMode, device)
-        attributes.cameraExposure.mode = newExposureMode
+        try setExposureMode(exposureMode, device)
+        attributes.cameraExposure.mode = exposureMode
     }
 }
 private extension CameraManager {
-    func setExposureMode(_ newExposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws {
+    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureMode(newExposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        try device.setExposureMode(exposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
     }
 }
