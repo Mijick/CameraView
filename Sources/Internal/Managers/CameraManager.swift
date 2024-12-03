@@ -118,11 +118,23 @@ extension CameraManager {
 }
 
 
-// MARK: - LIVE UPDATES
+// MARK: - LIVE ACTIONS
 
 
 
-// MARK: Camera Output
+// MARK: Capture Output
+extension CameraManager {
+    func captureOutput() {
+        guard !isChanging else { return }
+
+        switch attributes.outputType {
+            case .photo: photoOutput.capture()
+            case .video: videoOutput.toggleRecording()
+        }
+    }
+}
+
+// MARK: Change Camera Output
 extension CameraManager {
     func setOutputType(_ outputType: CameraOutputType) {
         guard outputType != attributes.outputType, !isChanging else { return }
@@ -130,7 +142,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Camera Position
+// MARK: Change Camera Position
 extension CameraManager {
     func changeCameraPosition(_ position: CameraPosition) async throws {
         guard position != attributes.cameraPosition, !isChanging else { return }
@@ -153,7 +165,7 @@ private extension CameraManager {
     }
 }
 
-// MARK: Camera Zoom
+// MARK: Set Camera Zoom
 extension CameraManager {
     func changeCameraZoomFactor(_ factor: CGFloat) throws {
         guard let device = getCameraInput()?.device, !isChanging else { return }
@@ -170,7 +182,7 @@ private extension CameraManager {
     }
 }
 
-// MARK: Camera Focus
+// MARK: Set Camera Focus
 extension CameraManager {
     func setCameraFocus(at touchPoint: CGPoint) throws {
         guard let device = getCameraInput()?.device, !isChanging else { return }
@@ -193,7 +205,7 @@ private extension CameraManager {
     }
 }
 
-// MARK: Camera Filters
+// MARK: Set Filters
 extension CameraManager {
     func changeCameraFilters(_ cameraFilters: [CIFilter]) {
         guard cameraFilters != attributes.cameraFilters, !isChanging else { return }
@@ -201,7 +213,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Flash Mode
+// MARK: Set Flash Mode
 extension CameraManager {
     func changeFlashMode(_ mode: CameraFlashMode) {
         guard let device = getCameraInput()?.device, device.hasFlash, !isChanging else { return }
@@ -209,7 +221,7 @@ extension CameraManager {
     }
 }
 
-// MARK: Torch Mode
+// MARK: Set Torch Mode
 extension CameraManager {
     func changeTorchMode(_ mode: CameraTorchMode) throws {
         guard let device = getCameraInput()?.device, device.hasTorch, !isChanging else { return }
@@ -226,7 +238,7 @@ private extension CameraManager {
     }
 }
 
-// MARK: Exposure Mode
+// MARK: Set Exposure Mode
 extension CameraManager {
     func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws {
         guard let device = getCameraInput()?.device, exposureMode != attributes.cameraExposure.mode, !isChanging else { return }
@@ -243,7 +255,7 @@ private extension CameraManager {
     }
 }
 
-// MARK: Exposure Duration
+// MARK: Set Exposure Duration
 extension CameraManager {
 
 }
@@ -254,7 +266,7 @@ private extension CameraManager {
 
 }
 
-// MARK: ISO
+// MARK: Set ISO
 extension CameraManager {
 
 }
@@ -265,7 +277,7 @@ private extension CameraManager {
 
 }
 
-// MARK: Exposure Target Bias
+// MARK: Set Exposure Target Bias
 extension CameraManager {
 
 }
@@ -276,7 +288,7 @@ private extension CameraManager {
 
 }
 
-// MARK: HDR Mode
+// MARK: Set HDR Mode
 extension CameraManager {
 
 }
@@ -287,7 +299,7 @@ private extension CameraManager {
 
 }
 
-// MARK: Camera Resolution
+// MARK: Set Camera Resolution
 extension CameraManager {
 
 }
@@ -329,18 +341,6 @@ private extension CameraManager {
 }
 private extension CameraManager {
 
-}
-
-// MARK: Capture Output
-extension CameraManager {
-    func captureOutput() {
-        guard !isChanging else { return }
-
-        switch attributes.outputType {
-            case .photo: photoOutput.capture()
-            case .video: videoOutput.toggleRecording()
-        }
-    }
 }
 
 
