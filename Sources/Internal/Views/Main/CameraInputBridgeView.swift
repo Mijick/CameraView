@@ -33,9 +33,9 @@ extension CameraInputBridgeView {
     func makeCoordinator() -> Coordinator { .init(self) }
 }
 private extension CameraInputBridgeView {
-    func setupCameraManager() {
-        cameraManager.setup(in: inputView)
-    }
+    func setupCameraManager() { Task {
+        await cameraManager.setup(in: inputView)
+    }}
     func setupTapGesture(_ context: Context) {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
         inputView.addGestureRecognizer(tapRecognizer)
