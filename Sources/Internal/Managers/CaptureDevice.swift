@@ -39,6 +39,7 @@ protocol CaptureDevice: NSObject {
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float)
     func setExposureTargetBias(_ bias: Float)
     func setFrameRate(_ frameRate: Int32)
+    func setZoomFactor(_ factor: CGFloat)
 }
 
 
@@ -70,6 +71,10 @@ extension AVCaptureDevice: CaptureDevice {
         activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
         activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
     }
+    func setZoomFactor(_ factor: CGFloat) {
+        let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
+        videoZoomFactor = factor
+    }
 }
 
 
@@ -99,4 +104,5 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { return }
     func setExposureTargetBias(_ bias: Float) { return }
     func setFrameRate(_ frameRate: Int32) { return }
+    func setZoomFactor(_ factor: CGFloat) { return }
 }
