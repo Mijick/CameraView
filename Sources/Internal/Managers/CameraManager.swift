@@ -118,16 +118,17 @@ extension CameraManager {
 
 // MARK: Output Type
 extension CameraManager {
-    func setOutputType(_ newOutputType: CameraOutputType) throws { if newOutputType != attributes.outputType && !isChanging {
-        updateCameraOutputType(newOutputType)
-        updateTorchMode(.off)
-    }}
-}
-private extension CameraManager {
-    func updateCameraOutputType(_ cameraOutputType: CameraOutputType) {
-        attributes.outputType = cameraOutputType
+    func setOutputType(_ outputType: CameraOutputType) throws {
+        guard outputType != attributes.outputType, !isChanging else { return }
+
+        attributes.outputType = outputType
+        attributes.torchMode = .off
     }
 }
+
+
+
+
 
 // MARK: - Changing Camera Position
 extension CameraManager {
