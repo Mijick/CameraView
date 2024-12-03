@@ -188,7 +188,7 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, !isChanging else { return }
 
         let focusPoint = convertTouchPointToFocusPoint(touchPoint)
-        try setCameraFocus(focusPoint, device)
+        try setDeviceCameraFocus(focusPoint, device)
         cameraMetalView.performCameraFocusAnimation(touchPoint: touchPoint)
     }
 }
@@ -197,7 +197,7 @@ private extension CameraManager {
         x: touchPoint.y / cameraView.frame.height,
         y: 1 - touchPoint.x / cameraView.frame.width
     )}
-    func setCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws {
+    func setDeviceCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         try device.setFocusPointOfInterest(focusPoint)
         try device.setExposurePointOfInterest(focusPoint)
@@ -226,12 +226,12 @@ extension CameraManager {
     func setTorchMode(_ mode: CameraTorchMode) throws {
         guard let device = getCameraInput()?.device, device.hasTorch, !isChanging else { return }
 
-        try setTorchMode(device, mode)
+        try setDeviceTorchMode(device, mode)
         attributes.torchMode = mode
     }
 }
 private extension CameraManager {
-    func setTorchMode(_ device: any CaptureDevice, _ mode: CameraTorchMode) throws {
+    func setDeviceTorchMode(_ device: any CaptureDevice, _ mode: CameraTorchMode) throws {
         try device.lockForConfiguration()
         device.torchMode = mode.get()
         device.unlockForConfiguration()
@@ -243,12 +243,12 @@ extension CameraManager {
     func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws {
         guard let device = getCameraInput()?.device, exposureMode != attributes.cameraExposure.mode, !isChanging else { return }
 
-        try setExposureMode(exposureMode, device)
+        try setDeviceExposureMode(exposureMode, device)
         attributes.cameraExposure.mode = exposureMode
     }
 }
 private extension CameraManager {
-    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws {
+    func setDeviceExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         try device.setExposureMode(exposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
