@@ -323,13 +323,19 @@ extension CameraManager {
 
 // MARK: Set Frame Rate
 extension CameraManager {
+    func setFrameRate(_ frameRate: Int32) throws {
+        guard let device = getCameraInput()?.device, frameRate != attributes.frameRate, !isChanging else { return }
 
+        try setDeviceFrameRate(frameRate, device)
+        attributes.frameRate = frameRate
+    }
 }
 private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setDeviceFrameRate(_ frameRate: Int32, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        try device.setFrameRate(frameRate)
+        device.unlockForConfiguration()
+    }
 }
 
 // MARK: Set Mirror Mode
@@ -393,21 +399,7 @@ private extension CameraManager {
 
 
 // MARK: - Changing Frame Rate
-extension CameraManager {
-    func setFrameRate(_ frameRate: Int32) throws {
-        guard let device = getCameraInput()?.device, frameRate != attributes.frameRate, !isChanging else { return }
 
-        try setDeviceFrameRate(frameRate, device)
-        attributes.frameRate = frameRate
-    }
-}
-private extension CameraManager {
-    func setDeviceFrameRate(_ frameRate: Int32, _ device: any CaptureDevice) throws {
-        try device.lockForConfiguration()
-        try device.setFrameRate(frameRate)
-        device.unlockForConfiguration()
-    }
-}
 
 // MARK: - Modifiers
 extension CameraManager {
