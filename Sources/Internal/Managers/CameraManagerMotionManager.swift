@@ -44,6 +44,9 @@ private extension CameraManagerMotionManager {
         case let acceleration where acceleration.y >= 0.75: .portraitUpsideDown
         default: parent.attributes.deviceOrientation
     }}
+    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != parent.attributes.deviceOrientation {
+        parent.attributes.deviceOrientation = newDeviceOrientation
+    }}
 }
 private extension CameraManagerMotionManager {
 
@@ -66,9 +69,6 @@ extension CameraManagerMotionManager {
 
 
 private extension CameraManager {
-    func updateDeviceOrientation(_ newDeviceOrientation: AVCaptureVideoOrientation) { if newDeviceOrientation != attributes.deviceOrientation {
-        attributes.deviceOrientation = newDeviceOrientation
-    }}
     func updateUserBlockedScreenRotation() {
         let newUserBlockedScreenRotation = getNewUserBlockedScreenRotation()
         updateUserBlockedScreenRotation(newUserBlockedScreenRotation)
