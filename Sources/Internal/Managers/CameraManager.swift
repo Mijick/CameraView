@@ -55,7 +55,6 @@ extension CameraManager {
         try setupFrameRecorder()
         notificationCenterManager.setup(parent: self)
         motionManager.setup(parent: self)
-
         setupCameraLayer(cameraView)
         try cameraMetalView.setup(parent: self)
         cameraGridView.setup(parent: self)
