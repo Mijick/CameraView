@@ -47,7 +47,7 @@ import AVKit
 extension CameraManager {
     func cancel() {
         captureSession = captureSession.stopRunningAndReturnNewInstance()
-        motionManager.stopAccelerometerUpdates()
+        motionManager.reset()
         videoOutput.reset()
         notificationCenter.reset()
 
