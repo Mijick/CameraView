@@ -31,15 +31,15 @@ public extension MCameraView {
     func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.setCameraPosition(position) }
     func changeCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
     func changeResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
-    func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.changeFrameRate(frameRate) }
+    func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.setCameraZoomFactor(value) }
     func changeFlashMode(_ mode: CameraFlashMode) { cameraManager.setFlashMode(mode) }
     func changeTorchMode(_ mode: CameraTorchMode) throws { try cameraManager.setTorchMode(mode) }
-    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.changeExposureMode(exposureMode) }
-    func changeExposureDuration(_ value: CMTime) throws { try cameraManager.changeExposureDuration(value) }
-    func changeISO(_ value: Float) throws { try cameraManager.changeISO(value) }
+    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
+    func changeExposureDuration(_ value: CMTime) throws { try cameraManager.setExposureDuration(value) }
+    func changeISO(_ value: Float) throws { try cameraManager.setISO(value) }
     func changeExposureTargetBias(_ value: Float) throws { try cameraManager.changeExposureTargetBias(value) }
-    func changeHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.changeHDRMode(mode) }
+    func changeHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.setHDRMode(mode) }
     func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.setMirrorMode(shouldMirror) }
     func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
 }
