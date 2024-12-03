@@ -370,19 +370,18 @@ extension CameraManager {
 
 // MARK: - Changing Exposure Target Bias
 extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float) throws { if let device = getCameraInput()?.device, newExposureTargetBias != attributes.cameraExposure.targetBias {
-        try changeExposureTargetBias(newExposureTargetBias, device)
-        updateExposureTargetBias(newExposureTargetBias)
-    }}
+    func setExposureTargetBias(_ exposureTargetBias: Float) throws {
+        guard let device = getCameraInput()?.device, exposureTargetBias != attributes.cameraExposure.targetBias, !isChanging else { return }
+
+        try setDeviceExposureTargetBias(exposureTargetBias, device)
+        attributes.cameraExposure.targetBias = exposureTargetBias
+    }
 }
 private extension CameraManager {
-    func changeExposureTargetBias(_ newExposureTargetBias: Float, _ device: any CaptureDevice) throws {
+    func setDeviceExposureTargetBias(_ exposureTargetBias: Float, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureTargetBias(newExposureTargetBias)
+        try device.setExposureTargetBias(exposureTargetBias)
         device.unlockForConfiguration()
-    }
-    func updateExposureTargetBias(_ newExposureTargetBias: Float) {
-        attributes.cameraExposure.targetBias = newExposureTargetBias
     }
 }
 
