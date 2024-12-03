@@ -51,13 +51,6 @@ extension CameraManager {
         motionManager.reset()
         videoOutput.reset()
         notificationCenter.reset()
-
-
-
-        // permissions do osobnej klasy
-        // refaktoryzacja tej klasy
-        // refaktoryzacja klas pomocniczych
-
     }
 }
 
