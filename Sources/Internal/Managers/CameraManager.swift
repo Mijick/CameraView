@@ -91,6 +91,9 @@ extension CameraManager {
     func setup(in cameraView: UIView) async throws {
         await permissionsManager.requestAccess(parent: self)
 
+        try setupDeviceInputs()
+        try setupDeviceOutput()
+
         setupCameraLayer(cameraView)
 
 
@@ -103,8 +106,8 @@ extension CameraManager {
         initializeMotionManager()
         initialiseObservers()
 
-        try setupDeviceInputs()
-        try setupDeviceOutput()
+
+
         try setupFrameRecorder()
         try setupCameraAttributes()
         try setupFrameRate()
