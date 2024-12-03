@@ -46,7 +46,22 @@ import AVKit
 
 // MARK: Setup
 extension CameraManager {
+    func setup(in cameraView: UIView) async throws {
+        await permissionsManager.requestAccess(parent: self)
 
+        try setupDeviceInputs()
+        try setupDevice()
+        try setupDeviceOutput()
+        try setupFrameRecorder()
+        notificationCenterManager.setup(parent: self)
+        motionManager.setup(parent: self)
+
+        setupCameraLayer(cameraView)
+        try cameraMetalView.setup(parent: self)
+        cameraGridView.setup(parent: self)
+
+        Task { await startCaptureSession() }
+    }
 }
 private extension CameraManager {
     func setupDeviceInputs() throws {
@@ -91,7 +106,7 @@ private extension CameraManager {
 
 }
 private extension CameraManager {
-
+    // TODO: dodać opcjonalną kamerę
 }
 private extension CameraManager {
 
@@ -123,27 +138,6 @@ extension CameraManager {
 }
 
 // MARK: - Initialising Camera
-extension CameraManager {
-    func setup(in cameraView: UIView) async throws {
-        await permissionsManager.requestAccess(parent: self)
-
-        try setupDeviceInputs()
-        try setupDevice()
-        try setupDeviceOutput()
-        try setupFrameRecorder()
-        notificationCenterManager.setup(parent: self)
-        motionManager.setup(parent: self)
-
-        setupCameraLayer(cameraView)
-        try cameraMetalView.setup(parent: self)
-        cameraGridView.setup(parent: self)
-
-        Task { await startCaptureSession() }
-    }
-}
-private extension CameraManager {
-
-}
 private extension CameraManager {
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
