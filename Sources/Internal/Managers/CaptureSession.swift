@@ -11,7 +11,7 @@
 
 import AVKit
 
-@MainActor protocol CaptureSession: Sendable {
+protocol CaptureSession: Sendable {
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
     func add(output: AVCaptureOutput?) throws(MijickCameraError)
 

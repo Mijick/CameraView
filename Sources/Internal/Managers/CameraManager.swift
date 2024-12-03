@@ -65,8 +65,8 @@ extension CameraManager {
 }
 private extension CameraManager {
     func setupDeviceInputs() throws {
-        try setupCameraInput(attributes.cameraPosition)
-        try setupInput(audioInput)
+        try captureSession.add(input: currentCameraInput)
+        if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
     }
     func setupDevice() throws {
         guard let device = getDevice(attributes.cameraPosition) else { return }
@@ -102,14 +102,17 @@ private extension CameraManager {
         await cameraMetalView.finishCameraEntranceAnimation()
     }
 }
-private extension CameraManager {
 
-}
-private extension CameraManager {
-    // TODO: dodać opcjonalną kamerę
-}
-private extension CameraManager {
 
+
+
+
+
+private extension CameraManager {
+    var currentCameraInput: (any CaptureDeviceInput)? { switch attributes.cameraPosition {
+        case .front: frontCameraInput
+        case .back: backCameraInput
+    }}
 }
 
 // MARK: Cancel
