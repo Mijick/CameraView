@@ -176,8 +176,7 @@ private extension DefaultCameraView {
         changeMirrorOutputMode(!mirrorOutput)
     }
     func changeFlashMode() {
-        do { try changeFlashMode(flashMode.next()) }
-        catch {}
+        changeFlashMode(flashMode.next())
     }
     func changeTorchMode() {
         do { try changeTorchMode(torchMode.next()) }
