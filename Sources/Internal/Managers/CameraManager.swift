@@ -30,10 +30,10 @@ import AVKit
     private(set) var cameraMetalView: CameraMetalView = .init()
     private(set) var cameraGridView: GridView = .init()
 
-    // MARK: Other Objects
-    private(set) var permissions: CameraManagerPermissionsManager = .init()
+    // MARK: Others
+    private(set) var permissionsManager: CameraManagerPermissionsManager = .init()
     private(set) var motionManager: CameraManagerMotionManager = .init()
-    private(set) var notificationCenter: CameraManagerNotificationCenter = .init()
+    private(set) var notificationCenterManager: CameraManagerNotificationCenter = .init()
 
     // MARK: Initializer
     init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
@@ -50,7 +50,7 @@ extension CameraManager {
         captureSession = captureSession.stopRunningAndReturnNewInstance()
         motionManager.reset()
         videoOutput.reset()
-        notificationCenter.reset()
+        notificationCenterManager.reset()
     }
 }
 
@@ -91,7 +91,7 @@ extension CameraManager {
 }
 private extension CameraManager {
     func checkPermissions() async {
-        await permissions.requestAccess(parent: self)
+        await permissionsManager.requestAccess(parent: self)
     }
     func initialiseCaptureSession() {
         captureSession.sessionPreset = attributes.resolution
@@ -113,7 +113,7 @@ private extension CameraManager {
         motionManager.setup(parent: self)
     }
     func initialiseObservers() {
-        notificationCenter.setup(parent: self)
+        notificationCenterManager.setup(parent: self)
     }
     func setupDeviceInputs() throws {
         try setupCameraInput(attributes.cameraPosition)
