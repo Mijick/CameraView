@@ -74,36 +74,39 @@ extension CameraManager {
 // MARK: - Initialising Camera
 extension CameraManager {
     func setup(in cameraView: UIView) {
-        do {
-            checkPermissions()
-            initialiseCaptureSession()
-            initialiseCameraLayer(cameraView)
-            try initialiseCameraMetalView()
-            initialiseCameraGridView()
-            initializeMotionManager()
-            initialiseObservers()
+        Task {
+            do {
+                await checkPermissions()
+                initialiseCaptureSession()
+                initialiseCameraLayer(cameraView)
+                try initialiseCameraMetalView()
+                initialiseCameraGridView()
+                initializeMotionManager()
+                initialiseObservers()
 
-            try setupDeviceInputs()
-            try setupDeviceOutput()
-            try setupFrameRecorder()
-            try setupCameraAttributes()
-            try setupFrameRate()
+                try setupDeviceInputs()
+                try setupDeviceOutput()
+                try setupFrameRecorder()
+                try setupCameraAttributes()
+                try setupFrameRate()
+
+            } catch { print("CANNOT SETUP CAMERA: \(error)") }
 
             Task {
                 cameraMetalView.beginCameraEntranceAnimation()
                 await startCaptureSession()
                 cameraMetalView.finishCameraEntranceAnimation()
             }
-        } catch { print("CANNOT SETUP CAMERA: \(error)") }
+        }
     }
 }
 private extension CameraManager {
-    func checkPermissions() { Task {
+    func checkPermissions() async {
         do {
-            try await checkPermissions(.video)
-            try await checkPermissions(.audio)
-        } catch { attributes.error = error as? MijickCameraError }
-    }}
+            try await CameraManagerPermissionsManager.getAuthorizationStatus(for: .video)
+            try await CameraManagerPermissionsManager.getAuthorizationStatus(for: .audio)
+        } catch { attributes.error = error }
+    }
     func initialiseCaptureSession() {
         captureSession.sessionPreset = attributes.resolution
     }
@@ -156,21 +159,12 @@ private extension CameraManager {
     }
 }
 private extension CameraManager {
-    func checkPermissions(_ mediaType: AVMediaType) async throws { switch AVCaptureDevice.authorizationStatus(for: mediaType) {
-        case .denied, .restricted: throw getPermissionsError(mediaType)
-        case .notDetermined: let granted = await AVCaptureDevice.requestAccess(for: mediaType); if !granted { throw getPermissionsError(mediaType) }
-        default: return
-    }}
     func setupCameraInput(_ cameraPosition: CameraPosition) throws { switch cameraPosition {
         case .front: try setupInput(frontCameraInput)
         case .back: try setupInput(backCameraInput)
     }}
 }
 private extension CameraManager {
-    func getPermissionsError(_ mediaType: AVMediaType) -> MijickCameraError { switch mediaType {
-        case .audio: .microphonePermissionsNotGranted
-        default: .cameraPermissionsNotGranted
-    }}
     func setupInput(_ input: (any CaptureDeviceInput)?) throws {
         try captureSession.add(input: input)
     }
