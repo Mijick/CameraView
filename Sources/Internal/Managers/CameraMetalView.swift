@@ -37,6 +37,8 @@ private extension CameraMetalView {
         self.ciContext = CIContext(mtlDevice: metalDevice)
     }
     func configureMetalView(metalDevice: MTLDevice) {
+        self.parent.cameraView.alpha = 0
+
         self.delegate = self
         self.device = metalDevice
         self.isPaused = true
@@ -55,10 +57,7 @@ private extension CameraMetalView {
 
 // MARK: Camera Entrance
 extension CameraMetalView {
-    func beginCameraEntranceAnimation() {
-        parent.cameraView.alpha = 0
-    }
-    func finishCameraEntranceAnimation() { UIView.animate(withDuration: 0.33) { [self] in
+    func performCameraEntranceAnimation() { UIView.animate(withDuration: 0.33) { [self] in
         parent.cameraView.alpha = 1
     }}
 }

@@ -59,11 +59,7 @@ extension CameraManager {
         try cameraMetalView.setup(parent: self)
         cameraGridView.setup(parent: self)
 
-        Task {
-            cameraMetalView.beginCameraEntranceAnimation()
-            await startCaptureSession()
-            cameraMetalView.finishCameraEntranceAnimation()
-        }
+        startSession()
     }
 }
 private extension CameraManager {
@@ -99,9 +95,10 @@ private extension CameraManager {
 
         try captureSession.add(output: captureVideoOutput)
     }
-    nonisolated func startCaptureSession() async {
+    func startSession() { Task.detached { [self] in
         await captureSession.startRunning()
-    }
+        await cameraMetalView.performCameraEntranceAnimation()
+    }}
 }
 
 
