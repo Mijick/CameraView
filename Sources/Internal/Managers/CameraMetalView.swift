@@ -58,12 +58,9 @@ extension CameraMetalView {
     func beginCameraEntranceAnimation() {
         parent.cameraView.alpha = 0
     }
-    func finishCameraEntranceAnimation() { UIView.animate(withDuration: cameraEntranceAnimationDuration) { [self] in
+    func finishCameraEntranceAnimation() { UIView.animate(withDuration: 0.33) { [self] in
         parent.cameraView.alpha = 1
     }}
-}
-private extension CameraMetalView {
-    var cameraEntranceAnimationDuration: Double { 0.33 }
 }
 
 // MARK: Camera Focus
@@ -87,16 +84,12 @@ private extension CameraMetalView {
         parent.cameraView.addSubview(focusIndicator)
     }
     func animateFocusIndicator() {
-        UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { self.focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
-            UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorAnimationDelay, animations: { self.focusIndicator.alpha = 0.2 }) { _ in
-                UIView.animate(withDuration: self.focusIndicatorAnimationDuration, delay: self.focusIndicatorAnimationDelay, animations: { self.focusIndicator.alpha = 0 })
+        UIView.animate(withDuration: 0.44, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { self.focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
+            UIView.animate(withDuration: 0.44, delay: 1.44, animations: { self.focusIndicator.alpha = 0.2 }) { _ in
+                UIView.animate(withDuration: 0.44, delay: 1.44, animations: { self.focusIndicator.alpha = 0 })
             }
         }
     }
-}
-private extension CameraMetalView {
-    var focusIndicatorAnimationDuration: Double { 0.44 }
-    var focusIndicatorAnimationDelay: Double { 1.44 }
 }
 
 // MARK: Image Capture
@@ -117,30 +110,23 @@ private extension CameraMetalView {
         return view
     }
     func animateBlackMatte(_ view: UIView) {
-        UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { view.alpha = 1 }) { _ in
-            UIView.animate(withDuration: self.imageCaptureAnimationDuration, animations: { view.alpha = 0 }) { _ in
+        UIView.animate(withDuration: 0.13, animations: { view.alpha = 1 }) { _ in
+            UIView.animate(withDuration: 0.13, animations: { view.alpha = 0 }) { _ in
                 view.removeFromSuperview()
             }
         }
     }
-}
-private extension CameraMetalView {
-    var imageCaptureAnimationDuration: Double { 0.13 }
 }
 
 // MARK: Camera Orientation
 extension CameraMetalView {
     func beginCameraOrientationAnimation(if shouldAnimate: Bool) async { if shouldAnimate {
         parent.cameraView.alpha = 0
-        await Task.sleep(seconds: cameraOrientationAnimationDelay)
+        await Task.sleep(seconds: 0.1)
     }}
     func finishCameraOrientationAnimation(if shouldAnimate: Bool) { if shouldAnimate {
-        UIView.animate(withDuration: cameraOrientationAnimationDuration, delay: cameraOrientationAnimationDelay) { self.parent.cameraView.alpha = 1 }
+        UIView.animate(withDuration: 0.2, delay: 0.1) { self.parent.cameraView.alpha = 1 }
     }}
-}
-private extension CameraMetalView {
-    var cameraOrientationAnimationDuration: Double { 0.2 }
-    var cameraOrientationAnimationDelay: Double { 0.1 }
 }
 
 // MARK: Camera Flip
@@ -156,7 +142,7 @@ extension CameraMetalView {
     func finishCameraFlipAnimation() {
         guard let blurView = parent.cameraView.viewWithTag(2137) else { return }
 
-        UIView.animate(withDuration: cameraFlipBlurAnimationDuration, delay: cameraFlipBlurAnimationDelay, animations: { blurView.alpha = 0 }) { [self] _ in
+        UIView.animate(withDuration: 0.33, delay: 0.16, animations: { blurView.alpha = 0 }) { [self] _ in
             blurView.removeFromSuperview()
             isAnimating = false
         }
@@ -180,14 +166,10 @@ private extension CameraMetalView {
         parent.cameraView.addSubview(blurView)
     }}
     func animateBlurFlip() {
-        UIView.transition(with: parent.cameraView, duration: cameraFlipAnimationDuration, options: cameraFlipAnimationTransition) {}
+        UIView.transition(with: parent.cameraView, duration: 0.44, options: cameraFlipAnimationTransition) {}
     }
 }
 private extension CameraMetalView {
-    var cameraFlipBlurAnimationDuration: Double { 0.33 }
-    var cameraFlipBlurAnimationDelay: Double { 0.16 }
-
-    var cameraFlipAnimationDuration: Double { 0.44 }
     var cameraFlipAnimationTransition: UIView.AnimationOptions { parent.attributes.cameraPosition == .back ? .transitionFlipFromLeft : .transitionFlipFromRight }
 }
 
