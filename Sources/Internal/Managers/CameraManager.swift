@@ -296,13 +296,19 @@ private extension CameraManager {
 
 // MARK: Set HDR Mode
 extension CameraManager {
+    func setHDRMode(_ hdrMode: CameraHDRMode) throws {
+        guard let device = getCameraInput()?.device, hdrMode != attributes.hdrMode, !isChanging else { return }
 
+        try setDeviceHDRMode(hdrMode, device)
+        attributes.hdrMode = hdrMode
+    }
 }
 private extension CameraManager {
-
-}
-private extension CameraManager {
-
+    func setDeviceHDRMode(_ hdrMode: CameraHDRMode, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
+        device.hdrMode = hdrMode
+        device.unlockForConfiguration()
+    }
 }
 
 // MARK: Set Resolution
@@ -384,21 +390,7 @@ private extension CameraManager {
 }
 
 // MARK: - Changing Camera HDR Mode
-extension CameraManager {
-    func setHDRMode(_ hdrMode: CameraHDRMode) throws {
-        guard let device = getCameraInput()?.device, hdrMode != attributes.hdrMode, !isChanging else { return }
 
-        try setDeviceHDRMode(hdrMode, device)
-        attributes.hdrMode = hdrMode
-    }
-}
-private extension CameraManager {
-    func setDeviceHDRMode(_ hdrMode: CameraHDRMode, _ device: any CaptureDevice) throws {
-        try device.lockForConfiguration()
-        device.hdrMode = hdrMode
-        device.unlockForConfiguration()
-    }
-}
 
 // MARK: - Changing Frame Rate
 extension CameraManager {
