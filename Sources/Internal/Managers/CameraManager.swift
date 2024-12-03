@@ -105,8 +105,10 @@ extension CameraManager {
         await permissionsManager.requestAccess(parent: self)
 
         try setupDeviceInputs()
+        try setupDevice()
         try setupDeviceOutput()
         try setupFrameRecorder()
+
 
         setupCameraLayer(cameraView)
 
@@ -123,8 +125,8 @@ extension CameraManager {
 
 
 
-        try setupCameraAttributes()
-        try setupFrameRate()
+        //try setupCameraAttributes()
+        //try setupFrameRate()
 
         Task {
             cameraMetalView.beginCameraEntranceAnimation()
@@ -134,6 +136,16 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
+    func setupDevice() throws {
+        guard let device = getDevice(attributes.cameraPosition) else { return }
+
+        try device.lockForConfiguration()
+        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
+        device.setFrameRate(attributes.frameRate)
+        device.hdrMode = attributes.hdrMode
+        device.unlockForConfiguration()
+    }
 
 
 
