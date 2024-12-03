@@ -342,9 +342,11 @@ extension CameraManager {
     }}
 }
 private extension CameraManager {
-    func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: any CaptureDevice) throws { try withLockingDeviceForConfiguration(device) { device in
+    func changeHDRMode(_ newHDRMode: CameraHDRMode, _ device: any CaptureDevice) throws {
+        try device.lockForConfiguration()
         device.hdrMode = newHDRMode
-    }}
+        device.unlockForConfiguration()
+    }
     func updateHDRMode(_ newHDRMode: CameraHDRMode) {
         attributes.hdrMode = newHDRMode
     }
