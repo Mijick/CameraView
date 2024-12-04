@@ -145,11 +145,12 @@ extension CameraManagerTests {
     @Test("Set Camera Focus") func setCameraFocus() async throws {
         try await setupCamera()
 
-        let point = CGPoint(x: 0.2137, y: 0.2137)
+        let point = CGPoint(x: 213.7, y: 21.37)
+        let expectedPoint = CGPoint(x: point.y / cameraManager.cameraView.frame.height, y: 1 - point.x / cameraManager.cameraView.frame.width)
 
         try cameraManager.setCameraFocus(at: point)
-        #expect(currentDevice.focusPointOfInterest == point)
-        #expect(currentDevice.exposurePointOfInterest == point)
+        #expect(currentDevice.focusPointOfInterest == expectedPoint)
+        #expect(currentDevice.exposurePointOfInterest == expectedPoint)
         #expect(currentDevice.focusMode == .autoFocus)
         #expect(currentDevice.exposureMode == .autoExpose)
         #expect(cameraManager.cameraView.subviews.filter { $0.tag == .focusIndicatorTag }.count == 1)
@@ -233,7 +234,9 @@ extension CameraManagerTests {
 // MARK: Helpers
 private extension CameraManagerTests {
     func setupCamera() async throws {
-        try await cameraManager.setup(in: .init())
+        let cameraView = UIView(frame: .init(origin: .zero, size: .init(width: 1000, height: 1000)))
+
+        try await cameraManager.setup(in: cameraView)
         await Task.sleep(seconds: 0.1)
     }
 }
