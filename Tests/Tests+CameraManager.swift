@@ -41,13 +41,13 @@ extension CameraManagerTests {
     }
     @Test("Setup: Custom Attributes") func setupWithCustomAttributes() async throws {
         cameraManager.attributes.cameraPosition = .front
-        cameraManager.attributes.zoomFactor = 3.1
+        cameraManager.attributes.zoomFactor = 2137
         cameraManager.attributes.lightMode = .on
         cameraManager.attributes.resolution = .hd1280x720
-        cameraManager.attributes.frameRate = 60
+        cameraManager.attributes.frameRate = 666
         cameraManager.attributes.cameraExposure.duration = .init(value: 1, timescale: 10)
         cameraManager.attributes.cameraExposure.targetBias = 0.66
-        cameraManager.attributes.cameraExposure.iso = 2
+        cameraManager.attributes.cameraExposure.iso = 2000
         cameraManager.attributes.cameraExposure.mode = .custom
         cameraManager.attributes.hdrMode = .off
         cameraManager.attributes.isGridVisible = false
@@ -55,19 +55,21 @@ extension CameraManagerTests {
         try await setupCamera()
 
         #expect(currentDevice.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
-        #expect(currentDevice.videoZoomFactor == 3.1)
+        #expect(currentDevice.videoZoomFactor == currentDevice.maxAvailableVideoZoomFactor)
         #expect(currentDevice.lightMode == .on)
         #expect(cameraManager.captureSession.sessionPreset == .hd1280x720)
-        #expect(currentDevice.activeVideoMinFrameDuration == .init(value: 1, timescale: 60))
-        #expect(currentDevice.activeVideoMaxFrameDuration == .init(value: 1, timescale: 60))
+        #expect(currentDevice.activeVideoMinFrameDuration == .init(value: 1, timescale: Int32(currentDevice.maxFrameRate!)))
+        #expect(currentDevice.activeVideoMaxFrameDuration == .init(value: 1, timescale: Int32(currentDevice.maxFrameRate!)))
         #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 10))
         #expect(currentDevice.exposureTargetBias == 0.66)
-        #expect(currentDevice.iso == 2)
+        #expect(currentDevice.iso == currentDevice.maxISO)
         #expect(currentDevice.exposureMode == .custom)
         #expect(currentDevice.hdrMode == .off)
         #expect(cameraManager.cameraGridView.alpha == 0)
 
-        // TODO: Sprawdzić jeszcze czy Attributes zostały poprawnie zmienione
+        #expect(cameraManager.attributes.zoomFactor == currentDevice.maxAvailableVideoZoomFactor)
+        #expect(cameraManager.attributes.frameRate == Int32(currentDevice.maxFrameRate!))
+        #expect(cameraManager.attributes.cameraExposure.iso == currentDevice.maxISO)
     }
     @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() async throws {
         cameraManager.attributes.isAudioSourceAvailable = false
