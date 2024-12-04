@@ -26,6 +26,7 @@ import AVKit
     private(set) var videoOutput: CameraManagerVideo = .init()
 
     // MARK: UI Elements
+    private(set) var cameraView: UIView!
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer = .init()
     private(set) var cameraMetalView: CameraMetalView = .init()
     private(set) var cameraGridView: GridView = .init()
@@ -65,7 +66,8 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func setupCameraLayer(_ cameraView: UIView) {
+    func setupCameraLayer(_ superview: UIView) {
+        cameraView = superview
         captureSession.sessionPreset = attributes.resolution
 
         cameraLayer.session = captureSession as? AVCaptureSession
@@ -373,7 +375,6 @@ private extension CameraManager {
 
 // MARK: Attributes
 extension CameraManager {
-    var cameraView: UIView { cameraLayer.superview ?? .init() }
     var hasFlash: Bool { getCameraInput()?.device.hasFlash ?? false }
     var hasTorch: Bool { getCameraInput()?.device.hasTorch ?? false }
 }

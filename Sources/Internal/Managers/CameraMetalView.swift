@@ -158,16 +158,16 @@ private extension CameraMetalView {
         let image = UIImage(ciImage: currentFrame)
         return image
     }
-    func insertBlurView(_ snapshot: UIImage?) { if let snapshot {
-        let blurView = UIImageView(image: snapshot)
-        blurView.frame = parent.cameraView.frame
+    func insertBlurView(_ snapshot: UIImage?) {
+        let blurView = UIImageView(frame: parent.cameraView.frame)
+        blurView.image = snapshot
         blurView.contentMode = .scaleAspectFill
         blurView.clipsToBounds = true
         blurView.tag = 2137
         blurView.applyBlurEffect(style: .regular)
 
         parent.cameraView.addSubview(blurView)
-    }}
+    }
     func animateBlurFlip() {
         UIView.transition(with: parent.cameraView, duration: 0.44, options: cameraFlipAnimationTransition) {}
     }
