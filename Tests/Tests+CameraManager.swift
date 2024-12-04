@@ -229,43 +229,49 @@ extension CameraManagerTests {
 // MARK: Set Exposure Mode
 extension CameraManagerTests {
     @Test("Set Exposure Mode") func setExposureMode() async throws {
+        try await setupCamera()
     }
 }
 
 // MARK: Set Exposure Duration
 extension CameraManagerTests {
     @Test("Set Exposure Duration") func setExposureDuration() async throws {
+        try await setupCamera()
     }
 }
 
 // MARK: Set ISO
 extension CameraManagerTests {
     @Test("Set ISO") func setISO() async throws {
+        try await setupCamera()
     }
 }
 
 // MARK: Set Exposure Target Bias
 extension CameraManagerTests {
     @Test("Set Exposure Target Bias") func setExposureTargetBias() async throws {
+        try await setupCamera()
     }
 }
 
 // MARK: Set HDR Mode
 extension CameraManagerTests {
     @Test("Set HDR Mode") func setHDRMode() async throws {
+        try await setupCamera()
     }
 }
 
 // MARK: Set Resolution
 extension CameraManagerTests {
     @Test("Set Resolution") func setResolution() async throws {
-
+        try await setupCamera()
     }
 }
 
 // MARK: Set Frame Rate
 extension CameraManagerTests {
     @Test("Set Frame Rate") func setFrameRate() async throws {
+        try await setupCamera()
     }
 }
 
