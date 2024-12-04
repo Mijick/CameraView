@@ -271,6 +271,21 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set ISO") func setISO() async throws {
         try await setupCamera()
+
+        try cameraManager.setISO(1)
+        #expect(currentDevice.iso == 1)
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.iso == 1)
+
+        try cameraManager.setISO(-2137)
+        #expect(currentDevice.iso == currentDevice.minISO)
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.iso == currentDevice.minISO)
+
+        try cameraManager.setISO(2137)
+        #expect(currentDevice.iso == currentDevice.maxISO)
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.iso == currentDevice.maxISO)
     }
 }
 
