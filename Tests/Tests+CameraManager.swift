@@ -249,6 +249,21 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set Exposure Duration") func setExposureDuration() async throws {
         try await setupCamera()
+
+        try cameraManager.setExposureDuration(.init(value: 1, timescale: 33))
+        #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 33))
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.duration == .init(value: 1, timescale: 33))
+
+        try cameraManager.setExposureDuration(.init(value: 1, timescale: -10))
+        #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 33))
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.duration == .init(value: 1, timescale: 33))
+
+        try cameraManager.setExposureDuration(.init(value: 1, timescale: 1200))
+        #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 33))
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.duration == .init(value: 1, timescale: 33))
     }
 }
 
