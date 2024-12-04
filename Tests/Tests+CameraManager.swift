@@ -50,7 +50,6 @@ extension CameraManagerTests {
         cameraManager.attributes.cameraExposure.iso = 0.5
         cameraManager.attributes.cameraExposure.mode = .custom
         cameraManager.attributes.hdrMode = .off
-        cameraManager.attributes.mirrorOutput = true
         cameraManager.attributes.isGridVisible = false
 
         try await cameraManager.setup(in: .init())
@@ -69,8 +68,7 @@ extension CameraManagerTests {
         #expect(device.iso == 0.5)
         #expect(device.exposureMode == .custom)
         #expect(device.hdrMode == .off)
-
-
+        #expect(cameraManager.cameraGridView.alpha == 0)
     }
     @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() {
     }
