@@ -99,10 +99,10 @@ private extension CameraManager {
         guard let device = getCameraInput()?.device else { return }
 
         try device.lockForConfiguration()
-        try device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
-        try device.setExposureTargetBias(attributes.cameraExposure.targetBias)
+        device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        device.setExposureTargetBias(attributes.cameraExposure.targetBias)
         try device.setFrameRate(attributes.frameRate)
-        try device.setZoomFactor(attributes.zoomFactor)
+        device.setZoomFactor(attributes.zoomFactor)
         device.torchMode = attributes.torchMode.get()
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
@@ -184,7 +184,7 @@ extension CameraManager {
 private extension CameraManager {
     func setDeviceZoomFactor(_ zoomFactor: CGFloat, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setZoomFactor(zoomFactor)
+        device.setZoomFactor(zoomFactor)
         device.unlockForConfiguration()
     }
 }
@@ -321,13 +321,13 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, exposureTargetBias != attributes.cameraExposure.targetBias, !isChanging else { return }
 
         try setDeviceExposureTargetBias(exposureTargetBias, device)
-        attributes.cameraExposure.targetBias = exposureTargetBias
+        attributes.cameraExposure.targetBias = device.exposureTargetBias
     }
 }
 private extension CameraManager {
     func setDeviceExposureTargetBias(_ exposureTargetBias: Float, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureTargetBias(exposureTargetBias)
+        device.setExposureTargetBias(exposureTargetBias)
         device.unlockForConfiguration()
     }
 }

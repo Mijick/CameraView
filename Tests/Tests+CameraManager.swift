@@ -293,6 +293,18 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set Exposure Target Bias") func setExposureTargetBias() async throws {
         try await setupCamera()
+
+        try cameraManager.setExposureTargetBias(1)
+        #expect(currentDevice.exposureTargetBias == 1)
+        #expect(cameraManager.attributes.cameraExposure.targetBias == 1)
+
+        try cameraManager.setExposureTargetBias(-2137)
+        #expect(currentDevice.exposureTargetBias == currentDevice.minExposureTargetBias)
+        #expect(cameraManager.attributes.cameraExposure.targetBias == currentDevice.minExposureTargetBias)
+
+        try cameraManager.setExposureTargetBias(2137)
+        #expect(currentDevice.exposureTargetBias == currentDevice.maxExposureTargetBias)
+        #expect(cameraManager.attributes.cameraExposure.targetBias == currentDevice.maxExposureTargetBias)
     }
 }
 

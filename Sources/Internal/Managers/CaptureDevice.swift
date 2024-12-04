@@ -25,6 +25,8 @@ protocol CaptureDevice: NSObject {
     var maxExposureDuration: CMTime { get }
     var minISO: Float { get }
     var maxISO: Float { get }
+    var minExposureTargetBias: Float { get }
+    var maxExposureTargetBias: Float { get }
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
@@ -42,7 +44,7 @@ protocol CaptureDevice: NSObject {
     func unlockForConfiguration()
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> Void)?)
-    func setExposureTargetBias(_ bias: Float) throws
+    func setExposureTargetBias(_ bias: Float, completionHandler handler: ((CMTime) -> ())?)
     func setFrameRate(_ frameRate: Int32) throws
     func setFocusPointOfInterest(_ point: CGPoint) throws
     func setExposurePointOfInterest(_ point: CGPoint) throws
@@ -65,6 +67,12 @@ extension CaptureDevice {
 
         setExposureModeCustom(duration: duration, iso: iso, completionHandler: nil)
     }
+    func setExposureTargetBias(_ bias: Float) {
+        guard isExposureModeSupported(.custom) else { return }
+
+        let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
+        setExposureTargetBias(bias, completionHandler: nil)
+    }
 }
 
 
@@ -76,12 +84,6 @@ extension AVCaptureDevice: CaptureDevice {
     var maxISO: Float { activeFormat.maxISO }
 
 
-    func setExposureTargetBias(_ bias: Float) {
-        guard isExposureModeSupported(.custom) else { return }
-
-        let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
-        setExposureTargetBias(bias, completionHandler: nil)
-    }
     func setFrameRate(_ frameRate: Int32) {
         guard let range = activeFormat.videoSupportedFrameRateRanges.first,
               frameRate > Int32(range.minFrameRate), frameRate < Int32(range.maxFrameRate)
@@ -111,6 +113,8 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let maxExposureDuration: CMTime = .init(value: 1, timescale: 5)
     let minISO: Float = 1
     let maxISO: Float = 10
+    let minExposureTargetBias: Float = 0.1
+    let maxExposureTargetBias: Float = 199
 
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
 
@@ -140,7 +144,7 @@ class MockCaptureDevice: NSObject, CaptureDevice {
 
     func lockForConfiguration() throws { return }
     func unlockForConfiguration() { return }
-    func setExposureTargetBias(_ bias: Float) {
+    func setExposureTargetBias(_ bias: Float, completionHandler handler: ((CMTime) -> ())?) {
         _exposureTargetBias = bias
     }
     func setFrameRate(_ frameRate: Int32) {
