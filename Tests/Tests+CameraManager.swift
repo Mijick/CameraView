@@ -145,12 +145,14 @@ extension CameraManagerTests {
     @Test("Set Camera Focus") func setCameraFocus() async throws {
         try await setupCamera()
 
-        try cameraManager.setCameraFocus(at: .init(x: 0.2137, y: 0.2137))
-        #expect(currentDevice.focusPointOfInterest == .init(x: 0.2137, y: 0.2137))
+        let point = CGPoint(x: 0.2137, y: 0.2137)
+
+        try cameraManager.setCameraFocus(at: point)
+        #expect(currentDevice.focusPointOfInterest == point)
+        #expect(currentDevice.exposurePointOfInterest == point)
         #expect(currentDevice.focusMode == .autoFocus)
         #expect(currentDevice.exposureMode == .autoExpose)
-        #expect(currentDevice.exposurePointOfInterest == .init(x: 0.2137, y: 0.2137))
-        #expect(cameraManager.cameraView.subviews.filter { $0.tag == 29 }.count == 1)
+        #expect(cameraManager.cameraView.subviews.filter { $0.tag == .focusIndicatorTag }.count == 1)
     }
 }
 
@@ -237,4 +239,12 @@ private extension CameraManagerTests {
 }
 private extension CameraManagerTests {
     var currentDevice: any CaptureDevice { cameraManager.getCameraInput()!.device }
+}
+
+
+
+
+extension Int {
+    static var blurViewTag: Int { 2137 }
+    static var focusIndicatorTag: Int { 29 }
 }
