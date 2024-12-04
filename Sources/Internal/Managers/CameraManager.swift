@@ -270,13 +270,13 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, exposureMode != attributes.cameraExposure.mode, !isChanging else { return }
 
         try setDeviceExposureMode(exposureMode, device)
-        attributes.cameraExposure.mode = exposureMode
+        attributes.cameraExposure.mode = device.exposureMode
     }
 }
 private extension CameraManager {
     func setDeviceExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureMode(exposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
+        device.setExposureMode(exposureMode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
     }
 }
@@ -287,13 +287,13 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, exposureDuration != attributes.cameraExposure.duration, !isChanging else { return }
 
         try setDeviceExposureDuration(exposureDuration, device)
-        attributes.cameraExposure.duration = exposureDuration
+        attributes.cameraExposure.duration = device.exposureDuration
     }
 }
 private extension CameraManager {
     func setDeviceExposureDuration(_ exposureDuration: CMTime, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureMode(.custom, duration: exposureDuration, iso: attributes.cameraExposure.iso)
+        device.setExposureMode(.custom, duration: exposureDuration, iso: attributes.cameraExposure.iso)
         device.unlockForConfiguration()
     }
 }
@@ -304,13 +304,13 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, iso != attributes.cameraExposure.iso, !isChanging else { return }
 
         try setDeviceISO(iso, device)
-        attributes.cameraExposure.iso = iso
+        attributes.cameraExposure.iso = device.iso
     }
 }
 private extension CameraManager {
     func setDeviceISO(_ iso: Float, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: iso)
+        device.setExposureMode(.custom, duration: attributes.cameraExposure.duration, iso: iso)
         device.unlockForConfiguration()
     }
 }

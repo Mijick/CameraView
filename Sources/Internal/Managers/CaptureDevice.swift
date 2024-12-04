@@ -107,8 +107,8 @@ extension AVCaptureDevice: CaptureDevice {
 
 // MARK: MOCK
 class MockCaptureDevice: NSObject, CaptureDevice {
-    let minExposureDuration: CMTime = .init(value: 1, timescale: 1)
-    let maxExposureDuration: CMTime = .init(value: 1, timescale: 213)
+    let minExposureDuration: CMTime = .init(value: 1, timescale: 1000)
+    let maxExposureDuration: CMTime = .init(value: 1, timescale: 5)
     let minISO: Float = 1
     let maxISO: Float = 10
 

@@ -255,15 +255,15 @@ extension CameraManagerTests {
         #expect(currentDevice.exposureMode == .custom)
         #expect(cameraManager.attributes.cameraExposure.duration == .init(value: 1, timescale: 33))
 
-        try cameraManager.setExposureDuration(.init(value: 1, timescale: -10))
-        #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 33))
+        try cameraManager.setExposureDuration(.init(value: 1, timescale: 100000))
+        #expect(currentDevice.exposureDuration == currentDevice.minExposureDuration)
         #expect(currentDevice.exposureMode == .custom)
-        #expect(cameraManager.attributes.cameraExposure.duration == .init(value: 1, timescale: 33))
+        #expect(cameraManager.attributes.cameraExposure.duration == currentDevice.minExposureDuration)
 
-        try cameraManager.setExposureDuration(.init(value: 1, timescale: 1200))
-        #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 33))
+        try cameraManager.setExposureDuration(.init(value: 1, timescale: 2))
+        #expect(currentDevice.exposureDuration == currentDevice.maxExposureDuration)
         #expect(currentDevice.exposureMode == .custom)
-        #expect(cameraManager.attributes.cameraExposure.duration == .init(value: 1, timescale: 33))
+        #expect(cameraManager.attributes.cameraExposure.duration == currentDevice.maxExposureDuration)
     }
 }
 
