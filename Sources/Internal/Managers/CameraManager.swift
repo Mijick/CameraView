@@ -103,7 +103,7 @@ private extension CameraManager {
         device.setExposureTargetBias(attributes.cameraExposure.targetBias)
         device.setFrameRate(attributes.frameRate)
         device.setZoomFactor(attributes.zoomFactor)
-        device.torchMode = attributes.torchMode.get()
+        device.lightMode = attributes.torchMode
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
 
@@ -226,16 +226,13 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, device.hasTorch, torchMode != attributes.torchMode, !isChanging else { return }
 
         try setDeviceTorchMode(torchMode, device)
-        attributes.torchMode = torchMode
-
-
-        // TODO: Pobieraj torchMode z Device
+        attributes.torchMode = device.lightMode
     }
 }
 private extension CameraManager {
     func setDeviceTorchMode(_ torchMode: CameraTorchMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.torchMode = torchMode.get()
+        device.lightMode = torchMode
         device.unlockForConfiguration()
     }
 }

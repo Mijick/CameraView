@@ -34,7 +34,7 @@ protocol CaptureDevice: NSObject {
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
-    var torchMode: AVCaptureDevice.TorchMode { get set }
+    var lightMode: CameraTorchMode { get set }
     var exposureMode: AVCaptureDevice.ExposureMode { get set }
     var hdrMode: CameraHDRMode { get set }
     var focusPointOfInterest: CGPoint { get set }
@@ -138,7 +138,7 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     var maxAvailableVideoZoomFactor: CGFloat = 3.876
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
-    var torchMode: AVCaptureDevice.TorchMode = .auto
+    var lightMode: CameraTorchMode = .off
     var exposureMode: AVCaptureDevice.ExposureMode = .continuousAutoExposure
     var hdrMode: CameraHDRMode = .auto
     var focusPointOfInterest: CGPoint = .zero

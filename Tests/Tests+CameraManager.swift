@@ -56,7 +56,7 @@ extension CameraManagerTests {
 
         #expect(currentDevice.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
         #expect(currentDevice.videoZoomFactor == 3.1)
-        #expect(currentDevice.torchMode == .on)
+        #expect(currentDevice.lightMode == .on)
         #expect(cameraManager.captureSession.sessionPreset == .hd1280x720)
         #expect(currentDevice.activeVideoMinFrameDuration == .init(value: 1, timescale: 60))
         #expect(currentDevice.activeVideoMaxFrameDuration == .init(value: 1, timescale: 60))
@@ -179,11 +179,11 @@ extension CameraManagerTests {
         try await setupCamera()
 
         try cameraManager.setTorchMode(.on)
-        #expect(currentDevice.torchMode == .on)
+        #expect(currentDevice.lightMode == .on)
         #expect(cameraManager.attributes.torchMode == .on)
 
         try cameraManager.setTorchMode(.off)
-        #expect(currentDevice.torchMode == .off)
+        #expect(currentDevice.lightMode == .off)
         #expect(cameraManager.attributes.torchMode == .off)
     }
 }
