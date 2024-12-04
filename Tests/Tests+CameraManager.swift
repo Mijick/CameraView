@@ -204,6 +204,15 @@ extension CameraManagerTests {
 // MARK: Set Grid Visibility
 extension CameraManagerTests {
     @Test("Set Grid Visibility") func setGridVisibility() async throws {
+        try await setupCamera()
+
+        cameraManager.setGridVisibility(true)
+        #expect(cameraManager.cameraGridView.alpha == 1)
+        #expect(cameraManager.attributes.isGridVisible == true)
+
+        cameraManager.setGridVisibility(false)
+        #expect(cameraManager.cameraGridView.alpha == 0)
+        #expect(cameraManager.attributes.isGridVisible == false)
     }
 }
 
