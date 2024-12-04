@@ -382,7 +382,7 @@ private extension CameraManager {
 }
 
 // MARK: Methods
-private extension CameraManager {
+extension CameraManager {
     func getCameraInput(_ position: CameraPosition? = nil) -> (any CaptureDeviceInput)? { switch position ?? attributes.cameraPosition {
         case .front: frontCameraInput
         case .back: backCameraInput

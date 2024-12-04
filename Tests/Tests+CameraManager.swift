@@ -26,7 +26,6 @@ import SwiftUI
 extension CameraManagerTests {
     @Test("Setup: Default Attributes") func setupWithDefaultAttributes() async throws {
         try await cameraManager.setup(in: .init())
-
         await Task.sleep(seconds: 0.1)
 
         #expect(cameraManager.captureSession.isRunning)
@@ -41,7 +40,6 @@ extension CameraManagerTests {
         #expect(cameraManager.notificationCenterManager.parent != nil)
     }
     @Test("Setup: Custom Attributes") func setupWithCustomAttributes() async throws {
-        cameraManager.attributes.outputType = .video
         cameraManager.attributes.cameraPosition = .front
         cameraManager.attributes.zoomFactor = 3.1
         cameraManager.attributes.flashMode = .on
@@ -57,13 +55,14 @@ extension CameraManagerTests {
         cameraManager.attributes.isGridVisible = false
 
         try await cameraManager.setup(in: .init())
-
         await Task.sleep(seconds: 0.1)
 
+        let device = cameraManager.getCameraInput()!.device
+
+        #expect(device.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
+        
 
 
-
-        #expect(cameraManager.currentDevice.isRunning)
     }
     @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() {
     }
