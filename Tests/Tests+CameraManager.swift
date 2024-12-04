@@ -40,10 +40,31 @@ extension CameraManagerTests {
         #expect(cameraManager.motionManager.manager.accelerometerUpdateInterval > 0)
         #expect(cameraManager.notificationCenterManager.parent != nil)
     }
-    @Test("Setup: Custom Attributes (1)") func setupWithCustomAttributes_1() {
-    }
-    @Test("Setup: Custom Attributes (2)") func setupWithCustomAttributes_2() {
-    }
+    @Test("Setup: Custom Attributes") func setupWithCustomAttributes() async throws {
+        cameraManager.attributes.outputType = .video
+        cameraManager.attributes.cameraPosition = .front
+        cameraManager.attributes.zoomFactor = 3.1
+        cameraManager.attributes.flashMode = .on
+        cameraManager.attributes.torchMode = .on
+        cameraManager.attributes.resolution = .hd1280x720
+        cameraManager.attributes.frameRate = 60
+        cameraManager.attributes.cameraExposure.duration = .init(value: 1, timescale: 10)
+        cameraManager.attributes.cameraExposure.targetBias = 0.66
+        cameraManager.attributes.cameraExposure.iso = 0.5
+        cameraManager.attributes.cameraExposure.mode = .custom
+        cameraManager.attributes.hdrMode = .off
+        cameraManager.attributes.mirrorOutput = true
+        cameraManager.attributes.isGridVisible = false
 
-    // co się stanei gdy audio source nie jest dostępne?
+        try await cameraManager.setup(in: .init())
+
+        await Task.sleep(seconds: 0.1)
+
+
+
+
+        #expect(cameraManager.currentDevice.isRunning)
+    }
+    @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() {
+    }
 }
