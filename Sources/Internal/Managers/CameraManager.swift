@@ -107,14 +107,7 @@ private extension CameraManager {
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
 
-        attributes.cameraExposure.mode = device.exposureMode
-        attributes.cameraExposure.duration = device.exposureDuration
-        attributes.cameraExposure.iso = device.iso
-        attributes.cameraExposure.targetBias = device.exposureTargetBias
-        attributes.frameRate = device.activeVideoMaxFrameDuration.timescale
-        attributes.zoomFactor = device.videoZoomFactor
-        attributes.lightMode = device.lightMode
-        attributes.hdrMode = device.hdrMode
+        resetAttributes(device: device)
     }
 }
 
@@ -170,12 +163,9 @@ private extension CameraManager {
         try captureSession.add(input: getCameraInput(position))
     }
     func resetAttributesWhenChangingCamera(_ position: CameraPosition) {
+        resetAttributes(device: getCameraInput(position)?.device)
         attributes.cameraPosition = position
-        attributes.zoomFactor = 1
-        attributes.lightMode = .off
     }
-
-    // TODO: Zresetować attributes
 }
 
 // MARK: Set Camera Zoom
@@ -395,6 +385,18 @@ private extension CameraManager {
 
 // MARK: Methods
 extension CameraManager {
+    func resetAttributes(device: (any CaptureDevice)?) {
+        guard let device else { return }
+
+        attributes.cameraExposure.mode = device.exposureMode
+        attributes.cameraExposure.duration = device.exposureDuration
+        attributes.cameraExposure.iso = device.iso
+        attributes.cameraExposure.targetBias = device.exposureTargetBias
+        attributes.frameRate = device.activeVideoMaxFrameDuration.timescale
+        attributes.zoomFactor = device.videoZoomFactor
+        attributes.lightMode = device.lightMode
+        attributes.hdrMode = device.hdrMode
+    }
     func getCameraInput(_ position: CameraPosition? = nil) -> (any CaptureDeviceInput)? { switch position ?? attributes.cameraPosition {
         case .front: frontCameraInput
         case .back: backCameraInput
