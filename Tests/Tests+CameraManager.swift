@@ -230,6 +230,18 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set Exposure Mode") func setExposureMode() async throws {
         try await setupCamera()
+
+        try cameraManager.setExposureMode(.continuousAutoExposure)
+        #expect(currentDevice.exposureMode == .continuousAutoExposure)
+        #expect(cameraManager.attributes.cameraExposure.mode == .continuousAutoExposure)
+
+        try cameraManager.setExposureMode(.autoExpose)
+        #expect(currentDevice.exposureMode == .autoExpose)
+        #expect(cameraManager.attributes.cameraExposure.mode == .autoExpose)
+
+        try cameraManager.setExposureMode(.custom)
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(cameraManager.attributes.cameraExposure.mode == .custom)
     }
 }
 
