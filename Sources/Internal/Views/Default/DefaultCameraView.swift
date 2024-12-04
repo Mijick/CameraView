@@ -54,7 +54,7 @@ private extension DefaultCameraView {
     }
     func createBottomView() -> some View {
         ZStack {
-            createTorchButton()
+            createLightButton()
             createCaptureButton()
             createChangeCameraButton()
         }
@@ -124,13 +124,13 @@ private extension DefaultCameraView {
     }
 }
 private extension DefaultCameraView {
-    func createTorchButton() -> some View {
-        BottomButton(icon: "icon-torch", active: lightMode == .on, action: changeTorchMode)
+    func createLightButton() -> some View {
+        BottomButton(icon: "icon-light", active: lightMode == .on, action: changeLightMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(hasLight)
-            .isActive(config.torchButtonVisible)
+            .isActive(config.lightButtonVisible)
     }
     func createCaptureButton() -> some View {
         CaptureButton(action: captureOutput, mode: outputType, isRecording: isRecording).isActive(config.captureButtonVisible)
@@ -178,7 +178,7 @@ private extension DefaultCameraView {
     func changeFlashMode() {
         changeFlashMode(flashMode.next())
     }
-    func changeTorchMode() {
+    func changeLightMode() {
         do { try changeLightMode(lightMode.next()) }
         catch {}
     }
@@ -194,7 +194,7 @@ private extension DefaultCameraView {
 // MARK: - Configurables
 extension DefaultCameraView { struct Config {
     var outputTypePickerVisible: Bool = true
-    var torchButtonVisible: Bool = true
+    var lightButtonVisible: Bool = true
     var captureButtonVisible: Bool = true
     var changeCameraButtonVisible: Bool = true
     var gridButtonVisible: Bool = true
