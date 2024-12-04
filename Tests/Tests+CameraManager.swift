@@ -78,4 +78,7 @@ extension CameraManagerTests {
 
         #expect(cameraManager.captureSession.deviceInputs.count == 1)
     }
+
+    // że nie przyznano uprawnień
+    // potem akcje konkretne i sprawdzic wyniki
 }

@@ -14,8 +14,8 @@ Pod::Spec.new do |s|
     s.dependency            'MijickTimer'
     s.frameworks            = 'SwiftUI', 'Foundation', 'AVKit', 'AVFoundation', 'MijickTimer'
 
-    s.homepage              = 'https://github.com/Mijick/CameraView.git'
+    s.homepage              = 'https://github.com/Mijick/Camera.git'
     s.license               = { :type => 'MIT', :file => 'LICENSE' }
     s.author                = { 'Tomasz Kurylik' => 'tomasz.kurylik@mijick.com' }
-    s.source                = { :git => 'https://github.com/Mijick/CameraView.git', :tag => s.version.to_s }
+    s.source                = { :git => 'https://github.com/Mijick/Camera.git', :tag => s.version.to_s }
 end
