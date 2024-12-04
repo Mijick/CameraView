@@ -66,6 +66,8 @@ extension CameraManagerTests {
         #expect(currentDevice.exposureMode == .custom)
         #expect(currentDevice.hdrMode == .off)
         #expect(cameraManager.cameraGridView.alpha == 0)
+
+        // TODO: Sprawdzić jeszcze czy Attributes zostały poprawnie zmienione
     }
     @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() async throws {
         cameraManager.attributes.isAudioSourceAvailable = false
@@ -160,6 +162,16 @@ extension CameraManagerTests {
 // MARK: Set Flash Mode
 extension CameraManagerTests {
     @Test("Set Flash Mode") func setFlashMode() async throws {
+        try await setupCamera()
+
+        cameraManager.setFlashMode(.on)
+        #expect(cameraManager.attributes.flashMode == .on)
+
+        cameraManager.setFlashMode(.auto)
+        #expect(cameraManager.attributes.flashMode == .auto)
+
+        cameraManager.setFlashMode(.off)
+        #expect(cameraManager.attributes.flashMode == .off)
     }
 }
 
