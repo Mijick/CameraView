@@ -176,12 +176,28 @@ extension CameraManagerTests {
 // MARK: Set Torch Mode
 extension CameraManagerTests {
     @Test("Set Torch Mode") func setTorchMode() async throws {
+        try await setupCamera()
+
+        try cameraManager.setTorchMode(.on)
+        #expect(currentDevice.torchMode == .on)
+        #expect(cameraManager.attributes.torchMode == .on)
+
+        try cameraManager.setTorchMode(.off)
+        #expect(currentDevice.torchMode == .off)
+        #expect(cameraManager.attributes.torchMode == .off)
     }
 }
 
 // MARK: Set Mirror Output
 extension CameraManagerTests {
     @Test("Set Mirror Output") func setMirrorOutput() async throws {
+        try await setupCamera()
+
+        cameraManager.setMirrorOutput(true)
+        #expect(cameraManager.attributes.mirrorOutput == true)
+
+        cameraManager.setMirrorOutput(false)
+        #expect(cameraManager.attributes.mirrorOutput == false)
     }
 }
 

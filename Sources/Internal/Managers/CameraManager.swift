@@ -227,6 +227,9 @@ extension CameraManager {
 
         try setDeviceTorchMode(torchMode, device)
         attributes.torchMode = torchMode
+
+
+        // TODO: Pobieraj torchMode z Device
     }
 }
 private extension CameraManager {
