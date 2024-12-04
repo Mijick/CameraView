@@ -120,6 +120,13 @@ extension CameraManagerTests {
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
         #expect(currentDevice.uniqueID == cameraManager.backCameraInput?.device.uniqueID)
         #expect(cameraManager.attributes.cameraPosition == .back)
+
+        await Task.sleep(seconds: 0.5)
+
+        try cameraManager.setCameraZoomFactor(3.2)
+        try await cameraManager.setCameraPosition(.front)
+        #expect(currentDevice.videoZoomFactor == 1)
+        #expect(cameraManager.attributes.zoomFactor == 1)
     }
 }
 

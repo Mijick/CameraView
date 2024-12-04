@@ -143,7 +143,7 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     var hdrMode: CameraHDRMode = .auto
     var focusPointOfInterest: CGPoint = .zero
     var exposurePointOfInterest: CGPoint = .zero
-    var videoZoomFactor: CGFloat = 0
+    var videoZoomFactor: CGFloat = 1
     var activeVideoMinFrameDuration: CMTime = .init()
     var activeVideoMaxFrameDuration: CMTime = .init()
 
