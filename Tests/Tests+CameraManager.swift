@@ -70,6 +70,12 @@ extension CameraManagerTests {
         #expect(device.hdrMode == .off)
         #expect(cameraManager.cameraGridView.alpha == 0)
     }
-    @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() {
+    @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() async throws {
+        cameraManager.attributes.isAudioSourceAvailable = false
+
+        try await cameraManager.setup(in: .init())
+        await Task.sleep(seconds: 0.1)
+
+        #expect(cameraManager.captureSession.deviceInputs.count == 1)
     }
 }
