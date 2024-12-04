@@ -96,7 +96,7 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let hasFlash: Bool = true
     let hasTorch: Bool = true
     var exposureDuration: CMTime { _exposureDuration }
-    let exposureTargetBias: Float = 0
+    var exposureTargetBias: Float { _exposureTargetBias }
     var iso: Float { _iso }
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
@@ -116,14 +116,26 @@ class MockCaptureDevice: NSObject, CaptureDevice {
         _exposureDuration = duration
         _iso = iso
     }
-    func setExposureTargetBias(_ bias: Float) { return }
-    func setFrameRate(_ frameRate: Int32) { return }
-    func setZoomFactor(_ factor: CGFloat) { return }
-    func setFocusPointOfInterest(_ point: CGPoint) throws { return }
-    func setExposurePointOfInterest(_ point: CGPoint) throws { return }
+    func setExposureTargetBias(_ bias: Float) {
+        _exposureTargetBias = bias
+    }
+    func setFrameRate(_ frameRate: Int32) {
+        activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
+        activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
+    }
+    func setZoomFactor(_ factor: CGFloat) {
+        videoZoomFactor = factor
+    }
+    func setFocusPointOfInterest(_ point: CGPoint) throws {
+        focusPointOfInterest = point
+    }
+    func setExposurePointOfInterest(_ point: CGPoint) throws {
+        exposurePointOfInterest = point
+    }
 
 
 
     private var _exposureDuration: CMTime = .init()
+    private var _exposureTargetBias: Float = 0
     private var _iso: Float = 0
 }
