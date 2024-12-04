@@ -143,6 +143,14 @@ extension CameraManagerTests {
 // MARK: Set Camera Focus
 extension CameraManagerTests {
     @Test("Set Camera Focus") func setCameraFocus() async throws {
+        try await setupCamera()
+
+        try cameraManager.setCameraFocus(at: .init(x: 0.2137, y: 0.2137))
+        #expect(currentDevice.focusPointOfInterest == .init(x: 0.2137, y: 0.2137))
+        #expect(currentDevice.focusMode == .autoFocus)
+        #expect(currentDevice.exposureMode == .autoExpose)
+        #expect(currentDevice.exposurePointOfInterest == .init(x: 0.2137, y: 0.2137))
+        #expect(cameraManager.cameraView.subviews.filter { $0.tag == 29 }.count == 1)
     }
 }
 
