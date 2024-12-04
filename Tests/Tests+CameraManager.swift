@@ -47,7 +47,7 @@ extension CameraManagerTests {
         cameraManager.attributes.frameRate = 60
         cameraManager.attributes.cameraExposure.duration = .init(value: 1, timescale: 10)
         cameraManager.attributes.cameraExposure.targetBias = 0.66
-        cameraManager.attributes.cameraExposure.iso = 0.5
+        cameraManager.attributes.cameraExposure.iso = 2
         cameraManager.attributes.cameraExposure.mode = .custom
         cameraManager.attributes.hdrMode = .off
         cameraManager.attributes.isGridVisible = false
@@ -62,7 +62,7 @@ extension CameraManagerTests {
         #expect(currentDevice.activeVideoMaxFrameDuration == .init(value: 1, timescale: 60))
         #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 10))
         #expect(currentDevice.exposureTargetBias == 0.66)
-        #expect(currentDevice.iso == 0.5)
+        #expect(currentDevice.iso == 2)
         #expect(currentDevice.exposureMode == .custom)
         #expect(currentDevice.hdrMode == .off)
         #expect(cameraManager.cameraGridView.alpha == 0)
@@ -375,7 +375,7 @@ private extension CameraManagerTests {
         let cameraView = UIView(frame: .init(origin: .zero, size: .init(width: 1000, height: 1000)))
 
         try await cameraManager.setup(in: cameraView)
-        await Task.sleep(seconds: 0.15)
+        await Task.sleep(seconds: 0.3)
     }
 }
 private extension CameraManagerTests {
