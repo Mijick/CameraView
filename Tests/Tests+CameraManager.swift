@@ -381,8 +381,3 @@ private extension CameraManagerTests {
 private extension CameraManagerTests {
     var currentDevice: any CaptureDevice { cameraManager.getCameraInput()!.device }
 }
-
-
-
-
-
