@@ -31,15 +31,12 @@ extension CameraManagerTests {
 
         #expect(cameraManager.captureSession.isRunning)
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
-
         #expect(cameraManager.photoOutput.parent != nil)
         #expect(cameraManager.videoOutput.parent != nil)
         #expect(cameraManager.captureSession.outputs.count == 3)
-
         #expect(cameraManager.cameraLayer.isHidden)
         #expect(cameraManager.cameraMetalView.parent != nil)
         #expect(cameraManager.cameraGridView.parent != nil)
-
         #expect(cameraManager.motionManager.manager.accelerometerUpdateInterval > 0)
         #expect(cameraManager.notificationCenterManager.parent != nil)
     }
