@@ -103,7 +103,7 @@ private extension CameraManager {
         device.setExposureTargetBias(attributes.cameraExposure.targetBias)
         device.setFrameRate(attributes.frameRate)
         device.setZoomFactor(attributes.zoomFactor)
-        device.lightMode = attributes.torchMode
+        device.lightMode = attributes.lightMode
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
 
@@ -166,7 +166,7 @@ private extension CameraManager {
     func resetAttributesWhenChangingCamera(_ position: CameraPosition) {
         attributes.cameraPosition = position
         attributes.zoomFactor = 1
-        attributes.torchMode = .off
+        attributes.lightMode = .off
     }
 
     // TODO: Zresetować attributes
@@ -222,15 +222,15 @@ extension CameraManager {
 
 // MARK: Set Torch Mode
 extension CameraManager {
-    func setTorchMode(_ torchMode: CameraTorchMode) throws {
-        guard let device = getCameraInput()?.device, device.hasTorch, torchMode != attributes.torchMode, !isChanging else { return }
+    func setTorchMode(_ torchMode: CameraLightMode) throws {
+        guard let device = getCameraInput()?.device, device.hasTorch, torchMode != attributes.lightMode, !isChanging else { return }
 
         try setDeviceTorchMode(torchMode, device)
-        attributes.torchMode = device.lightMode
+        attributes.lightMode = device.lightMode
     }
 }
 private extension CameraManager {
-    func setDeviceTorchMode(_ torchMode: CameraTorchMode, _ device: any CaptureDevice) throws {
+    func setDeviceTorchMode(_ torchMode: CameraLightMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         device.lightMode = torchMode
         device.unlockForConfiguration()

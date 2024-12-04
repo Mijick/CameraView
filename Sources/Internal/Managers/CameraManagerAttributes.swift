@@ -20,7 +20,7 @@ struct CameraManagerAttributes {
     var isAudioSourceAvailable: Bool = true
     var zoomFactor: CGFloat = 1.0
     var flashMode: CameraFlashMode = .off
-    var torchMode: CameraTorchMode = .off
+    var lightMode: CameraLightMode = .off
     var resolution: AVCaptureSession.Preset = .hd1920x1080
     var frameRate: Int32 = 30
     var cameraExposure: CameraExposure = .init()
