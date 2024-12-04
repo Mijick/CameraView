@@ -331,6 +331,18 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set Resolution") func setResolution() async throws {
         try await setupCamera()
+
+        cameraManager.setResolution(.hd1280x720)
+        #expect(cameraManager.captureSession.sessionPreset == .hd1280x720)
+        #expect(cameraManager.attributes.resolution == .hd1280x720)
+
+        cameraManager.setResolution(.hd1920x1080)
+        #expect(cameraManager.captureSession.sessionPreset == .hd1920x1080)
+        #expect(cameraManager.attributes.resolution == .hd1920x1080)
+
+        cameraManager.setResolution(.cif352x288)
+        #expect(cameraManager.captureSession.sessionPreset == .cif352x288)
+        #expect(cameraManager.attributes.resolution == .cif352x288)
     }
 }
 
