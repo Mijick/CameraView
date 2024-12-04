@@ -385,7 +385,4 @@ private extension CameraManagerTests {
 
 
 
-extension Int {
-    static var blurViewTag: Int { 2137 }
-    static var focusIndicatorTag: Int { 29 }
-}
+

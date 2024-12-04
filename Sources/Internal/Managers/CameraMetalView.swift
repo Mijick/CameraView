@@ -73,7 +73,7 @@ extension CameraMetalView {
     }
 }
 private extension CameraMetalView {
-    func removeExistingFocusIndicatorAnimations() { if let view = parent.cameraView.viewWithTag(29) {
+    func removeExistingFocusIndicatorAnimations() { if let view = parent.cameraView.viewWithTag(.focusIndicatorTag) {
         view.removeFromSuperview()
     }}
     func createFocusIndicator(at touchPoint: CGPoint) -> UIImageView {
@@ -83,7 +83,7 @@ private extension CameraMetalView {
         focusIndicator.frame.origin.x = touchPoint.x - focusIndicator.frame.size.width / 2
         focusIndicator.frame.origin.y = touchPoint.y - focusIndicator.frame.size.height / 2
         focusIndicator.transform = .init(scaleX: 0, y: 0)
-        focusIndicator.tag = 29
+        focusIndicator.tag = .focusIndicatorTag
         return focusIndicator
     }
     func animateFocusIndicator(_ focusIndicator: UIImageView) {
@@ -143,7 +143,7 @@ extension CameraMetalView {
         await Task.sleep(seconds: 0.01)
     }
     func finishCameraFlipAnimation() {
-        guard let blurView = parent.cameraView.viewWithTag(2137) else { return }
+        guard let blurView = parent.cameraView.viewWithTag(.blurViewTag) else { return }
 
         UIView.animate(withDuration: 0.33, delay: 0.16, animations: { blurView.alpha = 0 }) { [self] _ in
             blurView.removeFromSuperview()
@@ -163,7 +163,7 @@ private extension CameraMetalView {
         blurView.image = snapshot
         blurView.contentMode = .scaleAspectFill
         blurView.clipsToBounds = true
-        blurView.tag = 2137
+        blurView.tag = .blurViewTag
         blurView.applyBlurEffect(style: .regular)
 
         parent.cameraView.addSubview(blurView)
