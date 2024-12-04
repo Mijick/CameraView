@@ -95,9 +95,9 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let uniqueID: String = UUID().uuidString
     let hasFlash: Bool = true
     let hasTorch: Bool = true
-    let exposureDuration: CMTime = .init()
+    var exposureDuration: CMTime { _exposureDuration }
     let exposureTargetBias: Float = 0
-    let iso: Float = 0
+    var iso: Float { _iso }
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
     var torchMode: AVCaptureDevice.TorchMode = .auto
@@ -111,10 +111,19 @@ class MockCaptureDevice: NSObject, CaptureDevice {
 
     func lockForConfiguration() throws { return }
     func unlockForConfiguration() { return }
-    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) { return }
+    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
+        exposureMode = mode
+        _exposureDuration = duration
+        _iso = iso
+    }
     func setExposureTargetBias(_ bias: Float) { return }
     func setFrameRate(_ frameRate: Int32) { return }
     func setZoomFactor(_ factor: CGFloat) { return }
     func setFocusPointOfInterest(_ point: CGPoint) throws { return }
     func setExposurePointOfInterest(_ point: CGPoint) throws { return }
+
+
+
+    private var _exposureDuration: CMTime = .init()
+    private var _iso: Float = 0
 }
