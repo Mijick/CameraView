@@ -32,6 +32,7 @@ extension CameraManagerTests {
         #expect(cameraManager.photoOutput.parent != nil)
         #expect(cameraManager.videoOutput.parent != nil)
         #expect(cameraManager.captureSession.outputs.count == 3)
+        #expect(cameraManager.cameraView != nil)
         #expect(cameraManager.cameraLayer.isHidden == true)
         #expect(cameraManager.cameraMetalView.parent != nil)
         #expect(cameraManager.cameraGridView.parent != nil)
@@ -88,6 +89,19 @@ extension CameraManagerTests {
         #expect(cameraManager.captureSession.isRunning == false)
         #expect(cameraManager.captureSession.deviceInputs.count == 0)
         #expect(cameraManager.captureSession.outputs.count == 0)
+    }
+}
+
+// MARK: Set Camera Output
+extension CameraManagerTests {
+    @Test("Set Camera Output") func setCameraOutput() async throws {
+        try await setupCamera()
+
+        cameraManager.setOutputType(.photo)
+        #expect(cameraManager.attributes.outputType == .photo)
+
+        cameraManager.setOutputType(.video)
+        #expect(cameraManager.attributes.outputType == .video)
     }
 }
 
