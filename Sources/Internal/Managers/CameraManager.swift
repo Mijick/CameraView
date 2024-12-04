@@ -365,7 +365,7 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, frameRate != attributes.frameRate, !isChanging else { return }
 
         try setDeviceFrameRate(frameRate, device)
-        attributes.frameRate = frameRate
+        attributes.frameRate = device.activeVideoMaxFrameDuration.timescale
     }
 }
 private extension CameraManager {
