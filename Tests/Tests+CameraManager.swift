@@ -78,7 +78,31 @@ extension CameraManagerTests {
 
         #expect(cameraManager.captureSession.deviceInputs.count == 1)
     }
+    @Test("Setup: Permissions Not Granted") func setupWithPermissionsNotGranted() async throws {
+    }
+}
 
-    // że nie przyznano uprawnień
-    // potem akcje konkretne i sprawdzic wyniki
+// MARK: D
+extension CameraManagerTests {
+
+}
+
+// MARK: D
+extension CameraManagerTests {
+
+}
+
+// MARK: D
+extension CameraManagerTests {
+
+}
+
+// MARK: D
+extension CameraManagerTests {
+
+}
+
+// MARK: D
+extension CameraManagerTests {
+
 }
