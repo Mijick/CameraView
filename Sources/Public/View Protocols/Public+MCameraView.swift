@@ -34,7 +34,7 @@ public extension MCameraView {
     func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.setCameraZoomFactor(value) }
     func changeFlashMode(_ mode: CameraFlashMode) { cameraManager.setFlashMode(mode) }
-    func changeTorchMode(_ mode: CameraLightMode) throws { try cameraManager.setLightMode(mode) }
+    func changeLightMode(_ mode: CameraLightMode) throws { try cameraManager.setLightMode(mode) }
     func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
     func changeExposureDuration(_ value: CMTime) throws { try cameraManager.setExposureDuration(value) }
     func changeISO(_ value: Float) throws { try cameraManager.setISO(value) }
@@ -51,7 +51,7 @@ public extension MCameraView {
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
     var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
-    var torchMode: CameraLightMode { cameraManager.attributes.lightMode }
+    var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
     var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
     var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
     var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
@@ -63,7 +63,7 @@ public extension MCameraView {
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.attributes.deviceOrientation }
     var isRecording: Bool { cameraManager.videoOutput.timer.timerStatus == .running }
     var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
-    var hasTorch: Bool { cameraManager.hasTorch }
+    var hasLight: Bool { cameraManager.hasLight }
     var hasFlash: Bool { cameraManager.hasFlash }
     var isOrientationLocked: Bool { cameraManager.attributes.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
 }

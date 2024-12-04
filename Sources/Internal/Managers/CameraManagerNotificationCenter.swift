@@ -24,7 +24,7 @@ extension CameraManagerNotificationCenter {
 }
 private extension CameraManagerNotificationCenter {
     @objc func handleSessionWasInterrupted() {
-        parent.attributes.torchMode = .off
+        parent.attributes.lightMode = .off
         parent.videoOutput.reset()
     }
 }

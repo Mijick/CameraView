@@ -30,7 +30,7 @@ public struct DefaultCameraView: MCameraView {
         .statusBarHidden()
         .animation(.defaultSpring, value: isRecording)
         .animation(.defaultSpring, value: outputType)
-        .animation(.defaultSpring, value: hasTorch)
+        .animation(.defaultSpring, value: hasLight)
         .animation(.defaultSpring, value: iconAngle)
     }
 }
@@ -125,11 +125,11 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createTorchButton() -> some View {
-        BottomButton(icon: "icon-torch", active: torchMode == .on, action: changeTorchMode)
+        BottomButton(icon: "icon-torch", active: lightMode == .on, action: changeTorchMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .isActive(hasTorch)
+            .isActive(hasLight)
             .isActive(config.torchButtonVisible)
     }
     func createCaptureButton() -> some View {
@@ -179,7 +179,7 @@ private extension DefaultCameraView {
         changeFlashMode(flashMode.next())
     }
     func changeTorchMode() {
-        do { try changeTorchMode(torchMode.next()) }
+        do { try changeLightMode(lightMode.next()) }
         catch {}
     }
     func changeCameraPosition() { Task {

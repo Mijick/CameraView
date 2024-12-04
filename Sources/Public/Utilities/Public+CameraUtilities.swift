@@ -30,7 +30,7 @@ public enum CameraFlashMode: CaseIterable {
     case auto
 }
 
-// MARK: Camera Torch Mode
+// MARK: Camera Light Mode
 public enum CameraLightMode: CaseIterable {
     case off
     case on

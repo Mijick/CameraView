@@ -225,12 +225,12 @@ extension CameraManager {
     func setLightMode(_ lightMode: CameraLightMode) throws {
         guard let device = getCameraInput()?.device, device.hasTorch, lightMode != attributes.lightMode, !isChanging else { return }
 
-        try setDeviceTorchMode(lightMode, device)
+        try setDeviceLightMode(lightMode, device)
         attributes.lightMode = device.lightMode
     }
 }
 private extension CameraManager {
-    func setDeviceTorchMode(_ lightMode: CameraLightMode, _ device: any CaptureDevice) throws {
+    func setDeviceLightMode(_ lightMode: CameraLightMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         device.lightMode = lightMode
         device.unlockForConfiguration()
@@ -381,7 +381,7 @@ private extension CameraManager {
 // MARK: Attributes
 extension CameraManager {
     var hasFlash: Bool { getCameraInput()?.device.hasFlash ?? false }
-    var hasTorch: Bool { getCameraInput()?.device.hasTorch ?? false }
+    var hasLight: Bool { getCameraInput()?.device.hasTorch ?? false }
 }
 private extension CameraManager {
     var isChanging: Bool { cameraMetalView.isAnimating }

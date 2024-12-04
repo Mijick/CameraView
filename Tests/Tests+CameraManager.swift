@@ -42,7 +42,7 @@ extension CameraManagerTests {
     @Test("Setup: Custom Attributes") func setupWithCustomAttributes() async throws {
         cameraManager.attributes.cameraPosition = .front
         cameraManager.attributes.zoomFactor = 3.1
-        cameraManager.attributes.torchMode = .on
+        cameraManager.attributes.lightMode = .on
         cameraManager.attributes.resolution = .hd1280x720
         cameraManager.attributes.frameRate = 60
         cameraManager.attributes.cameraExposure.duration = .init(value: 1, timescale: 10)
@@ -173,18 +173,18 @@ extension CameraManagerTests {
     }
 }
 
-// MARK: Set Torch Mode
+// MARK: Set Light Mode
 extension CameraManagerTests {
-    @Test("Set Torch Mode") func setTorchMode() async throws {
+    @Test("Set Light Mode") func setLightMode() async throws {
         try await setupCamera()
 
-        try cameraManager.setTorchMode(.on)
+        try cameraManager.setLightMode(.on)
         #expect(currentDevice.lightMode == .on)
-        #expect(cameraManager.attributes.torchMode == .on)
+        #expect(cameraManager.attributes.lightMode == .on)
 
-        try cameraManager.setTorchMode(.off)
+        try cameraManager.setLightMode(.off)
         #expect(currentDevice.lightMode == .off)
-        #expect(cameraManager.attributes.torchMode == .off)
+        #expect(cameraManager.attributes.lightMode == .off)
     }
 }
 
