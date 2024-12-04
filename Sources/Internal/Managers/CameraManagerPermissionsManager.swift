@@ -15,12 +15,15 @@ import AVKit
 
 // MARK: Request Access
 extension CameraManagerPermissionsManager {
-    func requestAccess(parent: CameraManager) async {
+    func requestAccess(parent: CameraManager) async throws(MijickCameraError) {
         do {
             try await getAuthorizationStatus(for: .video)
             if parent.attributes.isAudioSourceAvailable { try await getAuthorizationStatus(for: .audio) }
         }
-        catch { parent.attributes.error = error }
+        catch {
+            parent.attributes.error = error
+            throw error
+        }
     }
 }
 private extension CameraManagerPermissionsManager {

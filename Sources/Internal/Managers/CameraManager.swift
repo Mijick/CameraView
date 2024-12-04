@@ -47,7 +47,7 @@ import AVKit
 // MARK: Setup
 extension CameraManager {
     func setup(in cameraView: UIView) async throws {
-        await permissionsManager.requestAccess(parent: self)
+        try await permissionsManager.requestAccess(parent: self)
 
         setupCameraLayer(cameraView)
         try setupDeviceInputs()
