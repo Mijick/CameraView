@@ -219,6 +219,10 @@ extension CameraManagerTests {
 // MARK: Set Camera Filters
 extension CameraManagerTests {
     @Test("Set Camera Filters") func setCameraFilters() async throws {
+        try await setupCamera()
+
+        cameraManager.setCameraFilters([.init(name: "CISepiaTone")!])
+        #expect(cameraManager.attributes.cameraFilters.count == 1)
     }
 }
 
