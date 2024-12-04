@@ -16,8 +16,8 @@ struct CameraManagerAttributes {
     var error: MijickCameraError? = nil
 
     var outputType: CameraOutputType = .photo
-    var isAudioSourceAvailable: Bool = true
     var cameraPosition: CameraPosition = .back
+    var isAudioSourceAvailable: Bool = true
     var cameraFilters: [CIFilter] = []
     var zoomFactor: CGFloat = 1.0
     var flashMode: CameraFlashMode = .off
