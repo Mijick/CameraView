@@ -124,23 +124,78 @@ extension CameraManagerTests {
     }
 }
 
-// MARK: D
+// MARK: Set Camera Zoom
 extension CameraManagerTests {
 
 }
 
-// MARK: D
+// MARK: Set Camera Focus
 extension CameraManagerTests {
 
 }
 
-// MARK: D
+// MARK: Set Flash Mode
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Torch Mode
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Mirror Output
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Grid Visibility
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Camera Filters
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Exposure Mode
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Exposure Duration
+extension CameraManagerTests {
+
+}
+
+// MARK: Set ISO
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Exposure Target Bias
+extension CameraManagerTests {
+
+}
+
+// MARK: Set HDR Mode
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Resolution
+extension CameraManagerTests {
+
+}
+
+// MARK: Set Frame Rate
 extension CameraManagerTests {
 
 }
 
 
-
+// MARK: Helpers
 private extension CameraManagerTests {
     func setupCamera() async throws {
         try await cameraManager.setup(in: .init())
