@@ -220,19 +220,19 @@ extension CameraManager {
     }
 }
 
-// MARK: Set Torch Mode
+// MARK: Set Light Mode
 extension CameraManager {
-    func setTorchMode(_ torchMode: CameraLightMode) throws {
-        guard let device = getCameraInput()?.device, device.hasTorch, torchMode != attributes.lightMode, !isChanging else { return }
+    func setLightMode(_ lightMode: CameraLightMode) throws {
+        guard let device = getCameraInput()?.device, device.hasTorch, lightMode != attributes.lightMode, !isChanging else { return }
 
-        try setDeviceTorchMode(torchMode, device)
+        try setDeviceTorchMode(lightMode, device)
         attributes.lightMode = device.lightMode
     }
 }
 private extension CameraManager {
-    func setDeviceTorchMode(_ torchMode: CameraLightMode, _ device: any CaptureDevice) throws {
+    func setDeviceTorchMode(_ lightMode: CameraLightMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.lightMode = torchMode
+        device.lightMode = lightMode
         device.unlockForConfiguration()
     }
 }

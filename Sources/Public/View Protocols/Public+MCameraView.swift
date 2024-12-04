@@ -34,7 +34,7 @@ public extension MCameraView {
     func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
     func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.setCameraZoomFactor(value) }
     func changeFlashMode(_ mode: CameraFlashMode) { cameraManager.setFlashMode(mode) }
-    func changeTorchMode(_ mode: CameraLightMode) throws { try cameraManager.setTorchMode(mode) }
+    func changeTorchMode(_ mode: CameraLightMode) throws { try cameraManager.setLightMode(mode) }
     func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
     func changeExposureDuration(_ value: CMTime) throws { try cameraManager.setExposureDuration(value) }
     func changeISO(_ value: Float) throws { try cameraManager.setISO(value) }
