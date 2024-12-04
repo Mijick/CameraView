@@ -25,15 +25,14 @@ import SwiftUI
 // MARK: Setup
 extension CameraManagerTests {
     @Test("Setup: Default Attributes") func setupWithDefaultAttributes() async throws {
-        try await cameraManager.setup(in: .init())
-        await Task.sleep(seconds: 0.1)
+        try await setupCamera()
 
-        #expect(cameraManager.captureSession.isRunning)
+        #expect(cameraManager.captureSession.isRunning == true)
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
         #expect(cameraManager.photoOutput.parent != nil)
         #expect(cameraManager.videoOutput.parent != nil)
         #expect(cameraManager.captureSession.outputs.count == 3)
-        #expect(cameraManager.cameraLayer.isHidden)
+        #expect(cameraManager.cameraLayer.isHidden == true)
         #expect(cameraManager.cameraMetalView.parent != nil)
         #expect(cameraManager.cameraGridView.parent != nil)
         #expect(cameraManager.motionManager.manager.accelerometerUpdateInterval > 0)
@@ -52,8 +51,7 @@ extension CameraManagerTests {
         cameraManager.attributes.hdrMode = .off
         cameraManager.attributes.isGridVisible = false
 
-        try await cameraManager.setup(in: .init())
-        await Task.sleep(seconds: 0.1)
+        try await setupCamera()
 
         let device = cameraManager.getCameraInput()!.device
 
@@ -73,8 +71,7 @@ extension CameraManagerTests {
     @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() async throws {
         cameraManager.attributes.isAudioSourceAvailable = false
 
-        try await cameraManager.setup(in: .init())
-        await Task.sleep(seconds: 0.1)
+        try await setupCamera()
 
         #expect(cameraManager.captureSession.deviceInputs.count == 1)
     }
@@ -82,9 +79,16 @@ extension CameraManagerTests {
     }
 }
 
-// MARK: D
+// MARK: Cancel
 extension CameraManagerTests {
+    @Test("Cancel Camera Session") func cancelCameraSession() async throws {
+        try await setupCamera()
+        cameraManager.cancel()
 
+        #expect(cameraManager.captureSession.isRunning == false)
+        #expect(cameraManager.captureSession.deviceInputs.count == 0)
+        #expect(cameraManager.captureSession.outputs.count == 0)
+    }
 }
 
 // MARK: D
@@ -105,4 +109,13 @@ extension CameraManagerTests {
 // MARK: D
 extension CameraManagerTests {
 
+}
+
+
+
+private extension CameraManagerTests {
+    func setupCamera() async throws {
+        try await cameraManager.setup(in: .init())
+        await Task.sleep(seconds: 0.1)
+    }
 }

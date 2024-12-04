@@ -22,7 +22,7 @@ extension CameraManagerMotionManager {
     func setup(parent: CameraManager) {
         self.parent = parent
         manager.accelerometerUpdateInterval = 0.05
-        manager.startAccelerometerUpdates(to: OperationQueue.current ?? .init(), withHandler: handleAccelerometerUpdates)
+        manager.startAccelerometerUpdates(to: .current ?? .init(), withHandler: handleAccelerometerUpdates)
     }
 }
 private extension CameraManagerMotionManager {
