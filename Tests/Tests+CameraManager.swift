@@ -91,9 +91,23 @@ extension CameraManagerTests {
     }
 }
 
-// MARK: D
+// MARK: Set Camera Position
 extension CameraManagerTests {
+    @Test("Set Camera Position") func setCameraPosition() async throws {
+        try await setupCamera()
 
+        try await cameraManager.setCameraPosition(.front)
+        #expect(cameraManager.captureSession.deviceInputs.count == 2)
+        #expect(cameraManager.getCameraInput()!.device.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
+        #expect(cameraManager.attributes.cameraPosition == .front)
+
+        await Task.sleep(seconds: 0.5)
+
+        try await cameraManager.setCameraPosition(.back)
+        #expect(cameraManager.captureSession.deviceInputs.count == 2)
+        #expect(cameraManager.getCameraInput()!.device.uniqueID == cameraManager.backCameraInput?.device.uniqueID)
+        #expect(cameraManager.attributes.cameraPosition == .back)
+    }
 }
 
 // MARK: D

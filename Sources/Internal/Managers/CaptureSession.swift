@@ -88,12 +88,8 @@ class MockCaptureSession: NSObject, CaptureSession {
 
 
     func remove(input: (any CaptureDeviceInput)?) {
-        //guard let input = input as? MockDeviceInput, let index = inputs.firstIndex(of: input) else { return }
-
-
-
-
-        fatalError()
+        guard let input = input as? MockDeviceInput, let index = _inputs.firstIndex(where: { $0.device.uniqueID == input.device.uniqueID }) else { return }
+        _inputs.remove(at: index)
     }
     required override init() {}
 
