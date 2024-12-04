@@ -106,6 +106,9 @@ private extension CameraManager {
         device.torchMode = attributes.torchMode.get()
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
+
+
+        // TODO: Dostosować attributes
     }
 }
 
@@ -165,6 +168,8 @@ private extension CameraManager {
         attributes.zoomFactor = 1
         attributes.torchMode = .off
     }
+
+    // TODO: Zresetować attributes
 }
 
 // MARK: Set Camera Zoom
@@ -173,7 +178,7 @@ extension CameraManager {
         guard let device = getCameraInput()?.device, zoomFactor != attributes.zoomFactor, !isChanging else { return }
 
         try setDeviceZoomFactor(zoomFactor, device)
-        attributes.zoomFactor = zoomFactor
+        attributes.zoomFactor = device.videoZoomFactor
     }
 }
 private extension CameraManager {

@@ -237,7 +237,7 @@ private extension CameraManagerTests {
         let cameraView = UIView(frame: .init(origin: .zero, size: .init(width: 1000, height: 1000)))
 
         try await cameraManager.setup(in: cameraView)
-        await Task.sleep(seconds: 0.1)
+        await Task.sleep(seconds: 0.15)
     }
 }
 private extension CameraManagerTests {

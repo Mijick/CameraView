@@ -44,6 +44,13 @@ protocol CaptureDevice: NSObject {
     func setExposurePointOfInterest(_ point: CGPoint) throws
 }
 
+extension CaptureDevice {
+    func setZoomFactor(_ factor: CGFloat) {
+        let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
+        videoZoomFactor = factor
+    }
+}
+
 
 // MARK: REAL
 extension AVCaptureDevice: CaptureDevice {
@@ -72,10 +79,6 @@ extension AVCaptureDevice: CaptureDevice {
 
         activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
         activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
-    }
-    func setZoomFactor(_ factor: CGFloat) {
-        let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
-        videoZoomFactor = factor
     }
     func setFocusPointOfInterest(_ point: CGPoint) {
         guard isFocusPointOfInterestSupported else { return }
@@ -126,9 +129,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     func setFrameRate(_ frameRate: Int32) {
         activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
         activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
-    }
-    func setZoomFactor(_ factor: CGFloat) {
-        videoZoomFactor = factor
     }
     func setFocusPointOfInterest(_ point: CGPoint) throws {
         focusPointOfInterest = point
