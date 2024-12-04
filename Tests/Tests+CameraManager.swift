@@ -42,7 +42,6 @@ extension CameraManagerTests {
     @Test("Setup: Custom Attributes") func setupWithCustomAttributes() async throws {
         cameraManager.attributes.cameraPosition = .front
         cameraManager.attributes.zoomFactor = 3.1
-        cameraManager.attributes.flashMode = .on
         cameraManager.attributes.torchMode = .on
         cameraManager.attributes.resolution = .hd1280x720
         cameraManager.attributes.frameRate = 60
@@ -60,7 +59,9 @@ extension CameraManagerTests {
         let device = cameraManager.getCameraInput()!.device
 
         #expect(device.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
-        
+        #expect(device.videoZoomFactor == 3.1)
+        #expect(device.torchMode == .on)
+        #expect(cameraManager.captureSession.sessionPreset == .hd1280x720)
 
 
     }
