@@ -101,7 +101,7 @@ private extension CameraManager {
         try device.lockForConfiguration()
         device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
         device.setExposureTargetBias(attributes.cameraExposure.targetBias)
-        try device.setFrameRate(attributes.frameRate)
+        device.setFrameRate(attributes.frameRate)
         device.setZoomFactor(attributes.zoomFactor)
         device.torchMode = attributes.torchMode.get()
         device.hdrMode = attributes.hdrMode
@@ -371,7 +371,7 @@ extension CameraManager {
 private extension CameraManager {
     func setDeviceFrameRate(_ frameRate: Int32, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setFrameRate(frameRate)
+        device.setFrameRate(frameRate)
         device.unlockForConfiguration()
     }
 }

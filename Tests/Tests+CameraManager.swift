@@ -350,6 +350,21 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set Frame Rate") func setFrameRate() async throws {
         try await setupCamera()
+
+        try cameraManager.setFrameRate(45)
+        #expect(currentDevice.activeVideoMinFrameDuration == .init(value: 1, timescale: 45))
+        #expect(currentDevice.activeVideoMaxFrameDuration == .init(value: 1, timescale: 45))
+        #expect(cameraManager.attributes.frameRate == 45)
+
+        try cameraManager.setFrameRate(10)
+        #expect(currentDevice.activeVideoMinFrameDuration.timescale == Int32(currentDevice.minFrameRate!))
+        #expect(currentDevice.activeVideoMaxFrameDuration.timescale == Int32(currentDevice.minFrameRate!))
+        #expect(cameraManager.attributes.frameRate == Int32(currentDevice.minFrameRate!))
+
+        try cameraManager.setFrameRate(100)
+        #expect(currentDevice.activeVideoMinFrameDuration.timescale == Int32(currentDevice.maxFrameRate!))
+        #expect(currentDevice.activeVideoMaxFrameDuration.timescale == Int32(currentDevice.maxFrameRate!))
+        #expect(cameraManager.attributes.frameRate == Int32(currentDevice.maxFrameRate!))
     }
 }
 
