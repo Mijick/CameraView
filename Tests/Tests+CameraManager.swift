@@ -312,6 +312,18 @@ extension CameraManagerTests {
 extension CameraManagerTests {
     @Test("Set HDR Mode") func setHDRMode() async throws {
         try await setupCamera()
+
+        try cameraManager.setHDRMode(.on)
+        #expect(currentDevice.hdrMode == .on)
+        #expect(cameraManager.attributes.hdrMode == .on)
+
+        try cameraManager.setHDRMode(.off)
+        #expect(currentDevice.hdrMode == .off)
+        #expect(cameraManager.attributes.hdrMode == .off)
+
+        try cameraManager.setHDRMode(.auto)
+        #expect(currentDevice.hdrMode == .auto)
+        #expect(cameraManager.attributes.hdrMode == .auto)
     }
 }
 
