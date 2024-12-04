@@ -126,72 +126,87 @@ extension CameraManagerTests {
 
 // MARK: Set Camera Zoom
 extension CameraManagerTests {
-
+    @Test("Set Camera Zoom") func setCameraZoom() async throws {
+    }
 }
 
 // MARK: Set Camera Focus
 extension CameraManagerTests {
-
+    @Test("Set Camera Focus") func setCameraFocus() async throws {
+    }
 }
 
 // MARK: Set Flash Mode
 extension CameraManagerTests {
-
+    @Test("Set Flash Mode") func setFlashMode() async throws {
+    }
 }
 
 // MARK: Set Torch Mode
 extension CameraManagerTests {
-
+    @Test("Set Torch Mode") func setTorchMode() async throws {
+    }
 }
 
 // MARK: Set Mirror Output
 extension CameraManagerTests {
-
+    @Test("Set Mirror Output") func setMirrorOutput() async throws {
+    }
 }
 
 // MARK: Set Grid Visibility
 extension CameraManagerTests {
-
+    @Test("Set Grid Visibility") func setGridVisibility() async throws {
+    }
 }
 
 // MARK: Set Camera Filters
 extension CameraManagerTests {
-
+    @Test("Set Camera Filters") func setCameraFilters() async throws {
+    }
 }
 
 // MARK: Set Exposure Mode
 extension CameraManagerTests {
-
+    @Test("Set Exposure Mode") func setExposureMode() async throws {
+    }
 }
 
 // MARK: Set Exposure Duration
 extension CameraManagerTests {
-
+    @Test("Set Exposure Duration") func setExposureDuration() async throws {
+    }
 }
 
 // MARK: Set ISO
 extension CameraManagerTests {
-
+    @Test("Set ISO") func setISO() async throws {
+    }
 }
 
 // MARK: Set Exposure Target Bias
 extension CameraManagerTests {
-
+    @Test("Set Exposure Target Bias") func setExposureTargetBias() async throws {
+    }
 }
 
 // MARK: Set HDR Mode
 extension CameraManagerTests {
-
+    @Test("Set HDR Mode") func setHDRMode() async throws {
+    }
 }
 
 // MARK: Set Resolution
 extension CameraManagerTests {
+    @Test("Set Resolution") func setResolution() async throws {
 
+    }
 }
 
 // MARK: Set Frame Rate
 extension CameraManagerTests {
-
+    @Test("Set Frame Rate") func setFrameRate() async throws {
+    }
 }
 
 
