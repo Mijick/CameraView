@@ -59,10 +59,7 @@ extension CameraManager {
         try cameraMetalView.setup(parent: self)
         cameraGridView.setup(parent: self)
 
-        Task {
-            try await startSession()
-            cameraMetalView.performCameraEntranceAnimation()
-        }
+        startSession()
     }
 }
 private extension CameraManager {
@@ -89,15 +86,20 @@ private extension CameraManager {
 
         try captureSession.add(output: captureVideoOutput)
     }
-    nonisolated func startSession() async throws {
-        await captureSession.startRunning()
-        try await setupDeviceAndAttributes()
-    }
-}
-private extension CameraManager {
-    func setupDeviceAndAttributes() throws {
+    func startSession() { Task {
         guard let device = getCameraInput()?.device else { return }
 
+        try await startCaptureSession()
+        try setupDevice(device)
+        resetAttributes(device: device)
+        cameraMetalView.performCameraEntranceAnimation()
+    }}
+}
+private extension CameraManager {
+    nonisolated func startCaptureSession() async throws {
+        await captureSession.startRunning()
+    }
+    func setupDevice(_ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
         device.setExposureMode(attributes.cameraExposure.mode, duration: attributes.cameraExposure.duration, iso: attributes.cameraExposure.iso)
         device.setExposureTargetBias(attributes.cameraExposure.targetBias)
@@ -106,8 +108,6 @@ private extension CameraManager {
         device.lightMode = attributes.lightMode
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
-
-        resetAttributes(device: device)
     }
 }
 
