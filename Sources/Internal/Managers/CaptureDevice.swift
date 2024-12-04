@@ -29,6 +29,8 @@ protocol CaptureDevice: NSObject {
     var maxExposureTargetBias: Float { get }
     var minFrameRate: Float64? { get }
     var maxFrameRate: Float64? { get }
+    var isExposurePointOfInterestSupported: Bool { get }
+    var isFocusPointOfInterestSupported: Bool { get }
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
@@ -47,8 +49,6 @@ protocol CaptureDevice: NSObject {
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> Void)?)
     func setExposureTargetBias(_ bias: Float, completionHandler handler: ((CMTime) -> ())?)
-    func setFocusPointOfInterest(_ point: CGPoint) throws
-    func setExposurePointOfInterest(_ point: CGPoint) throws
 }
 
 extension CaptureDevice {
@@ -82,6 +82,18 @@ extension CaptureDevice {
         activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
         activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
     }
+    func setExposurePointOfInterest(_ point: CGPoint) {
+        guard isExposurePointOfInterestSupported else { return }
+
+        exposurePointOfInterest = point
+        exposureMode = .autoExpose
+    }
+    func setFocusPointOfInterest(_ point: CGPoint) {
+        guard isFocusPointOfInterestSupported else { return }
+
+        focusPointOfInterest = point
+        focusMode = .autoFocus
+    }
 }
 
 
@@ -93,22 +105,6 @@ extension AVCaptureDevice: CaptureDevice {
     var maxISO: Float { activeFormat.maxISO }
     var minFrameRate: Float64? { activeFormat.videoSupportedFrameRateRanges.first?.minFrameRate }
     var maxFrameRate: Float64? { activeFormat.videoSupportedFrameRateRanges.first?.maxFrameRate }
-
-
-    func setFocusPointOfInterest(_ point: CGPoint) {
-        guard isFocusPointOfInterestSupported else { return }
-        
-        focusPointOfInterest = point
-        focusMode = .autoFocus
-
-        // TODO: To zrefaktoryzować
-    }
-    func setExposurePointOfInterest(_ point: CGPoint) {
-        guard isExposurePointOfInterestSupported else { return }
-
-        exposurePointOfInterest = point
-        exposureMode = .autoExpose
-    }
 }
 
 
@@ -122,6 +118,8 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     let maxExposureTargetBias: Float = 199
     let minFrameRate: Float64? = 15
     let maxFrameRate: Float64? = 60
+    let isExposurePointOfInterestSupported: Bool = true
+    let isFocusPointOfInterestSupported: Bool = true
 
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
 
@@ -153,12 +151,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     func unlockForConfiguration() { return }
     func setExposureTargetBias(_ bias: Float, completionHandler handler: ((CMTime) -> ())?) {
         _exposureTargetBias = bias
-    }
-    func setFocusPointOfInterest(_ point: CGPoint) throws {
-        focusPointOfInterest = point
-    }
-    func setExposurePointOfInterest(_ point: CGPoint) throws {
-        exposurePointOfInterest = point
     }
 
 

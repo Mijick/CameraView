@@ -206,8 +206,8 @@ private extension CameraManager {
     )}
     func setDeviceCameraFocus(_ focusPoint: CGPoint, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        try device.setFocusPointOfInterest(focusPoint)
-        try device.setExposurePointOfInterest(focusPoint)
+        device.setFocusPointOfInterest(focusPoint)
+        device.setExposurePointOfInterest(focusPoint)
         device.unlockForConfiguration()
     }
 }
