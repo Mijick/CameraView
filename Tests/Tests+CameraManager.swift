@@ -62,6 +62,13 @@ extension CameraManagerTests {
         #expect(device.videoZoomFactor == 3.1)
         #expect(device.torchMode == .on)
         #expect(cameraManager.captureSession.sessionPreset == .hd1280x720)
+        #expect(device.activeVideoMinFrameDuration == .init(value: 1, timescale: 60))
+        #expect(device.activeVideoMaxFrameDuration == .init(value: 1, timescale: 60))
+        #expect(device.exposureDuration == .init(value: 1, timescale: 10))
+        #expect(device.exposureTargetBias == 0.66)
+        #expect(device.iso == 0.5)
+        #expect(device.exposureMode == .custom)
+        #expect(device.hdrMode == .off)
 
 
     }
