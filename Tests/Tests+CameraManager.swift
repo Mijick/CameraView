@@ -54,24 +54,21 @@ extension CameraManagerTests {
 
         try await setupCamera()
 
-        let device = cameraManager.getCameraInput()!.device
-
-        #expect(device.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
-        #expect(device.videoZoomFactor == 3.1)
-        #expect(device.torchMode == .on)
+        #expect(currentDevice.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
+        #expect(currentDevice.videoZoomFactor == 3.1)
+        #expect(currentDevice.torchMode == .on)
         #expect(cameraManager.captureSession.sessionPreset == .hd1280x720)
-        #expect(device.activeVideoMinFrameDuration == .init(value: 1, timescale: 60))
-        #expect(device.activeVideoMaxFrameDuration == .init(value: 1, timescale: 60))
-        #expect(device.exposureDuration == .init(value: 1, timescale: 10))
-        #expect(device.exposureTargetBias == 0.66)
-        #expect(device.iso == 0.5)
-        #expect(device.exposureMode == .custom)
-        #expect(device.hdrMode == .off)
+        #expect(currentDevice.activeVideoMinFrameDuration == .init(value: 1, timescale: 60))
+        #expect(currentDevice.activeVideoMaxFrameDuration == .init(value: 1, timescale: 60))
+        #expect(currentDevice.exposureDuration == .init(value: 1, timescale: 10))
+        #expect(currentDevice.exposureTargetBias == 0.66)
+        #expect(currentDevice.iso == 0.5)
+        #expect(currentDevice.exposureMode == .custom)
+        #expect(currentDevice.hdrMode == .off)
         #expect(cameraManager.cameraGridView.alpha == 0)
     }
     @Test("Setup: Audio Source Unavailable") func setupWithAudioSourceUnavailable() async throws {
         cameraManager.attributes.isAudioSourceAvailable = false
-
         try await setupCamera()
 
         #expect(cameraManager.captureSession.deviceInputs.count == 1)
@@ -112,14 +109,14 @@ extension CameraManagerTests {
 
         try await cameraManager.setCameraPosition(.front)
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
-        #expect(cameraManager.getCameraInput()!.device.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
+        #expect(currentDevice.uniqueID == cameraManager.frontCameraInput?.device.uniqueID)
         #expect(cameraManager.attributes.cameraPosition == .front)
 
         await Task.sleep(seconds: 0.5)
 
         try await cameraManager.setCameraPosition(.back)
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
-        #expect(cameraManager.getCameraInput()!.device.uniqueID == cameraManager.backCameraInput?.device.uniqueID)
+        #expect(currentDevice.uniqueID == cameraManager.backCameraInput?.device.uniqueID)
         #expect(cameraManager.attributes.cameraPosition == .back)
     }
 }
