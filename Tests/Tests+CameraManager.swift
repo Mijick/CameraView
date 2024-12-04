@@ -14,18 +14,34 @@ import SwiftUI
 @testable import MijickCamera
 
 @MainActor @Suite("Camera Manager Tests") struct CameraManagerTests {
-    var cameraManager: MockCameraManager = .init()
+    var cameraManager: CameraManager = .init(
+        captureSession: MockCaptureSession(),
+        fontCameraInput: MockDeviceInput.get(mediaType: .video, position: .front),
+        backCameraInput: MockDeviceInput.get(mediaType: .video, position: .back),
+        audioInput: MockDeviceInput.get(mediaType: .audio, position: .unspecified)
+    )
 }
 
 // MARK: Setup
 extension CameraManagerTests {
-    @Test("Setup: Default Attributes") func setupWithDefaultAttributes() async {
-        cameraManager.setup(in: .init())
+    @Test("Setup: Default Attributes") func setupWithDefaultAttributes() async throws {
+        try await cameraManager.setup(in: .init())
+
+        await Task.sleep(seconds: 0.1)
 
         #expect(cameraManager.captureSession.isRunning)
-        #expect(cameraManager.captureSession.outputs.count == 3)
         #expect(cameraManager.captureSession.deviceInputs.count == 2)
-        #expect(cameraManager.motionManager.accelerometerUpdateInterval > 0)
+
+        #expect(cameraManager.photoOutput.parent != nil)
+        #expect(cameraManager.videoOutput.parent != nil)
+        #expect(cameraManager.captureSession.outputs.count == 3)
+
+        #expect(cameraManager.cameraLayer.isHidden)
+        #expect(cameraManager.cameraMetalView.parent != nil)
+        #expect(cameraManager.cameraGridView.parent != nil)
+
+        #expect(cameraManager.motionManager.manager.accelerometerUpdateInterval > 0)
+        #expect(cameraManager.notificationCenterManager.parent != nil)
     }
     @Test("Setup: Custom Attributes (1)") func setupWithCustomAttributes_1() {
     }
@@ -33,21 +49,4 @@ extension CameraManagerTests {
     }
 
     // co się stanei gdy audio source nie jest dostępne?
-}
-
-
-
-
-
-
-
-
-
-class MockCameraManager: CameraManager {
-    init() { super.init(
-        captureSession: MockCaptureSession(),
-        fontCameraInput: MockDeviceInput.get(mediaType: .video, position: .front),
-        backCameraInput: MockDeviceInput.get(mediaType: .video, position: .back),
-        audioInput: MockDeviceInput.get(mediaType: .audio, position: .unspecified)
-    )}
 }
