@@ -19,6 +19,8 @@ protocol CaptureDevice: NSObject {
     var exposureDuration: CMTime { get }
     var exposureTargetBias: Float { get }
     var iso: Float { get }
+    var minAvailableVideoZoomFactor: CGFloat { get }
+    var maxAvailableVideoZoomFactor: CGFloat { get }
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
@@ -98,6 +100,8 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     var exposureDuration: CMTime { _exposureDuration }
     var exposureTargetBias: Float { _exposureTargetBias }
     var iso: Float { _iso }
+    var minAvailableVideoZoomFactor: CGFloat = 1
+    var maxAvailableVideoZoomFactor: CGFloat = 3.876
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
     var torchMode: AVCaptureDevice.TorchMode = .auto

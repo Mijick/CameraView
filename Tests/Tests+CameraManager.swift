@@ -124,6 +124,19 @@ extension CameraManagerTests {
 // MARK: Set Camera Zoom
 extension CameraManagerTests {
     @Test("Set Camera Zoom") func setCameraZoom() async throws {
+        try await setupCamera()
+
+        try cameraManager.setCameraZoomFactor(2.137)
+        #expect(currentDevice.videoZoomFactor == 2.137)
+        #expect(cameraManager.attributes.zoomFactor == 2.137)
+
+        try cameraManager.setCameraZoomFactor(0.2137)
+        #expect(currentDevice.videoZoomFactor == currentDevice.minAvailableVideoZoomFactor)
+        #expect(cameraManager.attributes.zoomFactor == currentDevice.minAvailableVideoZoomFactor)
+
+        try cameraManager.setCameraZoomFactor(213.7)
+        #expect(currentDevice.videoZoomFactor == currentDevice.maxAvailableVideoZoomFactor)
+        #expect(cameraManager.attributes.zoomFactor == currentDevice.maxAvailableVideoZoomFactor)
     }
 }
 
@@ -213,4 +226,7 @@ private extension CameraManagerTests {
         try await cameraManager.setup(in: .init())
         await Task.sleep(seconds: 0.1)
     }
+}
+private extension CameraManagerTests {
+    var currentDevice: any CaptureDevice { cameraManager.getCameraInput()!.device }
 }
