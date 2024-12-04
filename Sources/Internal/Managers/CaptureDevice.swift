@@ -21,6 +21,10 @@ protocol CaptureDevice: NSObject {
     var iso: Float { get }
     var minAvailableVideoZoomFactor: CGFloat { get }
     var maxAvailableVideoZoomFactor: CGFloat { get }
+    var minExposureDuration: CMTime { get }
+    var maxExposureDuration: CMTime { get }
+    var minISO: Float { get }
+    var maxISO: Float { get }
 
     // MARK: Changable
     var focusMode: AVCaptureDevice.FocusMode { get set }
@@ -36,10 +40,10 @@ protocol CaptureDevice: NSObject {
     // MARK: Methods
     func lockForConfiguration() throws
     func unlockForConfiguration()
-    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) throws
+    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool
+    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> Void)?)
     func setExposureTargetBias(_ bias: Float) throws
     func setFrameRate(_ frameRate: Int32) throws
-    func setZoomFactor(_ factor: CGFloat) throws
     func setFocusPointOfInterest(_ point: CGPoint) throws
     func setExposurePointOfInterest(_ point: CGPoint) throws
 }
@@ -49,11 +53,6 @@ extension CaptureDevice {
         let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
         videoZoomFactor = factor
     }
-}
-
-
-// MARK: REAL
-extension AVCaptureDevice: CaptureDevice {
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
         guard isExposureModeSupported(mode) else { return }
 
@@ -61,11 +60,22 @@ extension AVCaptureDevice: CaptureDevice {
 
         guard mode == .custom else { return }
 
-        let duration = max(min(duration, activeFormat.maxExposureDuration), activeFormat.minExposureDuration)
-        let iso = max(min(iso, activeFormat.maxISO), activeFormat.minISO)
+        let duration = max(min(duration, maxExposureDuration), minExposureDuration)
+        let iso = max(min(iso, maxISO), minISO)
 
         setExposureModeCustom(duration: duration, iso: iso, completionHandler: nil)
     }
+}
+
+
+// MARK: REAL
+extension AVCaptureDevice: CaptureDevice {
+    var minExposureDuration: CMTime { activeFormat.minExposureDuration }
+    var maxExposureDuration: CMTime { activeFormat.maxExposureDuration }
+    var minISO: Float { activeFormat.minISO }
+    var maxISO: Float { activeFormat.maxISO }
+
+
     func setExposureTargetBias(_ bias: Float) {
         guard isExposureModeSupported(.custom) else { return }
 
@@ -97,6 +107,18 @@ extension AVCaptureDevice: CaptureDevice {
 
 // MARK: MOCK
 class MockCaptureDevice: NSObject, CaptureDevice {
+    let minExposureDuration: CMTime = .init(value: 1, timescale: 1)
+    let maxExposureDuration: CMTime = .init(value: 1, timescale: 213)
+    let minISO: Float = 1
+    let maxISO: Float = 10
+
+    func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
+
+    func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> Void)?) {
+        _exposureDuration = duration
+        _iso = iso
+    }
+    
     let uniqueID: String = UUID().uuidString
     let hasFlash: Bool = true
     let hasTorch: Bool = true
@@ -118,11 +140,6 @@ class MockCaptureDevice: NSObject, CaptureDevice {
 
     func lockForConfiguration() throws { return }
     func unlockForConfiguration() { return }
-    func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
-        exposureMode = mode
-        _exposureDuration = duration
-        _iso = iso
-    }
     func setExposureTargetBias(_ bias: Float) {
         _exposureTargetBias = bias
     }
