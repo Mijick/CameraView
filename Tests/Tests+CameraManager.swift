@@ -75,8 +75,6 @@ extension CameraManagerTests {
 
         #expect(cameraManager.captureSession.deviceInputs.count == 1)
     }
-    @Test("Setup: Permissions Not Granted") func setupWithPermissionsNotGranted() async throws {
-    }
 }
 
 // MARK: Cancel
