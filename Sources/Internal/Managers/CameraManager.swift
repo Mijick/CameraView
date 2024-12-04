@@ -91,11 +91,11 @@ private extension CameraManager {
     }
     nonisolated func startSession() async throws {
         await captureSession.startRunning()
-        try await setupDevice()
+        try await setupDeviceAndAttributes()
     }
 }
 private extension CameraManager {
-    func setupDevice() throws {
+    func setupDeviceAndAttributes() throws {
         guard let device = getCameraInput()?.device else { return }
 
         try device.lockForConfiguration()
@@ -107,8 +107,14 @@ private extension CameraManager {
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
 
-
-        // TODO: Dostosować attributes
+        attributes.cameraExposure.mode = device.exposureMode
+        attributes.cameraExposure.duration = device.exposureDuration
+        attributes.cameraExposure.iso = device.iso
+        attributes.cameraExposure.targetBias = device.exposureTargetBias
+        attributes.frameRate = device.activeVideoMaxFrameDuration.timescale
+        attributes.zoomFactor = device.videoZoomFactor
+        attributes.lightMode = device.lightMode
+        attributes.hdrMode = device.hdrMode
     }
 }
 
