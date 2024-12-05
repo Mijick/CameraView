@@ -28,7 +28,7 @@ public struct MCameraController: View {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
         }}
-        .animation(.defaultEase, value: cameraManager.attributes.capturedMedia)
+        .animation(.mijickEase, value: cameraManager.attributes.capturedMedia)
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)

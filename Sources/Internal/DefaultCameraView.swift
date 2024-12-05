@@ -28,10 +28,10 @@ public struct DefaultCameraView: MCameraView {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
-        .animation(.defaultSpring, value: isRecording)
-        .animation(.defaultSpring, value: outputType)
-        .animation(.defaultSpring, value: hasLight)
-        .animation(.defaultSpring, value: iconAngle)
+        .animation(.mijickSpring, value: isRecording)
+        .animation(.mijickSpring, value: outputType)
+        .animation(.mijickSpring, value: hasLight)
+        .animation(.mijickSpring, value: iconAngle)
     }
 }
 private extension DefaultCameraView {
@@ -73,7 +73,7 @@ private extension DefaultCameraView {
         .padding(8)
         .background(Color(.mijickBackgroundPrimary).opacity(0.64))
         .mask(Capsule())
-        .transition(.asymmetric(insertion: .opacity.animation(.defaultSpring.delay(1)), removal: .scale.combined(with: .opacity)))
+        .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
         .isActive(!isRecording)
         .isActive(config.outputTypePickerVisible)
         .frame(maxHeight: .infinity, alignment: .bottom)

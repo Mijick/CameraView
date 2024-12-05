@@ -71,7 +71,7 @@ private extension DefaultCameraPreview {
 
 private extension DefaultCameraPreview {
     func onAppear() { DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-        withAnimation(.defaultEase) { [self] in shouldShowContent = true }
+        withAnimation(.mijickEase) { [self] in shouldShowContent = true }
     }}
     func onVideoAppear(_ url: URL) {
         player = .init(url: url)
