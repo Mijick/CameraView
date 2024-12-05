@@ -170,24 +170,24 @@ private extension DefaultCameraView {
 
 private extension DefaultCameraView {
     func changeGridVisibility() {
-        changeGridVisibility(!showGrid)
+        setGridVisibility(!showGrid)
     }
     func changeMirrorOutput() {
-        changeMirrorOutputMode(!mirrorOutput)
+        setMirrorOutput(!mirrorOutput)
     }
     func changeFlashMode() {
-        changeFlashMode(flashMode.next())
+        setFlashMode(flashMode.next())
     }
     func changeLightMode() {
-        do { try changeLightMode(lightMode.next()) }
+        do { try setLightMode(lightMode.next()) }
         catch {}
     }
     func changeCameraPosition() { Task {
-        do { try await changeCamera(cameraPosition.next()) }
+        do { try await setCameraPosition(cameraPosition.next()) }
         catch {}
     }}
     func changeCameraOutputType(_ type: CameraOutputType) {
-        changeOutputType(type)
+        setOutputType(type)
     }
 }
 
