@@ -53,14 +53,19 @@ public extension MCameraScreen {
     var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
     var isOutputMirrored: Bool { cameraManager.attributes.mirrorOutput }
     var isGridVisible: Bool { cameraManager.attributes.isGridVisible }
+    var cameraFilters: [CIFilter] { cameraManager.attributes.cameraFilters }
+    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
+    var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
+
+
 
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
 
 
 
-    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
-    var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
+
+
     var iso: Float { cameraManager.attributes.cameraExposure.iso }
     var exposureTargetBias: Float { cameraManager.attributes.cameraExposure.targetBias }
     var hdrMode: CameraHDRMode { cameraManager.attributes.hdrMode }
