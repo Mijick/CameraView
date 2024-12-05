@@ -19,12 +19,10 @@ public protocol MCameraScreen: View {
     var closeControllerAction: () -> () { get }
 }
 
-// MARK: View Methods
+// MARK: Methods
 public extension MCameraScreen {
     func createCameraView() -> some View { CameraInputBridgeView(cameraManager: cameraManager).equatable() }
 }
-
-// MARK: Logic Methods
 public extension MCameraScreen {
     func captureOutput() { cameraManager.captureOutput() }
     func setOutputType(_ outputType: CameraOutputType) { cameraManager.setOutputType(outputType) }
@@ -61,7 +59,8 @@ public extension MCameraScreen {
     var hdrMode: CameraHDRMode { cameraManager.attributes.hdrMode }
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
-
+}
+public extension MCameraScreen {
     var hasLight: Bool { cameraManager.hasLight }
     var hasFlash: Bool { cameraManager.hasFlash }
     var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
