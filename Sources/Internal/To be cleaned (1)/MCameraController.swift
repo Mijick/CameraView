@@ -20,7 +20,7 @@ public struct MCameraController: View {
         audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
     )
     @Namespace var namespace
-    var config: CameraConfig = .init()
+    var config: CameraControllerConfig = .init()
 
     
     public var body: some View { if config.isCameraControllerConfigured {
