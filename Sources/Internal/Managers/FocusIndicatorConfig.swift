@@ -12,7 +12,7 @@
 import SwiftUI
 
 class FocusIndicatorConfig {
-    var image: UIImage = .init(resource: .iconCrosshair)
+    var image: UIImage = .init(resource: .mijickIconCrosshair)
     var tintColor: UIColor = .init(resource: .mijickBackgroundYellow)
     var size: CGFloat = 92
 }

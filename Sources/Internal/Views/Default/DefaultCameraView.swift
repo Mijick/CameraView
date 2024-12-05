@@ -105,18 +105,18 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createGridButton() -> some View {
-        TopButton(icon: gridButtonIcon, action: changeGridVisibility)
+        TopButton(image: gridButtonIcon, action: changeGridVisibility)
             .rotationEffect(iconAngle)
             .isActiveStackElement(config.gridButtonVisible)
     }
     func createFlipOutputButton() -> some View {
-        TopButton(icon: flipButtonIcon, action: changeMirrorOutput)
+        TopButton(image: flipButtonIcon, action: changeMirrorOutput)
             .rotationEffect(iconAngle)
             .isActiveStackElement(cameraPosition == .front)
             .isActiveStackElement(config.flipButtonVisible)
     }
     func createFlashButton() -> some View {
-        TopButton(icon: flashButtonIcon, action: changeFlashMode)
+        TopButton(image: flashButtonIcon, action: changeFlashMode)
             .rotationEffect(iconAngle)
             .isActiveStackElement(hasFlash)
             .isActiveStackElement(outputType == .photo)
@@ -125,7 +125,7 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createLightButton() -> some View {
-        BottomButton(icon: "icon-light", active: lightMode == .on, action: changeLightMode)
+        BottomButton(image: .mijickIconLight, active: lightMode == .on, action: changeLightMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -136,7 +136,7 @@ private extension DefaultCameraView {
         CaptureButton(action: captureOutput, mode: outputType, isRecording: isRecording).isActive(config.captureButtonVisible)
     }
     func createChangeCameraButton() -> some View {
-        BottomButton(icon: "icon-change-camera", active: false, action: changeCameraPosition)
+        BottomButton(image: .mijickIconChangeCamera, active: false, action: changeCameraPosition)
             .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -210,7 +210,7 @@ fileprivate struct CloseButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image("icon-cancel", bundle: .module)
+            Image(.mijickIconCancel)
                 .resizable()
                 .frame(width: 24, height: 24)
                 .foregroundColor(Color.white)
@@ -220,7 +220,7 @@ fileprivate struct CloseButton: View {
 
 // MARK: - TopButton
 fileprivate struct TopButton: View {
-    let icon: String
+    let image: ImageResource
     let action: () -> ()
 
 
@@ -243,7 +243,7 @@ private extension TopButton {
             .frame(width: 32, height: 32)
     }
     func createIcon() -> some View {
-        Image(icon, bundle: .module)
+        Image(image)
             .resizable()
             .frame(width: 16, height: 16)
             .foregroundColor(Color.white)
@@ -296,7 +296,7 @@ private extension CaptureButton {
 
 // MARK: - BottomButton
 fileprivate struct BottomButton: View {
-    let icon: String
+    let image: ImageResource
     let active: Bool
     let action: () -> ()
 
@@ -320,7 +320,7 @@ private extension BottomButton {
         Circle().fill(Color(.mijickBackgroundSecondary))
     }
     func createIcon() -> some View {
-        Image(icon, bundle: .module)
+        Image(image)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
@@ -346,7 +346,7 @@ fileprivate struct OutputTypeButton: View {
 }
 private extension OutputTypeButton {
     func createButtonLabel() -> some View {
-        Image(icon, bundle: .module)
+        Image(icon)
             .resizable()
             .frame(width: iconSize, height: iconSize)
             .foregroundColor(iconColor)
@@ -356,7 +356,10 @@ private extension OutputTypeButton {
     }
 }
 private extension OutputTypeButton {
-    var icon: String { "icon-" + .init(describing: type) }
+    var icon: ImageResource { switch type {
+        case .photo: .mijickIconPhoto
+        case .video: .mijickIconVideo
+    }}
     var iconSize: CGFloat { switch active {
         case true: 28
         case false: 22
