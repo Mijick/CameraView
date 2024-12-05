@@ -26,7 +26,7 @@ public struct DefaultCameraView: MCameraView {
         }
         .ignoresSafeArea(.all, edges: .horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.background).ignoresSafeArea())
+        .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
         .animation(.defaultSpring, value: isRecording)
         .animation(.defaultSpring, value: outputType)
@@ -71,7 +71,7 @@ private extension DefaultCameraView {
             createOutputTypeButton(.photo)
         }
         .padding(8)
-        .background(Color(.background).opacity(0.64))
+        .background(Color(.mijickBackgroundPrimary).opacity(0.64))
         .mask(Capsule())
         .transition(.asymmetric(insertion: .opacity.animation(.defaultSpring.delay(1)), removal: .scale.combined(with: .opacity)))
         .isActive(!isRecording)
@@ -239,7 +239,7 @@ private extension TopButton {
 private extension TopButton {
     func createBackground() -> some View {
         Circle()
-            .fill(Color.white.opacity(0.12))
+            .fill(Color(.mijickBackgroundSecondary))
             .frame(width: 32, height: 32)
     }
     func createIcon() -> some View {
@@ -317,7 +317,7 @@ private extension BottomButton {
 }
 private extension BottomButton {
     func createBackground() -> some View {
-        Circle().fill(Color.white.opacity(0.12))
+        Circle().fill(Color(.mijickBackgroundSecondary))
     }
     func createIcon() -> some View {
         Image(icon, bundle: .module)
@@ -351,7 +351,7 @@ private extension OutputTypeButton {
             .frame(width: iconSize, height: iconSize)
             .foregroundColor(iconColor)
             .frame(width: backgroundSize, height: backgroundSize)
-            .background(Color.white.opacity(0.12))
+            .background(Color(.mijickBackgroundSecondary))
             .mask(Circle())
     }
 }
