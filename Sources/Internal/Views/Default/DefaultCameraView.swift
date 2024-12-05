@@ -66,7 +66,7 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createOutputTypeButtons() -> some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 4) {
             createOutputTypeButton(.video)
             createOutputTypeButton(.photo)
         }
