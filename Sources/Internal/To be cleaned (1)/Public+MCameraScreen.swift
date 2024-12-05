@@ -46,13 +46,19 @@ public extension MCameraScreen {
 
 // MARK: Attributes
 public extension MCameraScreen {
-    var outputType: CameraOutputType { cameraManager.attributes.outputType }
+    var cameraOutputType: CameraOutputType { cameraManager.attributes.outputType }
     var cameraPosition: CameraPosition { cameraManager.attributes.cameraPosition }
+    var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
+    var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
+    var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
+
+
+
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
-    var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
-    var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
-    var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
+
+
+
     var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
     var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
     var iso: Float { cameraManager.attributes.cameraExposure.iso }
