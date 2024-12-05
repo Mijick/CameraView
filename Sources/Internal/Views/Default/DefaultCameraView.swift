@@ -26,7 +26,7 @@ public struct DefaultCameraView: MCameraView {
         }
         .ignoresSafeArea(.all, edges: .horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background.ignoresSafeArea())
+        .background(Color(.background).ignoresSafeArea())
         .statusBarHidden()
         .animation(.defaultSpring, value: isRecording)
         .animation(.defaultSpring, value: outputType)
@@ -71,7 +71,7 @@ private extension DefaultCameraView {
             createOutputTypeButton(.photo)
         }
         .padding(8)
-        .background(Color.background.opacity(0.64))
+        .background(Color(.background).opacity(0.64))
         .mask(Capsule())
         .transition(.asymmetric(insertion: .opacity.animation(.defaultSpring.delay(1)), removal: .scale.combined(with: .opacity)))
         .isActive(!isRecording)

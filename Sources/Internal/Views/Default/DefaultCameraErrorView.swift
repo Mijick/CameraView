@@ -29,7 +29,7 @@ struct DefaultCameraErrorView: MCameraErrorView {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background.ignoresSafeArea())
+        .background(Color(.background).ignoresSafeArea())
     }
 }
 private extension DefaultCameraErrorView {

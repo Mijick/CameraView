@@ -29,7 +29,7 @@ struct DefaultCameraPreview: MCameraPreview {
             createButtons()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background.ignoresSafeArea())
+        .background(Color(.background).ignoresSafeArea())
         .onAppear(perform: onAppear)
     }
 }
@@ -104,7 +104,7 @@ private extension BottomButton {
 }
 private extension BottomButton {
     var iconColor: Color { switch primary {
-        case true: .background
+        case true: .init(.background)
         case false: .white
     }}
     var backgroundColor: Color { switch primary {
