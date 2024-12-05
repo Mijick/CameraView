@@ -10,7 +10,6 @@
 
 
 import SwiftUI
-import AVKit
 
 public struct MCameraController: View {
     @ObservedObject var cameraManager: CameraManager
