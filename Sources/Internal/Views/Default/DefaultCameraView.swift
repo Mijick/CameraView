@@ -276,7 +276,7 @@ private extension CaptureButton {
             .padding(backgroundPadding)
     }
     func createBorders() -> some View {
-        Circle().stroke(Color.white, lineWidth: 2.5)
+        Circle().stroke(Color(.mijickBackgroundInverted), lineWidth: 2.5)
     }
 }
 private extension CaptureButton {
