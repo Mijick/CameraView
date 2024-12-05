@@ -90,7 +90,7 @@ private extension DefaultCameraView {
     func createTopCentreView() -> some View {
         Text(recordingTime.toString())
             .font(.system(size: 20, weight: .medium, design: .monospaced))
-            .foregroundColor(.white)
+            .foregroundColor(.init(.mijickTextPrimary))
             .isActive(isRecording)
     }
     func createTopRightView() -> some View {
@@ -370,6 +370,6 @@ private extension OutputTypeButton {
     }}
     var iconColor: Color { switch active {
         case true: .init(.mijickBackgroundYellow)
-        case false: .white.opacity(0.6)
+        case false: .init(.mijickTextTertiary)
     }}
 }

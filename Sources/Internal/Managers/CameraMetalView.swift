@@ -110,7 +110,7 @@ private extension CameraMetalView {
     func createBlackMatte() -> UIView {
         let view = UIView()
         view.frame = parent.cameraView.frame
-        view.backgroundColor = .black
+        view.backgroundColor = .init(resource: .mijickBackgroundPrimary)
         view.alpha = 0
         return view
     }

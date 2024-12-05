@@ -46,7 +46,7 @@ private extension DefaultCameraErrorView {
     func createTitle() -> some View {
         Text(getDefaultTitle())
             .font(.system(size: 20, weight: .bold))
-            .foregroundColor(Color.white)
+            .foregroundColor(.init(.mijickTextPrimary))
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 60)
@@ -54,7 +54,7 @@ private extension DefaultCameraErrorView {
     func createDescription() -> some View {
         Text(getDefaultDescription())
             .font(.system(size: 15, weight: .regular))
-            .foregroundColor(Color.white.opacity(0.7))
+            .foregroundColor(.init(.mijickTextSecondary))
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 48)
