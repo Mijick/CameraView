@@ -21,7 +21,7 @@ public extension DefaultCameraView {
 // MARK: - Customising View
 public extension DefaultCameraView {
     func outputTypePickerVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.outputTypePickerVisible = value } }
-    func torchButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.torchButtonVisible = value } }
+    func lightButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.lightButtonVisible = value } }
     func captureButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.captureButtonVisible = value } }
     func cameraPositionButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.changeCameraButtonVisible = value } }
     func gridButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.gridButtonVisible = value } }

@@ -26,12 +26,19 @@ extension UIView {
 
 // MARK: - Blurring View
 extension UIView {
-    func applyBlurEffect(style: UIBlurEffect.Style, animationDuration: Double) {
+    func applyBlurEffect(style: UIBlurEffect.Style) {
         let blurEffectView = UIVisualEffectView()
         blurEffectView.frame = bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        UIView.animate(withDuration: animationDuration) { blurEffectView.effect = UIBlurEffect(style: style) }
+        blurEffectView.effect = UIBlurEffect(style: style)
 
         addSubview(blurEffectView)
     }
+}
+
+
+
+extension Int {
+    static var blurViewTag: Int { 2137 }
+    static var focusIndicatorTag: Int { 29 }
 }

@@ -10,14 +10,20 @@
 
 
 import SwiftUI
+import AVKit
 
 public struct MCameraController: View {
-    @ObservedObject var cameraManager: CameraManager
+    @ObservedObject var cameraManager: CameraManager = .init(
+        captureSession: AVCaptureSession(),
+        fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
+        backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
+        audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
+    )
     @Namespace var namespace
     var config: CameraConfig = .init()
-
+    public init() {}
     
-    public var body: some View {
+    public var body: some View { if config.isInitialised {
         ZStack { switch cameraManager.attributes.error {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
@@ -26,10 +32,10 @@ public struct MCameraController: View {
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)
-    }
+    }}
 }
 private extension MCameraController {
-    func createErrorStateView(_ error: CameraManager.Error) -> some View {
+    func createErrorStateView(_ error: MijickCameraError) -> some View {
         config.cameraErrorView(error, config.onCloseController).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch cameraManager.attributes.capturedMedia {
@@ -39,10 +45,12 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func createCameraPreview(_ media: MCameraMedia) -> some View {
-        config.mediaPreviewView?(media, namespace, cameraManager.resetCapturedMedia, performAfterMediaCapturedAction).erased()
+        config.mediaPreviewView?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
-        config.cameraView(cameraManager, namespace, config.onCloseController).erased()
+        config.cameraView(cameraManager, namespace, config.onCloseController)
+            .erased()
+            .onDisappear(perform: cameraManager.cancel)
     }
 }
 
@@ -56,7 +64,7 @@ private extension MCameraController {
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
-            case true: cameraManager.resetZoomAndTorch()
+            case true: return
             case false: performAfterMediaCapturedAction()
         }
     }}
@@ -69,6 +77,9 @@ private extension MCameraController {
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
     }
+    func resetCapturedMedia() {
+        cameraManager.attributes.capturedMedia = nil
+    }
     func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
         notifyUserOfMediaCaptured(capturedMedia)
         performPostCameraAction()
@@ -76,11 +87,11 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.image { config.onImageCaptured(image) }
-        else if let video = capturedMedia.video { config.onVideoCaptured(video) }
+        if let image = capturedMedia.getImage() { config.onImageCaptured(image) }
+        else if let video = capturedMedia.getVideo() { config.onVideoCaptured(video) }
     }
     func performPostCameraAction() { let afterMediaCaptured = config.afterMediaCaptured(.init())
-        afterMediaCaptured.shouldReturnToCameraView ? cameraManager.resetCapturedMedia() : ()
+        afterMediaCaptured.shouldReturnToCameraView ? resetCapturedMedia() : ()
         afterMediaCaptured.shouldCloseCameraController ? config.onCloseController() : ()
         afterMediaCaptured.customAction()
     }

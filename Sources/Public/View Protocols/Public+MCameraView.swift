@@ -27,21 +27,21 @@ public extension MCameraView {
 // MARK: - Use-only Logic Methods
 public extension MCameraView {
     func captureOutput() { cameraManager.captureOutput() }
-    func changeOutputType(_ type: CameraOutputType) throws { try cameraManager.changeOutputType(type) }
-    func changeCamera(_ position: CameraPosition) throws { try cameraManager.changeCamera(position) }
-    func changeCameraFilters(_ filters: [CIFilter]) throws { try cameraManager.changeCameraFilters(filters) }
-    func changeResolution(_ resolution: AVCaptureSession.Preset) throws { try cameraManager.changeResolution(resolution) }
-    func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.changeFrameRate(frameRate) }
-    func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.changeZoomFactor(value) }
-    func changeFlashMode(_ mode: CameraFlashMode) throws { try cameraManager.changeFlashMode(mode) }
-    func changeTorchMode(_ mode: CameraTorchMode) throws { try cameraManager.changeTorchMode(mode) }
-    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.changeExposureMode(exposureMode) }
-    func changeExposureDuration(_ value: CMTime) throws { try cameraManager.changeExposureDuration(value) }
-    func changeISO(_ value: Float) throws { try cameraManager.changeISO(value) }
-    func changeExposureTargetBias(_ value: Float) throws { try cameraManager.changeExposureTargetBias(value) }
-    func changeHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.changeHDRMode(mode) }
-    func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.changeMirrorMode(shouldMirror) }
-    func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.changeGridVisibility(shouldShowGrid) }
+    func changeOutputType(_ type: CameraOutputType) { cameraManager.setOutputType(type) }
+    func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.setCameraPosition(position) }
+    func changeCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
+    func changeResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
+    func changeFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
+    func changeZoomFactor(_ value: CGFloat) throws { try cameraManager.setCameraZoomFactor(value) }
+    func changeFlashMode(_ mode: CameraFlashMode) { cameraManager.setFlashMode(mode) }
+    func changeLightMode(_ mode: CameraLightMode) throws { try cameraManager.setLightMode(mode) }
+    func changeExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
+    func changeExposureDuration(_ value: CMTime) throws { try cameraManager.setExposureDuration(value) }
+    func changeISO(_ value: Float) throws { try cameraManager.setISO(value) }
+    func changeExposureTargetBias(_ value: Float) throws { try cameraManager.setExposureTargetBias(value) }
+    func changeHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.setHDRMode(mode) }
+    func changeMirrorOutputMode(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
+    func changeGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
 }
 
 // MARK: - Flags
@@ -51,7 +51,7 @@ public extension MCameraView {
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
     var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
-    var torchMode: CameraTorchMode { cameraManager.attributes.torchMode }
+    var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
     var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
     var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
     var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
@@ -61,9 +61,9 @@ public extension MCameraView {
     var mirrorOutput: Bool { cameraManager.attributes.mirrorOutput }
     var showGrid: Bool { cameraManager.attributes.isGridVisible }
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.attributes.deviceOrientation }
-    var isRecording: Bool { cameraManager.attributes.isRecording }
-    var recordingTime: MTime { cameraManager.attributes.recordingTime }
-    var hasTorch: Bool { cameraManager.hasTorch }
+    var isRecording: Bool { cameraManager.videoOutput.timer.timerStatus == .running }
+    var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
+    var hasLight: Bool { cameraManager.hasLight }
     var hasFlash: Bool { cameraManager.hasFlash }
-    var isOrientationLocked: Bool { cameraManager.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
+    var isOrientationLocked: Bool { cameraManager.attributes.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
 }

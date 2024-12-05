@@ -29,15 +29,15 @@ struct DefaultCameraPreview: MCameraPreview {
             createButtons()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background.ignoresSafeArea())
+        .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .onAppear(perform: onAppear)
     }
 }
 private extension DefaultCameraPreview {
     func createContentView() -> some View {
         ZStack {
-            if let image = capturedMedia.image { createImageView(image) }
-            else if let video = capturedMedia.video { createVideoView(video) }
+            if let image = capturedMedia.getImage() { createImageView(image) }
+            else if let video = capturedMedia.getVideo() { createVideoView(video) }
             else { EmptyView() }
         }
         .opacity(shouldShowContent ? 1 : 0)
@@ -62,10 +62,10 @@ private extension DefaultCameraPreview {
         VideoPlayer(player: player).onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(icon: "icon-cancel", primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(image: .mijickIconCancel, primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(icon: "icon-check", primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(image: .mijickIconCheck, primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 
@@ -82,7 +82,7 @@ private extension DefaultCameraPreview {
 
 // MARK: - BottomButton
 fileprivate struct BottomButton: View {
-    let icon: String
+    let image: ImageResource
     let primary: Bool
     let action: () -> ()
 
@@ -93,7 +93,7 @@ fileprivate struct BottomButton: View {
 }
 private extension BottomButton {
     func createButtonLabel() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(image)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
@@ -104,11 +104,11 @@ private extension BottomButton {
 }
 private extension BottomButton {
     var iconColor: Color { switch primary {
-        case true: .background
-        case false: .white
+        case true: .init(.mijickBackgroundPrimary)
+        case false: .init(.mijickBackgroundInverted)
     }}
     var backgroundColor: Color { switch primary {
-        case true: .white
-        case false: .white.opacity(0.12)
+        case true: .init(.mijickBackgroundInverted)
+        case false: .init(.mijickBackgroundSecondary)
     }}
 }

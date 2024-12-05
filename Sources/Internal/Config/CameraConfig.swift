@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct CameraConfig {
+@MainActor struct CameraConfig {
     // MARK: Default Views
     var cameraErrorView: ErrorViewBuilder = DefaultCameraErrorView.init
     var cameraView: CameraViewBuilder = DefaultCameraView.init
@@ -25,4 +25,7 @@ struct CameraConfig {
     var onVideoCaptured: (URL) -> () = { _ in }
     var afterMediaCaptured: (PostCameraConfig) -> (PostCameraConfig) = { _ in .init() }
     var onCloseController: () -> () = {}
+
+
+    var isInitialised: Bool = false
 }

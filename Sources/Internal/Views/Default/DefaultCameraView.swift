@@ -26,11 +26,11 @@ public struct DefaultCameraView: MCameraView {
         }
         .ignoresSafeArea(.all, edges: .horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background.ignoresSafeArea())
+        .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
         .animation(.defaultSpring, value: isRecording)
         .animation(.defaultSpring, value: outputType)
-        .animation(.defaultSpring, value: hasTorch)
+        .animation(.defaultSpring, value: hasLight)
         .animation(.defaultSpring, value: iconAngle)
     }
 }
@@ -54,7 +54,7 @@ private extension DefaultCameraView {
     }
     func createBottomView() -> some View {
         ZStack {
-            createTorchButton()
+            createLightButton()
             createCaptureButton()
             createChangeCameraButton()
         }
@@ -66,12 +66,12 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createOutputTypeButtons() -> some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 4) {
             createOutputTypeButton(.video)
             createOutputTypeButton(.photo)
         }
         .padding(8)
-        .background(Color.background.opacity(0.64))
+        .background(Color(.mijickBackgroundPrimary).opacity(0.64))
         .mask(Capsule())
         .transition(.asymmetric(insertion: .opacity.animation(.defaultSpring.delay(1)), removal: .scale.combined(with: .opacity)))
         .isActive(!isRecording)
@@ -90,7 +90,7 @@ private extension DefaultCameraView {
     func createTopCentreView() -> some View {
         Text(recordingTime.toString())
             .font(.system(size: 20, weight: .medium, design: .monospaced))
-            .foregroundColor(.white)
+            .foregroundColor(.init(.mijickTextPrimary))
             .isActive(isRecording)
     }
     func createTopRightView() -> some View {
@@ -105,18 +105,18 @@ private extension DefaultCameraView {
 }
 private extension DefaultCameraView {
     func createGridButton() -> some View {
-        TopButton(icon: gridButtonIcon, action: changeGridVisibility)
+        TopButton(image: gridButtonIcon, action: changeGridVisibility)
             .rotationEffect(iconAngle)
             .isActiveStackElement(config.gridButtonVisible)
     }
     func createFlipOutputButton() -> some View {
-        TopButton(icon: flipButtonIcon, action: changeMirrorOutput)
+        TopButton(image: flipButtonIcon, action: changeMirrorOutput)
             .rotationEffect(iconAngle)
             .isActiveStackElement(cameraPosition == .front)
             .isActiveStackElement(config.flipButtonVisible)
     }
     func createFlashButton() -> some View {
-        TopButton(icon: flashButtonIcon, action: changeFlashMode)
+        TopButton(image: flashButtonIcon, action: changeFlashMode)
             .rotationEffect(iconAngle)
             .isActiveStackElement(hasFlash)
             .isActiveStackElement(outputType == .photo)
@@ -124,19 +124,19 @@ private extension DefaultCameraView {
     }
 }
 private extension DefaultCameraView {
-    func createTorchButton() -> some View {
-        BottomButton(icon: "icon-torch", active: torchMode == .on, action: changeTorchMode)
+    func createLightButton() -> some View {
+        BottomButton(image: .mijickIconLight, active: lightMode == .on, action: changeLightMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .isActive(hasTorch)
-            .isActive(config.torchButtonVisible)
+            .isActive(hasLight)
+            .isActive(config.lightButtonVisible)
     }
     func createCaptureButton() -> some View {
         CaptureButton(action: captureOutput, mode: outputType, isRecording: isRecording).isActive(config.captureButtonVisible)
     }
     func createChangeCameraButton() -> some View {
-        BottomButton(icon: "icon-change-camera", active: false, action: changeCameraPosition)
+        BottomButton(image: .mijickIconChangeCamera, active: false, action: changeCameraPosition)
             .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
             .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -153,18 +153,18 @@ private extension DefaultCameraView {
         case true: deviceOrientation.getAngle()
         case false: .zero
     }}
-    var gridButtonIcon: String { switch showGrid {
-        case true: "icon-grid-on"
-        case false: "icon-grid-off"
+    var gridButtonIcon: ImageResource { switch showGrid {
+        case true: .mijickIconGridOn
+        case false: .mijickIconGridOff
     }}
-    var flipButtonIcon: String { switch mirrorOutput {
-        case true: "icon-flip-on"
-        case false: "icon-flip-off"
+    var flipButtonIcon: ImageResource { switch mirrorOutput {
+        case true: .mijickIconFlipOn
+        case false: .mijickIconFlipOff
     }}
-    var flashButtonIcon: String { switch flashMode {
-        case .off: "icon-flash-off"
-        case .on: "icon-flash-on"
-        case .auto: "icon-flash-auto"
+    var flashButtonIcon: ImageResource { switch flashMode {
+        case .off: .mijickIconFlashOff
+        case .on: .mijickIconFlashOn
+        case .auto: .mijickIconFlashAuto
     }}
 }
 
@@ -176,27 +176,25 @@ private extension DefaultCameraView {
         changeMirrorOutputMode(!mirrorOutput)
     }
     func changeFlashMode() {
-        do { try changeFlashMode(flashMode.next()) }
+        changeFlashMode(flashMode.next())
+    }
+    func changeLightMode() {
+        do { try changeLightMode(lightMode.next()) }
         catch {}
     }
-    func changeTorchMode() {
-        do { try changeTorchMode(torchMode.next()) }
+    func changeCameraPosition() { Task {
+        do { try await changeCamera(cameraPosition.next()) }
         catch {}
-    }
-    func changeCameraPosition() {
-        do { try changeCamera(cameraPosition.next()) }
-        catch {}
-    }
+    }}
     func changeCameraOutputType(_ type: CameraOutputType) {
-        do { try changeOutputType(type) }
-        catch {}
+        changeOutputType(type)
     }
 }
 
 // MARK: - Configurables
 extension DefaultCameraView { struct Config {
     var outputTypePickerVisible: Bool = true
-    var torchButtonVisible: Bool = true
+    var lightButtonVisible: Bool = true
     var captureButtonVisible: Bool = true
     var changeCameraButtonVisible: Bool = true
     var gridButtonVisible: Bool = true
@@ -212,17 +210,17 @@ fileprivate struct CloseButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image("icon-cancel", bundle: .mijick)
+            Image(.mijickIconCancel)
                 .resizable()
                 .frame(width: 24, height: 24)
-                .foregroundColor(Color.white)
+                .foregroundColor(Color(.mijickBackgroundInverted))
         }
     }
 }
 
 // MARK: - TopButton
 fileprivate struct TopButton: View {
-    let icon: String
+    let image: ImageResource
     let action: () -> ()
 
 
@@ -241,14 +239,14 @@ private extension TopButton {
 private extension TopButton {
     func createBackground() -> some View {
         Circle()
-            .fill(Color.white.opacity(0.12))
+            .fill(Color(.mijickBackgroundSecondary))
             .frame(width: 32, height: 32)
     }
     func createIcon() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(image)
             .resizable()
             .frame(width: 16, height: 16)
-            .foregroundColor(Color.white)
+            .foregroundColor(Color(.mijickBackgroundInverted))
     }
 }
 
@@ -278,13 +276,13 @@ private extension CaptureButton {
             .padding(backgroundPadding)
     }
     func createBorders() -> some View {
-        Circle().stroke(Color.white, lineWidth: 2.5)
+        Circle().stroke(Color(.mijickBackgroundInverted), lineWidth: 2.5)
     }
 }
 private extension CaptureButton {
     var backgroundColor: Color { switch mode {
-        case .photo: .white
-        case .video: .red
+        case .photo: .init(.mijickBackgroundInverted)
+        case .video: .init(.mijickBackgroundRed)
     }}
     var backgroundCornerRadius: CGFloat { switch isRecording {
         case true: 5
@@ -298,7 +296,7 @@ private extension CaptureButton {
 
 // MARK: - BottomButton
 fileprivate struct BottomButton: View {
-    let icon: String
+    let image: ImageResource
     let active: Bool
     let action: () -> ()
 
@@ -319,10 +317,10 @@ private extension BottomButton {
 }
 private extension BottomButton {
     func createBackground() -> some View {
-        Circle().fill(Color.white.opacity(0.12))
+        Circle().fill(Color(.mijickBackgroundSecondary))
     }
     func createIcon() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(image)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
@@ -330,8 +328,8 @@ private extension BottomButton {
 }
 private extension BottomButton {
     var iconColor: Color { switch active {
-        case true: .yellow
-        case false: .white
+        case true: .init(.mijickBackgroundYellow)
+        case false: .init(.mijickBackgroundInverted)
     }}
 }
 
@@ -348,17 +346,20 @@ fileprivate struct OutputTypeButton: View {
 }
 private extension OutputTypeButton {
     func createButtonLabel() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(icon)
             .resizable()
             .frame(width: iconSize, height: iconSize)
             .foregroundColor(iconColor)
             .frame(width: backgroundSize, height: backgroundSize)
-            .background(Color.white.opacity(0.12))
+            .background(Color(.mijickBackgroundSecondary))
             .mask(Circle())
     }
 }
 private extension OutputTypeButton {
-    var icon: String { "icon-" + .init(describing: type) }
+    var icon: ImageResource { switch type {
+        case .photo: .mijickIconPhoto
+        case .video: .mijickIconVideo
+    }}
     var iconSize: CGFloat { switch active {
         case true: 28
         case false: 22
@@ -368,7 +369,7 @@ private extension OutputTypeButton {
         case false: 32
     }}
     var iconColor: Color { switch active {
-        case true: .yellow
-        case false: .white.opacity(0.6)
+        case true: .init(.mijickBackgroundYellow)
+        case false: .init(.mijickTextTertiary)
     }}
 }

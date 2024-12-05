@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct CameraInputBridgeView {
+struct CameraInputBridgeView: UIViewRepresentable {
     let cameraManager: CameraManager
     let inputView: UIView = .init()
 }
@@ -22,7 +22,7 @@ struct CameraInputBridgeView {
 
 
 // MARK: UIViewRepresentable
-extension CameraInputBridgeView: UIViewRepresentable {
+extension CameraInputBridgeView {
     func makeUIView(context: Context) -> some UIView {
         setupCameraManager()
         setupTapGesture(context)
@@ -33,9 +33,10 @@ extension CameraInputBridgeView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator { .init(self) }
 }
 private extension CameraInputBridgeView {
-    func setupCameraManager() {
-        cameraManager.setup(in: inputView)
-    }
+    func setupCameraManager() { Task {
+        do { try await cameraManager.setup(in: inputView) }
+        catch { print("CANNOT SETUP CAMERA: \(error)") }
+    }}
     func setupTapGesture(_ context: Context) {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
         inputView.addGestureRecognizer(tapRecognizer)
@@ -48,7 +49,7 @@ private extension CameraInputBridgeView {
 
 // MARK: Equatable
 extension CameraInputBridgeView: Equatable {
-    static func ==(lhs: Self, rhs: Self) -> Bool { true }
+    nonisolated static func ==(lhs: Self, rhs: Self) -> Bool { true }
 }
 
 
@@ -59,20 +60,20 @@ extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: C
 
 // MARK: On Tap
 extension CameraInputBridgeView.Coordinator {
-    @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
+    @MainActor @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
         do {
             let touchPoint = tap.location(in: parent.inputView)
-            try parent.cameraManager.setCameraFocus(touchPoint)
+            try parent.cameraManager.setCameraFocus(at: touchPoint)
         } catch {}
     }
 }
 
 // MARK: On Pinch
 extension CameraInputBridgeView.Coordinator {
-    @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
+    @MainActor @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
         do {
             let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)
-            try parent.cameraManager.changeZoomFactor(desiredZoomFactor)
+            try parent.cameraManager.setCameraZoomFactor(desiredZoomFactor)
         } catch {}
     }}
 }

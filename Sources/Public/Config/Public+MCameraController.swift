@@ -10,10 +10,11 @@
 
 
 import SwiftUI
+import AVKit
 
 // MARK: - Initialiser
 public extension MCameraController {
-    init(manager: CameraManager) { self.init(cameraManager: manager) }
+    //init() { }
 }
 
 // MARK: - Changing Default Views
@@ -50,5 +51,27 @@ public extension MCameraController {
 public extension MCameraController {
     /// Locks the camera interface in portrait orientation (even if device screen rotation is enabled).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.lockOrientation() } }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.attributes.orientationLocked = true } }
+}
+
+
+
+public extension MCameraController {
+    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.attributes.outputType = type } }
+    func cameraPosition(_ position: CameraPosition) -> Self { setAndReturnSelf { $0.cameraManager.attributes.cameraPosition = position } }
+    func cameraFilters(_ filters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.attributes.cameraFilters = filters } }
+    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { setAndReturnSelf { $0.cameraManager.attributes.resolution = resolution } }
+    func frameRate(_ frameRate: Int32) -> Self { setAndReturnSelf { $0.cameraManager.attributes.frameRate = frameRate } }
+    func flashMode(_ mode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.attributes.flashMode = mode } }
+    func gridVisibility(_ isVisible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.attributes.isGridVisible = isVisible } }
+
+    func focusImage(_ image: UIImage) -> Self {  setAndReturnSelf { $0.cameraManager.cameraMetalView.focusIndicatorConfig.image = image } }
+    func focusImageColor(_ color: UIColor) -> Self {  setAndReturnSelf { $0.cameraManager.cameraMetalView.focusIndicatorConfig.tintColor = color } }
+    func focusImageSize(_ size: CGFloat) -> Self {  setAndReturnSelf { $0.cameraManager.cameraMetalView.focusIndicatorConfig.size = size } }
+}
+
+
+
+public extension MCameraController {
+    func start() -> some View { setAndReturnSelf { $0.config.isInitialised = true } }
 }

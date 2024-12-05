@@ -12,7 +12,7 @@
 import SwiftUI
 
 struct DefaultCameraErrorView: MCameraErrorView {
-    let error: CameraManager.Error
+    let error: MijickCameraError
     let closeControllerAction: () -> ()
 
 
@@ -29,16 +29,16 @@ struct DefaultCameraErrorView: MCameraErrorView {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background.ignoresSafeArea())
+        .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
     }
 }
 private extension DefaultCameraErrorView {
     func createCloseButton() -> some View {
         Button(action: closeControllerAction) {
-            Image("icon-cancel", bundle: .mijick)
+            Image(.mijickIconCancel)
                 .resizable()
                 .frame(width: 24, height: 24)
-                .foregroundColor(Color.white)
+                .foregroundColor(Color(.mijickBackgroundInverted))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 20)
@@ -46,7 +46,7 @@ private extension DefaultCameraErrorView {
     func createTitle() -> some View {
         Text(getDefaultTitle())
             .font(.system(size: 20, weight: .bold))
-            .foregroundColor(Color.white)
+            .foregroundColor(.init(.mijickTextPrimary))
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 60)
@@ -54,7 +54,7 @@ private extension DefaultCameraErrorView {
     func createDescription() -> some View {
         Text(getDefaultDescription())
             .font(.system(size: 15, weight: .regular))
-            .foregroundColor(Color.white.opacity(0.7))
+            .foregroundColor(.init(.mijickTextSecondary))
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 48)
@@ -63,7 +63,7 @@ private extension DefaultCameraErrorView {
         Button(action: openAppSettings) {
             Text(NSLocalizedString("Open Settings", comment: ""))
                 .font(.system(size: 15, weight: .bold))
-                .foregroundColor(Color.accent)
+                .foregroundColor(Color(.mijickTextBrand))
         }
     }
 }

@@ -23,4 +23,8 @@ extension AVCaptureDevice {
             if newValue != .auto { isVideoHDREnabled = newValue == .on }
         }
     }
+    var lightMode: CameraLightMode {
+        get { torchMode == .off ? .off : .on }
+        set { torchMode = newValue == .off ? .off : .on }
+    }
 }
