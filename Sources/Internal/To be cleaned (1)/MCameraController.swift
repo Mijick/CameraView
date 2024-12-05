@@ -87,17 +87,30 @@ private extension MCameraController {
     }
     func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
         notifyUserOfMediaCaptured(capturedMedia)
-        performPostCameraAction()
     }}
 }
 private extension MCameraController {
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.getImage() { config.onImageCaptured(image) }
-        else if let video = capturedMedia.getVideo() { config.onVideoCaptured(video) }
+        if let image = capturedMedia.getImage() { config.onImageCaptured(image, .init(cameraController: self)) }
+        else if let video = capturedMedia.getVideo() { config.onVideoCaptured(video, .init(cameraController: self)) }
     }
-    func performPostCameraAction() { let afterMediaCaptured = config.afterMediaCaptured(.init())
-        afterMediaCaptured.shouldReturnToCameraView ? resetCapturedMedia() : ()
-        afterMediaCaptured.shouldCloseCameraController ? config.onCloseController() : ()
-        afterMediaCaptured.customAction()
+}
+
+
+
+
+
+
+@MainActor public struct MController {
+    let cameraController: MCameraController
+}
+
+
+public extension MController {
+    func closeController() {
+        cameraController.config.onCloseController()
+    }
+    func back() {
+        cameraController.cameraManager.attributes.capturedMedia = nil
     }
 }

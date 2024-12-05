@@ -18,9 +18,8 @@ import SwiftUI
     var errorScreen: ErrorScreenBuilder = DefaultCameraErrorView.init
 
     // MARK: Actions
-    var onImageCaptured: (UIImage) -> () = { _ in }
-    var onVideoCaptured: (URL) -> () = { _ in }
-    var afterMediaCaptured: (PostCameraConfig) -> (PostCameraConfig) = { _ in .init() }
+    var onImageCaptured: (UIImage, MController) -> () = { _,_ in }
+    var onVideoCaptured: (URL, MController) -> () = { _,_ in }
     var onCloseController: () -> () = {}
 
     // MARK: Others
