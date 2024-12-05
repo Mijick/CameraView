@@ -29,7 +29,7 @@ public struct DefaultCameraView: MCameraScreen {
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
         .animation(.mijickSpring, value: isRecording)
-        .animation(.mijickSpring, value: outputType)
+        .animation(.mijickSpring, value: cameraOutputType)
         .animation(.mijickSpring, value: hasLight)
         .animation(.mijickSpring, value: iconAngle)
     }
@@ -119,7 +119,7 @@ private extension DefaultCameraView {
         TopButton(image: flashButtonIcon, action: changeFlashMode)
             .rotationEffect(iconAngle)
             .isActiveStackElement(hasFlash)
-            .isActiveStackElement(outputType == .photo)
+            .isActiveStackElement(cameraOutputType == .photo)
             .isActiveStackElement(config.flashButtonVisible)
     }
 }
@@ -153,11 +153,11 @@ private extension DefaultCameraView {
         case true: deviceOrientation.getAngle()
         case false: .zero
     }}
-    var gridButtonIcon: ImageResource { switch showGrid {
+    var gridButtonIcon: ImageResource { switch isGridVisible {
         case true: .mijickIconGridOn
         case false: .mijickIconGridOff
     }}
-    var flipButtonIcon: ImageResource { switch mirrorOutput {
+    var flipButtonIcon: ImageResource { switch isOutputMirrored {
         case true: .mijickIconFlipOn
         case false: .mijickIconFlipOff
     }}
@@ -170,10 +170,10 @@ private extension DefaultCameraView {
 
 private extension DefaultCameraView {
     func changeGridVisibility() {
-        setGridVisibility(!showGrid)
+        setGridVisibility(!isGridVisible)
     }
     func changeMirrorOutput() {
-        setMirrorOutput(!mirrorOutput)
+        setMirrorOutput(!isOutputMirrored)
     }
     func changeFlashMode() {
         setFlashMode(flashMode.next())
