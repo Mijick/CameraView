@@ -16,6 +16,7 @@ import AVKit
 @MainActor class CameraMetalView: MTKView {
     private(set) var parent: CameraManager!
     private(set) var ciContext: CIContext!
+    private(set) var commandQueue: MTLCommandQueue!
     private(set) var currentFrame: CIImage?
     private(set) var focusIndicatorConfig: FocusIndicatorConfig = .init()
     private(set) var isAnimating: Bool = false
@@ -35,6 +36,7 @@ private extension CameraMetalView {
     func assignInitialValues(parent: CameraManager, metalDevice: MTLDevice) {
         self.parent = parent
         self.ciContext = CIContext(mtlDevice: metalDevice)
+        self.commandQueue = metalDevice.makeCommandQueue()
     }
     func configureMetalView(metalDevice: MTLDevice) {
         self.parent.cameraView.alpha = 0
@@ -208,7 +210,7 @@ private extension CameraMetalView {
 // MARK: Draw
 extension CameraMetalView: MTKViewDelegate {
     func draw(in view: MTKView) {
-        guard let commandBuffer = view.device?.makeCommandQueue()?.makeCommandBuffer(),
+        guard let commandBuffer = commandQueue.makeCommandBuffer(),
               let ciImage = currentFrame,
               let currentDrawable = view.currentDrawable
         else { return }
