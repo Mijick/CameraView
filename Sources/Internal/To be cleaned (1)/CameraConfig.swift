@@ -17,16 +17,14 @@ import SwiftUI
     var capturedMediaScreen: CapturedMediaScreenBuilder? = DefaultCameraPreview.init
     var errorScreen: ErrorScreenBuilder = DefaultCameraErrorView.init
 
-    // MARK: To Lock Orientation
-    var appDelegate: MApplicationDelegate.Type? = nil
-
     // MARK: Actions
     var onImageCaptured: (UIImage) -> () = { _ in }
     var onVideoCaptured: (URL) -> () = { _ in }
     var afterMediaCaptured: (PostCameraConfig) -> (PostCameraConfig) = { _ in .init() }
     var onCloseController: () -> () = {}
 
-
+    // MARK: Others
+    var appDelegate: MApplicationDelegate.Type? = nil
     var isInitialised: Bool = false
 }
 
