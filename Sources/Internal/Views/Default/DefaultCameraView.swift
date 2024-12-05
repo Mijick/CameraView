@@ -213,7 +213,7 @@ fileprivate struct CloseButton: View {
             Image(.mijickIconCancel)
                 .resizable()
                 .frame(width: 24, height: 24)
-                .foregroundColor(Color.white)
+                .foregroundColor(Color(.mijickBackgroundInverted))
         }
     }
 }
@@ -246,7 +246,7 @@ private extension TopButton {
         Image(image)
             .resizable()
             .frame(width: 16, height: 16)
-            .foregroundColor(Color.white)
+            .foregroundColor(Color(.mijickBackgroundInverted))
     }
 }
 
@@ -281,7 +281,7 @@ private extension CaptureButton {
 }
 private extension CaptureButton {
     var backgroundColor: Color { switch mode {
-        case .photo: .white
+        case .photo: .init(.mijickBackgroundInverted)
         case .video: .init(.mijickBackgroundRed)
     }}
     var backgroundCornerRadius: CGFloat { switch isRecording {
@@ -329,7 +329,7 @@ private extension BottomButton {
 private extension BottomButton {
     var iconColor: Color { switch active {
         case true: .init(.mijickBackgroundYellow)
-        case false: .white
+        case false: .init(.mijickBackgroundInverted)
     }}
 }
 

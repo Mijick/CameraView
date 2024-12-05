@@ -38,7 +38,7 @@ private extension DefaultCameraErrorView {
             Image(.mijickIconCancel)
                 .resizable()
                 .frame(width: 24, height: 24)
-                .foregroundColor(Color.white)
+                .foregroundColor(Color(.mijickBackgroundInverted))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 20)

@@ -105,10 +105,10 @@ private extension BottomButton {
 private extension BottomButton {
     var iconColor: Color { switch primary {
         case true: .init(.mijickBackgroundPrimary)
-        case false: .white
+        case false: .init(.mijickBackgroundInverted)
     }}
     var backgroundColor: Color { switch primary {
-        case true: .white
+        case true: .init(.mijickBackgroundInverted)
         case false: .init(.mijickBackgroundSecondary)
     }}
 }
