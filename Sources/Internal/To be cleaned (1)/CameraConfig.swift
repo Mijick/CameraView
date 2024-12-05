@@ -26,11 +26,3 @@ import SwiftUI
     var appDelegate: MApplicationDelegate.Type? = nil
     var isInitialised: Bool = false
 }
-
-
-
-
-// MARK: - Typealiases
-public typealias CameraScreenBuilder = (CameraManager, Namespace.ID, _ closeControllerAction: @escaping () -> ()) -> any MCameraView
-public typealias CapturedMediaScreenBuilder = (MCameraMedia, Namespace.ID, _ retakeAction: @escaping () -> (), _ acceptMediaAction: @escaping () -> ()) -> any MCameraPreview
-public typealias ErrorScreenBuilder = (MijickCameraError, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView
