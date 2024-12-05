@@ -153,18 +153,18 @@ private extension DefaultCameraView {
         case true: deviceOrientation.getAngle()
         case false: .zero
     }}
-    var gridButtonIcon: String { switch showGrid {
-        case true: "icon-grid-on"
-        case false: "icon-grid-off"
+    var gridButtonIcon: ImageResource { switch showGrid {
+        case true: .mijickIconGridOn
+        case false: .mijickIconGridOff
     }}
-    var flipButtonIcon: String { switch mirrorOutput {
-        case true: "icon-flip-on"
-        case false: "icon-flip-off"
+    var flipButtonIcon: ImageResource { switch mirrorOutput {
+        case true: .mijickIconFlipOn
+        case false: .mijickIconFlipOff
     }}
-    var flashButtonIcon: String { switch flashMode {
-        case .off: "icon-flash-off"
-        case .on: "icon-flash-on"
-        case .auto: "icon-flash-auto"
+    var flashButtonIcon: ImageResource { switch flashMode {
+        case .off: .mijickIconFlashOff
+        case .on: .mijickIconFlashOn
+        case .auto: .mijickIconFlashAuto
     }}
 }
 

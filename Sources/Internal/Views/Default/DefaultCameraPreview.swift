@@ -62,10 +62,10 @@ private extension DefaultCameraPreview {
         VideoPlayer(player: player).onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(icon: "icon-cancel", primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(image: .mijickIconCancel, primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(icon: "icon-check", primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(image: .mijickIconCheck, primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 
@@ -82,7 +82,7 @@ private extension DefaultCameraPreview {
 
 // MARK: - BottomButton
 fileprivate struct BottomButton: View {
-    let icon: String
+    let image: ImageResource
     let primary: Bool
     let action: () -> ()
 
@@ -93,7 +93,7 @@ fileprivate struct BottomButton: View {
 }
 private extension BottomButton {
     func createButtonLabel() -> some View {
-        Image(icon, bundle: .module)
+        Image(image)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
