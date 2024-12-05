@@ -41,7 +41,7 @@ public struct MCameraController: View {
 }
 private extension MCameraController {
     func createErrorStateView(_ error: MijickCameraError) -> some View {
-        config.errorScreen(error, config.onCloseController).erased()
+        config.errorScreen(error, config.closeCameraControllerAction).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch cameraManager.attributes.capturedMedia {
         case .some(let media) where config.capturedMediaScreen != nil: createCameraPreview(media)
@@ -53,7 +53,7 @@ private extension MCameraController {
         config.capturedMediaScreen?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
-        config.cameraScreen(cameraManager, namespace, config.onCloseController)
+        config.cameraScreen(cameraManager, namespace, config.closeCameraControllerAction)
             .erased()
             .onDisappear(perform: cameraManager.cancel)
     }
@@ -91,8 +91,8 @@ private extension MCameraController {
 }
 private extension MCameraController {
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.getImage() { config.onImageCaptured(image, .init(cameraController: self)) }
-        else if let video = capturedMedia.getVideo() { config.onVideoCaptured(video, .init(cameraController: self)) }
+        if let image = capturedMedia.getImage() { config.imageCapturedAction(image, .init(cameraController: self)) }
+        else if let video = capturedMedia.getVideo() { config.videoCapturedAction(video, .init(cameraController: self)) }
     }
 }
 
@@ -108,7 +108,7 @@ private extension MCameraController {
 
 public extension MController {
     func closeController() {
-        cameraController.config.onCloseController()
+        cameraController.config.closeCameraControllerAction()
     }
     func back() {
         cameraController.cameraManager.attributes.capturedMedia = nil
