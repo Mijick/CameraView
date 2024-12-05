@@ -1,5 +1,5 @@
 //
-//  CameraControllerConfig.swift of MijickCamera
+//  MCameraControllerConfig.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-@MainActor struct CameraControllerConfig {
+extension MCameraController { @MainActor struct Config {
     // MARK: Screens
     var cameraScreen: CameraScreenBuilder = DefaultCameraView.init
     var capturedMediaScreen: CapturedMediaScreenBuilder? = DefaultCameraPreview.init
@@ -25,4 +25,4 @@ import SwiftUI
     // MARK: Others
     var appDelegate: MApplicationDelegate.Type? = nil
     var isCameraControllerConfigured: Bool = false
-}
+}}
