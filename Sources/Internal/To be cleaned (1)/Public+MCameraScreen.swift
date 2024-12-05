@@ -19,32 +19,41 @@ public protocol MCameraScreen: View {
     var closeControllerAction: () -> () { get }
 }
 
-// MARK: - Use-only View Methods
+// MARK: View Methods
 public extension MCameraScreen {
     func createCameraView() -> some View { CameraInputBridgeView(cameraManager: cameraManager).equatable() }
 }
 
-// MARK: - Use-only Logic Methods
+// MARK: Logic Methods
 public extension MCameraScreen {
     func captureOutput() { cameraManager.captureOutput() }
-    func setOutputType(_ type: CameraOutputType) { cameraManager.setOutputType(type) }
-    func setCameraPosition(_ position: CameraPosition) async throws { try await cameraManager.setCameraPosition(position) }
+    func setOutputType(_ outputType: CameraOutputType) { cameraManager.setOutputType(outputType) }
+    func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
+    func setZoomFactor(_ zoomFactor: CGFloat) throws { try cameraManager.setCameraZoomFactor(zoomFactor) }
+    func setFlashMode(_ flashMode: CameraFlashMode) { cameraManager.setFlashMode(flashMode) }
+    func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
+    func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
+    func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
     func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
+
+
+
+
     func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
-    func setZoomFactor(_ value: CGFloat) throws { try cameraManager.setCameraZoomFactor(value) }
-    func setFlashMode(_ mode: CameraFlashMode) { cameraManager.setFlashMode(mode) }
-    func setLightMode(_ mode: CameraLightMode) throws { try cameraManager.setLightMode(mode) }
+
+
+
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
     func setExposureDuration(_ value: CMTime) throws { try cameraManager.setExposureDuration(value) }
     func setISO(_ value: Float) throws { try cameraManager.setISO(value) }
     func setExposureTargetBias(_ value: Float) throws { try cameraManager.setExposureTargetBias(value) }
     func setHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.setHDRMode(mode) }
-    func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
-    func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
+
+
 }
 
-// MARK: - Flags
+// MARK: Attributes
 public extension MCameraScreen {
     var outputType: CameraOutputType { cameraManager.attributes.outputType }
     var cameraPosition: CameraPosition { cameraManager.attributes.cameraPosition }
