@@ -51,8 +51,8 @@ public extension MCameraScreen {
     var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
     var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
     var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
-
-
+    var isOutputMirrored: Bool { cameraManager.attributes.mirrorOutput }
+    var isGridVisible: Bool { cameraManager.attributes.isGridVisible }
 
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
@@ -64,8 +64,8 @@ public extension MCameraScreen {
     var iso: Float { cameraManager.attributes.cameraExposure.iso }
     var exposureTargetBias: Float { cameraManager.attributes.cameraExposure.targetBias }
     var hdrMode: CameraHDRMode { cameraManager.attributes.hdrMode }
-    var mirrorOutput: Bool { cameraManager.attributes.mirrorOutput }
-    var showGrid: Bool { cameraManager.attributes.isGridVisible }
+
+
     var deviceOrientation: AVCaptureVideoOrientation { cameraManager.attributes.deviceOrientation }
     var isRecording: Bool { cameraManager.videoOutput.timer.timerStatus == .running }
     var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
