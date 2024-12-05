@@ -82,7 +82,7 @@ private extension CameraManager {
     }
     func setupFrameRecorder() throws {
         let captureVideoOutput = AVCaptureVideoDataOutput()
-        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: DispatchQueue.main)
+        captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: .main)
 
         try captureSession.add(output: captureVideoOutput)
     }
