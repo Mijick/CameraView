@@ -48,7 +48,9 @@ private extension MCameraController {
         config.mediaPreviewView?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
-        config.cameraView(cameraManager, namespace, config.onCloseController).erased()
+        config.cameraView(cameraManager, namespace, config.onCloseController)
+            .erased()
+            .onDisappear(perform: cameraManager.cancel)
     }
 }
 
@@ -62,7 +64,7 @@ private extension MCameraController {
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
         switch config.mediaPreviewView != nil {
-            case true: cacaca()
+            case true: return
             case false: performAfterMediaCapturedAction()
         }
     }}
@@ -74,9 +76,6 @@ private extension MCameraController {
     }
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
-    }
-    func cacaca() {
-
     }
     func resetCapturedMedia() {
         cameraManager.attributes.capturedMedia = nil
