@@ -210,7 +210,7 @@ fileprivate struct CloseButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image("icon-cancel", bundle: .mijick)
+            Image("icon-cancel", bundle: .module)
                 .resizable()
                 .frame(width: 24, height: 24)
                 .foregroundColor(Color.white)
@@ -243,7 +243,7 @@ private extension TopButton {
             .frame(width: 32, height: 32)
     }
     func createIcon() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(icon, bundle: .module)
             .resizable()
             .frame(width: 16, height: 16)
             .foregroundColor(Color.white)
@@ -320,7 +320,7 @@ private extension BottomButton {
         Circle().fill(Color.white.opacity(0.12))
     }
     func createIcon() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(icon, bundle: .module)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
@@ -346,7 +346,7 @@ fileprivate struct OutputTypeButton: View {
 }
 private extension OutputTypeButton {
     func createButtonLabel() -> some View {
-        Image(icon, bundle: .mijick)
+        Image(icon, bundle: .module)
             .resizable()
             .frame(width: iconSize, height: iconSize)
             .foregroundColor(iconColor)

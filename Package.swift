@@ -15,7 +15,7 @@ let package = Package(
         .package(url: "https://github.com/Mijick/Timer", .branch("patch-2.0.0"))
     ],
     targets: [
-        .target(name: "MijickCamera", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources"),
+        .target(name: "MijickCamera", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources", resources: [.process("Internal/Assets")]),
         .testTarget(name: "MijickCameraTests", dependencies: ["MijickCamera"], path: "Tests")
     ],
     swiftLanguageModes: [.v6]
