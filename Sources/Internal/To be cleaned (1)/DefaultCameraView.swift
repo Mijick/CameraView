@@ -133,7 +133,7 @@ private extension DefaultCameraView {
             .isActive(config.lightButtonVisible)
     }
     func createCaptureButton() -> some View {
-        CaptureButton(action: captureOutput, mode: outputType, isRecording: isRecording).isActive(config.captureButtonVisible)
+        CaptureButton(action: captureOutput, mode: cameraOutputType, isRecording: isRecording).isActive(config.captureButtonVisible)
     }
     func createChangeCameraButton() -> some View {
         BottomButton(image: .mijickIconChangeCamera, active: false, action: changeCameraPosition)
