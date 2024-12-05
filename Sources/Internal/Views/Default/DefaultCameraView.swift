@@ -328,7 +328,7 @@ private extension BottomButton {
 }
 private extension BottomButton {
     var iconColor: Color { switch active {
-        case true: .yellow
+        case true: .init(.mijickBackgroundYellow)
         case false: .white
     }}
 }
@@ -366,7 +366,7 @@ private extension OutputTypeButton {
         case false: 32
     }}
     var iconColor: Color { switch active {
-        case true: .yellow
+        case true: .init(.mijickBackgroundYellow)
         case false: .white.opacity(0.6)
     }}
 }
