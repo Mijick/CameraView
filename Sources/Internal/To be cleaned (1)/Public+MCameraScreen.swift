@@ -38,20 +38,10 @@ public extension MCameraScreen {
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
     func setExposureDuration(_ exposureDuration: CMTime) throws { try cameraManager.setExposureDuration(exposureDuration) }
     func setISO(_ iso: Float) throws { try cameraManager.setISO(iso) }
-
-
+    func setExposureTargetBias(_ exposureTargetBias: Float) throws { try cameraManager.setExposureTargetBias(exposureTargetBias) }
+    func setHDRMode(_ hdrMode: CameraHDRMode) throws { try cameraManager.setHDRMode(hdrMode) }
     func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
-
-
-
-
-
-
-    func setExposureTargetBias(_ value: Float) throws { try cameraManager.setExposureTargetBias(value) }
-    func setHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.setHDRMode(mode) }
-
-
 }
 
 // MARK: Attributes
