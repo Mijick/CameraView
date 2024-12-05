@@ -143,8 +143,8 @@ private extension DefaultCameraView {
             .isActive(!isRecording)
             .isActive(config.changeCameraButtonVisible)
     }
-    func createOutputTypeButton(_ cameraOutputType: CameraOutputType) -> some View {
-        OutputTypeButton(type: cameraOutputType, active: cameraOutputType == outputType, action: { changeCameraOutputType(cameraOutputType) })
+    func createOutputTypeButton(_ outputType: CameraOutputType) -> some View {
+        OutputTypeButton(type: outputType, active: outputType == cameraOutputType, action: { changeCameraOutputType(outputType) })
             .rotationEffect(iconAngle)
     }
 }
