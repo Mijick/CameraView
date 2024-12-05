@@ -13,12 +13,7 @@ import SwiftUI
 import AVKit
 
 public struct MCameraController: View {
-    @ObservedObject var cameraManager: CameraManager = .init(
-        captureSession: AVCaptureSession(),
-        fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
-        backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
-        audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
-    )
+    @ObservedObject var cameraManager: CameraManager
     @Namespace var namespace
     var config: Config = .init()
 
@@ -33,11 +28,6 @@ public struct MCameraController: View {
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)
     }}
-
-
-
-
-    public init() {}
 }
 private extension MCameraController {
     func createErrorStateView(_ error: MijickCameraError) -> some View {
