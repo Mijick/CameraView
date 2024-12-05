@@ -63,7 +63,7 @@ private extension DefaultCameraErrorView {
         Button(action: openAppSettings) {
             Text(NSLocalizedString("Open Settings", comment: ""))
                 .font(.system(size: 15, weight: .bold))
-                .foregroundColor(Color.accent)
+                .foregroundColor(Color(.mijickTextBrand))
         }
     }
 }
