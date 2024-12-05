@@ -23,7 +23,7 @@ public struct MCameraController: View {
     var config: CameraConfig = .init()
 
     
-    public var body: some View { if config.isInitialised {
+    public var body: some View { if config.isCameraControllerConfigured {
         ZStack { switch cameraManager.attributes.error {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()

@@ -24,5 +24,5 @@ import SwiftUI
 
     // MARK: Others
     var appDelegate: MApplicationDelegate.Type? = nil
-    var isInitialised: Bool = false
+    var isCameraControllerConfigured: Bool = false
 }

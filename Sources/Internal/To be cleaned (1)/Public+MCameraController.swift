@@ -70,7 +70,7 @@ public extension MCameraController {
 
 
 public extension MCameraController {
-    func start() -> some View { setAndReturnSelf { $0.config.isInitialised = true } }
+    func start() -> some View { setAndReturnSelf { $0.config.isCameraControllerConfigured = true } }
 }
 
 
