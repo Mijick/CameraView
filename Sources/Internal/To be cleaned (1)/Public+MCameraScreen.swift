@@ -35,8 +35,9 @@ public extension MCameraScreen {
     func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
     func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
     func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
-
-
+    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
+    func setExposureDuration(_ exposureDuration: CMTime) throws { try cameraManager.setExposureDuration(exposureDuration) }
+    func setISO(_ iso: Float) throws { try cameraManager.setISO(iso) }
 
 
     func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
@@ -44,9 +45,9 @@ public extension MCameraScreen {
 
 
 
-    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
-    func setExposureDuration(_ value: CMTime) throws { try cameraManager.setExposureDuration(value) }
-    func setISO(_ value: Float) throws { try cameraManager.setISO(value) }
+
+
+
     func setExposureTargetBias(_ value: Float) throws { try cameraManager.setExposureTargetBias(value) }
     func setHDRMode(_ mode: CameraHDRMode) throws { try cameraManager.setHDRMode(mode) }
 
