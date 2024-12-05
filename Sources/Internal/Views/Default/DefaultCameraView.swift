@@ -282,7 +282,7 @@ private extension CaptureButton {
 private extension CaptureButton {
     var backgroundColor: Color { switch mode {
         case .photo: .white
-        case .video: .red
+        case .video: .init(.mijickBackgroundRed)
     }}
     var backgroundCornerRadius: CGFloat { switch isRecording {
         case true: 5
