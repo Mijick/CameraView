@@ -62,19 +62,10 @@ public extension MCameraScreen {
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
 
-
-
-
-
-
-
-
-
-
-    var deviceOrientation: AVCaptureVideoOrientation { cameraManager.attributes.deviceOrientation }
-    var isRecording: Bool { cameraManager.videoOutput.timer.timerStatus == .running }
-    var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
     var hasLight: Bool { cameraManager.hasLight }
     var hasFlash: Bool { cameraManager.hasFlash }
+    var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
+    var isRecording: Bool { cameraManager.videoOutput.timer.timerStatus == .running }
     var isOrientationLocked: Bool { cameraManager.attributes.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
+    var deviceOrientation: AVCaptureVideoOrientation { cameraManager.attributes.deviceOrientation }
 }
