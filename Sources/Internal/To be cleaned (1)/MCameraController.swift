@@ -41,19 +41,19 @@ public struct MCameraController: View {
 }
 private extension MCameraController {
     func createErrorStateView(_ error: MijickCameraError) -> some View {
-        config.cameraErrorView(error, config.onCloseController).erased()
+        config.errorScreen(error, config.onCloseController).erased()
     }
     func createNormalStateView() -> some View { ZStack { switch cameraManager.attributes.capturedMedia {
-        case .some(let media) where config.mediaPreviewView != nil: createCameraPreview(media)
+        case .some(let media) where config.capturedMediaScreen != nil: createCameraPreview(media)
         default: createCameraView()
     }}}
 }
 private extension MCameraController {
     func createCameraPreview(_ media: MCameraMedia) -> some View {
-        config.mediaPreviewView?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
+        config.capturedMediaScreen?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
     }
     func createCameraView() -> some View {
-        config.cameraView(cameraManager, namespace, config.onCloseController)
+        config.cameraScreen(cameraManager, namespace, config.onCloseController)
             .erased()
             .onDisappear(perform: cameraManager.cancel)
     }
@@ -68,7 +68,7 @@ private extension MCameraController {
         cameraManager.cancel()
     }
     func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
-        switch config.mediaPreviewView != nil {
+        switch config.capturedMediaScreen != nil {
             case true: return
             case false: performAfterMediaCapturedAction()
         }

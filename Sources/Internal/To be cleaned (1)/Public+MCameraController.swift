@@ -21,15 +21,15 @@ public extension MCameraController {
 public extension MCameraController {
     /// Replaces the default Camera Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func cameraScreen(_ builder: @escaping CameraViewBuilder) -> Self { setAndReturnSelf { $0.config.cameraView = builder } }
+    func cameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { setAndReturnSelf { $0.config.cameraScreen = builder } }
 
     /// Replaces the default Media Preview Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func mediaPreviewScreen(_ builder: PreviewViewBuilder?) -> Self { setAndReturnSelf { $0.config.mediaPreviewView = builder } }
+    func mediaPreviewScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { setAndReturnSelf { $0.config.capturedMediaScreen = builder } }
 
     /// Replaces the default Error Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func errorScreen(_ builder: @escaping ErrorViewBuilder) -> Self { setAndReturnSelf { $0.config.cameraErrorView = builder } }
+    func errorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { setAndReturnSelf { $0.config.errorScreen = builder } }
 }
 
 // MARK: - Actions

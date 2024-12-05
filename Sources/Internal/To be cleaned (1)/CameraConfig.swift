@@ -12,10 +12,10 @@
 import SwiftUI
 
 @MainActor struct CameraConfig {
-    // MARK: Default Views
-    var cameraErrorView: ErrorViewBuilder = DefaultCameraErrorView.init
-    var cameraView: CameraViewBuilder = DefaultCameraView.init
-    var mediaPreviewView: PreviewViewBuilder? = DefaultCameraPreview.init
+    // MARK: Screens
+    var cameraScreen: CameraScreenBuilder = DefaultCameraView.init
+    var capturedMediaScreen: CapturedMediaScreenBuilder? = DefaultCameraPreview.init
+    var errorScreen: ErrorScreenBuilder = DefaultCameraErrorView.init
 
     // MARK: To Lock Orientation
     var appDelegate: MApplicationDelegate.Type? = nil
@@ -34,6 +34,6 @@ import SwiftUI
 
 
 // MARK: - Typealiases
-public typealias CameraViewBuilder = (CameraManager, Namespace.ID, _ closeControllerAction: @escaping () -> ()) -> any MCameraView
-public typealias PreviewViewBuilder = (MCameraMedia, Namespace.ID, _ retakeAction: @escaping () -> (), _ acceptMediaAction: @escaping () -> ()) -> any MCameraPreview
-public typealias ErrorViewBuilder = (MijickCameraError, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView
+public typealias CameraScreenBuilder = (CameraManager, Namespace.ID, _ closeControllerAction: @escaping () -> ()) -> any MCameraView
+public typealias CapturedMediaScreenBuilder = (MCameraMedia, Namespace.ID, _ retakeAction: @escaping () -> (), _ acceptMediaAction: @escaping () -> ()) -> any MCameraPreview
+public typealias ErrorScreenBuilder = (MijickCameraError, _ closeControllerAction: @escaping () -> ()) -> any MCameraErrorView
