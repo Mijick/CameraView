@@ -1,5 +1,5 @@
 //
-//  Public+MCameraView.swift of MijickCamera
+//  Public+MCameraScreen.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -13,19 +13,19 @@ import SwiftUI
 import AVFoundation
 import MijickTimer
 
-public protocol MCameraView: View {
+public protocol MCameraScreen: View {
     var cameraManager: CameraManager { get }
     var namespace: Namespace.ID { get }
     var closeControllerAction: () -> () { get }
 }
 
 // MARK: - Use-only View Methods
-public extension MCameraView {
+public extension MCameraScreen {
     func createCameraView() -> some View { CameraInputBridgeView(cameraManager: cameraManager).equatable() }
 }
 
 // MARK: - Use-only Logic Methods
-public extension MCameraView {
+public extension MCameraScreen {
     func captureOutput() { cameraManager.captureOutput() }
     func changeOutputType(_ type: CameraOutputType) { cameraManager.setOutputType(type) }
     func changeCamera(_ position: CameraPosition) async throws { try await cameraManager.setCameraPosition(position) }
@@ -45,7 +45,7 @@ public extension MCameraView {
 }
 
 // MARK: - Flags
-public extension MCameraView {
+public extension MCameraScreen {
     var outputType: CameraOutputType { cameraManager.attributes.outputType }
     var cameraPosition: CameraPosition { cameraManager.attributes.cameraPosition }
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
