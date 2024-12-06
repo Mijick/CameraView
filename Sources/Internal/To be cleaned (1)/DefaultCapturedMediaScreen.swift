@@ -55,6 +55,7 @@ private extension DefaultCapturedMediaScreen {
     }
     func createVideoView(_ video: URL) -> some View {
         VideoPlayer(player: player)
+            .matchedGeometryEffect(id: "content", in: namespace)
             .onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
