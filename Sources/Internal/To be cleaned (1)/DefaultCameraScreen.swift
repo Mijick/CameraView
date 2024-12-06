@@ -77,7 +77,6 @@ private extension DefaultCameraScreen {
 private extension DefaultCameraScreen {
     func createCloseButton() -> some View {
         CloseButton(action: closeControllerAction)
-            .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(!isRecording)
     }
