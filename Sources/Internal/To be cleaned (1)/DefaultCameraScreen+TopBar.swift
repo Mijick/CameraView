@@ -31,7 +31,7 @@ private extension DefaultCameraScreen.TopBar {
     }}
     @ViewBuilder func createCentralView() -> some View { if isCentralViewActive {
         Text(parent.recordingTime.toString())
-            .font(.system(size: 20, weight: .medium, design: .monospaced))
+            .font(.system(size: 20, weight: .medium))
             .foregroundColor(.init(.mijickTextPrimary))
     }}
     @ViewBuilder func createRightSideView() -> some View { if isRightSideViewActive {
