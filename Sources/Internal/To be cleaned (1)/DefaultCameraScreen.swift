@@ -105,27 +105,7 @@ private extension DefaultCameraScreen {
             .isActiveStackElement(config.flashButtonVisible)
     }
 }
-private extension DefaultCameraScreen {
-    // TODO: Dodać animację do przycisków
-    func createLightButton() -> some View {
-        BottomButton(icon: .mijickIconLight, iconRotationAngle: iconAngle, active: lightMode == .on, action: changeLightMode)
-            .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .isActive(hasLight)
-            .isActive(config.lightButtonVisible)
-    }
-    func createCaptureButton() -> some View {
-        CaptureButton(outputType: cameraOutputType, isRecording: isRecording, action: captureOutput).isActive(config.captureButtonVisible)
-    }
-    func createChangeCameraButton() -> some View {
-        BottomButton(icon: .mijickIconChangeCamera, iconRotationAngle: iconAngle, active: false, action: changeCameraPosition)
-            .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .isActive(!isRecording)
-            .isActive(config.changeCameraButtonVisible)
-    }
-}
-private extension DefaultCameraScreen {
+extension DefaultCameraScreen {
     var iconAngle: Angle { switch isOrientationLocked {
         case true: deviceOrientation.getAngle()
         case false: .zero
@@ -155,14 +135,6 @@ private extension DefaultCameraScreen {
     func changeFlashMode() {
         setFlashMode(flashMode.next())
     }
-    func changeLightMode() {
-        do { try setLightMode(lightMode.next()) }
-        catch {}
-    }
-    func changeCameraPosition() { Task {
-        do { try await setCameraPosition(cameraPosition.next()) }
-        catch {}
-    }}
     func changeCameraOutputType(_ type: CameraOutputType) {
         setOutputType(type)
     }
@@ -186,67 +158,7 @@ extension DefaultCameraScreen { struct Config {
 
 
 
-extension DefaultCameraScreen { struct BottomBar: View {
-    let parent: DefaultCameraScreen
 
-
-    var body: some View {
-        ZStack {
-            createLightButton()
-            createCaptureButton()
-            createChangeCameraButton()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 16)
-        .padding(.bottom, 12)
-        .padding(.horizontal, 32)
-    }
-}}
-private extension DefaultCameraScreen.BottomBar {
-    @ViewBuilder func createLightButton() -> some View { if isLightButtonActive {
-        DefaultCameraScreen.BottomButton(
-            icon: .mijickIconLight,
-            iconRotationAngle: parent.iconAngle,
-            active: parent.lightMode == .on,
-            action: parent.changeLightMode
-        )
-        .matchedGeometryEffect(id: "button-bottom-left", in: parent.namespace)
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }}
-    @ViewBuilder func createCaptureButton() -> some View { if isCaptureButtonActive {
-        DefaultCameraScreen.CaptureButton(
-            outputType: parent.cameraOutputType,
-            isRecording: parent.isRecording,
-            action: parent.captureOutput
-        )
-    }}
-    @ViewBuilder func createChangeCameraButton() -> some View { if isChangeCameraButtonActive {
-        DefaultCameraScreen.BottomButton(
-            icon: .mijickIconChangeCamera,
-            iconRotationAngle: parent.iconAngle,
-            active: false,
-            action: changeCameraPosition
-        )
-        .matchedGeometryEffect(id: "button-bottom-right", in: parent.namespace)
-        .frame(maxWidth: .infinity, alignment: .trailing)
-    }}
-}
-
-private extension DefaultCameraScreen.BottomBar {
-    func changeLightMode() {
-        do { try parent.setLightMode(parent.lightMode.next()) }
-        catch {}
-    }
-    func changeCameraPosition() { Task {
-        do { try await parent.setCameraPosition(parent.cameraPosition.next()) }
-        catch {}
-    }}
-}
-private extension DefaultCameraScreen.BottomBar {
-    var isLightButtonActive: Bool { parent.config.lightButtonVisible && parent.hasLight }
-    var isCaptureButtonActive: Bool { parent.config.captureButtonVisible }
-    var isChangeCameraButtonActive: Bool { parent.config.changeCameraButtonVisible && !parent.isRecording }
-}
 
 
 
