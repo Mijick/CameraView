@@ -15,13 +15,6 @@ struct CameraInputBridgeView: UIViewRepresentable {
     let cameraManager: CameraManager
     let inputView: UIView = .init()
 }
-
-
-// MARK: - PROTOCOLS CONFORMANCE
-
-
-
-// MARK: UIViewRepresentable
 extension CameraInputBridgeView {
     func makeUIView(context: Context) -> some UIView {
         setupCameraManager()
@@ -53,7 +46,7 @@ extension CameraInputBridgeView: Equatable {
 }
 
 
-// MARK: - LOGIC
+// MARK: - COORDINATOR
 extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: CameraInputBridgeView) { self.parent = parent }
     let parent: CameraInputBridgeView
 }}
