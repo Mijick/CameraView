@@ -29,17 +29,12 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
-        .onAppear(perform: onAppear)
     }
 }
 private extension DefaultCapturedMediaScreen {
-    func createContentView() -> some View {
-        ZStack {
-            if let image = capturedMedia.getImage() { createImageView(image) }
-            else if let video = capturedMedia.getVideo() { createVideoView(video) }
-            else { EmptyView() }
-        }
-        .opacity(shouldShowContent ? 1 : 0)
+    @ViewBuilder func createContentView() -> some View {
+        if let image = capturedMedia.getImage() { createImageView(image) }
+        else if let video = capturedMedia.getVideo() { createVideoView(video) }
     }
     func createButtons() -> some View {
         HStack(spacing: 32) {
@@ -54,6 +49,7 @@ private extension DefaultCapturedMediaScreen {
     func createImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
             .resizable()
+            .matchedGeometryEffect(id: "content", in: namespace)
             .aspectRatio(contentMode: .fit)
             .ignoresSafeArea()
     }

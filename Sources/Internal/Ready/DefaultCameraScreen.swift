@@ -47,6 +47,7 @@ private extension DefaultCameraScreen {
             createCameraView()
             createOutputTypeSwitch()
         }
+        .matchedGeometryEffect(id: "content", in: namespace)
     }
     func createBottomBar() -> some View {
         DefaultCameraScreen.BottomBar(parent: self)

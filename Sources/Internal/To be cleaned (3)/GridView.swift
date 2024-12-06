@@ -73,7 +73,7 @@ private extension GridView {
     }
     func createGridLayer() -> CAShapeLayer {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.strokeColor = UIColor(white: 1.0, alpha: 0.24).cgColor
+        shapeLayer.strokeColor = UIColor(white: 1.0, alpha: 0.2).cgColor
         shapeLayer.frame = bounds
         shapeLayer.fillColor = nil
         return shapeLayer
