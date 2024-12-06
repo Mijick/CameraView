@@ -12,6 +12,6 @@
 import SwiftUI
 
 extension Animation {
-    static var mijickSpring: Animation { .spring(response: 0.4, dampingFraction: 1, blendDuration: 0.1) }
+    static var mijickSpring: Animation { .spring(duration: 0.32, bounce: 0, blendDuration: 0) }
     static var mijickEase: Animation { .easeInOut(duration: 0.32) }
 }
