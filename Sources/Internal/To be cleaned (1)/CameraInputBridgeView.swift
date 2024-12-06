@@ -28,7 +28,7 @@ extension CameraInputBridgeView {
 private extension CameraInputBridgeView {
     func setupCameraManager() { Task {
         do { try await cameraManager.setup(in: inputView) }
-        catch { print("CANNOT SETUP CAMERA: \(error)") }
+        catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
     }}
     func setupTapGesture(_ context: Context) {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
@@ -46,7 +46,7 @@ extension CameraInputBridgeView: Equatable {
 }
 
 
-// MARK: - COORDINATOR
+// MARK: - GESTURES
 extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: CameraInputBridgeView) { self.parent = parent }
     let parent: CameraInputBridgeView
 }}
