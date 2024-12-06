@@ -119,9 +119,8 @@ private extension DefaultCameraScreen {
 }
 private extension DefaultCameraScreen {
     func createLightButton() -> some View {
-        BottomButton(image: .mijickIconLight, active: lightMode == .on, action: changeLightMode)
+        BottomButton(icon: .mijickIconLight, iconRotationAngle: iconAngle, active: lightMode == .on, action: changeLightMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
-            .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .isActive(hasLight)
             .isActive(config.lightButtonVisible)
@@ -130,9 +129,8 @@ private extension DefaultCameraScreen {
         CaptureButton(outputType: cameraOutputType, isRecording: isRecording, action: captureOutput).isActive(config.captureButtonVisible)
     }
     func createChangeCameraButton() -> some View {
-        BottomButton(image: .mijickIconChangeCamera, active: false, action: changeCameraPosition)
+        BottomButton(icon: .mijickIconChangeCamera, iconRotationAngle: iconAngle, active: false, action: changeCameraPosition)
             .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
-            .rotationEffect(iconAngle)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .isActive(!isRecording)
             .isActive(config.changeCameraButtonVisible)

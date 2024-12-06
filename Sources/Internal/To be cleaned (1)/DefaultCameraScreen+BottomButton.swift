@@ -12,7 +12,8 @@
 import SwiftUI
 
 extension DefaultCameraScreen { struct BottomButton: View {
-    let image: ImageResource
+    let icon: ImageResource
+    let iconRotationAngle: Angle
     let active: Bool
     let action: () -> ()
 
@@ -25,21 +26,14 @@ extension DefaultCameraScreen { struct BottomButton: View {
 }}
 private extension DefaultCameraScreen.BottomButton {
     func createButtonLabel() -> some View {
-        ZStack {
-            createBackground()
-            createIcon()
-        }.frame(width: 52, height: 52)
-    }
-}
-private extension DefaultCameraScreen.BottomButton {
-    func createBackground() -> some View {
-        Circle().fill(Color(.mijickBackgroundSecondary))
-    }
-    func createIcon() -> some View {
-        Image(image)
+        Image(icon)
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
+            .frame(width: 52, height: 52)
+            .rotationEffect(iconRotationAngle)
+            .background(Color(.mijickBackgroundSecondary))
+            .mask(Circle())
     }
 }
 private extension DefaultCameraScreen.BottomButton {
