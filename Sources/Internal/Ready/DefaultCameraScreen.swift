@@ -41,26 +41,14 @@ private extension DefaultCameraScreen {
             .frame(maxHeight: .infinity, alignment: .top)
     }
     func createContentView() -> some View {
-        ZStack {
-            createCameraView()
-            createOutputTypeSwitch()
-        }
-        .matchedGeometryEffect(id: "content", in: namespace)
+        createCameraView()
+            .ignoresSafeArea()
+            .matchedGeometryEffect(id: "content", in: namespace)
     }
     func createBottomBar() -> some View {
         DefaultCameraScreen.BottomBar(parent: self)
-            .padding(.top, 16)
-            .padding(.bottom, 12)
-            .padding(.horizontal, 32)
             .frame(maxHeight: .infinity, alignment: .bottom)
     }
-}
-private extension DefaultCameraScreen {
-    @ViewBuilder func createOutputTypeSwitch() -> some View { if isOutputTypeSwitchActive {
-        CameraOutputSwitch(parent: self)
-            .frame(maxHeight: .infinity, alignment: .bottom)
-            .padding(.bottom, 8)
-    }}
 }
 
 extension DefaultCameraScreen {
@@ -68,5 +56,4 @@ extension DefaultCameraScreen {
         case true: deviceOrientation.getAngle()
         case false: .zero
     }}
-    var isOutputTypeSwitchActive: Bool { config.cameraOutputSwitchAllowed && !isRecording }
 }

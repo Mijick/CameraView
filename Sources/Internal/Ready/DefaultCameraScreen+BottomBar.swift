@@ -16,16 +16,27 @@ extension DefaultCameraScreen { struct BottomBar: View {
 
 
     var body: some View {
-        ZStack {
-            createLightButton()
-            createCaptureButton()
-            createChangeCameraPositionButton()
+        VStack(spacing: 20) {
+            createOutputTypeSwitch()
+            createButtons()
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 44)
         .padding(.horizontal, 32)
     }
 }}
+private extension DefaultCameraScreen.BottomBar {
+    @ViewBuilder func createOutputTypeSwitch() -> some View { if isOutputTypeSwitchActive {
+        DefaultCameraScreen.CameraOutputSwitch(parent: parent)
+    }}
+    func createButtons() -> some View {
+        ZStack {
+            createLightButton()
+            createCaptureButton()
+            createChangeCameraPositionButton()
+        }
+    }
+}
 private extension DefaultCameraScreen.BottomBar {
     @ViewBuilder func createLightButton() -> some View { if isLightButtonActive {
         BottomButton(
@@ -77,6 +88,7 @@ private extension DefaultCameraScreen.BottomBar {
     var changeCameraPositionButtonIconColor: Color { .init(.mijickBackgroundInverted) }
 }
 private extension DefaultCameraScreen.BottomBar {
+    var isOutputTypeSwitchActive: Bool { parent.config.cameraOutputSwitchAllowed && !parent.isRecording }
     var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight }
     var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed }
     var isChangeCameraPositionButtonActive: Bool { parent.config.cameraPositionButtonAllowed && !parent.isRecording }

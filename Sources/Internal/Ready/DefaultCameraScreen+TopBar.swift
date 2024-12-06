@@ -85,8 +85,8 @@ private extension DefaultCameraScreen.TopBar {
 
 private extension DefaultCameraScreen.TopBar {
     var topPadding: CGFloat { switch parent.deviceOrientation {
-        case .portrait, .portraitUpsideDown: return 32
-        default: return 16
+        case .portrait, .portraitUpsideDown: return 40
+        default: return 20
     }}
 }
 private extension DefaultCameraScreen.TopBar {
