@@ -1,5 +1,5 @@
 //
-//  MCameraControllerConfig.swift of MijickCamera
+//  MCameraController+Config.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com

@@ -98,7 +98,7 @@ private extension DefaultCameraScreen.TopBar {
     var isCloseButtonActive: Bool { !parent.isRecording }
     var isCentralViewActive: Bool { parent.isRecording }
     var isRightSideViewActive: Bool { !parent.isRecording }
-    var isGridButtonActive: Bool { parent.config.gridButtonVisible }
-    var isFlipOutputButtonActive: Bool { parent.config.flipButtonVisible && parent.cameraPosition == .front }
-    var isFlashButtonActive: Bool { parent.config.flashButtonVisible && parent.hasFlash && parent.cameraOutputType == .photo }
+    var isGridButtonActive: Bool { parent.config.gridButtonAllowed }
+    var isFlipOutputButtonActive: Bool { parent.config.flipButtonAllowed && parent.cameraPosition == .front }
+    var isFlashButtonActive: Bool { parent.config.flashButtonAllowed && parent.hasFlash && parent.cameraOutputType == .photo }
 }

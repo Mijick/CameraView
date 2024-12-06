@@ -20,11 +20,11 @@ public extension DefaultCameraScreen {
 
 // MARK: - Customising View
 public extension DefaultCameraScreen {
-    func outputTypePickerVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.outputTypePickerVisible = value } }
-    func lightButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.lightButtonVisible = value } }
-    func captureButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.captureButtonVisible = value } }
-    func cameraPositionButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.changeCameraButtonVisible = value } }
-    func gridButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.gridButtonVisible = value } }
-    func flipButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.flipButtonVisible = value } }
-    func flashButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.flashButtonVisible = value } }
+    func outputTypePickerVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.cameraOutputSwitchAllowed = value } }
+    func lightButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.lightButtonAllowed = value } }
+    func captureButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.captureButtonAllowed = value } }
+    func cameraPositionButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.cameraPositionButtonAllowed = value } }
+    func gridButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.gridButtonAllowed = value } }
+    func flipButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.flipButtonAllowed = value } }
+    func flashButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.flashButtonAllowed = value } }
 }

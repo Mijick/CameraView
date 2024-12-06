@@ -20,9 +20,9 @@ public struct DefaultCameraScreen: MCameraScreen {
 
     public var body: some View {
         VStack(spacing: 0) {
-            createTopView()
+            createTopBar()
             createContentView()
-            createBottomView()
+            createBottomBar()
         }
         .ignoresSafeArea(.all, edges: .horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -35,7 +35,7 @@ public struct DefaultCameraScreen: MCameraScreen {
     }
 }
 private extension DefaultCameraScreen {
-    func createTopView() -> some View {
+    func createTopBar() -> some View {
         DefaultCameraScreen.TopBar(parent: self)
             .padding(.top, 4)
             .padding(.bottom, 12)
@@ -44,10 +44,10 @@ private extension DefaultCameraScreen {
     func createContentView() -> some View {
         ZStack {
             createCameraView()
-            createOutputTypeButtons()
+            createOutputTypeSwitch()
         }
     }
-    func createBottomView() -> some View {
+    func createBottomBar() -> some View {
         DefaultCameraScreen.BottomBar(parent: self)
             .padding(.top, 16)
             .padding(.bottom, 12)
@@ -55,11 +55,11 @@ private extension DefaultCameraScreen {
     }
 }
 private extension DefaultCameraScreen {
-    func createOutputTypeButtons() -> some View {
+    func createOutputTypeSwitch() -> some View {
         CameraOutputSwitch(parent: self)
             .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
             .isActive(!isRecording)
-            .isActive(config.outputTypePickerVisible)
+            .isActive(config.cameraOutputSwitchAllowed)
             .frame(maxHeight: .infinity, alignment: .bottom)
             .padding(.bottom, 8)
     }
@@ -71,13 +71,25 @@ extension DefaultCameraScreen {
     }}
 }
 
-// MARK: - Configurables
+
+
+
+
+
+
 extension DefaultCameraScreen { struct Config {
-    var outputTypePickerVisible: Bool = true
-    var lightButtonVisible: Bool = true
-    var captureButtonVisible: Bool = true
-    var changeCameraButtonVisible: Bool = true
-    var gridButtonVisible: Bool = true
-    var flipButtonVisible: Bool = true
-    var flashButtonVisible: Bool = true
+    var captureButtonAllowed: Bool = true
+
+
+    var cameraOutputSwitchAllowed: Bool = true
+    var lightButtonAllowed: Bool = true
+
+
+
+
+
+    var cameraPositionButtonAllowed: Bool = true
+    var gridButtonAllowed: Bool = true
+    var flipButtonAllowed: Bool = true
+    var flashButtonAllowed: Bool = true
 }}
