@@ -64,6 +64,7 @@ private extension DefaultCameraScreen.BottomBar {
         catch {}
     }}
 }
+
 private extension DefaultCameraScreen.BottomBar {
     var isLightButtonActive: Bool { parent.config.lightButtonVisible && parent.hasLight }
     var isCaptureButtonActive: Bool { parent.config.captureButtonVisible }

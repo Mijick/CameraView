@@ -189,10 +189,18 @@ private extension DefaultCameraScreen.TopBar {
 }
 private extension DefaultCameraScreen.TopBar {
     @ViewBuilder func createGridButton() -> some View { if isGridButtonActive {
-
+        DefaultCameraScreen.TopButton(
+            icon: gridButtonIcon,
+            iconRotationAngle: parent.iconAngle,
+            action: changeGridVisibility
+        )
     }}
     @ViewBuilder func createFlipOutputButton() -> some View { if isFlipOutputButtonActive {
-
+        DefaultCameraScreen.TopButton(
+            icon: flipButtonIcon,
+            iconRotationAngle: parent.iconAngle,
+            action: changeMirrorOutput
+        )
     }}
     @ViewBuilder func createFlashButton() -> some View { if isFlashButtonActive {
         DefaultCameraScreen.TopButton(
@@ -216,6 +224,7 @@ private extension DefaultCameraScreen.TopBar {
         parent.setFlashMode(parent.flashMode.next())
     }
 }
+
 private extension DefaultCameraScreen.TopBar {
     var gridButtonIcon: ImageResource { switch parent.isGridVisible {
         case true: .mijickIconGridOn
@@ -233,8 +242,8 @@ private extension DefaultCameraScreen.TopBar {
 }
 private extension DefaultCameraScreen.TopBar {
     var isCloseButtonActive: Bool { true }
-    var isGridButtonActive: Bool { true }
-    var isFlipOutputButtonActive: Bool { true }
-    var isFlashButtonActive: Bool { true }
+    var isGridButtonActive: Bool { parent.config.gridButtonVisible }
+    var isFlipOutputButtonActive: Bool { parent.config.flipButtonVisible && parent.cameraPosition == .front }
+    var isFlashButtonActive: Bool { parent.config.flashButtonVisible && parent.hasFlash && parent.cameraOutputType == .photo }
 }
 
