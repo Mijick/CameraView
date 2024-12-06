@@ -18,7 +18,6 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
     let retakeAction: () -> ()
     let acceptMediaAction: () -> ()
     @State private var player: AVPlayer = .init()
-    @State private var shouldShowContent: Bool = false
 
 
     var body: some View {
@@ -85,9 +84,6 @@ private extension DefaultCapturedMediaScreen {
 }
 
 private extension DefaultCapturedMediaScreen {
-    func onAppear() { DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-        withAnimation(.mijickEase) { [self] in shouldShowContent = true }
-    }}
     func onVideoAppear(_ url: URL) {
         player = .init(url: url)
         player.play()
