@@ -13,7 +13,7 @@ import SwiftUI
 
 extension MCameraController { @MainActor struct Config {
     // MARK: Screens
-    var cameraScreen: CameraScreenBuilder = DefaultCameraView.init
+    var cameraScreen: CameraScreenBuilder = DefaultCameraScreen.init
     var capturedMediaScreen: CapturedMediaScreenBuilder? = DefaultCameraPreview.init
     var errorScreen: ErrorScreenBuilder = DefaultCameraErrorView.init
 

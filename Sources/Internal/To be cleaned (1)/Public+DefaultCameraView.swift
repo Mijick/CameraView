@@ -1,5 +1,5 @@
 //
-//  Public+DefaultCameraView.swift of MijickCameraView
+//  Public+DefaultCameraScreen.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

@@ -1,5 +1,5 @@
 //
-//  DefaultCameraView.swift of MijickCameraView
+//  DefaultCameraScreen.swift of MijickCameraView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-public struct DefaultCameraView: MCameraScreen {
+public struct DefaultCameraScreen: MCameraScreen {
     @ObservedObject public var cameraManager: CameraManager
     public let namespace: Namespace.ID
     public let closeControllerAction: () -> ()
@@ -34,7 +34,7 @@ public struct DefaultCameraView: MCameraScreen {
         .animation(.mijickSpring, value: iconAngle)
     }
 }
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     func createTopView() -> some View {
         ZStack {
             createCloseButton()
@@ -64,7 +64,7 @@ private extension DefaultCameraView {
         .padding(.horizontal, 32)
     }
 }
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     func createOutputTypeButtons() -> some View {
         HStack(spacing: 4) {
             createOutputTypeButton(.video)
@@ -80,7 +80,7 @@ private extension DefaultCameraView {
         .padding(.bottom, 8)
     }
 }
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     func createCloseButton() -> some View {
         CloseButton(action: closeControllerAction)
             .rotationEffect(iconAngle)
@@ -103,7 +103,7 @@ private extension DefaultCameraView {
         .isActive(!isRecording)
     }
 }
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     func createGridButton() -> some View {
         TopButton(image: gridButtonIcon, action: changeGridVisibility)
             .rotationEffect(iconAngle)
@@ -123,7 +123,7 @@ private extension DefaultCameraView {
             .isActiveStackElement(config.flashButtonVisible)
     }
 }
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     func createLightButton() -> some View {
         BottomButton(image: .mijickIconLight, active: lightMode == .on, action: changeLightMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
@@ -148,7 +148,7 @@ private extension DefaultCameraView {
             .rotationEffect(iconAngle)
     }
 }
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     var iconAngle: Angle { switch isOrientationLocked {
         case true: deviceOrientation.getAngle()
         case false: .zero
@@ -168,7 +168,7 @@ private extension DefaultCameraView {
     }}
 }
 
-private extension DefaultCameraView {
+private extension DefaultCameraScreen {
     func changeGridVisibility() {
         setGridVisibility(!isGridVisible)
     }
@@ -192,7 +192,7 @@ private extension DefaultCameraView {
 }
 
 // MARK: - Configurables
-extension DefaultCameraView { struct Config {
+extension DefaultCameraScreen { struct Config {
     var outputTypePickerVisible: Bool = true
     var lightButtonVisible: Bool = true
     var captureButtonVisible: Bool = true
@@ -373,3 +373,7 @@ private extension OutputTypeButton {
         case false: .init(.mijickTextTertiary)
     }}
 }
+
+
+
+
