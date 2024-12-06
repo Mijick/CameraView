@@ -57,7 +57,6 @@ private extension DefaultCameraScreen {
 private extension DefaultCameraScreen {
     @ViewBuilder func createOutputTypeSwitch() -> some View { if isOutputTypeSwitchActive {
         CameraOutputSwitch(parent: self)
-            .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
             .frame(maxHeight: .infinity, alignment: .bottom)
             .padding(.bottom, 8)
     }}
