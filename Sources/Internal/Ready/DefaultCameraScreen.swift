@@ -24,7 +24,7 @@ public struct DefaultCameraScreen: MCameraScreen {
             createTopBar()
             createBottomBar()
         }
-        .ignoresSafeArea(.all, edges: .horizontal)
+        .ignoresSafeArea()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()

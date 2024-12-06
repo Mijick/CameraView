@@ -22,6 +22,7 @@ extension DefaultCameraScreen { struct TopBar: View {
             createRightSideView()
         }
         .frame(maxWidth: .infinity)
+        .padding(.top, topPadding)
         .padding(.bottom, 12)
         .padding(.horizontal, 20)
         .background(Color(.mijickBackgroundPrimary))
@@ -82,6 +83,12 @@ private extension DefaultCameraScreen.TopBar {
     }
 }
 
+private extension DefaultCameraScreen.TopBar {
+    var topPadding: CGFloat { switch parent.deviceOrientation {
+        case .portrait, .portraitUpsideDown: return 32
+        default: return 16
+    }}
+}
 private extension DefaultCameraScreen.TopBar {
     var gridButtonIcon: ImageResource { switch parent.isGridVisible {
         case true: .mijickIconGridOn
