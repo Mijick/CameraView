@@ -76,15 +76,6 @@ private extension DefaultCameraScreen {
             .foregroundColor(.init(.mijickTextPrimary))
             .isActive(isRecording)
     }
-    func createTopRightView() -> some View {
-        HStack(spacing: 12) {
-            createGridButton()
-            createFlipOutputButton()
-            createFlashButton()
-        }
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .isActive(!isRecording)
-    }
 }
 extension DefaultCameraScreen {
     var iconAngle: Angle { switch isOrientationLocked {
@@ -103,21 +94,3 @@ extension DefaultCameraScreen { struct Config {
     var flipButtonVisible: Bool = true
     var flashButtonVisible: Bool = true
 }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
