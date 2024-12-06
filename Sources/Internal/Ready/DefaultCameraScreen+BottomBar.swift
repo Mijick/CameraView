@@ -28,8 +28,9 @@ private extension DefaultCameraScreen.BottomBar {
     @ViewBuilder func createLightButton() -> some View { if isLightButtonActive {
         DefaultCameraScreen.BottomButton(
             icon: .mijickIconLight,
-            iconRotationAngle: parent.iconAngle,
-            active: parent.lightMode == .on,
+            iconColor: lightButtonIconColor,
+            backgroundColor: .init(.mijickBackgroundSecondary),
+            rotationAngle: parent.iconAngle,
             action: changeLightMode
         )
         .matchedGeometryEffect(id: "button-bottom-left", in: parent.namespace)
@@ -45,8 +46,9 @@ private extension DefaultCameraScreen.BottomBar {
     @ViewBuilder func createChangeCameraPositionButton() -> some View { if isChangeCameraPositionButtonActive {
         DefaultCameraScreen.BottomButton(
             icon: .mijickIconChangeCamera,
-            iconRotationAngle: parent.iconAngle,
-            active: false,
+            iconColor: .init(.mijickBackgroundInverted),
+            backgroundColor: .init(.mijickBackgroundSecondary),
+            rotationAngle: parent.iconAngle,
             action: changeCameraPosition
         )
         .matchedGeometryEffect(id: "button-bottom-right", in: parent.namespace)
@@ -65,6 +67,12 @@ private extension DefaultCameraScreen.BottomBar {
     }}
 }
 
+private extension DefaultCameraScreen.BottomBar {
+    var lightButtonIconColor: Color { switch parent.lightMode {
+        case .on: .init(.mijickBackgroundYellow)
+        case .off: .init(.mijickBackgroundInverted)
+    }}
+}
 private extension DefaultCameraScreen.BottomBar {
     var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight }
     var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed }
