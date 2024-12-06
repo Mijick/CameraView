@@ -28,7 +28,11 @@ public struct DefaultCameraScreen: MCameraScreen {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
-        .animation(.mijickSpring)
+        .animation(.mijickSpring, value: isRecording)
+        .animation(.mijickSpring, value: cameraOutputType)
+        .animation(.mijickSpring, value: hasLight)
+        .animation(.mijickSpring, value: iconAngle)
+        .animation(.mijickSpring, value: lightMode)
     }
 }
 private extension DefaultCameraScreen {
