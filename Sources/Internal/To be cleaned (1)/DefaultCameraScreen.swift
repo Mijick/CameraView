@@ -64,19 +64,6 @@ private extension DefaultCameraScreen {
             .padding(.bottom, 8)
     }
 }
-private extension DefaultCameraScreen {
-    func createCloseButton() -> some View {
-        CloseButton(action: closeControllerAction)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .isActive(!isRecording)
-    }
-    func createTopCentreView() -> some View {
-        Text(recordingTime.toString())
-            .font(.system(size: 20, weight: .medium, design: .monospaced))
-            .foregroundColor(.init(.mijickTextPrimary))
-            .isActive(isRecording)
-    }
-}
 extension DefaultCameraScreen {
     var iconAngle: Angle { switch isOrientationLocked {
         case true: deviceOrientation.getAngle()
