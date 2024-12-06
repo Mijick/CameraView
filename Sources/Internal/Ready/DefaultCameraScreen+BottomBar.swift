@@ -26,7 +26,7 @@ extension DefaultCameraScreen { struct BottomBar: View {
 }}
 private extension DefaultCameraScreen.BottomBar {
     @ViewBuilder func createLightButton() -> some View { if isLightButtonActive {
-        DefaultCameraScreen.BottomButton(
+        BottomButton(
             icon: .mijickIconLight,
             iconColor: lightButtonIconColor,
             backgroundColor: .init(.mijickBackgroundSecondary),
@@ -44,7 +44,7 @@ private extension DefaultCameraScreen.BottomBar {
         )
     }}
     @ViewBuilder func createChangeCameraPositionButton() -> some View { if isChangeCameraPositionButtonActive {
-        DefaultCameraScreen.BottomButton(
+        BottomButton(
             icon: .mijickIconChangeCamera,
             iconColor: .init(.mijickBackgroundInverted),
             backgroundColor: .init(.mijickBackgroundSecondary),
