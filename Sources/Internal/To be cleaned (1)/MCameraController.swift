@@ -32,10 +32,10 @@ private extension MCameraController {
     func createErrorStateView(_ error: MijickCameraError) -> some View {
         config.errorScreen(error, config.closeCameraControllerAction).erased()
     }
-    func createNormalStateView() -> some View { ZStack { switch cameraManager.attributes.capturedMedia {
+    @ViewBuilder func createNormalStateView() -> some View { switch cameraManager.attributes.capturedMedia {
         case .some(let media) where config.capturedMediaScreen != nil: createCameraPreview(media)
         default: createCameraView()
-    }}}
+    }}
 }
 private extension MCameraController {
     func createCameraPreview(_ media: MCameraMedia) -> some View {
