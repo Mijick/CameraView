@@ -1,18 +1,18 @@
 //
-//  DefaultCameraPreview.swift of MijickCameraView
+//  DefaultCapturedMediaScreen.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import SwiftUI
 import AVKit
 
-struct DefaultCameraPreview: MCapturedMediaScreen {
+struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
     let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
     let retakeAction: () -> ()
@@ -33,7 +33,7 @@ struct DefaultCameraPreview: MCapturedMediaScreen {
         .onAppear(perform: onAppear)
     }
 }
-private extension DefaultCameraPreview {
+private extension DefaultCapturedMediaScreen {
     func createContentView() -> some View {
         ZStack {
             if let image = capturedMedia.getImage() { createImageView(image) }
@@ -51,7 +51,7 @@ private extension DefaultCameraPreview {
         .padding(.bottom, 4)
     }
 }
-private extension DefaultCameraPreview {
+private extension DefaultCapturedMediaScreen {
     func createImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
             .resizable()
@@ -72,7 +72,7 @@ private extension DefaultCameraPreview {
     }
 }
 
-private extension DefaultCameraPreview {
+private extension DefaultCapturedMediaScreen {
     func onAppear() { DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
         withAnimation(.mijickEase) { [self] in shouldShowContent = true }
     }}
