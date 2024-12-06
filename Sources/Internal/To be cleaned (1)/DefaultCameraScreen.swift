@@ -86,53 +86,11 @@ private extension DefaultCameraScreen {
         .isActive(!isRecording)
     }
 }
-private extension DefaultCameraScreen {
-    func createGridButton() -> some View {
-        TopButton(icon: gridButtonIcon, iconRotationAngle: iconAngle, action: changeGridVisibility)
-            .isActiveStackElement(config.gridButtonVisible)
-    }
-    func createFlipOutputButton() -> some View {
-        TopButton(icon: flipButtonIcon, iconRotationAngle: iconAngle, action: changeMirrorOutput)
-            .isActiveStackElement(cameraPosition == .front)
-            .isActiveStackElement(config.flipButtonVisible)
-    }
-    func createFlashButton() -> some View {
-        TopButton(icon: flashButtonIcon, iconRotationAngle: iconAngle, action: changeFlashMode)
-            .isActiveStackElement(hasFlash)
-            .isActiveStackElement(cameraOutputType == .photo)
-            .isActiveStackElement(config.flashButtonVisible)
-    }
-}
 extension DefaultCameraScreen {
     var iconAngle: Angle { switch isOrientationLocked {
         case true: deviceOrientation.getAngle()
         case false: .zero
     }}
-    var gridButtonIcon: ImageResource { switch isGridVisible {
-        case true: .mijickIconGridOn
-        case false: .mijickIconGridOff
-    }}
-    var flipButtonIcon: ImageResource { switch isOutputMirrored {
-        case true: .mijickIconFlipOn
-        case false: .mijickIconFlipOff
-    }}
-    var flashButtonIcon: ImageResource { switch flashMode {
-        case .off: .mijickIconFlashOff
-        case .on: .mijickIconFlashOn
-        case .auto: .mijickIconFlashAuto
-    }}
-}
-
-private extension DefaultCameraScreen {
-    func changeGridVisibility() {
-        setGridVisibility(!isGridVisible)
-    }
-    func changeMirrorOutput() {
-        setMirrorOutput(!isOutputMirrored)
-    }
-    func changeFlashMode() {
-        setFlashMode(flashMode.next())
-    }
 }
 
 // MARK: - Configurables
@@ -247,7 +205,7 @@ private extension DefaultCameraScreen.TopBar {
     }}
 }
 private extension DefaultCameraScreen.TopBar {
-    var isCloseButtonActive: Bool { true }
+    var isCloseButtonActive: Bool { !parent.isRecording }
     var isCentralViewActive: Bool { parent.isRecording }
     var isRightSideViewActive: Bool { !parent.isRecording }
     var isGridButtonActive: Bool { parent.config.gridButtonVisible }
