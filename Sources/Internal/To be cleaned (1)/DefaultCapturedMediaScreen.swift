@@ -63,12 +63,24 @@ private extension DefaultCapturedMediaScreen {
             .onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(image: .mijickIconCancel, primary: false, action: retakeAction)
-            .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(
+            icon: .mijickIconCancel,
+            iconColor: .init(.mijickBackgroundInverted),
+            backgroundColor: .init(.mijickBackgroundSecondary),
+            rotationAngle: .zero,
+            action: retakeAction
+        )
+        .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(image: .mijickIconCheck, primary: true, action: acceptMediaAction)
-            .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(
+            icon: .mijickIconCheck,
+            iconColor: .init(.mijickBackgroundPrimary),
+            backgroundColor: .init(.mijickBackgroundInverted),
+            rotationAngle: .zero,
+            action: acceptMediaAction
+        )
+        .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 
@@ -80,41 +92,4 @@ private extension DefaultCapturedMediaScreen {
         player = .init(url: url)
         player.play()
     }
-}
-
-
-
-
-
-
-fileprivate struct BottomButton: View {
-    let image: ImageResource
-    let primary: Bool
-    let action: () -> ()
-
-
-    var body: some View {
-        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
-    }
-}
-private extension BottomButton {
-    func createButtonLabel() -> some View {
-        Image(image)
-            .resizable()
-            .frame(width: 26, height: 26)
-            .foregroundColor(iconColor)
-            .frame(width: 52, height: 52)
-            .background(backgroundColor)
-            .mask(Circle())
-    }
-}
-private extension BottomButton {
-    var iconColor: Color { switch primary {
-        case true: .init(.mijickBackgroundPrimary)
-        case false: .init(.mijickBackgroundInverted)
-    }}
-    var backgroundColor: Color { switch primary {
-        case true: .init(.mijickBackgroundInverted)
-        case false: .init(.mijickBackgroundSecondary)
-    }}
 }

@@ -46,7 +46,7 @@ private extension DefaultCameraScreen.BottomBar {
     @ViewBuilder func createChangeCameraPositionButton() -> some View { if isChangeCameraPositionButtonActive {
         BottomButton(
             icon: .mijickIconChangeCamera,
-            iconColor: .init(.mijickBackgroundInverted),
+            iconColor: changeCameraPositionButtonIconColor,
             backgroundColor: .init(.mijickBackgroundSecondary),
             rotationAngle: parent.iconAngle,
             action: changeCameraPosition
@@ -72,6 +72,7 @@ private extension DefaultCameraScreen.BottomBar {
         case .on: .init(.mijickBackgroundYellow)
         case .off: .init(.mijickBackgroundInverted)
     }}
+    var changeCameraPositionButtonIconColor: Color { .init(.mijickBackgroundInverted) }
 }
 private extension DefaultCameraScreen.BottomBar {
     var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight }

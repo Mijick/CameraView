@@ -31,7 +31,7 @@ private extension BottomButton {
             .foregroundColor(iconColor)
             .rotationEffect(rotationAngle)
             .frame(width: 52, height: 52)
-            .background(Color(.mijickBackgroundSecondary))
+            .background(backgroundColor)
             .mask(Circle())
     }
 }
