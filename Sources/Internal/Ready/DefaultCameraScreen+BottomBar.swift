@@ -19,7 +19,7 @@ extension DefaultCameraScreen { struct BottomBar: View {
         ZStack {
             createLightButton()
             createCaptureButton()
-            createChangeCameraButton()
+            createChangeCameraPositionButton()
         }
         .frame(maxWidth: .infinity)
     }
@@ -42,7 +42,7 @@ private extension DefaultCameraScreen.BottomBar {
             action: parent.captureOutput
         )
     }}
-    @ViewBuilder func createChangeCameraButton() -> some View { if isChangeCameraButtonActive {
+    @ViewBuilder func createChangeCameraPositionButton() -> some View { if isChangeCameraPositionButtonActive {
         DefaultCameraScreen.BottomButton(
             icon: .mijickIconChangeCamera,
             iconRotationAngle: parent.iconAngle,
@@ -68,5 +68,5 @@ private extension DefaultCameraScreen.BottomBar {
 private extension DefaultCameraScreen.BottomBar {
     var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight }
     var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed }
-    var isChangeCameraButtonActive: Bool { parent.config.cameraPositionButtonAllowed && !parent.isRecording }
+    var isChangeCameraPositionButtonActive: Bool { parent.config.cameraPositionButtonAllowed && !parent.isRecording }
 }
