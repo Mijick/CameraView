@@ -45,8 +45,8 @@ private extension DefaultCameraScreen.CaptureButton {
         case .video: .init(.mijickBackgroundRed)
     }}
     var backgroundCornerRadius: CGFloat { switch isRecording {
-        case true: 5
-        case false: 34
+        case true: 6
+        case false: 36
     }}
     var backgroundPadding: CGFloat { switch isRecording {
         case true: 20
