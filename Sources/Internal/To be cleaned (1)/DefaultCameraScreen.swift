@@ -54,6 +54,9 @@ private extension DefaultCameraScreen {
     }
     func createBottomView() -> some View {
         DefaultCameraScreen.BottomBar(parent: self)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
+            .padding(.horizontal, 32)
     }
 }
 private extension DefaultCameraScreen {
@@ -166,10 +169,16 @@ extension DefaultCameraScreen { struct Config {
 
 
 extension DefaultCameraScreen { struct TopBar: View {
+    let parent: DefaultCameraScreen
 
 
     var body: some View {
-        EmptyView()
+        ZStack {
+            createCloseButton()
+            createTopCentreView()
+            createTopRightView()
+        }
+        .frame(maxWidth: .infinity)
     }
 }}
 private extension DefaultCameraScreen.TopBar {
@@ -179,7 +188,15 @@ private extension DefaultCameraScreen.TopBar {
 
 }
 private extension DefaultCameraScreen.TopBar {
+    @ViewBuilder func createGridButton() -> some View {
 
+    }
+    @ViewBuilder func createFlipOutputButton() -> some View {
+
+    }
+    @ViewBuilder func createFlashButton() -> some View {
+
+    }
 }
 private extension DefaultCameraScreen.TopBar {
 
@@ -191,6 +208,9 @@ private extension DefaultCameraScreen.TopBar {
 
 }
 private extension DefaultCameraScreen.TopBar {
-
+    var isCloseButtonActive: Bool { true }
+    var isGridButtonActive: Bool { true }
+    var isFlipOutputButtonActive: Bool { true }
+    var isFlashButtonActive: Bool { true }
 }
 

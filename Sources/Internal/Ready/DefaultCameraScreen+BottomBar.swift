@@ -22,9 +22,6 @@ extension DefaultCameraScreen { struct BottomBar: View {
             createChangeCameraButton()
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 16)
-        .padding(.bottom, 12)
-        .padding(.horizontal, 32)
     }
 }}
 private extension DefaultCameraScreen.BottomBar {
