@@ -12,9 +12,9 @@
 import SwiftUI
 
 extension DefaultCameraScreen { struct CaptureButton: View {
-    let action: () -> ()
-    let mode: CameraOutputType
+    let outputType: CameraOutputType
     let isRecording: Bool
+    let action: () -> ()
 
 
     var body: some View {
@@ -40,7 +40,7 @@ private extension DefaultCameraScreen.CaptureButton {
     }
 }
 private extension DefaultCameraScreen.CaptureButton {
-    var backgroundColor: Color { switch mode {
+    var backgroundColor: Color { switch outputType {
         case .photo: .init(.mijickBackgroundInverted)
         case .video: .init(.mijickBackgroundRed)
     }}
