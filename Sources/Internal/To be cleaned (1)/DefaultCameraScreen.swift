@@ -175,7 +175,7 @@ extension DefaultCameraScreen { struct TopBar: View {
     var body: some View {
         ZStack {
             createCloseButton()
-            createTopCentreView()
+            createCentralView()
             createRightSideView()
         }
         .frame(maxWidth: .infinity)
@@ -185,6 +185,11 @@ private extension DefaultCameraScreen.TopBar {
 
 }
 private extension DefaultCameraScreen.TopBar {
+    @ViewBuilder func createCentralView() -> some View { if isCentralViewActive {
+        Text(parent.recordingTime.toString())
+            .font(.system(size: 20, weight: .medium, design: .monospaced))
+            .foregroundColor(.init(.mijickTextPrimary))
+    }}
     @ViewBuilder func createRightSideView() -> some View { if isRightSideViewActive {
         HStack(spacing: 12) {
             createGridButton()
@@ -249,6 +254,7 @@ private extension DefaultCameraScreen.TopBar {
 }
 private extension DefaultCameraScreen.TopBar {
     var isCloseButtonActive: Bool { true }
+    var isCentralViewActive: Bool { parent.isRecording }
     var isRightSideViewActive: Bool { !parent.isRecording }
     var isGridButtonActive: Bool { parent.config.gridButtonVisible }
     var isFlipOutputButtonActive: Bool { parent.config.flipButtonVisible && parent.cameraPosition == .front }
