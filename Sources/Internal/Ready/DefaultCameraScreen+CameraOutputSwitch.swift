@@ -21,7 +21,7 @@ extension DefaultCameraScreen { struct CameraOutputSwitch: View {
             createOutputTypeButton(.photo)
         }
         .padding(8)
-        .background(Color(.mijickBackgroundPrimary60))
+        .background(Color(.mijickBackgroundPrimary50))
         .mask(Capsule())
     }
 }}
