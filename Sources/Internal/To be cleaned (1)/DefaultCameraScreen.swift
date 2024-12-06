@@ -187,22 +187,3 @@ extension DefaultCameraScreen { struct Config {
     var flipButtonVisible: Bool = true
     var flashButtonVisible: Bool = true
 }}
-
-
-// MARK: - CloseButton
-fileprivate struct CloseButton: View {
-    let action: () -> ()
-
-
-    var body: some View {
-        Button(action: action) {
-            Image(.mijickIconCancel)
-                .resizable()
-                .frame(width: 24, height: 24)
-                .foregroundColor(Color(.mijickBackgroundInverted))
-        }
-    }
-}
-
-// MARK: - TopButton
-
