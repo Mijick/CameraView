@@ -36,15 +36,10 @@ public struct DefaultCameraScreen: MCameraScreen {
 }
 private extension DefaultCameraScreen {
     func createTopView() -> some View {
-        ZStack {
-            createCloseButton()
-            createTopCentreView()
-            createTopRightView()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 4)
-        .padding(.bottom, 12)
-        .padding(.horizontal, 20)
+        DefaultCameraScreen.TopBar(parent: self)
+            .padding(.top, 4)
+            .padding(.bottom, 12)
+            .padding(.horizontal, 20)
     }
     func createContentView() -> some View {
         ZStack {
