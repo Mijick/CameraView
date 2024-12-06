@@ -19,9 +19,7 @@ extension DefaultCameraScreen { struct BottomButton: View {
 
 
     var body: some View {
-        Button(action: action, label: createButtonLabel)
-            .buttonStyle(ButtonScaleStyle())
-            .transition(.scale.combined(with: .opacity))
+        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
     }
 }}
 private extension DefaultCameraScreen.BottomButton {
