@@ -144,10 +144,11 @@ extension CameraMetalView {
 
         await Task.sleep(seconds: 0.01)
     }
-    func finishCameraFlipAnimation() {
+    func finishCameraFlipAnimation() async {
         guard let blurView = parent.cameraView.viewWithTag(.blurViewTag) else { return }
 
-        UIView.animate(withDuration: 0.33, delay: 0.16, animations: { blurView.alpha = 0 }) { [self] _ in
+        await Task.sleep(seconds: 0.44)
+        UIView.animate(withDuration: 0.3, animations: { blurView.alpha = 0 }) { [self] _ in
             blurView.removeFromSuperview()
             isAnimating = false
         }

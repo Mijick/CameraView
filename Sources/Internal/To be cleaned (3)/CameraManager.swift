@@ -154,7 +154,7 @@ extension CameraManager {
         await cameraMetalView.beginCameraFlipAnimation()
         try changeCameraInput(position)
         resetAttributesWhenChangingCamera(position)
-        cameraMetalView.finishCameraFlipAnimation()
+        await cameraMetalView.finishCameraFlipAnimation()
     }
 }
 private extension CameraManager {
