@@ -13,7 +13,7 @@ import SwiftUI
 
 extension DefaultCameraScreen { struct OutputTypeSwitch: View {
     let currentCameraOutputType: CameraOutputType
-    let currentScreenRotationAngle: Angle
+    let iconRotationAngle: Angle
     let changeOutputTypeAction: (CameraOutputType) -> ()
 
 
@@ -32,7 +32,7 @@ private extension DefaultCameraScreen.OutputTypeSwitch {
         Button(icon: getOutputTypeButtonIcon(outputType), active: isOutputTypeButtonActive(outputType)) {
             changeOutputTypeAction(outputType)
         }
-        .rotationEffect(currentScreenRotationAngle)
+        .rotationEffect(iconRotationAngle)
     }
 }
 
@@ -64,7 +64,7 @@ private extension Button {
             .resizable()
             .frame(width: iconSize, height: iconSize)
             .foregroundColor(iconColor)
-            .padding(16)
+            .padding(8)
             .background(Color(.mijickBackgroundSecondary))
             .mask(Circle())
     }
@@ -72,7 +72,7 @@ private extension Button {
 private extension Button {
     var iconSize: CGFloat { switch active {
         case true: 28
-        case false: 22
+        case false: 20
     }}
     var iconColor: Color { switch active {
         case true: .init(.mijickBackgroundYellow)

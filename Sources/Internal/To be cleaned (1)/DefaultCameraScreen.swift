@@ -66,18 +66,12 @@ private extension DefaultCameraScreen {
 }
 private extension DefaultCameraScreen {
     func createOutputTypeButtons() -> some View {
-        HStack(spacing: 4) {
-            createOutputTypeButton(.video)
-            createOutputTypeButton(.photo)
-        }
-        .padding(8)
-        .background(Color(.mijickBackgroundPrimary).opacity(0.6))
-        .mask(Capsule())
-        .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
-        .isActive(!isRecording)
-        .isActive(config.outputTypePickerVisible)
-        .frame(maxHeight: .infinity, alignment: .bottom)
-        .padding(.bottom, 8)
+        OutputTypeSwitch(currentCameraOutputType: cameraOutputType, iconRotationAngle: iconAngle, changeOutputTypeAction: changeCameraOutputType)
+            .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
+            .isActive(!isRecording)
+            .isActive(config.outputTypePickerVisible)
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(.bottom, 8)
     }
 }
 private extension DefaultCameraScreen {
@@ -142,10 +136,6 @@ private extension DefaultCameraScreen {
             .frame(maxWidth: .infinity, alignment: .trailing)
             .isActive(!isRecording)
             .isActive(config.changeCameraButtonVisible)
-    }
-    func createOutputTypeButton(_ outputType: CameraOutputType) -> some View {
-        OutputTypeButton(type: outputType, active: outputType == cameraOutputType, action: { changeCameraOutputType(outputType) })
-            .rotationEffect(iconAngle)
     }
 }
 private extension DefaultCameraScreen {
