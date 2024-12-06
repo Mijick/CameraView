@@ -55,18 +55,18 @@ private extension DefaultCameraScreen {
     }
 }
 private extension DefaultCameraScreen {
-    func createOutputTypeSwitch() -> some View {
+    @ViewBuilder func createOutputTypeSwitch() -> some View { if isOutputTypeSwitchActive {
         CameraOutputSwitch(parent: self)
             .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
-            .isActive(!isRecording)
-            .isActive(config.cameraOutputSwitchAllowed)
             .frame(maxHeight: .infinity, alignment: .bottom)
             .padding(.bottom, 8)
-    }
+    }}
 }
+
 extension DefaultCameraScreen {
     var iconAngle: Angle { switch isOrientationLocked {
         case true: deviceOrientation.getAngle()
         case false: .zero
     }}
+    var isOutputTypeSwitchActive: Bool { config.cameraOutputSwitchAllowed && !isRecording }
 }
