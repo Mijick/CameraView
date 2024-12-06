@@ -22,6 +22,9 @@ extension DefaultCameraScreen { struct TopBar: View {
             createRightSideView()
         }
         .frame(maxWidth: .infinity)
+        .padding(.bottom, 12)
+        .padding(.horizontal, 20)
+        .background(Color(.mijickBackgroundPrimary))
     }
 }}
 private extension DefaultCameraScreen.TopBar {
