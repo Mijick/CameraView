@@ -59,13 +59,16 @@ private extension DefaultCameraPreview {
             .ignoresSafeArea()
     }
     func createVideoView(_ video: URL) -> some View {
-        VideoPlayer(player: player).onAppear { onVideoAppear(video) }
+        VideoPlayer(player: player)
+            .onAppear { onVideoAppear(video) }
     }
     func createRetakeButton() -> some View {
-        BottomButton(image: .mijickIconCancel, primary: false, action: retakeAction).matchedGeometryEffect(id: "button-bottom-left", in: namespace)
+        BottomButton(image: .mijickIconCancel, primary: false, action: retakeAction)
+            .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
-        BottomButton(image: .mijickIconCheck, primary: true, action: acceptMediaAction).matchedGeometryEffect(id: "button-bottom-right", in: namespace)
+        BottomButton(image: .mijickIconCheck, primary: true, action: acceptMediaAction)
+            .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 
@@ -80,7 +83,10 @@ private extension DefaultCameraPreview {
 }
 
 
-// MARK: - BottomButton
+
+
+
+
 fileprivate struct BottomButton: View {
     let image: ImageResource
     let primary: Bool
