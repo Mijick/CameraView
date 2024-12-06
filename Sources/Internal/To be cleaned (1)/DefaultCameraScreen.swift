@@ -182,9 +182,10 @@ extension DefaultCameraScreen { struct TopBar: View {
     }
 }}
 private extension DefaultCameraScreen.TopBar {
-
-}
-private extension DefaultCameraScreen.TopBar {
+    @ViewBuilder func createCloseButton() -> some View { if isCloseButtonActive {
+        CloseButton(action: parent.closeControllerAction)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }}
     @ViewBuilder func createCentralView() -> some View { if isCentralViewActive {
         Text(parent.recordingTime.toString())
             .font(.system(size: 20, weight: .medium, design: .monospaced))
@@ -222,9 +223,7 @@ private extension DefaultCameraScreen.TopBar {
         )
     }}
 }
-private extension DefaultCameraScreen.TopBar {
 
-}
 private extension DefaultCameraScreen.TopBar {
     func changeGridVisibility() {
         parent.setGridVisibility(!parent.isGridVisible)
