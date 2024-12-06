@@ -19,9 +19,9 @@ public struct DefaultCameraScreen: MCameraScreen {
 
 
     public var body: some View {
-        VStack(spacing: 0) {
-            createTopBar()
+        ZStack {
             createContentView()
+            createTopBar()
             createBottomBar()
         }
         .ignoresSafeArea(.all, edges: .horizontal)
@@ -38,9 +38,7 @@ public struct DefaultCameraScreen: MCameraScreen {
 private extension DefaultCameraScreen {
     func createTopBar() -> some View {
         DefaultCameraScreen.TopBar(parent: self)
-            .padding(.top, 4)
-            .padding(.bottom, 12)
-            .padding(.horizontal, 20)
+            .frame(maxHeight: .infinity, alignment: .top)
     }
     func createContentView() -> some View {
         ZStack {
@@ -54,6 +52,7 @@ private extension DefaultCameraScreen {
             .padding(.top, 16)
             .padding(.bottom, 12)
             .padding(.horizontal, 32)
+            .frame(maxHeight: .infinity, alignment: .bottom)
     }
 }
 private extension DefaultCameraScreen {
