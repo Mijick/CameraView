@@ -58,7 +58,7 @@ private extension DefaultCameraScreen {
 }
 private extension DefaultCameraScreen {
     func createOutputTypeButtons() -> some View {
-        CameraOutputSwitch(currentCameraOutputType: cameraOutputType, iconRotationAngle: iconAngle, changeOutputTypeAction: changeCameraOutputType)
+        CameraOutputSwitch(parent: self)
             .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
             .isActive(!isRecording)
             .isActive(config.outputTypePickerVisible)
@@ -134,9 +134,6 @@ private extension DefaultCameraScreen {
     }
     func changeFlashMode() {
         setFlashMode(flashMode.next())
-    }
-    func changeCameraOutputType(_ type: CameraOutputType) {
-        setOutputType(type)
     }
 }
 

@@ -12,9 +12,7 @@
 import SwiftUI
 
 extension DefaultCameraScreen { struct CameraOutputSwitch: View {
-    let currentCameraOutputType: CameraOutputType
-    let iconRotationAngle: Angle
-    let changeOutputTypeAction: (CameraOutputType) -> ()
+    let parent: DefaultCameraScreen
 
 
     var body: some View {
@@ -30,9 +28,9 @@ extension DefaultCameraScreen { struct CameraOutputSwitch: View {
 private extension DefaultCameraScreen.CameraOutputSwitch {
     func createOutputTypeButton(_ outputType: CameraOutputType) -> some View {
         Button(icon: getOutputTypeButtonIcon(outputType), active: isOutputTypeButtonActive(outputType)) {
-            changeOutputTypeAction(outputType)
+            parent.setOutputType(outputType)
         }
-        .rotationEffect(iconRotationAngle)
+        .rotationEffect(parent.iconAngle)
     }
 }
 
@@ -42,7 +40,7 @@ private extension DefaultCameraScreen.CameraOutputSwitch {
         case .video: return .mijickIconVideo
     }}
     func isOutputTypeButtonActive(_ outputType: CameraOutputType) -> Bool {
-        outputType == currentCameraOutputType
+        outputType == parent.cameraOutputType
     }
 }
 
