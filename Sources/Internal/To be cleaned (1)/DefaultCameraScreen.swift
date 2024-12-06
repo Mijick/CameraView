@@ -176,7 +176,7 @@ extension DefaultCameraScreen { struct TopBar: View {
         ZStack {
             createCloseButton()
             createTopCentreView()
-            createTopRightView()
+            createRightSideView()
         }
         .frame(maxWidth: .infinity)
     }
@@ -185,7 +185,14 @@ private extension DefaultCameraScreen.TopBar {
 
 }
 private extension DefaultCameraScreen.TopBar {
-
+    @ViewBuilder func createRightSideView() -> some View { if isRightSideViewActive {
+        HStack(spacing: 12) {
+            createGridButton()
+            createFlipOutputButton()
+            createFlashButton()
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
+    }}
 }
 private extension DefaultCameraScreen.TopBar {
     @ViewBuilder func createGridButton() -> some View { if isGridButtonActive {
@@ -242,6 +249,7 @@ private extension DefaultCameraScreen.TopBar {
 }
 private extension DefaultCameraScreen.TopBar {
     var isCloseButtonActive: Bool { true }
+    var isRightSideViewActive: Bool { !parent.isRecording }
     var isGridButtonActive: Bool { parent.config.gridButtonVisible }
     var isFlipOutputButtonActive: Bool { parent.config.flipButtonVisible && parent.cameraPosition == .front }
     var isFlashButtonActive: Bool { parent.config.flashButtonVisible && parent.hasFlash && parent.cameraOutputType == .photo }
