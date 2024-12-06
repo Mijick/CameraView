@@ -246,4 +246,3 @@ private extension DefaultCameraScreen.TopBar {
     var isFlipOutputButtonActive: Bool { parent.config.flipButtonVisible && parent.cameraPosition == .front }
     var isFlashButtonActive: Bool { parent.config.flashButtonVisible && parent.hasFlash && parent.cameraOutputType == .photo }
 }
-
