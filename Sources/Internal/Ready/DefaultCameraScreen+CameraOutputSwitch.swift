@@ -1,5 +1,5 @@
 //
-//  DefaultCameraScreen.OutputTypeSwitch.swift of MijickCamera
+//  DefaultCameraScreen+CameraOutputSwitch.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-extension DefaultCameraScreen { struct OutputTypeSwitch: View {
+extension DefaultCameraScreen { struct CameraOutputSwitch: View {
     let currentCameraOutputType: CameraOutputType
     let iconRotationAngle: Angle
     let changeOutputTypeAction: (CameraOutputType) -> ()
@@ -27,7 +27,7 @@ extension DefaultCameraScreen { struct OutputTypeSwitch: View {
         .mask(Capsule())
     }
 }}
-private extension DefaultCameraScreen.OutputTypeSwitch {
+private extension DefaultCameraScreen.CameraOutputSwitch {
     func createOutputTypeButton(_ outputType: CameraOutputType) -> some View {
         Button(icon: getOutputTypeButtonIcon(outputType), active: isOutputTypeButtonActive(outputType)) {
             changeOutputTypeAction(outputType)
@@ -36,7 +36,7 @@ private extension DefaultCameraScreen.OutputTypeSwitch {
     }
 }
 
-private extension DefaultCameraScreen.OutputTypeSwitch {
+private extension DefaultCameraScreen.CameraOutputSwitch {
     func getOutputTypeButtonIcon(_ outputType: CameraOutputType) -> ImageResource { switch outputType {
         case .photo: return .mijickIconPhoto
         case .video: return .mijickIconVideo

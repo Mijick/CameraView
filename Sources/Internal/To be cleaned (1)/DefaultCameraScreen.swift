@@ -66,7 +66,7 @@ private extension DefaultCameraScreen {
 }
 private extension DefaultCameraScreen {
     func createOutputTypeButtons() -> some View {
-        OutputTypeSwitch(currentCameraOutputType: cameraOutputType, iconRotationAngle: iconAngle, changeOutputTypeAction: changeCameraOutputType)
+        CameraOutputSwitch(currentCameraOutputType: cameraOutputType, iconRotationAngle: iconAngle, changeOutputTypeAction: changeCameraOutputType)
             .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
             .isActive(!isRecording)
             .isActive(config.outputTypePickerVisible)
@@ -238,50 +238,6 @@ private extension TopButton {
             .frame(width: 16, height: 16)
             .foregroundColor(Color(.mijickBackgroundInverted))
     }
-}
-
-// MARK: - CaptureButton
-fileprivate struct CaptureButton: View {
-    let action: () -> ()
-    let mode: CameraOutputType
-    let isRecording: Bool
-
-
-    var body: some View {
-        Button(action: action, label: createButtonLabel).buttonStyle(ButtonScaleStyle())
-    }
-}
-private extension CaptureButton {
-    func createButtonLabel() -> some View {
-        ZStack {
-            createBackground()
-            createBorders()
-        }.frame(width: 72, height: 72)
-    }
-}
-private extension CaptureButton {
-    func createBackground() -> some View {
-        RoundedRectangle(cornerRadius: backgroundCornerRadius, style: .continuous)
-            .fill(backgroundColor)
-            .padding(backgroundPadding)
-    }
-    func createBorders() -> some View {
-        Circle().stroke(Color(.mijickBackgroundInverted), lineWidth: 2.5)
-    }
-}
-private extension CaptureButton {
-    var backgroundColor: Color { switch mode {
-        case .photo: .init(.mijickBackgroundInverted)
-        case .video: .init(.mijickBackgroundRed)
-    }}
-    var backgroundCornerRadius: CGFloat { switch isRecording {
-        case true: 5
-        case false: 34
-    }}
-    var backgroundPadding: CGFloat { switch isRecording {
-        case true: 20
-        case false: 4
-    }}
 }
 
 // MARK: - BottomButton
