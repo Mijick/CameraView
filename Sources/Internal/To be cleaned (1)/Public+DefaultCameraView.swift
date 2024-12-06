@@ -12,14 +12,14 @@
 import SwiftUI
 
 // MARK: - Initialiser
-public extension DefaultCameraView {
+public extension DefaultCameraScreen {
     init(cameraManager: CameraManager, namespace: Namespace.ID, closeControllerAction: @escaping () -> Void) {
         self.init(cameraManager: cameraManager, namespace: namespace, closeControllerAction: closeControllerAction, config: .init())
     }
 }
 
 // MARK: - Customising View
-public extension DefaultCameraView {
+public extension DefaultCameraScreen {
     func outputTypePickerVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.outputTypePickerVisible = value } }
     func lightButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.lightButtonVisible = value } }
     func captureButtonVisible(_ value: Bool) -> Self { setAndReturnSelf { $0.config.captureButtonVisible = value } }

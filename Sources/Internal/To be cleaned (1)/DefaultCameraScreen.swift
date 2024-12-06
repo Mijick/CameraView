@@ -71,7 +71,7 @@ private extension DefaultCameraScreen {
             createOutputTypeButton(.photo)
         }
         .padding(8)
-        .background(Color(.mijickBackgroundPrimary).opacity(0.64))
+        .background(Color(.mijickBackgroundPrimary).opacity(0.6))
         .mask(Capsule())
         .transition(.asymmetric(insertion: .opacity.animation(.mijickSpring.delay(1)), removal: .scale.combined(with: .opacity)))
         .isActive(!isRecording)
@@ -373,7 +373,3 @@ private extension OutputTypeButton {
         case false: .init(.mijickTextTertiary)
     }}
 }
-
-
-
-
