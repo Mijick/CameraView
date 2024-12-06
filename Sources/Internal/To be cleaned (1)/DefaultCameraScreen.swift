@@ -99,25 +99,23 @@ private extension DefaultCameraScreen {
 }
 private extension DefaultCameraScreen {
     func createGridButton() -> some View {
-        TopButton(image: gridButtonIcon, action: changeGridVisibility)
-            .rotationEffect(iconAngle)
+        TopButton(icon: gridButtonIcon, iconRotationAngle: iconAngle, action: changeGridVisibility)
             .isActiveStackElement(config.gridButtonVisible)
     }
     func createFlipOutputButton() -> some View {
-        TopButton(image: flipButtonIcon, action: changeMirrorOutput)
-            .rotationEffect(iconAngle)
+        TopButton(icon: flipButtonIcon, iconRotationAngle: iconAngle, action: changeMirrorOutput)
             .isActiveStackElement(cameraPosition == .front)
             .isActiveStackElement(config.flipButtonVisible)
     }
     func createFlashButton() -> some View {
-        TopButton(image: flashButtonIcon, action: changeFlashMode)
-            .rotationEffect(iconAngle)
+        TopButton(icon: flashButtonIcon, iconRotationAngle: iconAngle, action: changeFlashMode)
             .isActiveStackElement(hasFlash)
             .isActiveStackElement(cameraOutputType == .photo)
             .isActiveStackElement(config.flashButtonVisible)
     }
 }
 private extension DefaultCameraScreen {
+    // TODO: Dodać animację do przycisków
     func createLightButton() -> some View {
         BottomButton(icon: .mijickIconLight, iconRotationAngle: iconAngle, active: lightMode == .on, action: changeLightMode)
             .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
@@ -207,33 +205,25 @@ fileprivate struct CloseButton: View {
 }
 
 // MARK: - TopButton
-fileprivate struct TopButton: View {
-    let image: ImageResource
+extension DefaultCameraScreen { struct TopButton: View {
+    let icon: ImageResource
+    let iconRotationAngle: Angle
     let action: () -> ()
 
 
     var body: some View {
         Button(action: action, label: createButtonLabel)
     }
-}
-private extension TopButton {
+}}
+private extension DefaultCameraScreen.TopButton {
     func createButtonLabel() -> some View {
-        ZStack {
-            createBackground()
-            createIcon()
-        }
-    }
-}
-private extension TopButton {
-    func createBackground() -> some View {
-        Circle()
-            .fill(Color(.mijickBackgroundSecondary))
-            .frame(width: 32, height: 32)
-    }
-    func createIcon() -> some View {
-        Image(image)
+        Image(icon)
             .resizable()
             .frame(width: 16, height: 16)
             .foregroundColor(Color(.mijickBackgroundInverted))
+            .rotationEffect(iconRotationAngle)
+            .frame(width: 32, height: 32)
+            .background(Color(.mijickBackgroundSecondary))
+            .mask(Circle())
     }
 }

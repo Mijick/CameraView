@@ -28,8 +28,8 @@ private extension DefaultCameraScreen.BottomButton {
             .resizable()
             .frame(width: 26, height: 26)
             .foregroundColor(iconColor)
-            .frame(width: 52, height: 52)
             .rotationEffect(iconRotationAngle)
+            .frame(width: 52, height: 52)
             .background(Color(.mijickBackgroundSecondary))
             .mask(Circle())
     }
