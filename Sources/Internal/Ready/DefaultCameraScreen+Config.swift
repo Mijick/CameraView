@@ -9,7 +9,7 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
-extension DefaultCameraScreen { struct Config {
+extension DefaultCameraScreen { class Config {
     var captureButtonAllowed: Bool = true
     var cameraOutputSwitchAllowed: Bool = true
     var cameraPositionButtonAllowed: Bool = true

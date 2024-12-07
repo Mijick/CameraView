@@ -26,56 +26,56 @@ public extension MCameraController {
 public extension MCameraController {
     /// Replaces the default Camera Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func cameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { setAndReturnSelf { $0.config.cameraScreen = builder } }
+    func cameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
 
     /// Replaces the default Media Preview Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func mediaPreviewScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { setAndReturnSelf { $0.config.capturedMediaScreen = builder } }
+    func mediaPreviewScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
 
     /// Replaces the default Error Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func errorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { setAndReturnSelf { $0.config.errorScreen = builder } }
+    func errorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
 }
 
 // MARK: - Actions
 public extension MCameraController {
     /// Sets the action to be triggered when the photo is taken. Passes the captured content as an argument
-    func onImageCaptured(_ action: @escaping (UIImage, MController) -> ()) -> Self { setAndReturnSelf { $0.config.imageCapturedAction = action } }
+    func onImageCaptured(_ action: @escaping (UIImage, MController) -> ()) -> Self { config.imageCapturedAction = action; return self }
 
     /// Sets the action to be triggered when the video is taken. Passes the captured content as an argument
-    func onVideoCaptured(_ action: @escaping (URL, MController) -> ()) -> Self { setAndReturnSelf { $0.config.videoCapturedAction = action } }
+    func onVideoCaptured(_ action: @escaping (URL, MController) -> ()) -> Self { config.videoCapturedAction = action; return self }
 
     /// Determines what happens when the Camera Controller should be closed
-    func onCloseController(_ action: @escaping () -> ()) -> Self { setAndReturnSelf { $0.config.closeCameraControllerAction = action } }
+    func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeCameraControllerAction = action; return self }
 }
 
 // MARK: - Others
 public extension MCameraController {
     /// Locks the camera interface in portrait orientation (even if device screen rotation is enabled).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { setAndReturnSelf { $0.config.appDelegate = appDelegate; $0.cameraManager.attributes.orientationLocked = true } }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; cameraManager.attributes.orientationLocked = true; return self }
 }
 
 
 
 public extension MCameraController {
-    func outputType(_ type: CameraOutputType) -> Self { setAndReturnSelf { $0.cameraManager.attributes.outputType = type } }
-    func cameraPosition(_ position: CameraPosition) -> Self { setAndReturnSelf { $0.cameraManager.attributes.cameraPosition = position } }
-    func cameraFilters(_ filters: [CIFilter]) -> Self { setAndReturnSelf { $0.cameraManager.attributes.cameraFilters = filters } }
-    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { setAndReturnSelf { $0.cameraManager.attributes.resolution = resolution } }
-    func frameRate(_ frameRate: Int32) -> Self { setAndReturnSelf { $0.cameraManager.attributes.frameRate = frameRate } }
-    func flashMode(_ mode: CameraFlashMode) -> Self { setAndReturnSelf { $0.cameraManager.attributes.flashMode = mode } }
-    func gridVisibility(_ isVisible: Bool) -> Self { setAndReturnSelf { $0.cameraManager.attributes.isGridVisible = isVisible } }
+    func outputType(_ type: CameraOutputType) -> Self { cameraManager.attributes.outputType = type; return self }
+    func cameraPosition(_ position: CameraPosition) -> Self { cameraManager.attributes.cameraPosition = position; return self }
+    func cameraFilters(_ filters: [CIFilter]) -> Self { cameraManager.attributes.cameraFilters = filters; return self }
+    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { cameraManager.attributes.resolution = resolution; return self }
+    func frameRate(_ frameRate: Int32) -> Self { self.cameraManager.attributes.frameRate = frameRate; return self }
+    func flashMode(_ mode: CameraFlashMode) -> Self { cameraManager.attributes.flashMode = mode; return self }
+    func gridVisibility(_ isVisible: Bool) -> Self { cameraManager.attributes.isGridVisible = isVisible; return self }
 
-    func focusImage(_ image: UIImage) -> Self {  setAndReturnSelf { $0.cameraManager.cameraMetalView.focusIndicatorConfig.image = image } }
-    func focusImageColor(_ color: UIColor) -> Self {  setAndReturnSelf { $0.cameraManager.cameraMetalView.focusIndicatorConfig.tintColor = color } }
-    func focusImageSize(_ size: CGFloat) -> Self {  setAndReturnSelf { $0.cameraManager.cameraMetalView.focusIndicatorConfig.size = size } }
+    func focusImage(_ image: UIImage) -> Self {  cameraManager.cameraMetalView.focusIndicatorConfig.image = image; return self }
+    func focusImageColor(_ color: UIColor) -> Self {  cameraManager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
+    func focusImageSize(_ size: CGFloat) -> Self {  cameraManager.cameraMetalView.focusIndicatorConfig.size = size; return self }
 }
 
 
 
 public extension MCameraController {
-    func start() -> some View { setAndReturnSelf { $0.config.isCameraControllerConfigured = true } }
+    func start() -> some View { config.isCameraControllerConfigured = true; return self }
 }
 
 
