@@ -34,14 +34,9 @@ struct DefaultCameraErrorScreen: MCameraErrorScreen {
 }
 private extension DefaultCameraErrorScreen {
     func createCloseButton() -> some View {
-        Button(action: closeControllerAction) {
-            Image(.mijickIconCancel)
-                .resizable()
-                .frame(width: 24, height: 24)
-                .foregroundColor(Color(.mijickBackgroundInverted))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.leading, 20)
+        CloseButton(action: closeControllerAction)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 20)
     }
     func createTitle() -> some View {
         Text(getDefaultTitle())
