@@ -28,3 +28,19 @@ public extension DefaultCameraScreen {
     func flipButtonVisible(_ value: Bool) -> Self { config.flipButtonAllowed = value; return self }
     func flashButtonVisible(_ value: Bool) -> Self { config.flashButtonAllowed = value; return self }
 }
+
+
+
+@MainActor public struct MController {
+    let cameraController: MCameraController
+}
+
+
+public extension MController {
+    func closeController() {
+        cameraController.config.closeCameraControllerAction()
+    }
+    func back() {
+        cameraController.cameraManager.attributes.capturedMedia = nil
+    }
+}

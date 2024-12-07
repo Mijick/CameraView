@@ -84,22 +84,3 @@ private extension MCameraController {
         else if let video = capturedMedia.getVideo() { config.videoCapturedAction(video, .init(cameraController: self)) }
     }
 }
-
-
-
-
-
-
-@MainActor public struct MController {
-    let cameraController: MCameraController
-}
-
-
-public extension MController {
-    func closeController() {
-        cameraController.config.closeCameraControllerAction()
-    }
-    func back() {
-        cameraController.cameraManager.attributes.capturedMedia = nil
-    }
-}
