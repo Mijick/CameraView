@@ -15,7 +15,7 @@ extension MCameraController { @MainActor struct Config {
     // MARK: Screens
     var cameraScreen: CameraScreenBuilder = DefaultCameraScreen.init
     var capturedMediaScreen: CapturedMediaScreenBuilder? = DefaultCapturedMediaScreen.init
-    var errorScreen: ErrorScreenBuilder = DefaultCameraErrorView.init
+    var errorScreen: ErrorScreenBuilder = DefaultCameraErrorScreen.init
 
     // MARK: Actions
     var imageCapturedAction: (UIImage, MController) -> () = { _,_ in }

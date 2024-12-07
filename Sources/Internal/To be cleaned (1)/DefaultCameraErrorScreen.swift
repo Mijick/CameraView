@@ -1,5 +1,5 @@
 //
-//  DefaultCameraErrorView.swift of MijickCamera
+//  DefaultCameraErrorScreen.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-struct DefaultCameraErrorView: MCameraErrorScreen {
+struct DefaultCameraErrorScreen: MCameraErrorScreen {
     let error: MijickCameraError
     let closeControllerAction: () -> ()
 
@@ -32,7 +32,7 @@ struct DefaultCameraErrorView: MCameraErrorScreen {
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
     }
 }
-private extension DefaultCameraErrorView {
+private extension DefaultCameraErrorScreen {
     func createCloseButton() -> some View {
         Button(action: closeControllerAction) {
             Image(.mijickIconCancel)
@@ -71,7 +71,7 @@ private extension DefaultCameraErrorView {
 
 
 
-extension DefaultCameraErrorView {
+extension DefaultCameraErrorScreen {
     func getDefaultTitle() -> String { switch error {
         case .microphonePermissionsNotGranted: NSLocalizedString("Enable Microphone Access", comment: "")
         case .cameraPermissionsNotGranted: NSLocalizedString("Enable Camera Access", comment: "")
