@@ -41,6 +41,6 @@ public extension MController {
         cameraController.config.closeCameraControllerAction()
     }
     func back() {
-        cameraController.cameraManager.attributes.capturedMedia = nil
+        cameraController.cameraManager.setCapturedMedia(nil)
     }
 }

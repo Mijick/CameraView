@@ -24,6 +24,7 @@ public struct DefaultCameraScreen: MCameraScreen {
             createTopBar()
             createBottomBar()
         }
+        .matchedGeometryEffect(id: "content", in: namespace)
         .ignoresSafeArea()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
@@ -43,7 +44,6 @@ private extension DefaultCameraScreen {
     func createContentView() -> some View {
         createCameraView()
             .ignoresSafeArea()
-            .matchedGeometryEffect(id: "content", in: namespace)
     }
     func createBottomBar() -> some View {
         DefaultCameraScreen.BottomBar(parent: self)

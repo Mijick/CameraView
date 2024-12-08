@@ -22,7 +22,6 @@ public struct MCameraController: View {
             case .some(let error): createErrorStateView(error)
             case nil: createNormalStateView()
         }}
-        .animation(.mijickSpring, value: cameraManager.attributes.capturedMedia)
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
         .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)
@@ -72,7 +71,7 @@ private extension MCameraController {
         config.appDelegate?.orientationLock = .all
     }
     func resetCapturedMedia() {
-        cameraManager.attributes.capturedMedia = nil
+        cameraManager.setCapturedMedia(nil)
     }
     func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
         notifyUserOfMediaCaptured(capturedMedia)

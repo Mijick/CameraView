@@ -97,7 +97,8 @@ private extension CameraManagerVideo {
 }
 private extension CameraManagerVideo {
     func presentLastFrame() {
-        parent.attributes.capturedMedia = .init(data: firstRecordedFrame)
+        let firstRecordedFrame = MCameraMedia(data: firstRecordedFrame)
+        parent.setCapturedMedia(firstRecordedFrame)
     }
 }
 
