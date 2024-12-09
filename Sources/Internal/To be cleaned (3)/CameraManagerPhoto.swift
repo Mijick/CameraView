@@ -42,7 +42,7 @@ extension CameraManagerPhoto {
 private extension CameraManagerPhoto {
     func getPhotoOutputSettings() -> AVCapturePhotoSettings {
         let settings = AVCapturePhotoSettings()
-        settings.flashMode = parent.attributes.flashMode.get()
+        settings.flashMode = parent.attributes.flashMode.toDeviceFlashMode()
         return settings
     }
     func configureOutput() {
