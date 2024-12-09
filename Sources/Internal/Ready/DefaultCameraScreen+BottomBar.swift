@@ -24,6 +24,7 @@ extension DefaultCameraScreen { struct BottomBar: View {
         .frame(maxWidth: .infinity)
         .padding(.bottom, 44)
         .padding(.horizontal, 32)
+        .onAppear { isInitialized = true }
     }
 }}
 private extension DefaultCameraScreen.BottomBar {
