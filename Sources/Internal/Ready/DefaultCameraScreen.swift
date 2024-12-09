@@ -14,7 +14,7 @@ import SwiftUI
 public struct DefaultCameraScreen: MCameraScreen {
     @ObservedObject public var cameraManager: CameraManager
     public let namespace: Namespace.ID
-    public let closeControllerAction: () -> ()
+    public let closeMCameraAction: () -> ()
     var config: Config = .init()
 
 

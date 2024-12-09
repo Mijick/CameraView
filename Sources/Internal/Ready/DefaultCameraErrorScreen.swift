@@ -13,7 +13,7 @@ import SwiftUI
 
 struct DefaultCameraErrorScreen: MCameraErrorScreen {
     let error: MijickCameraError
-    let closeControllerAction: () -> ()
+    let closeMCameraAction: () -> ()
 
 
     var body: some View {
@@ -34,7 +34,7 @@ struct DefaultCameraErrorScreen: MCameraErrorScreen {
 }
 private extension DefaultCameraErrorScreen {
     func createCloseButton() -> some View {
-        CloseButton(action: closeControllerAction)
+        CloseButton(action: closeMCameraAction)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 20)
     }

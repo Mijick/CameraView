@@ -52,7 +52,7 @@ private extension MCamera {
 
 
 
-// MARK: Controller
+// MARK: MCamera
 private extension MCamera {
     func onAppear() {
         lockScreenOrientation()

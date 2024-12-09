@@ -13,8 +13,8 @@ import SwiftUI
 
 // MARK: Initializer
 public extension DefaultCameraScreen {
-    init(cameraManager: CameraManager, namespace: Namespace.ID, closeControllerAction: @escaping () -> Void) {
-        self.init(cameraManager: cameraManager, namespace: namespace, closeControllerAction: closeControllerAction, config: .init())
+    init(cameraManager: CameraManager, namespace: Namespace.ID, closeMCameraAction: @escaping () -> Void) {
+        self.init(cameraManager: cameraManager, namespace: namespace, closeMCameraAction: closeMCameraAction, config: .init())
     }
 }
 

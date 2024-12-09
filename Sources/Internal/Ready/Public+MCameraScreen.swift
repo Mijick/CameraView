@@ -16,7 +16,7 @@ import MijickTimer
 public protocol MCameraScreen: View {
     var cameraManager: CameraManager { get }
     var namespace: Namespace.ID { get }
-    var closeControllerAction: () -> () { get }
+    var closeMCameraAction: () -> () { get }
 }
 
 // MARK: Methods

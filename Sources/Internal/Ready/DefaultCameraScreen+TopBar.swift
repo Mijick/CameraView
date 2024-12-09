@@ -31,7 +31,7 @@ extension DefaultCameraScreen { struct TopBar: View {
 }}
 private extension DefaultCameraScreen.TopBar {
     @ViewBuilder func createCloseButton() -> some View { if isCloseButtonActive {
-        CloseButton(action: parent.closeControllerAction)
+        CloseButton(action: parent.closeMCameraAction)
             .frame(maxWidth: .infinity, alignment: .leading)
     }}
     @ViewBuilder func createCentralView() -> some View { if isCentralViewActive {
