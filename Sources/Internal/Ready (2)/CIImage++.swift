@@ -11,7 +11,6 @@
 
 import SwiftUI
 
-// MARK: Applying Filters
 extension CIImage {
     func applyingFilters(_ filters: [CIFilter]) -> CIImage {
         var ciImage = self
