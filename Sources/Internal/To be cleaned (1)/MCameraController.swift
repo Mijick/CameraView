@@ -36,7 +36,7 @@ private extension MCameraController {
         config.errorScreen(error, config.closeCameraControllerAction).erased()
     }
     func createCapturedMediaScreen(_ media: MCameraMedia) -> some View {
-        config.capturedMediaScreen?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction)
+        config.capturedMediaScreen?(media, namespace, onCapturedMediaRejected, onCapturedMediaAccepted)
             .erased()
     }
     func createCameraScreen() -> some View {
@@ -93,10 +93,10 @@ private extension MCameraController {
 
 // MARK: Captured Media Screen
 private extension MCameraController {
-    func resetCapturedMedia() {
+    func onCapturedMediaRejected() {
         cameraManager.setCapturedMedia(nil)
     }
-    func performAfterMediaCapturedAction() {
+    func onCapturedMediaAccepted() {
         guard let capturedMedia = cameraManager.attributes.capturedMedia else { return }
         notifyUserOfMediaCaptured(capturedMedia)
     }
