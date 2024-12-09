@@ -29,7 +29,7 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .animation(.mijickSpring, value: isInitialized)
-        .onAppear(perform: onAppear)
+        .onAppear { isInitialized = true }
     }
 }
 private extension DefaultCapturedMediaScreen {
@@ -83,9 +83,6 @@ private extension DefaultCapturedMediaScreen {
 }
 
 private extension DefaultCapturedMediaScreen {
-    func onAppear() {
-        isInitialized = true
-    }
     func onVideoAppear(_ url: URL) {
         player = .init(url: url)
         player.play()

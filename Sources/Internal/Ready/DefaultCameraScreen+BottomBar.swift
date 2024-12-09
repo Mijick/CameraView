@@ -91,8 +91,8 @@ private extension DefaultCameraScreen.BottomBar {
     var changeCameraPositionButtonIconColor: Color { .init(.mijickBackgroundInverted) }
 }
 private extension DefaultCameraScreen.BottomBar {
-    var isOutputTypeSwitchActive: Bool { parent.config.cameraOutputSwitchAllowed && parent.cameraManager.captureSession.isRunning && !parent.isRecording }
-    var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight }
-    var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed && parent.cameraManager.captureSession.isRunning }
-    var isChangeCameraPositionButtonActive: Bool { parent.config.cameraPositionButtonAllowed && !parent.isRecording }
+    var isOutputTypeSwitchActive: Bool { parent.config.cameraOutputSwitchAllowed && parent.cameraManager.captureSession.isRunning && !parent.isRecording && isInitialized }
+    var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight && parent.cameraManager.captureSession.isRunning && !parent.isRecording && isInitialized }
+    var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed && parent.cameraManager.captureSession.isRunning && isInitialized }
+    var isChangeCameraPositionButtonActive: Bool { parent.config.cameraPositionButtonAllowed && parent.cameraManager.captureSession.isRunning && !parent.isRecording && isInitialized }
 }
