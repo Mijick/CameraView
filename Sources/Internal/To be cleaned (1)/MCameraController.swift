@@ -43,6 +43,7 @@ private extension MCameraController {
     func createCameraView() -> some View {
         config.cameraScreen(cameraManager, namespace, config.closeCameraControllerAction)
             .erased()
+            .onAppear(perform: onCameraAppear)
             .onDisappear(perform: cameraManager.cancel)
     }
 }
@@ -51,6 +52,10 @@ private extension MCameraController {
     func onAppear() {
         lockScreenOrientation()
     }
+    func onCameraAppear() { Task {
+        do { try await cameraManager.setup() }
+        catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
+    }}
     func onDisappear() {
         unlockScreenOrientation()
         cameraManager.cancel()

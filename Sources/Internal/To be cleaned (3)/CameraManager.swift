@@ -45,12 +45,19 @@ import AVKit
     }
 }
 
+// MARK: Preinitialize
+extension CameraManager {
+    func preinitialize(in view: UIView) {
+        cameraView = view
+    }
+}
+
 // MARK: Setup
 extension CameraManager {
-    func setup(in cameraView: UIView) async throws {
+    func setup() async throws {
         try await permissionsManager.requestAccess(parent: self)
 
-        setupCameraLayer(cameraView)
+        setupCameraLayer()
         try setupDeviceInputs()
         try setupDeviceOutput()
         try setupFrameRecorder()
@@ -63,8 +70,7 @@ extension CameraManager {
     }
 }
 private extension CameraManager {
-    func setupCameraLayer(_ superview: UIView) {
-        cameraView = superview
+    func setupCameraLayer() {
         captureSession.sessionPreset = attributes.resolution
 
         cameraLayer.session = captureSession as? AVCaptureSession

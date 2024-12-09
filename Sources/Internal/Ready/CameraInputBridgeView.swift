@@ -26,10 +26,6 @@ extension CameraInputBridgeView {
     func makeCoordinator() -> Coordinator { .init(self) }
 }
 private extension CameraInputBridgeView {
-    func setupCameraManager() { Task {
-        do { try await cameraManager.setup(in: inputView) }
-        catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
-    }}
     func setupTapGesture(_ context: Context) {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
         inputView.addGestureRecognizer(tapRecognizer)
