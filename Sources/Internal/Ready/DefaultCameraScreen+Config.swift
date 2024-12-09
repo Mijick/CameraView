@@ -9,6 +9,8 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
+import Foundation
+
 extension DefaultCameraScreen { class Config {
     var captureButtonAllowed: Bool = true
     var cameraOutputSwitchAllowed: Bool = true

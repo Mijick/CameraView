@@ -18,5 +18,5 @@ import Foundation
 // MARK: Available Actions
 public extension MCameraController {
     func closeMCamera() { mCamera.config.closeMCameraAction() }
-    func openCameraScreen() { mCamera.manager.setCapturedMedia(nil) }
+    func reopenCameraScreen() { mCamera.manager.setCapturedMedia(nil) }
 }
