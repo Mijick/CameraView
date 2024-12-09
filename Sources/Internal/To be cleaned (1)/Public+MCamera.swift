@@ -65,22 +65,9 @@ public extension MCamera {
     func setCameraFilters(_ filters: [CIFilter]) -> Self { manager.attributes.cameraFilters = filters; return self }
     func setMirrorOutput(_ shouldMirror: Bool) -> Self { manager.attributes.mirrorOutput = shouldMirror; return self }
     func setGridVisibility(_ shouldShowGrid: Bool) -> Self { manager.attributes.isGridVisible = shouldShowGrid; return self }
-
-
-
-
-
-    func outputType(_ type: CameraOutputType) -> Self { manager.attributes.outputType = type; return self }
-    func cameraPosition(_ position: CameraPosition) -> Self { manager.attributes.cameraPosition = position; return self }
-    func cameraFilters(_ filters: [CIFilter]) -> Self { manager.attributes.cameraFilters = filters; return self }
-    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { manager.attributes.resolution = resolution; return self }
-    func frameRate(_ frameRate: Int32) -> Self { self.manager.attributes.frameRate = frameRate; return self }
-    func flashMode(_ mode: CameraFlashMode) -> Self { manager.attributes.flashMode = mode; return self }
-    func gridVisibility(_ isVisible: Bool) -> Self { manager.attributes.isGridVisible = isVisible; return self }
-
-    func focusImage(_ image: UIImage) -> Self {  manager.cameraMetalView.focusIndicatorConfig.image = image; return self }
-    func focusImageColor(_ color: UIColor) -> Self {  manager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
-    func focusImageSize(_ size: CGFloat) -> Self {  manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
+    func setFocusImage(_ image: UIImage) -> Self { manager.cameraMetalView.focusIndicatorConfig.image = image; return self }
+    func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
+    func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
 }
 
 
