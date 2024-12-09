@@ -29,7 +29,6 @@ private extension DefaultCameraScreen.BottomBar {
     @ViewBuilder func createOutputTypeSwitch() -> some View { if isOutputTypeSwitchActive {
         DefaultCameraScreen.CameraOutputSwitch(parent: parent)
             .offset(y: -80)
-            .transition(.scale)
     }}
     func createButtons() -> some View {
         ZStack {
