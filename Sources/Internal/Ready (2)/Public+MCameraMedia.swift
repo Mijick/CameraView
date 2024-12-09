@@ -28,7 +28,6 @@ public extension MCameraMedia {
     func getVideo() -> URL? { video }
 }
 
-
 // MARK: Equatable
 extension MCameraMedia: Equatable {
     public static func == (lhs: MCameraMedia, rhs: MCameraMedia) -> Bool { lhs.image == rhs.image && lhs.video == rhs.video }
