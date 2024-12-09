@@ -21,7 +21,7 @@ public struct MCameraController: View {
         ZStack(content: createContent)
             .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
-            .onChange(of: cameraManager.attributes.capturedMedia, perform: onMediaCaptured)
+            .onChange(of: cameraManager.attributes.capturedMedia, perform: notifyUserOfMediaCaptured)
     }}
 }
 private extension MCameraController {
@@ -74,14 +74,6 @@ private extension MCameraController {
     func onCameraDisappear() {
         cameraManager.cancel()
     }
-
-
-    func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
-        switch config.capturedMediaScreen != nil {
-            case true: return
-            case false: performAfterMediaCapturedAction()
-        }
-    }}
 }
 private extension MCameraController {
 
@@ -94,8 +86,8 @@ private extension MCameraController {
     }}
 }
 private extension MCameraController {
-    func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.getImage() { config.imageCapturedAction(image, .init(cameraController: self)) }
-        else if let video = capturedMedia.getVideo() { config.videoCapturedAction(video, .init(cameraController: self)) }
+    func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia?) {
+        if let image = capturedMedia?.getImage() { config.imageCapturedAction(image, .init(cameraController: self)) }
+        else if let video = capturedMedia?.getVideo() { config.videoCapturedAction(video, .init(cameraController: self)) }
     }
 }
