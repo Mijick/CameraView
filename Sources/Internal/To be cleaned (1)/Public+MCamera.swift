@@ -24,35 +24,20 @@ public extension MCamera {
 
 // MARK: - Changing Default Views
 public extension MCamera {
-    /// Replaces the default Camera Screen with a new one of your choice (pass the initialiser as an argument of this method).
-    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func cameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
-
-    /// Replaces the default Media Preview Screen with a new one of your choice (pass the initialiser as an argument of this method).
-    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func mediaPreviewScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
-
-    /// Replaces the default Error Screen with a new one of your choice (pass the initialiser as an argument of this method).
-    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func errorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
 }
 
 // MARK: - Actions
 public extension MCamera {
-    /// Sets the action to be triggered when the photo is taken. Passes the captured content as an argument
     func onImageCaptured(_ action: @escaping (UIImage, MCameraController) -> ()) -> Self { config.imageCapturedAction = action; return self }
-
-    /// Sets the action to be triggered when the video is taken. Passes the captured content as an argument
     func onVideoCaptured(_ action: @escaping (URL, MCameraController) -> ()) -> Self { config.videoCapturedAction = action; return self }
-
-    /// Determines what happens when the Camera Controller should be closed
     func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
 }
 
 // MARK: - Others
 public extension MCamera {
-    /// Locks the camera interface in portrait orientation (even if device screen rotation is enabled).
-    /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
 }
 
