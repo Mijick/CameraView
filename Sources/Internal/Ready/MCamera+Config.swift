@@ -1,5 +1,5 @@
 //
-//  MCameraView+Config.swift of MijickCamera
+//  MCamera+Config.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-extension MCameraView { @MainActor class Config {
+extension MCamera { @MainActor class Config {
     // MARK: Screens
     var cameraScreen: CameraScreenBuilder = DefaultCameraScreen.init
     var capturedMediaScreen: CapturedMediaScreenBuilder? = DefaultCapturedMediaScreen.init
@@ -20,7 +20,7 @@ extension MCameraView { @MainActor class Config {
     // MARK: Actions
     var imageCapturedAction: (UIImage, MController) -> () = { _,_ in }
     var videoCapturedAction: (URL, MController) -> () = { _,_ in }
-    var closeCameraViewAction: () -> () = {}
+    var closeMCameraAction: () -> () = {}
 
     // MARK: Others
     var appDelegate: MApplicationDelegate.Type? = nil

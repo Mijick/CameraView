@@ -1,5 +1,5 @@
 //
-//  MCameraView.swift of MijickCamera
+//  MCamera.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-public struct MCameraView: View {
+public struct MCamera: View {
     @ObservedObject var manager: CameraManager
     @Namespace var namespace
     var config: Config = .init()
@@ -24,23 +24,23 @@ public struct MCameraView: View {
             .onChange(of: manager.attributes.capturedMedia, perform: onCapturedMediaChange)
     }}
 }
-private extension MCameraView {
+private extension MCamera {
     @ViewBuilder func createContent() -> some View {
         if let error = manager.attributes.error { createErrorScreen(error) }
         else if let capturedMedia = manager.attributes.capturedMedia, config.capturedMediaScreen != nil { createCapturedMediaScreen(capturedMedia) }
         else { createCameraScreen() }
     }
 }
-private extension MCameraView {
+private extension MCamera {
     func createErrorScreen(_ error: MijickCameraError) -> some View {
-        config.errorScreen(error, config.closeCameraViewAction).erased()
+        config.errorScreen(error, config.closeMCameraAction).erased()
     }
     func createCapturedMediaScreen(_ media: MCameraMedia) -> some View {
         config.capturedMediaScreen?(media, namespace, onCapturedMediaRejected, onCapturedMediaAccepted)
             .erased()
     }
     func createCameraScreen() -> some View {
-        config.cameraScreen(manager, namespace, config.closeCameraViewAction)
+        config.cameraScreen(manager, namespace, config.closeMCameraAction)
             .erased()
             .onAppear(perform: onCameraAppear)
             .onDisappear(perform: onCameraDisappear)
@@ -53,7 +53,7 @@ private extension MCameraView {
 
 
 // MARK: Controller
-private extension MCameraView {
+private extension MCamera {
     func onAppear() {
         lockScreenOrientation()
     }
@@ -66,7 +66,7 @@ private extension MCameraView {
         notifyUserOfMediaCaptured(capturedMedia)
     }
 }
-private extension MCameraView {
+private extension MCamera {
     func lockScreenOrientation() {
         config.appDelegate?.orientationLock = .portrait
         UINavigationController.attemptRotationToDeviceOrientation()
@@ -75,13 +75,13 @@ private extension MCameraView {
         config.appDelegate?.orientationLock = .all
     }
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
-        if let image = capturedMedia.getImage() { config.imageCapturedAction(image, .init(cameraView: self)) }
-        else if let video = capturedMedia.getVideo() { config.videoCapturedAction(video, .init(cameraView: self)) }
+        if let image = capturedMedia.getImage() { config.imageCapturedAction(image, .init(mCamera: self)) }
+        else if let video = capturedMedia.getVideo() { config.videoCapturedAction(video, .init(mCamera: self)) }
     }
 }
 
 // MARK: Camera Screen
-private extension MCameraView {
+private extension MCamera {
     func onCameraAppear() { Task {
         do { try await manager.setup() }
         catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
@@ -92,7 +92,7 @@ private extension MCameraView {
 }
 
 // MARK: Captured Media Screen
-private extension MCameraView {
+private extension MCamera {
     func onCapturedMediaRejected() {
         manager.setCapturedMedia(nil)
     }
