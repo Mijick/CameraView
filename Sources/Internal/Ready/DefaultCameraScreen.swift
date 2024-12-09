@@ -38,7 +38,6 @@ private extension DefaultCameraScreen {
     }
     func createContentView() -> some View {
         createCameraView()
-            .matchedGeometryEffect(id: "content", in: namespace)
             .ignoresSafeArea()
     }
     func createBottomBar() -> some View {
