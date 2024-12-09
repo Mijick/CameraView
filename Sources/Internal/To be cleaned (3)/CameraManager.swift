@@ -45,9 +45,9 @@ import AVKit
     }
 }
 
-// MARK: Preinitialize
+// MARK: Initialize
 extension CameraManager {
-    func preinitialize(in view: UIView) {
+    func initialize(in view: UIView) {
         cameraView = view
     }
 }

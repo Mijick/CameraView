@@ -17,7 +17,7 @@ struct CameraInputBridgeView: UIViewRepresentable {
 }
 extension CameraInputBridgeView {
     func makeUIView(context: Context) -> some UIView {
-        cameraManager.preinitialize(in: inputView)
+        cameraManager.initialize(in: inputView)
         setupTapGesture(context)
         setupPinchGesture(context)
         return inputView
