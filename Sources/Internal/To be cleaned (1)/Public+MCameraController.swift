@@ -40,10 +40,10 @@ public extension MCamera {
 // MARK: - Actions
 public extension MCamera {
     /// Sets the action to be triggered when the photo is taken. Passes the captured content as an argument
-    func onImageCaptured(_ action: @escaping (UIImage, MController) -> ()) -> Self { config.imageCapturedAction = action; return self }
+    func onImageCaptured(_ action: @escaping (UIImage, MCameraController) -> ()) -> Self { config.imageCapturedAction = action; return self }
 
     /// Sets the action to be triggered when the video is taken. Passes the captured content as an argument
-    func onVideoCaptured(_ action: @escaping (URL, MController) -> ()) -> Self { config.videoCapturedAction = action; return self }
+    func onVideoCaptured(_ action: @escaping (URL, MCameraController) -> ()) -> Self { config.videoCapturedAction = action; return self }
 
     /// Determines what happens when the Camera Controller should be closed
     func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
