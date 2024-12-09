@@ -1,24 +1,24 @@
 //
 //  Public+DefaultCameraScreen.swift of MijickCameraView
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import SwiftUI
 
-// MARK: - Initialiser
+// MARK: Initializer
 public extension DefaultCameraScreen {
     init(cameraManager: CameraManager, namespace: Namespace.ID, closeControllerAction: @escaping () -> Void) {
         self.init(cameraManager: cameraManager, namespace: namespace, closeControllerAction: closeControllerAction, config: .init())
     }
 }
 
-// MARK: - Customising View
+// MARK: Customising View
 public extension DefaultCameraScreen {
     func outputTypePickerVisible(_ value: Bool) -> Self { config.cameraOutputSwitchAllowed = value; return self }
     func lightButtonVisible(_ value: Bool) -> Self { config.lightButtonAllowed = value; return self }
