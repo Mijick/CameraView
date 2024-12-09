@@ -22,21 +22,26 @@ public extension MCamera {
     ))}
 }
 
-// MARK: - Changing Default Views
+
+// MARK: - METHODS
+
+
+
+// MARK: Changing Default Screens
 public extension MCamera {
-    func cameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
-    func mediaPreviewScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
-    func errorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
+    func setCameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
+    func setCapturedMediaScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
+    func setErrorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
 }
 
-// MARK: - Actions
+// MARK: Actions
 public extension MCamera {
     func onImageCaptured(_ action: @escaping (UIImage, MCameraController) -> ()) -> Self { config.imageCapturedAction = action; return self }
     func onVideoCaptured(_ action: @escaping (URL, MCameraController) -> ()) -> Self { config.videoCapturedAction = action; return self }
     func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
 }
 
-// MARK: - Others
+// MARK: Others
 public extension MCamera {
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
 }
