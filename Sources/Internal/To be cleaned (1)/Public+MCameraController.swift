@@ -13,8 +13,8 @@ import SwiftUI
 import AVKit
 
 // MARK: - Initialiser
-public extension MCameraController {
-    init() { self.init(cameraManager: .init(
+public extension MCameraView {
+    init() { self.init(manager: .init(
         captureSession: AVCaptureSession(),
         fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
         backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
@@ -23,7 +23,7 @@ public extension MCameraController {
 }
 
 // MARK: - Changing Default Views
-public extension MCameraController {
+public extension MCameraView {
     /// Replaces the default Camera Screen with a new one of your choice (pass the initialiser as an argument of this method).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
     func cameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
@@ -38,7 +38,7 @@ public extension MCameraController {
 }
 
 // MARK: - Actions
-public extension MCameraController {
+public extension MCameraView {
     /// Sets the action to be triggered when the photo is taken. Passes the captured content as an argument
     func onImageCaptured(_ action: @escaping (UIImage, MController) -> ()) -> Self { config.imageCapturedAction = action; return self }
 
@@ -50,31 +50,31 @@ public extension MCameraController {
 }
 
 // MARK: - Others
-public extension MCameraController {
+public extension MCameraView {
     /// Locks the camera interface in portrait orientation (even if device screen rotation is enabled).
     /// For more information, see the project documentation (https://github.com/Mijick/CameraView)
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; cameraManager.attributes.orientationLocked = true; return self }
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
 }
 
 
 
-public extension MCameraController {
-    func outputType(_ type: CameraOutputType) -> Self { cameraManager.attributes.outputType = type; return self }
-    func cameraPosition(_ position: CameraPosition) -> Self { cameraManager.attributes.cameraPosition = position; return self }
-    func cameraFilters(_ filters: [CIFilter]) -> Self { cameraManager.attributes.cameraFilters = filters; return self }
-    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { cameraManager.attributes.resolution = resolution; return self }
-    func frameRate(_ frameRate: Int32) -> Self { self.cameraManager.attributes.frameRate = frameRate; return self }
-    func flashMode(_ mode: CameraFlashMode) -> Self { cameraManager.attributes.flashMode = mode; return self }
-    func gridVisibility(_ isVisible: Bool) -> Self { cameraManager.attributes.isGridVisible = isVisible; return self }
+public extension MCameraView {
+    func outputType(_ type: CameraOutputType) -> Self { manager.attributes.outputType = type; return self }
+    func cameraPosition(_ position: CameraPosition) -> Self { manager.attributes.cameraPosition = position; return self }
+    func cameraFilters(_ filters: [CIFilter]) -> Self { manager.attributes.cameraFilters = filters; return self }
+    func resolution(_ resolution: AVCaptureSession.Preset) -> Self { manager.attributes.resolution = resolution; return self }
+    func frameRate(_ frameRate: Int32) -> Self { self.manager.attributes.frameRate = frameRate; return self }
+    func flashMode(_ mode: CameraFlashMode) -> Self { manager.attributes.flashMode = mode; return self }
+    func gridVisibility(_ isVisible: Bool) -> Self { manager.attributes.isGridVisible = isVisible; return self }
 
-    func focusImage(_ image: UIImage) -> Self {  cameraManager.cameraMetalView.focusIndicatorConfig.image = image; return self }
-    func focusImageColor(_ color: UIColor) -> Self {  cameraManager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
-    func focusImageSize(_ size: CGFloat) -> Self {  cameraManager.cameraMetalView.focusIndicatorConfig.size = size; return self }
+    func focusImage(_ image: UIImage) -> Self {  manager.cameraMetalView.focusIndicatorConfig.image = image; return self }
+    func focusImageColor(_ color: UIColor) -> Self {  manager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
+    func focusImageSize(_ size: CGFloat) -> Self {  manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
 }
 
 
 
-public extension MCameraController {
+public extension MCameraView {
     func start() -> some View { config.isCameraControllerConfigured = true; return self }
 }
 

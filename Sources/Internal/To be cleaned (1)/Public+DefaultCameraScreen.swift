@@ -1,5 +1,5 @@
 //
-//  Public+DefaultCameraScreen.swift of MijickCameraView
+//  Public+DefaultCameraScreen.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -32,11 +32,11 @@ public extension DefaultCameraScreen {
 
 
 @MainActor public struct MController {
-    let cameraController: MCameraController
+    let cameraView: MCameraView
 }
 
 // MARK: Available Actions
 public extension MController {
-    func closeCameraController() { cameraController.config.closeCameraControllerAction() }
-    func openCameraScreen() { cameraController.cameraManager.setCapturedMedia(nil) }
+    func closeCameraController() { cameraView.config.closeCameraControllerAction() }
+    func openCameraScreen() { cameraView.manager.setCapturedMedia(nil) }
 }
