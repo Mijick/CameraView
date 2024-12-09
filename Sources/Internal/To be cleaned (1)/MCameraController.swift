@@ -47,6 +47,12 @@ private extension MCameraController {
     }
 }
 
+
+// MARK: - ACTIONS
+
+
+
+// MARK: Controller
 private extension MCameraController {
     func onAppear() {
         lockScreenOrientation()
@@ -70,6 +76,7 @@ private extension MCameraController {
     }
 }
 
+// MARK: Camera Screen
 private extension MCameraController {
     func onCameraAppear() { Task {
         do { try await cameraManager.setup() }
@@ -79,16 +86,14 @@ private extension MCameraController {
         cameraManager.cancel()
     }
 }
+
+// MARK: Captured Media Screen
 private extension MCameraController {
-
-
     func resetCapturedMedia() {
         cameraManager.setCapturedMedia(nil)
     }
-    func performAfterMediaCapturedAction() { if let capturedMedia = cameraManager.attributes.capturedMedia {
+    func performAfterMediaCapturedAction() {
+        guard let capturedMedia = cameraManager.attributes.capturedMedia else { return }
         notifyUserOfMediaCaptured(capturedMedia)
-    }}
-}
-private extension MCameraController {
-
+    }
 }
