@@ -55,6 +55,10 @@ private extension MCameraController {
         unlockScreenOrientation()
         cameraManager.cancel()
     }
+    func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia?) {
+        if let image = capturedMedia?.getImage() { config.imageCapturedAction(image, .init(cameraController: self)) }
+        else if let video = capturedMedia?.getVideo() { config.videoCapturedAction(video, .init(cameraController: self)) }
+    }
 }
 private extension MCameraController {
     func lockScreenOrientation() {
@@ -86,8 +90,5 @@ private extension MCameraController {
     }}
 }
 private extension MCameraController {
-    func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia?) {
-        if let image = capturedMedia?.getImage() { config.imageCapturedAction(image, .init(cameraController: self)) }
-        else if let video = capturedMedia?.getVideo() { config.videoCapturedAction(video, .init(cameraController: self)) }
-    }
+
 }
