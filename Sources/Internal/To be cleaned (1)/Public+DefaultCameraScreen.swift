@@ -18,17 +18,13 @@ public extension DefaultCameraScreen {
     }
 }
 
-// MARK: Customising View
+// MARK: Methods
 public extension DefaultCameraScreen {
-    func outputTypePickerVisible(_ value: Bool) -> Self { config.cameraOutputSwitchAllowed = value; return self }
-    func lightButtonVisible(_ value: Bool) -> Self { config.lightButtonAllowed = value; return self }
-    func captureButtonVisible(_ value: Bool) -> Self { config.captureButtonAllowed = value; return self }
-    func cameraPositionButtonVisible(_ value: Bool) -> Self { config.cameraPositionButtonAllowed = value; return self }
-    func gridButtonVisible(_ value: Bool) -> Self { config.gridButtonAllowed = value; return self }
-    func flipButtonVisible(_ value: Bool) -> Self { config.flipButtonAllowed = value; return self }
-    func flashButtonVisible(_ value: Bool) -> Self { config.flashButtonAllowed = value; return self }
+    func captureButtonAllowed(_ value: Bool) -> Self { config.captureButtonAllowed = value; return self }
+    func cameraOutputSwitchAllowed(_ value: Bool) -> Self { config.cameraOutputSwitchAllowed = value; return self }
+    func cameraPositionButtonAllowed(_ value: Bool) -> Self { config.cameraPositionButtonAllowed = value; return self }
+    func flashButtonAllowed(_ value: Bool) -> Self { config.flashButtonAllowed = value; return self }
+    func lightButtonAllowed(_ value: Bool) -> Self { config.lightButtonAllowed = value; return self }
+    func flipButtonAllowed(_ value: Bool) -> Self { config.flipButtonAllowed = value; return self }
+    func gridButtonAllowed(_ value: Bool) -> Self { config.gridButtonAllowed = value; return self }
 }
-
-
-
-
