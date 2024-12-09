@@ -18,6 +18,7 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
     let retakeAction: () -> ()
     let acceptMediaAction: () -> ()
     @State private var player: AVPlayer = .init()
+    @State private var isInitialized: Bool = false
 
 
     var body: some View {
@@ -27,13 +28,15 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
+        .animation(.mijickSpring, value: isInitialized)
+        .onAppear(perform: onAppear)
     }
 }
 private extension DefaultCapturedMediaScreen {
-    @ViewBuilder func createContentView() -> some View {
+    @ViewBuilder func createContentView() -> some View { if isInitialized {
         if let image = capturedMedia.getImage() { createImageView(image) }
         else if let video = capturedMedia.getVideo() { createVideoView(video) }
-    }
+    }}
     func createButtons() -> some View {
         HStack(spacing: 32) {
             createRetakeButton()
@@ -49,15 +52,15 @@ private extension DefaultCapturedMediaScreen {
     func createImageView(_ image: UIImage) -> some View {
         Image(uiImage: image)
             .resizable()
-            .matchedGeometryEffect(id: "content", in: namespace)
             .aspectRatio(contentMode: .fit)
             .ignoresSafeArea()
+            .transition(.scale(scale: 1.1))
     }
     func createVideoView(_ video: URL) -> some View {
         VideoPlayer(player: player)
             .onAppear { onVideoAppear(video) }
     }
-    func createRetakeButton() -> some View {
+    @ViewBuilder func createRetakeButton() -> some View { if isInitialized {
         BottomButton(
             icon: .mijickIconCancel,
             iconColor: .init(.mijickBackgroundInverted),
@@ -65,9 +68,9 @@ private extension DefaultCapturedMediaScreen {
             rotationAngle: .zero,
             action: retakeAction
         )
-        .matchedGeometryEffect(id: "left-bottom-button", in: namespace)
-    }
-    func createSaveButton() -> some View {
+        .transition(.scale)
+    }}
+    @ViewBuilder func createSaveButton() -> some View { if isInitialized {
         BottomButton(
             icon: .mijickIconCheck,
             iconColor: .init(.mijickBackgroundPrimary),
@@ -75,11 +78,14 @@ private extension DefaultCapturedMediaScreen {
             rotationAngle: .zero,
             action: acceptMediaAction
         )
-        .matchedGeometryEffect(id: "right-bottom-button", in: namespace)
-    }
+        .transition(.scale)
+    }}
 }
 
 private extension DefaultCapturedMediaScreen {
+    func onAppear() {
+        isInitialized = true
+    }
     func onVideoAppear(_ url: URL) {
         player = .init(url: url)
         player.play()
