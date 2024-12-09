@@ -34,7 +34,7 @@ private extension DefaultCameraScreen.BottomBar {
             createLightButton()
             createCaptureButton()
             createChangeCameraPositionButton()
-        }
+        }.frame(height: 72)
     }
 }
 private extension DefaultCameraScreen.BottomBar {
@@ -46,6 +46,7 @@ private extension DefaultCameraScreen.BottomBar {
             rotationAngle: parent.iconAngle,
             action: changeLightMode
         )
+        .matchedGeometryEffect(id: "left-bottom-button", in: parent.namespace)
         .frame(maxWidth: .infinity, alignment: .leading)
     }}
     @ViewBuilder func createCaptureButton() -> some View { if isCaptureButtonActive {
@@ -63,6 +64,7 @@ private extension DefaultCameraScreen.BottomBar {
             rotationAngle: parent.iconAngle,
             action: changeCameraPosition
         )
+        .matchedGeometryEffect(id: "right-bottom-button", in: parent.namespace)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }}
 }
@@ -86,8 +88,8 @@ private extension DefaultCameraScreen.BottomBar {
     var changeCameraPositionButtonIconColor: Color { .init(.mijickBackgroundInverted) }
 }
 private extension DefaultCameraScreen.BottomBar {
-    var isOutputTypeSwitchActive: Bool { parent.config.cameraOutputSwitchAllowed && !parent.isRecording }
+    var isOutputTypeSwitchActive: Bool { parent.config.cameraOutputSwitchAllowed && parent.cameraManager.captureSession.isRunning && !parent.isRecording }
     var isLightButtonActive: Bool { parent.config.lightButtonAllowed && parent.hasLight }
-    var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed }
+    var isCaptureButtonActive: Bool { parent.config.captureButtonAllowed && parent.cameraManager.captureSession.isRunning }
     var isChangeCameraPositionButtonActive: Bool { parent.config.cameraPositionButtonAllowed && !parent.isRecording }
 }

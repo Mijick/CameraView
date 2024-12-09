@@ -65,6 +65,7 @@ private extension DefaultCapturedMediaScreen {
             rotationAngle: .zero,
             action: retakeAction
         )
+        .matchedGeometryEffect(id: "left-bottom-button", in: namespace)
     }
     func createSaveButton() -> some View {
         BottomButton(
@@ -74,6 +75,7 @@ private extension DefaultCapturedMediaScreen {
             rotationAngle: .zero,
             action: acceptMediaAction
         )
+        .matchedGeometryEffect(id: "right-bottom-button", in: namespace)
     }
 }
 
