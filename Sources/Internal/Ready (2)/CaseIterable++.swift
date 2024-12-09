@@ -9,6 +9,8 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
+import Foundation
+
 extension CaseIterable where Self: Equatable {
     func next() -> Self {
         guard let index = Self.allCases.firstIndex(of: self) else { return self }
