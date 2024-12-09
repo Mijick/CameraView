@@ -13,6 +13,7 @@ import SwiftUI
 
 extension DefaultCameraScreen { struct BottomBar: View {
     let parent: DefaultCameraScreen
+    @State private var isInitialized: Bool = false
 
 
     var body: some View {
@@ -46,8 +47,8 @@ private extension DefaultCameraScreen.BottomBar {
             rotationAngle: parent.iconAngle,
             action: changeLightMode
         )
-        .matchedGeometryEffect(id: "left-bottom-button", in: parent.namespace)
         .frame(maxWidth: .infinity, alignment: .leading)
+        .transition(.scale)
     }}
     @ViewBuilder func createCaptureButton() -> some View { if isCaptureButtonActive {
         DefaultCameraScreen.CaptureButton(
@@ -55,6 +56,7 @@ private extension DefaultCameraScreen.BottomBar {
             isRecording: parent.isRecording,
             action: parent.captureOutput
         )
+        .transition(.scale)
     }}
     @ViewBuilder func createChangeCameraPositionButton() -> some View { if isChangeCameraPositionButtonActive {
         BottomButton(
@@ -64,8 +66,8 @@ private extension DefaultCameraScreen.BottomBar {
             rotationAngle: parent.iconAngle,
             action: changeCameraPosition
         )
-        .matchedGeometryEffect(id: "right-bottom-button", in: parent.namespace)
         .frame(maxWidth: .infinity, alignment: .trailing)
+        .transition(.scale)
     }}
 }
 
