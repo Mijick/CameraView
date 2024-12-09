@@ -1,5 +1,5 @@
 //
-//  MCameraController+Config.swift of MijickCamera
+//  MCameraView+Config.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -20,9 +20,9 @@ extension MCameraView { @MainActor class Config {
     // MARK: Actions
     var imageCapturedAction: (UIImage, MController) -> () = { _,_ in }
     var videoCapturedAction: (URL, MController) -> () = { _,_ in }
-    var closeCameraControllerAction: () -> () = {}
+    var closeCameraViewAction: () -> () = {}
 
     // MARK: Others
     var appDelegate: MApplicationDelegate.Type? = nil
-    var isCameraControllerConfigured: Bool = false
+    var isCameraConfigured: Bool = false
 }}

@@ -17,7 +17,7 @@ public struct MCameraView: View {
     var config: Config = .init()
 
     
-    public var body: some View { if config.isCameraControllerConfigured {
+    public var body: some View { if config.isCameraConfigured {
         ZStack(content: createContent)
             .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
@@ -33,14 +33,14 @@ private extension MCameraView {
 }
 private extension MCameraView {
     func createErrorScreen(_ error: MijickCameraError) -> some View {
-        config.errorScreen(error, config.closeCameraControllerAction).erased()
+        config.errorScreen(error, config.closeCameraViewAction).erased()
     }
     func createCapturedMediaScreen(_ media: MCameraMedia) -> some View {
         config.capturedMediaScreen?(media, namespace, onCapturedMediaRejected, onCapturedMediaAccepted)
             .erased()
     }
     func createCameraScreen() -> some View {
-        config.cameraScreen(manager, namespace, config.closeCameraControllerAction)
+        config.cameraScreen(manager, namespace, config.closeCameraViewAction)
             .erased()
             .onAppear(perform: onCameraAppear)
             .onDisappear(perform: onCameraDisappear)

@@ -46,7 +46,7 @@ public extension MCameraView {
     func onVideoCaptured(_ action: @escaping (URL, MController) -> ()) -> Self { config.videoCapturedAction = action; return self }
 
     /// Determines what happens when the Camera Controller should be closed
-    func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeCameraControllerAction = action; return self }
+    func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeCameraViewAction = action; return self }
 }
 
 // MARK: - Others
@@ -75,7 +75,7 @@ public extension MCameraView {
 
 
 public extension MCameraView {
-    func start() -> some View { config.isCameraControllerConfigured = true; return self }
+    func start() -> some View { config.isCameraConfigured = true; return self }
 }
 
 
