@@ -34,13 +34,6 @@ public extension MCamera {
     func setErrorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
 }
 
-// MARK: Actions
-public extension MCamera {
-    func onImageCaptured(_ action: @escaping (UIImage, MCameraController) -> ()) -> Self { config.imageCapturedAction = action; return self }
-    func onVideoCaptured(_ action: @escaping (URL, MCameraController) -> ()) -> Self { config.videoCapturedAction = action; return self }
-    func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
-}
-
 // MARK: Changing Initial Values
 public extension MCamera {
     func setCameraOutputType(_ cameraOutputType: CameraOutputType) -> Self { manager.attributes.outputType = cameraOutputType; return self }
@@ -64,7 +57,12 @@ public extension MCamera {
     func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
 }
 
-
+// MARK: Actions
+public extension MCamera {
+    func onImageCaptured(_ action: @escaping (UIImage, MCameraController) -> ()) -> Self { config.imageCapturedAction = action; return self }
+    func onVideoCaptured(_ action: @escaping (URL, MCameraController) -> ()) -> Self { config.videoCapturedAction = action; return self }
+    func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
+}
 
 
 // MARK: Others
