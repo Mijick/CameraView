@@ -28,11 +28,7 @@ public struct DefaultCameraScreen: MCameraScreen {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
         .statusBarHidden()
-        .animation(.mijickSpring, value: isRecording)
-        .animation(.mijickSpring, value: cameraOutputType)
-        .animation(.mijickSpring, value: hasLight)
-        .animation(.mijickSpring, value: iconAngle)
-        .animation(.mijickSpring, value: lightMode)
+        .animation(.mijickSpring)
     }
 }
 private extension DefaultCameraScreen {
@@ -42,6 +38,7 @@ private extension DefaultCameraScreen {
     }
     func createContentView() -> some View {
         createCameraView()
+            .matchedGeometryEffect(id: "content", in: namespace)
             .ignoresSafeArea()
     }
     func createBottomBar() -> some View {
