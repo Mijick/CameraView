@@ -37,6 +37,6 @@ public extension DefaultCameraScreen {
 
 // MARK: Available Actions
 public extension MController {
-    func closeCameraController() { cameraView.config.closeCameraViewAction() }
+    func closeCameraView() { cameraView.config.closeCameraViewAction() }
     func openCameraScreen() { cameraView.manager.setCapturedMedia(nil) }
 }
