@@ -10,6 +10,7 @@
 
 
 @preconcurrency import AVKit
+import SwiftUI
 import MijickTimer
 
 @MainActor class CameraManagerVideo: NSObject {
@@ -108,7 +109,8 @@ extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelega
         let videoURL = try await prepareVideo(outputFileURL: outputFileURL, cameraFilters: parent.attributes.cameraFilters)
         let capturedVideo = MCameraMedia(data: videoURL)
 
-        parent.attributes.capturedMedia = capturedVideo
+        await Task.sleep(seconds: Animation.duration)
+        parent.setCapturedMedia(capturedVideo)
     }}
 }
 private extension CameraManagerVideo {

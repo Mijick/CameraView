@@ -12,5 +12,8 @@
 import SwiftUI
 
 extension Animation {
-    static var mijickSpring: Animation { .spring(duration: 0.3, bounce: 0, blendDuration: 0) }
+    static var mijickSpring: Animation { .spring(duration: duration, bounce: 0, blendDuration: 0) }
+}
+extension Animation {
+    static var duration: CGFloat { 0.3 }
 }
