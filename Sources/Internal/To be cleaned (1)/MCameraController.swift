@@ -27,18 +27,19 @@ public struct MCameraController: View {
 private extension MCameraController {
     @ViewBuilder func createContent() -> some View {
         if let error = cameraManager.attributes.error { createErrorScreen(error) }
-        else if let capturedMedia = cameraManager.attributes.capturedMedia { createCameraPreview(capturedMedia) }
-        else { createCameraView() }
+        else if let capturedMedia = cameraManager.attributes.capturedMedia, config.capturedMediaScreen != nil { createCapturedMediaScreen(capturedMedia) }
+        else { createCameraScreen() }
     }
 }
 private extension MCameraController {
     func createErrorScreen(_ error: MijickCameraError) -> some View {
         config.errorScreen(error, config.closeCameraControllerAction).erased()
     }
-    func createCameraPreview(_ media: MCameraMedia) -> some View {
-        config.capturedMediaScreen?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction).erased()
+    func createCapturedMediaScreen(_ media: MCameraMedia) -> some View {
+        config.capturedMediaScreen?(media, namespace, resetCapturedMedia, performAfterMediaCapturedAction)
+            .erased()
     }
-    func createCameraView() -> some View {
+    func createCameraScreen() -> some View {
         config.cameraScreen(cameraManager, namespace, config.closeCameraControllerAction)
             .erased()
             .onAppear(perform: onCameraAppear)
