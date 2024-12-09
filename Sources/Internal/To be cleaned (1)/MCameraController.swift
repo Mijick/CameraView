@@ -43,7 +43,7 @@ private extension MCameraController {
         config.cameraScreen(cameraManager, namespace, config.closeCameraControllerAction)
             .erased()
             .onAppear(perform: onCameraAppear)
-            .onDisappear(perform: cameraManager.cancel)
+            .onDisappear(perform: onCameraDisappear)
     }
 }
 
@@ -51,20 +51,10 @@ private extension MCameraController {
     func onAppear() {
         lockScreenOrientation()
     }
-    func onCameraAppear() { Task {
-        do { try await cameraManager.setup() }
-        catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
-    }}
     func onDisappear() {
         unlockScreenOrientation()
         cameraManager.cancel()
     }
-    func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
-        switch config.capturedMediaScreen != nil {
-            case true: return
-            case false: performAfterMediaCapturedAction()
-        }
-    }}
 }
 private extension MCameraController {
     func lockScreenOrientation() {
@@ -74,6 +64,28 @@ private extension MCameraController {
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
     }
+}
+
+private extension MCameraController {
+    func onCameraAppear() { Task {
+        do { try await cameraManager.setup() }
+        catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
+    }}
+    func onCameraDisappear() {
+        cameraManager.cancel()
+    }
+
+
+    func onMediaCaptured(_ media: MCameraMedia?) { if media != nil {
+        switch config.capturedMediaScreen != nil {
+            case true: return
+            case false: performAfterMediaCapturedAction()
+        }
+    }}
+}
+private extension MCameraController {
+
+
     func resetCapturedMedia() {
         cameraManager.setCapturedMedia(nil)
     }
