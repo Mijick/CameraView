@@ -383,7 +383,7 @@ private extension CameraManagerTests {
     func setupCamera() async throws {
         let cameraView = UIView(frame: .init(origin: .zero, size: .init(width: 1000, height: 1000)))
 
-        try await cameraManager.initialize(in: cameraView)
+        cameraManager.initialize(in: cameraView)
         try await cameraManager.setup()
         await Task.sleep(seconds: 0.3)
     }
