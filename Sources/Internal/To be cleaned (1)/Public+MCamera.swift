@@ -41,13 +41,7 @@ public extension MCamera {
     func onCloseController(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
 }
 
-// MARK: Others
-public extension MCamera {
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
-}
-
-
-
+// MARK: Changing Initial Values
 public extension MCamera {
     func setCameraOutputType(_ cameraOutputType: CameraOutputType) -> Self { manager.attributes.outputType = cameraOutputType; return self }
     func setCameraPosition(_ cameraPosition: CameraPosition) -> Self { manager.attributes.cameraPosition = cameraPosition; return self }
@@ -69,6 +63,18 @@ public extension MCamera {
     func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
     func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
 }
+
+
+
+
+// MARK: Others
+public extension MCamera {
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
+}
+
+
+
+
 
 
 
