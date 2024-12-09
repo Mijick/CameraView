@@ -401,14 +401,17 @@ extension CameraManager {
     func resetAttributes(device: (any CaptureDevice)?) {
         guard let device else { return }
 
-        attributes.cameraExposure.mode = device.exposureMode
-        attributes.cameraExposure.duration = device.exposureDuration
-        attributes.cameraExposure.iso = device.iso
-        attributes.cameraExposure.targetBias = device.exposureTargetBias
-        attributes.frameRate = device.activeVideoMaxFrameDuration.timescale
-        attributes.zoomFactor = device.videoZoomFactor
-        attributes.lightMode = device.lightMode
-        attributes.hdrMode = device.hdrMode
+        var newAttributes = attributes
+        newAttributes.cameraExposure.mode = device.exposureMode
+        newAttributes.cameraExposure.duration = device.exposureDuration
+        newAttributes.cameraExposure.iso = device.iso
+        newAttributes.cameraExposure.targetBias = device.exposureTargetBias
+        newAttributes.frameRate = device.activeVideoMaxFrameDuration.timescale
+        newAttributes.zoomFactor = device.videoZoomFactor
+        newAttributes.lightMode = device.lightMode
+        newAttributes.hdrMode = device.hdrMode
+
+        attributes = newAttributes
     }
     func getCameraInput(_ position: CameraPosition? = nil) -> (any CaptureDeviceInput)? { switch position ?? attributes.cameraPosition {
         case .front: frontCameraInput
