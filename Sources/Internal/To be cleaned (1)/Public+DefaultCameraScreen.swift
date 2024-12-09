@@ -31,12 +31,4 @@ public extension DefaultCameraScreen {
 
 
 
-@MainActor public struct MCameraController {
-    let mCamera: MCamera
-}
 
-// MARK: Available Actions
-public extension MCameraController {
-    func closeMCamera() { mCamera.config.closeMCameraAction() }
-    func openCameraScreen() { mCamera.manager.setCapturedMedia(nil) }
-}
