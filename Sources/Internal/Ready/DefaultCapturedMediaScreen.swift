@@ -21,10 +21,8 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
 
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
+        ZStack {
             createContentView()
-            Spacer()
             createButtons()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -43,6 +41,8 @@ private extension DefaultCapturedMediaScreen {
         }
         .padding(.top, 12)
         .padding(.bottom, 4)
+        .frame(maxHeight: .infinity, alignment: .bottom)
+        .padding(.bottom, 8)
     }
 }
 private extension DefaultCapturedMediaScreen {
@@ -65,7 +65,6 @@ private extension DefaultCapturedMediaScreen {
             rotationAngle: .zero,
             action: retakeAction
         )
-        .matchedGeometryEffect(id: "button-bottom-left", in: namespace)
     }
     func createSaveButton() -> some View {
         BottomButton(
@@ -75,7 +74,6 @@ private extension DefaultCapturedMediaScreen {
             rotationAngle: .zero,
             action: acceptMediaAction
         )
-        .matchedGeometryEffect(id: "button-bottom-right", in: namespace)
     }
 }
 

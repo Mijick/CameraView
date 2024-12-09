@@ -24,7 +24,6 @@ public struct DefaultCameraScreen: MCameraScreen {
             createTopBar()
             createBottomBar()
         }
-        .matchedGeometryEffect(id: "content", in: namespace)
         .ignoresSafeArea()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())

@@ -46,7 +46,6 @@ private extension DefaultCameraScreen.BottomBar {
             rotationAngle: parent.iconAngle,
             action: changeLightMode
         )
-        .matchedGeometryEffect(id: "button-bottom-left", in: parent.namespace)
         .frame(maxWidth: .infinity, alignment: .leading)
     }}
     @ViewBuilder func createCaptureButton() -> some View { if isCaptureButtonActive {
@@ -64,7 +63,6 @@ private extension DefaultCameraScreen.BottomBar {
             rotationAngle: parent.iconAngle,
             action: changeCameraPosition
         )
-        .matchedGeometryEffect(id: "button-bottom-right", in: parent.namespace)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }}
 }
