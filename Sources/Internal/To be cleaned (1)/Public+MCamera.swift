@@ -55,7 +55,6 @@ public extension MCamera {
     func setFocusImage(_ image: UIImage) -> Self { manager.cameraMetalView.focusIndicatorConfig.image = image; return self }
     func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
     func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
 }
 
 // MARK: Actions
@@ -67,5 +66,6 @@ public extension MCamera {
 
 // MARK: Others
 public extension MCamera {
+    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
     func start() -> some View { config.isCameraConfigured = true; return self }
 }
