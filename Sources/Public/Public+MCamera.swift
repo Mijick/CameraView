@@ -52,9 +52,9 @@ public extension MCamera {
     func setCameraFilters(_ filters: [CIFilter]) -> Self { manager.attributes.cameraFilters = filters; return self }
     func setMirrorOutput(_ shouldMirror: Bool) -> Self { manager.attributes.mirrorOutput = shouldMirror; return self }
     func setGridVisibility(_ shouldShowGrid: Bool) -> Self { manager.attributes.isGridVisible = shouldShowGrid; return self }
-    func setFocusImage(_ image: UIImage) -> Self { manager.cameraMetalView.focusIndicatorConfig.image = image; return self }
-    func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicatorConfig.tintColor = color; return self }
-    func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicatorConfig.size = size; return self }
+    func setFocusImage(_ image: UIImage) -> Self { manager.cameraMetalView.focusIndicator.image = image; return self }
+    func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicator.tintColor = color; return self }
+    func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicator.size = size; return self }
 }
 
 // MARK: Actions

@@ -18,7 +18,7 @@ import AVKit
     private(set) var ciContext: CIContext!
     private(set) var commandQueue: MTLCommandQueue!
     private(set) var currentFrame: CIImage?
-    private(set) var focusIndicatorConfig: CameraFocusIndicatorView = .init()
+    private(set) var focusIndicator: CameraFocusIndicatorView = .init()
     private(set) var isAnimating: Bool = false
 }
 
@@ -140,7 +140,7 @@ extension CameraMetalView {
     func performCameraFocusAnimation(touchPoint: CGPoint) {
         removeExistingFocusIndicatorAnimations()
 
-        let focusIndicator = createFocusIndicator(at: touchPoint)
+        let focusIndicator = focusIndicator.create(at: touchPoint)
         parent.cameraView.addSubview(focusIndicator)
         animateFocusIndicator(focusIndicator)
     }
@@ -149,16 +149,6 @@ private extension CameraMetalView {
     func removeExistingFocusIndicatorAnimations() { if let view = parent.cameraView.viewWithTag(.focusIndicatorTag) {
         view.removeFromSuperview()
     }}
-    func createFocusIndicator(at touchPoint: CGPoint) -> UIImageView {
-        let focusIndicator = UIImageView(image: focusIndicatorConfig.image)
-        focusIndicator.tintColor = focusIndicatorConfig.tintColor
-        focusIndicator.frame.size = .init(width: focusIndicatorConfig.size, height: focusIndicatorConfig.size)
-        focusIndicator.frame.origin.x = touchPoint.x - focusIndicator.frame.size.width / 2
-        focusIndicator.frame.origin.y = touchPoint.y - focusIndicator.frame.size.height / 2
-        focusIndicator.transform = .init(scaleX: 0, y: 0)
-        focusIndicator.tag = .focusIndicatorTag
-        return focusIndicator
-    }
     func animateFocusIndicator(_ focusIndicator: UIImageView) {
         UIView.animate(withDuration: 0.44, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, animations: { focusIndicator.transform = .init(scaleX: 1, y: 1) }) { _ in
             UIView.animate(withDuration: 0.44, delay: 1.44, animations: { focusIndicator.alpha = 0.2 }) { _ in
