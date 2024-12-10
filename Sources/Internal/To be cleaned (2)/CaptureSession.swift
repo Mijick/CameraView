@@ -19,12 +19,9 @@ protocol CaptureSession: Sendable {
     var sessionPreset: AVCaptureSession.Preset { get set }
 
     // MARK: Methods
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
-    func add(output: AVCaptureOutput?) throws(MijickCameraError)
-
-    func remove(input: (any CaptureDeviceInput)?)
-
-
     func startRunning()
     func stopRunningAndReturnNewInstance() -> CaptureSession
+    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
+    func remove(input: (any CaptureDeviceInput)?)
+    func add(output: AVCaptureOutput?) throws(MijickCameraError)
 }
