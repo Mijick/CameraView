@@ -12,7 +12,7 @@
 import AVKit
 
 extension MockCaptureSession: @unchecked Sendable {}
-class MockCaptureSession: NSObject, CaptureSession {
+class MockCaptureSession: NSObject, CaptureSession { required override init() {}
     // MARK: Attributes
     var isRunning: Bool { _isRunning }
     var deviceInputs: [any CaptureDeviceInput] { _deviceInputs }
@@ -20,51 +20,25 @@ class MockCaptureSession: NSObject, CaptureSession {
     var sessionPreset: AVCaptureSession.Preset = .cif352x288
 
     // MARK: Methods
-
-
-
-
-
-
-
+    func startRunning() {
+        _isRunning = true
+    }
     func stopRunningAndReturnNewInstance() -> any CaptureSession {
         _isRunning = false
         return MockCaptureSession()
-    }
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    func remove(input: (any CaptureDeviceInput)?) {
-        guard let input = input as? MockDeviceInput, let index = _deviceInputs.firstIndex(where: { $0.device.uniqueID == input.device.uniqueID }) else { return }
-        _deviceInputs.remove(at: index)
-    }
-    required override init() {}
-
-    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
-        guard let output, !outputs.contains(output) else { throw MijickCameraError.cannotSetupOutput }
-        _outputs.append(output)
     }
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
         guard let input = input as? MockDeviceInput, !_deviceInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
         _deviceInputs.append(input)
     }
-
-    func startRunning() {
-        _isRunning = true
+    func remove(input: (any CaptureDeviceInput)?) {
+        guard let input = input as? MockDeviceInput, let index = _deviceInputs.firstIndex(where: { $0.device.uniqueID == input.device.uniqueID }) else { return }
+        _deviceInputs.remove(at: index)
     }
-
+    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
+        guard let output, !outputs.contains(output) else { throw MijickCameraError.cannotSetupOutput }
+        _outputs.append(output)
+    }
 
     // MARK: Private Attributes
     private var _isRunning: Bool = false
