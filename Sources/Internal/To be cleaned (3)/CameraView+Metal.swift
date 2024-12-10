@@ -64,6 +64,32 @@ extension CameraMetalView {
     }}
 }
 
+// MARK: Image Capture
+extension CameraMetalView {
+    func performImageCaptureAnimation() {
+        let blackMatte = createBlackMatte()
+
+        parent.cameraView.addSubview(blackMatte)
+        animateBlackMatte(blackMatte)
+    }
+}
+private extension CameraMetalView {
+    func createBlackMatte() -> UIView {
+        let view = UIView()
+        view.frame = parent.cameraView.frame
+        view.backgroundColor = .init(resource: .mijickBackgroundPrimary)
+        view.alpha = 0
+        return view
+    }
+    func animateBlackMatte(_ view: UIView) {
+        UIView.animate(withDuration: 0.16, animations: { view.alpha = 1 }) { _ in
+            UIView.animate(withDuration: 0.16, animations: { view.alpha = 0 }) { _ in
+                view.removeFromSuperview()
+            }
+        }
+    }
+}
+
 // MARK: Camera Focus
 extension CameraMetalView {
     func performCameraFocusAnimation(touchPoint: CGPoint) {
@@ -97,31 +123,7 @@ private extension CameraMetalView {
     }
 }
 
-// MARK: Image Capture
-extension CameraMetalView {
-    func performImageCaptureAnimation() {
-        let blackMatte = createBlackMatte()
 
-        parent.cameraView.addSubview(blackMatte)
-        animateBlackMatte(blackMatte)
-    }
-}
-private extension CameraMetalView {
-    func createBlackMatte() -> UIView {
-        let view = UIView()
-        view.frame = parent.cameraView.frame
-        view.backgroundColor = .init(resource: .mijickBackgroundPrimary)
-        view.alpha = 0
-        return view
-    }
-    func animateBlackMatte(_ view: UIView) {
-        UIView.animate(withDuration: 0.16, animations: { view.alpha = 1 }) { _ in
-            UIView.animate(withDuration: 0.16, animations: { view.alpha = 0 }) { _ in
-                view.removeFromSuperview()
-            }
-        }
-    }
-}
 
 // MARK: Camera Orientation
 extension CameraMetalView {
