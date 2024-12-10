@@ -11,17 +11,17 @@
 
 import SwiftUI
 
-// MARK: - Preparing place for video output
+// MARK: Prepare Place for Video Output
 extension FileManager {
     static func prepareURLForVideoOutput() -> URL? {
-        guard let fileUrl = createFileUrl() else { return nil }
+        guard let fileUrl = getFileUrl() else { return nil }
 
         clearPlaceIfTaken(fileUrl)
         return fileUrl
     }
 }
 private extension FileManager {
-    static func createFileUrl() -> URL? {
+    static func getFileUrl() -> URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             .first?
             .appendingPathComponent(videoPath)
