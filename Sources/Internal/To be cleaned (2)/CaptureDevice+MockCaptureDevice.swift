@@ -55,8 +55,7 @@ class MockCaptureDevice: NSObject, CaptureDevice {
         _exposureTargetBias = bias
     }
 
-
-
+    // MARK: Private Attributes
     private var _exposureDuration: CMTime = .init()
     private var _exposureTargetBias: Float = 0
     private var _iso: Float = 0
