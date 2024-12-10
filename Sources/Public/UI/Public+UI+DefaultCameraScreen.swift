@@ -1,5 +1,5 @@
 //
-//  Public+DefaultCameraScreen.swift of MijickCamera
+//  Public+UI+DefaultCameraScreen.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
