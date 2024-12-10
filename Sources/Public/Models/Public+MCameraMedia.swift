@@ -22,13 +22,18 @@ public struct MCameraMedia: Sendable {
     }
 }
 
+
+// MARK: Equatable
+extension MCameraMedia: Equatable {
+    public static func == (lhs: MCameraMedia, rhs: MCameraMedia) -> Bool { lhs.image == rhs.image && lhs.video == rhs.video }
+}
+
+
+
 // MARK: Getters
 public extension MCameraMedia {
     func getImage() -> UIImage? { image }
     func getVideo() -> URL? { video }
 }
 
-// MARK: Equatable
-extension MCameraMedia: Equatable {
-    public static func == (lhs: MCameraMedia, rhs: MCameraMedia) -> Bool { lhs.image == rhs.image && lhs.video == rhs.video }
-}
+
