@@ -78,11 +78,11 @@ private extension CameraManager {
         cameraLayer.isHidden = true
         cameraView.layer.addSublayer(cameraLayer)
     }
-    func setupDeviceInputs() throws {
+    func setupDeviceInputs() throws(MCameraError) {
         try captureSession.add(input: getCameraInput())
         if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
     }
-    func setupDeviceOutput() throws {
+    func setupDeviceOutput() throws(MCameraError) {
         try photoOutput.setup(parent: self)
         try videoOutput.setup(parent: self)
     }

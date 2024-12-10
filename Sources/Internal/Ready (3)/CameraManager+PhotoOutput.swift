@@ -18,7 +18,7 @@ import AVKit
 
 // MARK: Setup
 extension CameraManagerPhotoOutput {
-    func setup(parent: CameraManager) throws(MijickCameraError) {
+    func setup(parent: CameraManager) throws(MCameraError) {
         self.parent = parent
         try self.parent.captureSession.add(output: output)
     }
