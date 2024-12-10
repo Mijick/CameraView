@@ -13,7 +13,13 @@ import AVKit
 
 class MockCaptureDevice: NSObject, CaptureDevice {
     // MARK: Getters
-
+    var uniqueID: String = UUID().uuidString
+    var exposureDuration: CMTime { _exposureDuration }
+    var exposureTargetBias: Float { _exposureTargetBias }
+    var iso: Float { _iso }
+    var minAvailableVideoZoomFactor: CGFloat { 1 }
+    var maxAvailableVideoZoomFactor: CGFloat { 3.876 }
+    
 
 
     // MARK: Setters
@@ -41,14 +47,13 @@ class MockCaptureDevice: NSObject, CaptureDevice {
         _iso = iso
     }
 
-    let uniqueID: String = UUID().uuidString
+
     let hasFlash: Bool = true
     let hasTorch: Bool = true
-    var exposureDuration: CMTime { _exposureDuration }
-    var exposureTargetBias: Float { _exposureTargetBias }
-    var iso: Float { _iso }
-    var minAvailableVideoZoomFactor: CGFloat = 1
-    var maxAvailableVideoZoomFactor: CGFloat = 3.876
+
+
+
+
 
     var focusMode: AVCaptureDevice.FocusMode = .autoFocus
     var lightMode: CameraLightMode = .off
