@@ -19,7 +19,18 @@ class MockCaptureSession: NSObject, CaptureSession { required override init() {}
     var outputs: [AVCaptureOutput] { _outputs }
     var sessionPreset: AVCaptureSession.Preset = .cif352x288
 
-    // MARK: Methods
+    // MARK: Private Attributes
+    private var _isRunning: Bool = false
+    private var _deviceInputs: [any CaptureDeviceInput] = []
+    private var _outputs: [AVCaptureOutput] = []
+}
+
+
+// MARK: - METHODS
+
+
+
+extension MockCaptureSession {
     func startRunning() {
         _isRunning = true
     }
@@ -27,6 +38,8 @@ class MockCaptureSession: NSObject, CaptureSession { required override init() {}
         _isRunning = false
         return MockCaptureSession()
     }
+}
+extension MockCaptureSession {
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
         guard let input = input as? MockDeviceInput, !_deviceInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
         _deviceInputs.append(input)
@@ -35,13 +48,10 @@ class MockCaptureSession: NSObject, CaptureSession { required override init() {}
         guard let input = input as? MockDeviceInput, let index = _deviceInputs.firstIndex(where: { $0.device.uniqueID == input.device.uniqueID }) else { return }
         _deviceInputs.remove(at: index)
     }
+}
+extension MockCaptureSession {
     func add(output: AVCaptureOutput?) throws(MijickCameraError) {
         guard let output, !outputs.contains(output) else { throw MijickCameraError.cannotSetupOutput }
         _outputs.append(output)
     }
-
-    // MARK: Private Attributes
-    private var _isRunning: Bool = false
-    private var _deviceInputs: [any CaptureDeviceInput] = []
-    private var _outputs: [AVCaptureOutput] = []
 }
