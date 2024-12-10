@@ -20,7 +20,7 @@ extension AVCaptureDeviceInput: CaptureDeviceInput {
             default: fatalError()
         }}()
 
-        if let device, let deviceInput = try? Self(device: device) { return deviceInput }
-        else { return nil }
+        guard let device, let deviceInput = try? Self(device: device) else { return nil }
+        return deviceInput
     }
 }
