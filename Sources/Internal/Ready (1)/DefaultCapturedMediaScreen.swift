@@ -28,7 +28,7 @@ struct DefaultCapturedMediaScreen: MCapturedMediaScreen {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.mijickBackgroundPrimary).ignoresSafeArea())
-        .animation(.mijickSpring, value: isInitialized)
+        .animation(.mSpring, value: isInitialized)
         .onAppear { isInitialized = true }
     }
 }

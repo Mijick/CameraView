@@ -146,7 +146,7 @@ extension CameraManager {
 
 // MARK: Set Captured Media
 extension CameraManager {
-    func setCapturedMedia(_ capturedMedia: MCameraMedia?) { withAnimation(.mijickSpring) {
+    func setCapturedMedia(_ capturedMedia: MCameraMedia?) { withAnimation(.mSpring) {
         attributes.capturedMedia = capturedMedia
     }}
 }
