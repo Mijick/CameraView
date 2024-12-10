@@ -60,8 +60,8 @@ public extension MCamera {
 // MARK: Actions
 public extension MCamera {
     func setCloseMCameraAction(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
-    func onImageCaptured(_ action: @escaping (UIImage, MCameraController) -> ()) -> Self { config.imageCapturedAction = action; return self }
-    func onVideoCaptured(_ action: @escaping (URL, MCameraController) -> ()) -> Self { config.videoCapturedAction = action; return self }
+    func onImageCaptured(_ action: @escaping (UIImage, MCamera.Controller) -> ()) -> Self { config.imageCapturedAction = action; return self }
+    func onVideoCaptured(_ action: @escaping (URL, MCamera.Controller) -> ()) -> Self { config.videoCapturedAction = action; return self }
 }
 
 // MARK: Others

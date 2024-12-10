@@ -11,7 +11,7 @@
 
 import Foundation
 
-public extension MCameraController {
+public extension MCamera.Controller {
     func closeMCamera() { mCamera.config.closeMCameraAction() }
     func reopenCameraScreen() { mCamera.manager.setCapturedMedia(nil) }
 }

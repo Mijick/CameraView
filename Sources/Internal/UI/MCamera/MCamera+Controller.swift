@@ -11,6 +11,6 @@
 
 import Foundation
 
-@MainActor public struct MCameraController {
+extension MCamera { @MainActor public struct Controller {
     let mCamera: MCamera
-}
+}}
