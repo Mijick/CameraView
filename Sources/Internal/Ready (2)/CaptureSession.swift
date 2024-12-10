@@ -21,7 +21,7 @@ protocol CaptureSession: Sendable {
     // MARK: Methods
     func startRunning()
     func stopRunningAndReturnNewInstance() -> CaptureSession
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
+    func add(input: (any CaptureDeviceInput)?) throws(MCameraError)
     func remove(input: (any CaptureDeviceInput)?)
-    func add(output: AVCaptureOutput?) throws(MijickCameraError)
+    func add(output: AVCaptureOutput?) throws(MCameraError)
 }

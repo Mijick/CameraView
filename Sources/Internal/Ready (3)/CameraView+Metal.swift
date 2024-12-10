@@ -24,7 +24,7 @@ import AVKit
 
 // MARK: Setup
 extension CameraMetalView {
-    func setup(parent: CameraManager) throws(MijickCameraError) {
+    func setup(parent: CameraManager) throws(MCameraError) {
         guard let metalDevice = MTLCreateSystemDefaultDevice() else { throw .cannotCreateMetalDevice }
 
         self.assignInitialValues(parent: parent, metalDevice: metalDevice)

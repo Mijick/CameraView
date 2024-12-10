@@ -13,7 +13,7 @@ import AVKit
 
 struct CameraManagerAttributes {
     var capturedMedia: MCameraMedia? = nil
-    var error: MijickCameraError? = nil
+    var error: MCameraError? = nil
 
     var outputType: CameraOutputType = .photo
     var cameraPosition: CameraPosition = .back
