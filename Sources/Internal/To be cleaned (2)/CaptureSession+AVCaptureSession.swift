@@ -13,15 +13,8 @@ import AVKit
 
 extension AVCaptureSession: @unchecked @retroactive Sendable {}
 extension AVCaptureSession: CaptureSession {
-    func stopRunningAndReturnNewInstance() -> any CaptureSession {
-        self.stopRunning()
-        return AVCaptureSession()
-    }
+    var deviceInputs: [any CaptureDeviceInput] { inputs as? [any CaptureDeviceInput] ?? [] }
 
-
-    var deviceInputs: [any CaptureDeviceInput] {
-        inputs as? [any CaptureDeviceInput] ?? []
-    }
 
     func remove(input: (any CaptureDeviceInput)?) {
         guard let input = input as? AVCaptureDeviceInput else { return }
@@ -37,4 +30,22 @@ extension AVCaptureSession: CaptureSession {
         guard let input = input as? AVCaptureDeviceInput else { throw MijickCameraError.cannotSetupInput }
         if canAddInput(input) { addInput(input) }
     }
+}
+
+
+// MARK: - METHODS
+
+
+
+extension AVCaptureSession {
+    func stopRunningAndReturnNewInstance() -> any CaptureSession {
+        self.stopRunning()
+        return AVCaptureSession()
+    }
+}
+extension AVCaptureSession {
+
+}
+extension AVCaptureSession {
+
 }
