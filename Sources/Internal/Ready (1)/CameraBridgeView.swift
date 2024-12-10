@@ -1,5 +1,5 @@
 //
-//  CameraInputBridgeView.swift of MijickCamera
+//  CameraBridgeView.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,11 +11,11 @@
 
 import SwiftUI
 
-struct CameraInputBridgeView: UIViewRepresentable {
+struct CameraBridgeView: UIViewRepresentable {
     let cameraManager: CameraManager
     let inputView: UIView = .init()
 }
-extension CameraInputBridgeView {
+extension CameraBridgeView {
     func makeUIView(context: Context) -> some UIView {
         cameraManager.initialize(in: inputView)
         setupTapGesture(context)
@@ -25,7 +25,7 @@ extension CameraInputBridgeView {
     func updateUIView(_ uiView: UIViewType, context: Context) {}
     func makeCoordinator() -> Coordinator { .init(self) }
 }
-private extension CameraInputBridgeView {
+private extension CameraBridgeView {
     func setupTapGesture(_ context: Context) {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.onTapGesture))
         inputView.addGestureRecognizer(tapRecognizer)
@@ -37,18 +37,18 @@ private extension CameraInputBridgeView {
 }
 
 // MARK: Equatable
-extension CameraInputBridgeView: Equatable {
+extension CameraBridgeView: Equatable {
     nonisolated static func ==(lhs: Self, rhs: Self) -> Bool { true }
 }
 
 
 // MARK: - GESTURES
-extension CameraInputBridgeView { class Coordinator: NSObject { init(_ parent: CameraInputBridgeView) { self.parent = parent }
-    let parent: CameraInputBridgeView
+extension CameraBridgeView { class Coordinator: NSObject { init(_ parent: CameraBridgeView) { self.parent = parent }
+    let parent: CameraBridgeView
 }}
 
 // MARK: On Tap
-extension CameraInputBridgeView.Coordinator {
+extension CameraBridgeView.Coordinator {
     @MainActor @objc func onTapGesture(_ tap: UITapGestureRecognizer) {
         do {
             let touchPoint = tap.location(in: parent.inputView)
@@ -58,7 +58,7 @@ extension CameraInputBridgeView.Coordinator {
 }
 
 // MARK: On Pinch
-extension CameraInputBridgeView.Coordinator {
+extension CameraBridgeView.Coordinator {
     @MainActor @objc func onPinchGesture(_ pinch: UIPinchGestureRecognizer) { if pinch.state == .changed {
         do {
             let desiredZoomFactor = parent.cameraManager.attributes.zoomFactor + atan2(pinch.velocity, 33)

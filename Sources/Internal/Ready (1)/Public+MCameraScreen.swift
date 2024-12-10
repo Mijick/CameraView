@@ -21,7 +21,7 @@ public protocol MCameraScreen: View {
 
 // MARK: Methods
 public extension MCameraScreen {
-    func createCameraView() -> some View { CameraInputBridgeView(cameraManager: cameraManager).equatable() }
+    func createCameraView() -> some View { CameraBridgeView(cameraManager: cameraManager).equatable() }
 }
 public extension MCameraScreen {
     func captureOutput() { cameraManager.captureOutput() }
