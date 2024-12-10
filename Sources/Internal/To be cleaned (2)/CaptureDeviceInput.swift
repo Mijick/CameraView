@@ -12,9 +12,10 @@
 import AVKit
 
 protocol CaptureDeviceInput: NSObject {
-    associatedtype S: CaptureDevice
-    var device: S { get }
+    // MARK: Attributes
+    associatedtype CD: CaptureDevice
+    var device: CD { get }
 
-
+    // MARK: Methods
     static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self?
 }
