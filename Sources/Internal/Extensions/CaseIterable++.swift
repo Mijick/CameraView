@@ -11,6 +11,7 @@
 
 import Foundation
 
+// MARK: Next
 extension CaseIterable where Self: Equatable {
     func next() -> Self {
         guard let index = Self.allCases.firstIndex(of: self) else { return self }

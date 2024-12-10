@@ -11,6 +11,7 @@
 
 import SwiftUI
 
+// MARK: Custom Animation
 extension Animation {
     static var mSpring: Animation { .spring(duration: duration, bounce: 0, blendDuration: 0) }
 }

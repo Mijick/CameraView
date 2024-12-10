@@ -11,6 +11,7 @@
 
 import AVKit
 
+// MARK: To Device Flash Mode
 extension CameraFlashMode {
     func toDeviceFlashMode() -> AVCaptureDevice.FlashMode { switch self {
         case .off: .off

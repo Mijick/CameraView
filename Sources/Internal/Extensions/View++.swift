@@ -11,6 +11,7 @@
 
 import SwiftUI
 
+// MARK: Erased
 extension View {
     func erased() -> AnyView { .init(self) }
 }
