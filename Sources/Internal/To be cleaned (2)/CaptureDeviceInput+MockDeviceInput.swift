@@ -12,14 +12,15 @@
 import AVKit
 
 class MockDeviceInput: NSObject, CaptureDeviceInput { required override init() {}
-    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? {
-        .init()
-    }
-
     var device: MockCaptureDevice = .init()
 }
+
+// MARK: Methods
 extension MockDeviceInput {
-    static func == (lhs: MockDeviceInput, rhs: MockDeviceInput) -> Bool {
-        lhs.device.uniqueID == rhs.device.uniqueID
-    }
+    static func get(mediaType: AVMediaType, position: AVCaptureDevice.Position?) -> Self? { .init() }
+}
+
+// MARK: Equatable
+extension MockDeviceInput {
+    static func == (lhs: MockDeviceInput, rhs: MockDeviceInput) -> Bool { lhs.device.uniqueID == rhs.device.uniqueID }
 }
