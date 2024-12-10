@@ -23,6 +23,10 @@ extension AVCaptureDevice: CaptureDevice {
 
 // MARK: Getters & Setters
 extension AVCaptureDevice {
+    var lightMode: CameraLightMode {
+        get { torchMode == .off ? .off : .on }
+        set { torchMode = newValue == .off ? .off : .on }
+    }
     var hdrMode: CameraHDRMode {
         get {
             if automaticallyAdjustsVideoHDREnabled { return .auto }
@@ -33,9 +37,5 @@ extension AVCaptureDevice {
             automaticallyAdjustsVideoHDREnabled = newValue == .auto
             if newValue != .auto { isVideoHDREnabled = newValue == .on }
         }
-    }
-    var lightMode: CameraLightMode {
-        get { torchMode == .off ? .off : .on }
-        set { torchMode = newValue == .off ? .off : .on }
     }
 }

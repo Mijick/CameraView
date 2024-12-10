@@ -12,7 +12,7 @@
 import AVKit
 
 protocol CaptureDevice: NSObject {
-    // MARK: Gettters
+    // MARK: Getters
     var uniqueID: String { get }
     var exposureDuration: CMTime { get }
     var exposureTargetBias: Float { get }
@@ -32,7 +32,7 @@ protocol CaptureDevice: NSObject {
     var isExposurePointOfInterestSupported: Bool { get }
     var isFocusPointOfInterestSupported: Bool { get }
 
-    // MARK: Gettters & Setters
+    // MARK: Getters & Setters
     var videoZoomFactor: CGFloat { get set }
     var focusMode: AVCaptureDevice.FocusMode { get set }
     var focusPointOfInterest: CGPoint { get set }
