@@ -44,15 +44,15 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     var hdrMode: CameraHDRMode = .auto
 
     // MARK: Methods
-
-
-
-
-
-
-
-
+    func lockForConfiguration() throws { return }
+    func unlockForConfiguration() { return }
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
+
+
+
+
+
+
 
     func setExposureModeCustom(duration: CMTime, iso: Float, completionHandler: ((CMTime) -> Void)?) {
         _exposureDuration = duration
@@ -75,8 +75,8 @@ class MockCaptureDevice: NSObject, CaptureDevice {
 
 
 
-    func lockForConfiguration() throws { return }
-    func unlockForConfiguration() { return }
+
+
     func setExposureTargetBias(_ bias: Float, completionHandler handler: ((CMTime) -> ())?) {
         _exposureTargetBias = bias
     }
