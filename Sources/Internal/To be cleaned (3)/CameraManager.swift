@@ -54,7 +54,7 @@ extension CameraManager {
 
 // MARK: Setup
 extension CameraManager {
-    func setup() async throws {
+    func setup() async throws(MCameraError) {
         try await permissionsManager.requestAccess(parent: self)
 
         setupCameraLayer()
@@ -86,7 +86,7 @@ private extension CameraManager {
         try photoOutput.setup(parent: self)
         try videoOutput.setup(parent: self)
     }
-    func setupFrameRecorder() throws {
+    func setupFrameRecorder() throws(MCameraError) {
         let captureVideoOutput = AVCaptureVideoDataOutput()
         captureVideoOutput.setSampleBufferDelegate(cameraMetalView, queue: .main)
 
