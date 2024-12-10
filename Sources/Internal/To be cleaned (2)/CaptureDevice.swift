@@ -51,6 +51,49 @@ protocol CaptureDevice: NSObject {
     func setExposureTargetBias(_ bias: Float, completionHandler handler: ((CMTime) -> ())?)
 }
 
+
+// MARK: - METHODS
+
+
+
+// MARK: Set Zoom Factor
+extension CaptureDevice {
+
+}
+
+// MARK: Set Exposure Mode
+extension CaptureDevice {
+
+}
+
+// MARK: Set Exposure Target Bias
+extension CaptureDevice {
+
+}
+
+// MARK: Set Frame Rate
+extension CaptureDevice {
+}
+
+// MARK: Set Exposure Point Of Interest
+extension CaptureDevice {
+
+}
+
+// MARK: Set Focus Point Of Interest
+extension CaptureDevice {
+}
+
+// MARK: Set Light Mode
+extension CaptureDevice {
+
+}
+
+
+
+
+
+
 extension CaptureDevice {
     func setZoomFactor(_ factor: CGFloat) {
         let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
