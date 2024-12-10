@@ -12,5 +12,5 @@
 public enum MCameraError: Error {
     case microphonePermissionsNotGranted, cameraPermissionsNotGranted
     case cannotSetupInput, cannotSetupOutput
-    case cannotCreateMetalDevice
+    case cannotSetupMetalDevice
 }
