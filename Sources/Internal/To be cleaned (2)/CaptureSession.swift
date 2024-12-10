@@ -13,13 +13,10 @@ import AVKit
 
 protocol CaptureSession: Sendable {
     // MARK: Attributes
-    var sessionPreset: AVCaptureSession.Preset { get set }
     var isRunning: Bool { get }
-
-
     var deviceInputs: [any CaptureDeviceInput] { get }
     var outputs: [AVCaptureOutput] { get }
-
+    var sessionPreset: AVCaptureSession.Preset { get set }
 
     // MARK: Methods
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError)
