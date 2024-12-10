@@ -29,7 +29,7 @@ import AVKit
     private(set) var cameraView: UIView!
     private(set) var cameraLayer: AVCaptureVideoPreviewLayer = .init()
     private(set) var cameraMetalView: CameraMetalView = .init()
-    private(set) var cameraGridView: GridView = .init()
+    private(set) var cameraGridView: CameraGridView = .init()
 
     // MARK: Others
     private(set) var permissionsManager: CameraManagerPermissionsManager = .init()

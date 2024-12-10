@@ -11,12 +11,12 @@
 
 import SwiftUI
 
-class GridView: UIView {
+class CameraGridView: UIView {
     var parent: CameraManager!
 }
 
 // MARK: Setup
-extension GridView {
+extension CameraGridView {
     func setup(parent: CameraManager) {
         self.parent = parent
         self.alpha = parent.attributes.isGridVisible ? 1 : 0
@@ -25,7 +25,7 @@ extension GridView {
 }
 
 // MARK: Set Visibility
-extension GridView {
+extension CameraGridView {
     func setVisibility(_ isVisible: Bool) {
         UIView.animate(withDuration: 0.2) { self.alpha = isVisible ? 1 : 0 }
         parent.attributes.isGridVisible = isVisible
@@ -33,7 +33,7 @@ extension GridView {
 }
 
 // MARK: Draw
-extension GridView {
+extension CameraGridView {
     override func draw(_ rect: CGRect) {
         clearOldLayersBeforeDraw()
 
@@ -66,7 +66,7 @@ extension GridView {
         layer.addSublayer(secondRowLayer)
     }
 }
-private extension GridView {
+private extension CameraGridView {
     func clearOldLayersBeforeDraw() {
         layer.sublayers?.removeAll()
         layer.backgroundColor = .none
