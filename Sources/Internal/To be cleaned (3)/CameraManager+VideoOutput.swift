@@ -1,5 +1,5 @@
 //
-//  CameraManagerVideo.swift of MijickCamera
+//  CameraManager+VideoOutput.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
