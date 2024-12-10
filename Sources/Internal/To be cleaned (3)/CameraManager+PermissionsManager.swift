@@ -1,5 +1,5 @@
 //
-//  CameraManagerPermissionsManager.swift of CameraView-Demo
+//  CameraManager+PermissionsManager.swift of CameraView-Demo
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
