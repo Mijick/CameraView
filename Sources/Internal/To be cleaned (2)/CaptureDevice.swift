@@ -94,6 +94,14 @@ extension CaptureDevice {
 
 // MARK: Set Frame Rate
 extension CaptureDevice {
+    func setFrameRate(_ frameRate: Int32) {
+        guard let minFrameRate, let maxFrameRate else { return }
+
+        let frameRate = max(min(frameRate, Int32(maxFrameRate)), Int32(minFrameRate))
+
+        activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
+        activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
+    }
 }
 
 // MARK: Set Exposure Mode
@@ -133,13 +141,6 @@ extension CaptureDevice {
         let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
         setExposureTargetBias(bias, completionHandler: nil)
     }
-    func setFrameRate(_ frameRate: Int32) {
-        guard let minFrameRate, let maxFrameRate else { return }
 
-        let frameRate = max(min(frameRate, Int32(maxFrameRate)), Int32(minFrameRate))
-
-        activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
-        activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
-    }
 
 }
