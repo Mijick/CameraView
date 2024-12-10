@@ -61,6 +61,24 @@ extension CaptureDevice {
 
 }
 
+// MARK: Set Focus Point Of Interest
+extension CaptureDevice {
+}
+
+// MARK: Set Exposure Point Of Interest
+extension CaptureDevice {
+
+}
+
+// MARK: Set Light Mode
+extension CaptureDevice {
+
+}
+
+// MARK: Set Frame Rate
+extension CaptureDevice {
+}
+
 // MARK: Set Exposure Mode
 extension CaptureDevice {
 
@@ -71,23 +89,7 @@ extension CaptureDevice {
 
 }
 
-// MARK: Set Frame Rate
-extension CaptureDevice {
-}
 
-// MARK: Set Exposure Point Of Interest
-extension CaptureDevice {
-
-}
-
-// MARK: Set Focus Point Of Interest
-extension CaptureDevice {
-}
-
-// MARK: Set Light Mode
-extension CaptureDevice {
-
-}
 
 
 
