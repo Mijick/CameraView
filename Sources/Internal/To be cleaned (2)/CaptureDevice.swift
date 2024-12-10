@@ -14,8 +14,6 @@ import AVKit
 protocol CaptureDevice: NSObject {
     // MARK: Gettters
     var uniqueID: String { get }
-    var hasFlash: Bool { get }
-    var hasTorch: Bool { get }
     var exposureDuration: CMTime { get }
     var exposureTargetBias: Float { get }
     var iso: Float { get }
@@ -29,6 +27,8 @@ protocol CaptureDevice: NSObject {
     var maxExposureTargetBias: Float { get }
     var minFrameRate: Float64? { get }
     var maxFrameRate: Float64? { get }
+    var hasFlash: Bool { get }
+    var hasTorch: Bool { get }
     var isExposurePointOfInterestSupported: Bool { get }
     var isFocusPointOfInterestSupported: Bool { get }
 
