@@ -66,11 +66,22 @@ extension CaptureDevice {
 
 // MARK: Set Focus Point Of Interest
 extension CaptureDevice {
+    func setFocusPointOfInterest(_ point: CGPoint) {
+        guard isFocusPointOfInterestSupported else { return }
+
+        focusPointOfInterest = point
+        focusMode = .autoFocus
+    }
 }
 
 // MARK: Set Exposure Point Of Interest
 extension CaptureDevice {
+    func setExposurePointOfInterest(_ point: CGPoint) {
+        guard isExposurePointOfInterestSupported else { return }
 
+        exposurePointOfInterest = point
+        exposureMode = .autoExpose
+    }
 }
 
 // MARK: Set Light Mode
@@ -129,18 +140,6 @@ extension CaptureDevice {
 
         activeVideoMinFrameDuration = CMTime(value: 1, timescale: frameRate)
         activeVideoMaxFrameDuration = CMTime(value: 1, timescale: frameRate)
-    }
-    func setExposurePointOfInterest(_ point: CGPoint) {
-        guard isExposurePointOfInterestSupported else { return }
-
-        exposurePointOfInterest = point
-        exposureMode = .autoExpose
-    }
-    func setFocusPointOfInterest(_ point: CGPoint) {
-        guard isFocusPointOfInterestSupported else { return }
-
-        focusPointOfInterest = point
-        focusMode = .autoFocus
     }
 
 }
