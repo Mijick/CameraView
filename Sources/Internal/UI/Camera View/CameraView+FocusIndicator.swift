@@ -1,5 +1,5 @@
 //
-//  FocusIndicatorConfig.swift of MijickCamera
+//  CameraView+FocusIndicator.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -11,7 +11,7 @@
 
 import SwiftUI
 
-class FocusIndicatorConfig {
+class CameraFocusIndicatorView {
     var image: UIImage = .init(resource: .mijickIconCrosshair)
     var tintColor: UIColor = .init(resource: .mijickBackgroundYellow)
     var size: CGFloat = 92
