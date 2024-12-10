@@ -40,8 +40,8 @@ extension MockCaptureSession {
     }
 }
 extension MockCaptureSession {
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        guard let input = input as? MockDeviceInput, !_deviceInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
+    func add(input: (any CaptureDeviceInput)?) throws(MCameraError) {
+        guard let input = input as? MockDeviceInput, !_deviceInputs.contains(where: { input == $0 }) else { throw .cannotSetupInput }
         _deviceInputs.append(input)
     }
     func remove(input: (any CaptureDeviceInput)?) {
@@ -50,8 +50,8 @@ extension MockCaptureSession {
     }
 }
 extension MockCaptureSession {
-    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
-        guard let output, !outputs.contains(output) else { throw MijickCameraError.cannotSetupOutput }
+    func add(output: AVCaptureOutput?) throws(MCameraError) {
+        guard let output, !outputs.contains(output) else { throw .cannotSetupOutput }
         _outputs.append(output)
     }
 }
