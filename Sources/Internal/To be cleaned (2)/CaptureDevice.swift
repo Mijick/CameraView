@@ -58,7 +58,10 @@ protocol CaptureDevice: NSObject {
 
 // MARK: Set Zoom Factor
 extension CaptureDevice {
-
+    func setZoomFactor(_ factor: CGFloat) {
+        let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
+        videoZoomFactor = factor
+    }
 }
 
 // MARK: Set Focus Point Of Interest
@@ -72,7 +75,10 @@ extension CaptureDevice {
 
 // MARK: Set Light Mode
 extension CaptureDevice {
-
+    func setLightMode(_ mode: CameraLightMode) {
+        guard hasTorch else { return }
+        lightMode = mode
+    }
 }
 
 // MARK: Set Frame Rate
@@ -97,10 +103,7 @@ extension CaptureDevice {
 
 
 extension CaptureDevice {
-    func setZoomFactor(_ factor: CGFloat) {
-        let factor = max(min(factor, min(maxAvailableVideoZoomFactor, 5)), minAvailableVideoZoomFactor)
-        videoZoomFactor = factor
-    }
+
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
         guard isExposureModeSupported(mode) else { return }
 
@@ -139,8 +142,5 @@ extension CaptureDevice {
         focusPointOfInterest = point
         focusMode = .autoFocus
     }
-    func setLightMode(_ mode: CameraLightMode) {
-        guard hasTorch else { return }
-        lightMode = mode
-    }
+
 }
