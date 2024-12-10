@@ -12,7 +12,7 @@
 import AVKit
 
 protocol CaptureDevice: NSObject {
-    // MARK: Read Only
+    // MARK: Gettters
     var uniqueID: String { get }
     var hasFlash: Bool { get }
     var hasTorch: Bool { get }
@@ -32,7 +32,7 @@ protocol CaptureDevice: NSObject {
     var isExposurePointOfInterestSupported: Bool { get }
     var isFocusPointOfInterestSupported: Bool { get }
 
-    // MARK: Changable
+    // MARK: Gettters & Setters
     var focusMode: AVCaptureDevice.FocusMode { get set }
     var lightMode: CameraLightMode { get set }
     var exposureMode: AVCaptureDevice.ExposureMode { get set }
