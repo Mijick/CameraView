@@ -33,15 +33,15 @@ protocol CaptureDevice: NSObject {
     var isFocusPointOfInterestSupported: Bool { get }
 
     // MARK: Gettters & Setters
+    var videoZoomFactor: CGFloat { get set }
     var focusMode: AVCaptureDevice.FocusMode { get set }
-    var lightMode: CameraLightMode { get set }
-    var exposureMode: AVCaptureDevice.ExposureMode { get set }
-    var hdrMode: CameraHDRMode { get set }
     var focusPointOfInterest: CGPoint { get set }
     var exposurePointOfInterest: CGPoint { get set }
-    var videoZoomFactor: CGFloat { get set }
+    var lightMode: CameraLightMode { get set }
     var activeVideoMinFrameDuration: CMTime { get set }
     var activeVideoMaxFrameDuration: CMTime { get set }
+    var exposureMode: AVCaptureDevice.ExposureMode { get set }
+    var hdrMode: CameraHDRMode { get set }
 
     // MARK: Methods
     func lockForConfiguration() throws
