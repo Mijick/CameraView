@@ -1,17 +1,17 @@
 //
-//  UIView++.swift of MijickCameraView
+//  UIView++.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import SwiftUI
 
-// MARK: - Adding to Parent
+// MARK: Add to Parent
 extension UIView {
     func addToParent(_ view: UIView) {
         view.addSubview(self)
@@ -24,7 +24,7 @@ extension UIView {
     }
 }
 
-// MARK: - Blurring View
+// MARK: Apply Blur Effect
 extension UIView {
     func applyBlurEffect(style: UIBlurEffect.Style) {
         let blurEffectView = UIVisualEffectView()
@@ -36,8 +36,7 @@ extension UIView {
     }
 }
 
-
-
+// MARK: Tags
 extension Int {
     static var blurViewTag: Int { 2137 }
     static var focusIndicatorTag: Int { 29 }
