@@ -11,6 +11,7 @@
 
 import AVKit
 
+// MARK: Getters
 extension AVCaptureDevice: CaptureDevice {
     var minExposureDuration: CMTime { activeFormat.minExposureDuration }
     var maxExposureDuration: CMTime { activeFormat.maxExposureDuration }
@@ -18,8 +19,10 @@ extension AVCaptureDevice: CaptureDevice {
     var maxISO: Float { activeFormat.maxISO }
     var minFrameRate: Float64? { activeFormat.videoSupportedFrameRateRanges.first?.minFrameRate }
     var maxFrameRate: Float64? { activeFormat.videoSupportedFrameRateRanges.first?.maxFrameRate }
+}
 
-
+// MARK: Getters & Setters
+extension AVCaptureDevice {
     var hdrMode: CameraHDRMode {
         get {
             if automaticallyAdjustsVideoHDREnabled { return .auto }
