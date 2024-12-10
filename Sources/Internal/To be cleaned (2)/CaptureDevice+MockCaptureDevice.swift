@@ -19,8 +19,18 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     var iso: Float { _iso }
     var minAvailableVideoZoomFactor: CGFloat { 1 }
     var maxAvailableVideoZoomFactor: CGFloat { 3.876 }
-    
-
+    var minExposureDuration: CMTime { .init(value: 1, timescale: 1000) }
+    var maxExposureDuration: CMTime { .init(value: 1, timescale: 5) }
+    var minISO: Float { 1 }
+    var maxISO: Float { 10 }
+    var minExposureTargetBias: Float { 0.1 }
+    var maxExposureTargetBias: Float { 199 }
+    var minFrameRate: Float64? { 15 }
+    var maxFrameRate: Float64? { 60 }
+    var hasFlash: Bool { true }
+    var hasTorch: Bool { true }
+    var isExposurePointOfInterestSupported: Bool { true }
+    var isFocusPointOfInterestSupported: Bool { true }
 
     // MARK: Setters
 
@@ -29,16 +39,11 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     // MARK: Methods
 
 
-    let minExposureDuration: CMTime = .init(value: 1, timescale: 1000)
-    let maxExposureDuration: CMTime = .init(value: 1, timescale: 5)
-    let minISO: Float = 1
-    let maxISO: Float = 10
-    let minExposureTargetBias: Float = 0.1
-    let maxExposureTargetBias: Float = 199
-    let minFrameRate: Float64? = 15
-    let maxFrameRate: Float64? = 60
-    let isExposurePointOfInterestSupported: Bool = true
-    let isFocusPointOfInterestSupported: Bool = true
+
+
+
+
+
 
     func isExposureModeSupported(_ exposureMode: AVCaptureDevice.ExposureMode) -> Bool { true }
 
@@ -48,8 +53,7 @@ class MockCaptureDevice: NSObject, CaptureDevice {
     }
 
 
-    let hasFlash: Bool = true
-    let hasTorch: Bool = true
+
 
 
 
