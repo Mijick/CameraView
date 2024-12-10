@@ -1,5 +1,5 @@
 //
-//  CameraBridgeView.swift of MijickCamera
+//  CameraView+Bridge.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
