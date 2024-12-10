@@ -94,4 +94,8 @@ extension CaptureDevice {
         focusPointOfInterest = point
         focusMode = .autoFocus
     }
+    func setLightMode(_ mode: CameraLightMode) {
+        guard hasTorch else { return }
+        lightMode = mode
+    }
 }

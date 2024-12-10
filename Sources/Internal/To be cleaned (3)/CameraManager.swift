@@ -111,7 +111,7 @@ private extension CameraManager {
         device.setExposureTargetBias(attributes.cameraExposure.targetBias)
         device.setFrameRate(attributes.frameRate)
         device.setZoomFactor(attributes.zoomFactor)
-        device.lightMode = attributes.lightMode
+        device.setLightMode(attributes.lightMode)
         device.hdrMode = attributes.hdrMode
         device.unlockForConfiguration()
     }
@@ -241,7 +241,7 @@ extension CameraManager {
 private extension CameraManager {
     func setDeviceLightMode(_ lightMode: CameraLightMode, _ device: any CaptureDevice) throws {
         try device.lockForConfiguration()
-        device.lightMode = lightMode
+        device.setLightMode(lightMode)
         device.unlockForConfiguration()
     }
 }
