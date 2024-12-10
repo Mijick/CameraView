@@ -13,16 +13,33 @@ import AVKit
 
 extension MockCaptureSession: @unchecked Sendable {}
 class MockCaptureSession: NSObject, CaptureSession {
+    // MARK: Attributes
+    var isRunning: Bool { _isRunning }
+    var deviceInputs: [any CaptureDeviceInput] { _inputs }
+    var outputs: [AVCaptureOutput] { _outputs }
+    var sessionPreset: AVCaptureSession.Preset = .cif352x288
+
+    
+
+
+    // MARK: Methods
+
+
+
+
+
+
+
     func stopRunningAndReturnNewInstance() -> any CaptureSession {
         _isRunning = false
         return MockCaptureSession()
     }
     
-    var deviceInputs: [any CaptureDeviceInput] { _inputs }
 
-    var outputs: [AVCaptureOutput] { _outputs }
 
-    var isRunning: Bool { _isRunning }
+
+
+
 
 
 
@@ -52,5 +69,5 @@ class MockCaptureSession: NSObject, CaptureSession {
     }
 
 
-    var sessionPreset: AVCaptureSession.Preset = .cif352x288
+
 }
