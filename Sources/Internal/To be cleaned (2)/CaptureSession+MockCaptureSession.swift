@@ -15,12 +15,9 @@ extension MockCaptureSession: @unchecked Sendable {}
 class MockCaptureSession: NSObject, CaptureSession {
     // MARK: Attributes
     var isRunning: Bool { _isRunning }
-    var deviceInputs: [any CaptureDeviceInput] { _inputs }
+    var deviceInputs: [any CaptureDeviceInput] { _deviceInputs }
     var outputs: [AVCaptureOutput] { _outputs }
     var sessionPreset: AVCaptureSession.Preset = .cif352x288
-
-    
-
 
     // MARK: Methods
 
@@ -44,14 +41,14 @@ class MockCaptureSession: NSObject, CaptureSession {
 
 
 
-    private var _outputs: [AVCaptureOutput] = []
-    private var _inputs: [any CaptureDeviceInput] = []
-    private var _isRunning: Bool = false
+
+
+
 
 
     func remove(input: (any CaptureDeviceInput)?) {
-        guard let input = input as? MockDeviceInput, let index = _inputs.firstIndex(where: { $0.device.uniqueID == input.device.uniqueID }) else { return }
-        _inputs.remove(at: index)
+        guard let input = input as? MockDeviceInput, let index = _deviceInputs.firstIndex(where: { $0.device.uniqueID == input.device.uniqueID }) else { return }
+        _deviceInputs.remove(at: index)
     }
     required override init() {}
 
@@ -60,8 +57,8 @@ class MockCaptureSession: NSObject, CaptureSession {
         _outputs.append(output)
     }
     func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
-        guard let input = input as? MockDeviceInput, !_inputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
-        _inputs.append(input)
+        guard let input = input as? MockDeviceInput, !_deviceInputs.contains(where: { input == $0 }) else { throw MijickCameraError.cannotSetupInput }
+        _deviceInputs.append(input)
     }
 
     func startRunning() {
@@ -69,5 +66,8 @@ class MockCaptureSession: NSObject, CaptureSession {
     }
 
 
-
+    // MARK: Private Attributes
+    private var _isRunning: Bool = false
+    private var _deviceInputs: [any CaptureDeviceInput] = []
+    private var _outputs: [AVCaptureOutput] = []
 }
