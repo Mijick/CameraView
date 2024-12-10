@@ -1,5 +1,5 @@
 //
-//  MCameraController.swift of MijickCamera
+//  MCamera+Controller.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -13,10 +13,4 @@ import Foundation
 
 @MainActor public struct MCameraController {
     let mCamera: MCamera
-}
-
-// MARK: Available Actions
-public extension MCameraController {
-    func closeMCamera() { mCamera.config.closeMCameraAction() }
-    func reopenCameraScreen() { mCamera.manager.setCapturedMedia(nil) }
 }
