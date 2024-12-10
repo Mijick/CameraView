@@ -1,5 +1,5 @@
 //
-//  Public+MCameraError.swift of MijickCamera
+//  Public+Model+MCameraMedia.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
@@ -9,9 +9,10 @@
 //  Copyright ©2024 Mijick. All rights reserved.
 
 
-import Foundation
+import SwiftUI
 
-public enum MCameraError: Error {
-    case microphonePermissionsNotGranted, cameraPermissionsNotGranted
-    case cannotSetupInput, cannotSetupOutput, cannotSetupMetalDevice
+// MARK: Getters
+public extension MCameraMedia {
+    func getImage() -> UIImage? { image }
+    func getVideo() -> URL? { video }
 }
