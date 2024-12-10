@@ -11,13 +11,13 @@
 
 import AVKit
 
-@MainActor class CameraManagerPhoto: NSObject {
+@MainActor class CameraManagerPhotoOutput: NSObject {
     private(set) var parent: CameraManager!
     private(set) var output: AVCapturePhotoOutput = .init()
 }
 
 // MARK: Setup
-extension CameraManagerPhoto {
+extension CameraManagerPhotoOutput {
     func setup(parent: CameraManager) throws(MijickCameraError) {
         self.parent = parent
         try self.parent.captureSession.add(output: output)
@@ -30,7 +30,7 @@ extension CameraManagerPhoto {
 
 
 // MARK: Capture
-extension CameraManagerPhoto {
+extension CameraManagerPhotoOutput {
     func capture() {
         let settings = getPhotoOutputSettings()
 
@@ -39,7 +39,7 @@ extension CameraManagerPhoto {
         parent.cameraMetalView.performImageCaptureAnimation()
     }
 }
-private extension CameraManagerPhoto {
+private extension CameraManagerPhotoOutput {
     func getPhotoOutputSettings() -> AVCapturePhotoSettings {
         let settings = AVCapturePhotoSettings()
         settings.flashMode = parent.attributes.flashMode.toDeviceFlashMode()
@@ -54,7 +54,7 @@ private extension CameraManagerPhoto {
 }
 
 // MARK: Receive Data
-extension CameraManagerPhoto: @preconcurrency AVCapturePhotoCaptureDelegate {
+extension CameraManagerPhotoOutput: @preconcurrency AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         guard let imageData = photo.fileDataRepresentation(),
               let ciImage = CIImage(data: imageData)
@@ -68,7 +68,7 @@ extension CameraManagerPhoto: @preconcurrency AVCapturePhotoCaptureDelegate {
         parent.setCapturedMedia(capturedMedia)
     }
 }
-private extension CameraManagerPhoto {
+private extension CameraManagerPhotoOutput {
     func prepareCIImage(_ ciImage: CIImage, _ filters: [CIFilter]) -> CIImage {
         ciImage.applyingFilters(filters)
     }
@@ -84,7 +84,7 @@ private extension CameraManagerPhoto {
         return uiImage
     }
 }
-private extension CameraManagerPhoto {
+private extension CameraManagerPhotoOutput {
     func getFixedFrameOrientation() -> CGImagePropertyOrientation {
         guard UIDevice.current.orientation != parent.attributes.deviceOrientation.toDeviceOrientation() else { return parent.attributes.frameOrientation }
 

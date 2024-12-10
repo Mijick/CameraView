@@ -13,7 +13,7 @@
 import SwiftUI
 import MijickTimer
 
-@MainActor class CameraManagerVideo: NSObject {
+@MainActor class CameraManagerVideoOutput: NSObject {
     private(set) var recordingTime: MTime = .zero
     private(set) var parent: CameraManager!
     private(set) var output: AVCaptureMovieFileOutput = .init()
@@ -22,7 +22,7 @@ import MijickTimer
 }
 
 // MARK: Setup
-extension CameraManagerVideo {
+extension CameraManagerVideoOutput {
     func setup(parent: CameraManager) throws(MijickCameraError) {
         self.parent = parent
         try parent.captureSession.add(output: output)
@@ -30,7 +30,7 @@ extension CameraManagerVideo {
 }
 
 // MARK: Reset
-extension CameraManagerVideo {
+extension CameraManagerVideoOutput {
     func reset() {
         timer.reset()
     }
@@ -42,7 +42,7 @@ extension CameraManagerVideo {
 
 
 // MARK: Toggle
-extension CameraManagerVideo {
+extension CameraManagerVideoOutput {
     func toggleRecording() { switch output.isRecording {
         case true: stopRecording()
         case false: startRecording()
@@ -50,7 +50,7 @@ extension CameraManagerVideo {
 }
 
 // MARK: Start Recording
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     func startRecording() {
         guard let url = prepareUrlForVideoRecording() else { return }
 
@@ -61,7 +61,7 @@ private extension CameraManagerVideo {
         parent.objectWillChange.send()
     }
 }
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     func prepareUrlForVideoRecording() -> URL? {
         FileManager.prepareURLForVideoOutput()
     }
@@ -89,14 +89,14 @@ private extension CameraManagerVideo {
 }
 
 // MARK: Stop Recording
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     func stopRecording() {
         presentLastFrame()
         output.stopRecording()
         timer.reset()
     }
 }
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     func presentLastFrame() {
         let firstRecordedFrame = MCameraMedia(data: firstRecordedFrame)
         parent.setCapturedMedia(firstRecordedFrame)
@@ -104,7 +104,7 @@ private extension CameraManagerVideo {
 }
 
 // MARK: Receive Data
-extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelegate {
+extension CameraManagerVideoOutput: @preconcurrency AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: (any Error)?) { Task {
         let videoURL = try await prepareVideo(outputFileURL: outputFileURL, cameraFilters: parent.attributes.cameraFilters)
         let capturedVideo = MCameraMedia(data: videoURL)
@@ -113,7 +113,7 @@ extension CameraManagerVideo: @preconcurrency AVCaptureFileOutputRecordingDelega
         parent.setCapturedMedia(capturedVideo)
     }}
 }
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     func prepareVideo(outputFileURL: URL, cameraFilters: [CIFilter]) async throws -> URL {
         if cameraFilters.isEmpty { return outputFileURL }
 
@@ -126,7 +126,7 @@ private extension CameraManagerVideo {
         return fileUrl ?? outputFileURL
     }
 }
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     nonisolated func applyFiltersToVideo(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) {
         let videoFrame = prepareVideoFrame(request, filters)
         request.finish(with: videoFrame, context: nil)
@@ -136,7 +136,7 @@ private extension CameraManagerVideo {
         else { await exportSession?.export() }
     }}
 }
-private extension CameraManagerVideo {
+private extension CameraManagerVideoOutput {
     nonisolated func prepareVideoFrame(_ request: AVAsynchronousCIImageFilteringRequest, _ filters: [CIFilter]) -> CIImage { request
         .sourceImage
         .clampedToExtent()

@@ -22,8 +22,8 @@ import AVKit
     private(set) var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
-    private(set) var photoOutput: CameraManagerPhoto = .init()
-    private(set) var videoOutput: CameraManagerVideo = .init()
+    private(set) var photoOutput: CameraManagerPhotoOutput = .init()
+    private(set) var videoOutput: CameraManagerVideoOutput = .init()
 
     // MARK: UI Elements
     private(set) var cameraView: UIView!
