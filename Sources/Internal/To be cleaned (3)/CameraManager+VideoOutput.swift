@@ -14,10 +14,10 @@ import SwiftUI
 import MijickTimer
 
 @MainActor class CameraManagerVideoOutput: NSObject {
-    private(set) var recordingTime: MTime = .zero
     private(set) var parent: CameraManager!
     private(set) var output: AVCaptureMovieFileOutput = .init()
     private(set) var timer: MTimer = .init(.camera)
+    private(set) var recordingTime: MTime = .zero
     private(set) var firstRecordedFrame: UIImage?
 }
 
