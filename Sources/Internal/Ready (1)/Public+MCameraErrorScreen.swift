@@ -12,7 +12,7 @@
 import SwiftUI
 
 public protocol MCameraErrorScreen: View {
-    var error: MijickCameraError { get }
+    var error: MCameraError { get }
     var closeMCameraAction: () -> () { get }
 }
 

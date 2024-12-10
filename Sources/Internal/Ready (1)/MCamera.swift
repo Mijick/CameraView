@@ -32,7 +32,7 @@ private extension MCamera {
     }
 }
 private extension MCamera {
-    func createErrorScreen(_ error: MijickCameraError) -> some View {
+    func createErrorScreen(_ error: MCameraError) -> some View {
         config.errorScreen(error, config.closeMCameraAction).erased()
     }
     func createCapturedMediaScreen(_ media: MCameraMedia) -> some View {

@@ -28,7 +28,7 @@ extension AVCaptureSession {
     }
 }
 extension AVCaptureSession {
-    func add(input: (any CaptureDeviceInput)?) throws(MijickCameraError) {
+    func add(input: (any CaptureDeviceInput)?) throws(MCameraError) {
         guard let input = input as? AVCaptureDeviceInput else { throw .cannotSetupInput }
         if canAddInput(input) { addInput(input) }
     }
@@ -38,7 +38,7 @@ extension AVCaptureSession {
     }
 }
 extension AVCaptureSession {
-    func add(output: AVCaptureOutput?) throws(MijickCameraError) {
+    func add(output: AVCaptureOutput?) throws(MCameraError) {
         guard let output else { throw .cannotSetupOutput }
         if canAddOutput(output) { addOutput(output) }
     }
