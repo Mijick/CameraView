@@ -106,23 +106,6 @@ extension CaptureDevice {
 
 // MARK: Set Exposure Mode
 extension CaptureDevice {
-
-}
-
-// MARK: Set Exposure Target Bias
-extension CaptureDevice {
-
-}
-
-
-
-
-
-
-
-
-extension CaptureDevice {
-
     func setExposureMode(_ mode: AVCaptureDevice.ExposureMode, duration: CMTime, iso: Float) {
         guard isExposureModeSupported(mode) else { return }
 
@@ -135,12 +118,14 @@ extension CaptureDevice {
 
         setExposureModeCustom(duration: duration, iso: iso, completionHandler: nil)
     }
+}
+
+// MARK: Set Exposure Target Bias
+extension CaptureDevice {
     func setExposureTargetBias(_ bias: Float) {
         guard isExposureModeSupported(.custom) else { return }
 
         let bias = max(min(bias, maxExposureTargetBias), minExposureTargetBias)
         setExposureTargetBias(bias, completionHandler: nil)
     }
-
-
 }
