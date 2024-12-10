@@ -1,5 +1,5 @@
 //
-//  CaptureDevice+Mock.swift of MijickCamera
+//  CaptureDevice+MockCaptureDevice.swift of MijickCamera
 //
 //  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
