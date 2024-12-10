@@ -12,6 +12,17 @@
 import AVKit
 
 class MockCaptureDevice: NSObject, CaptureDevice {
+    // MARK: Getters
+
+
+
+    // MARK: Setters
+
+
+
+    // MARK: Methods
+
+
     let minExposureDuration: CMTime = .init(value: 1, timescale: 1000)
     let maxExposureDuration: CMTime = .init(value: 1, timescale: 5)
     let minISO: Float = 1
