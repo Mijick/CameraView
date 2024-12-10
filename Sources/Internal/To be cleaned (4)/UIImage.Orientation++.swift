@@ -11,6 +11,7 @@
 
 import SwiftUI
 
+// MARK: From CGImagePropertyOrientation
 extension UIImage.Orientation {
     init(_ orientation: CGImagePropertyOrientation) { switch orientation {
         case .down: self = .down
