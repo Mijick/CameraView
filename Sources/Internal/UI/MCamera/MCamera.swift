@@ -21,13 +21,26 @@ import SwiftUI
  Optionally shows the **Captured Media Screen**, which is displayed after the user captures an image or video.
 
 
+ # Customization
+ All of the MCamera's default settings can be changed during initialisation.
+
+ ## Camera Screens
+ Use one of the methods below to change the default screens:
+    - ``setCameraScreen(_:)``
+    - ``setCapturedMediaScreen(_:)``
+    - ``setErrorScreen(_:)``
+
+ - tip: To disable displaying captured media, call the ``setCapturedMediaScreen(_:)`` method with a nil value.
+
+ ## Actions after capturing media
+ Use one of the methods below to set actions that will be called after capturing media:
+    - ``onImageCaptured(_:)``
+    - ``onVideoCaptured(_:)``
 
 
 
- Aby zmienić wygląd domyślnych ekranów, użyj funkcji:
- - setCameraScreen
- - setCapturedMediaScreen
- - setErrorScreen
+
+
 
  Aby zmienić początkowe ustawienia kamery, użyj funkcji:
  - setCameraOutputType
