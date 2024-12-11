@@ -11,6 +11,19 @@
 
 import SwiftUI
 
+/**
+ Screen that displays the captured media.
+
+ - important: A view conforming to **MCapturedMediaScreen** has to be passed directly to ``MCamera``. See ``MCamera/setCapturedMediaScreen(_:)`` for more details.
+
+
+ ## Usage
+ ```swift
+ 
+
+
+ ```
+ */
 public protocol MCapturedMediaScreen: View {
     var capturedMedia: MCameraMedia { get }
     var namespace: Namespace.ID { get }

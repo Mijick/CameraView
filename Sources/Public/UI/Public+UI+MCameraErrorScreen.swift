@@ -14,7 +14,7 @@ import SwiftUI
 /**
  Screen that displays an error message if one or more camera permissions are denied by the user.
 
- - important: A view conforming to MCameraErrorScreen has to be passed directly to ``MCamera``. See ``MCamera/setErrorScreen(_:)`` for more details.
+ - important: A view conforming to **MCameraErrorScreen** has to be passed directly to ``MCamera``. See ``MCamera/setErrorScreen(_:)`` for more details.
 
 
  ## Usage
