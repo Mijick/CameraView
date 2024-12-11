@@ -23,6 +23,7 @@ import SwiftUI
 
  # Customization
  All of the MCamera's default settings can be changed during initialisation.
+ - important: To start a camera session, simply call the ``startSession()`` method. For more details, see the **Usage** section.
 
  ## Camera Screens
  Use one of the methods below to change the default screens:
@@ -60,20 +61,12 @@ import SwiftUI
     - ``setFocusImageColor(_:)``
     - ``setFocusImageSize(_:)``
 
+ ## Other
+ There are other methods that you can use to customize your experience:
+    - ``setCloseMCameraAction(_:)``
+    - ``lockOrientation(_:)``
 
-
-
-
- Aby zmienić początkowe ustawienia kamery, użyj funkcji:
- - setCameraOutputType
- - setCameraPosition
- - bla bla bla
-
-
-
- Aby ustalić akcję, która doprowadzi do zamknięcia MCamera, użyj funkcji setCloseMCameraAction.
-
- ## Usage
+ # Usage
  ```swift
 
  ```
