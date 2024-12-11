@@ -116,6 +116,7 @@ private extension MCamera {
     func createCapturedMediaScreen(_ media: MCameraMedia) -> some View {
         config.capturedMediaScreen?(media, namespace, onCapturedMediaRejected, onCapturedMediaAccepted)
             .erased()
+            .onAppear(perform: onCaptureMediaScreenAppear)
     }
     func createCameraScreen() -> some View {
         config.cameraScreen(manager, namespace, config.closeMCameraAction)
@@ -132,11 +133,8 @@ private extension MCamera {
 
 // MARK: MCamera
 private extension MCamera {
-    func onAppear() {
-        lockScreenOrientation()
-    }
     func onDisappear() {
-        unlockScreenOrientation()
+        lockScreenOrientation(nil)
         manager.cancel()
     }
     func onCapturedMediaChange(_ capturedMedia: MCameraMedia?) {
@@ -158,7 +156,10 @@ private extension MCamera {
 // MARK: Camera Screen
 private extension MCamera {
     func onCameraAppear() { Task {
-        do { try await manager.setup() }
+        do {
+            try await manager.setup()
+            lockScreenOrientation(.portrait)
+        }
         catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
     }}
     func onCameraDisappear() {
@@ -168,6 +169,9 @@ private extension MCamera {
 
 // MARK: Captured Media Screen
 private extension MCamera {
+    func onCaptureMediaScreenAppear() {
+        lockScreenOrientation(nil)
+    }
     func onCapturedMediaRejected() {
         manager.setCapturedMedia(nil)
     }
