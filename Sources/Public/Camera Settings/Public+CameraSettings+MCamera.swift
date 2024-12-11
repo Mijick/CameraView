@@ -192,33 +192,43 @@ public extension MCamera {
     /**
      Changes the initial camera frame rate.
 
-     - important: Depending on the resolution of the camera and the current specifications of the device, there are some restrictions on the frame rate that can be set.
+     - note: Depending on the resolution of the camera and the current specifications of the device, there are some restrictions on the frame rate that can be set.
      If you set a frame rate that exceeds the camera's capabilities, the library will automatically set the closest possible value and show you which value has been set (``MCameraScreen/frameRate``).
      */
     func setFrameRate(_ frameRate: Int32) -> Self { manager.attributes.frameRate = frameRate; return self }
 
     /**
      Changes the initial camera exposure duration.
+
+     - note: If the exposure duration is out of bounds, it will be set to the closest available value.
      */
     func setCameraExposureDuration(_ duration: CMTime) -> Self { manager.attributes.cameraExposure.duration = duration; return self }
 
     /**
      Changes the initial camera target bias.
+
+     - note: If the target bias is out of bounds, it will be set to the closest available value.
      */
     func setCameraTargetBias(_ targetBias: Float) -> Self { manager.attributes.cameraExposure.targetBias = targetBias; return self }
 
     /**
      Changes the initial camera ISO.
+
+     - note: If the ISO is out of bounds, it will be set to the closest available value.
      */
     func setCameraISO(_ iso: Float) -> Self { manager.attributes.cameraExposure.iso = iso; return self }
 
     /**
      Changes the initial camera exposure mode.
+
+     - note: If the exposure mode is not supported, the exposure mode will not be changed.
      */
     func setCameraExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) -> Self { manager.attributes.cameraExposure.mode = exposureMode; return self }
 
     /**
      Changes the initial camera HDR mode.
+
+     For available options, please refer to the ``CameraHDRMode`` documentation.
      */
     func setCameraHDRMode(_ hdrMode: CameraHDRMode) -> Self { manager.attributes.hdrMode = hdrMode; return self }
 
