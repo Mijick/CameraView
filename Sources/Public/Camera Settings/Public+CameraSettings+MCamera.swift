@@ -144,7 +144,9 @@ public extension MCamera {
     /**
      Changes the initial camera position.
 
-     For available options, please refer to the ``CameraPosition`` documentation
+     For available options, please refer to the ``CameraPosition`` documentation.
+
+     - note: If the selected camera position is not available, the camera will not be changed.
      */
     func setCameraPosition(_ cameraPosition: CameraPosition) -> Self { manager.attributes.cameraPosition = cameraPosition; return self }
 
