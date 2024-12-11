@@ -220,8 +220,20 @@ public extension MCamera {
      - important: Setting multiple filters simultaneously can affect the performance of the camera.
      */
     func setCameraFilters(_ filters: [CIFilter]) -> Self { manager.attributes.cameraFilters = filters; return self }
+
+    /**
+     Changes the initial mirror output setting.
+     */
     func setMirrorOutput(_ shouldMirror: Bool) -> Self { manager.attributes.mirrorOutput = shouldMirror; return self }
+
+    /**
+     Changes the initial grid visibility setting.
+     */
     func setGridVisibility(_ shouldShowGrid: Bool) -> Self { manager.attributes.isGridVisible = shouldShowGrid; return self }
+
+    /**
+     Changes the image of the focus indicator visible when touching anywhere on the camera screen.
+     */
     func setFocusImage(_ image: UIImage) -> Self { manager.cameraMetalView.focusIndicator.image = image; return self }
     func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicator.tintColor = color; return self }
     func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicator.size = size; return self }
