@@ -152,6 +152,7 @@ private extension MCamera {
     }
     func unlockScreenOrientation() {
         config.appDelegate?.orientationLock = .all
+        UINavigationController.attemptRotationToDeviceOrientation()
     }
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
         if let image = capturedMedia.getImage() { config.imageCapturedAction(image, .init(mCamera: self)) }
