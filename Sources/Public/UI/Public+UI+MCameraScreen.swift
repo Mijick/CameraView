@@ -124,7 +124,7 @@ public extension MCameraScreen {
 
      For available options, please refer to the ``CameraFlashMode`` documentation.
 
-     - note: If the selected flash mode is not available, the flash will not be changed.
+     - note: If the selected flash mode is not available, the flash mode will not be changed.
      */
     func setFlashMode(_ flashMode: CameraFlashMode) { cameraManager.setFlashMode(flashMode) }
 
@@ -133,7 +133,7 @@ public extension MCameraScreen {
 
      For available options, please refer to the ``CameraLightMode`` documentation.
 
-     - note: If the selected light mode is not available, the light will not be changed.
+     - note: If the selected light mode is not available, the light mode will not be changed.
      */
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
 

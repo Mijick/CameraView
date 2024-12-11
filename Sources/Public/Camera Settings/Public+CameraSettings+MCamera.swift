@@ -159,6 +159,8 @@ public extension MCamera {
 
     /**
      Changes the initial camera zoom level.
+
+     - note: If the zoom factor is out of bounds, it will be set to the closest available value.
      */
     func setZoomFactor(_ zoomFactor: CGFloat) -> Self { manager.attributes.zoomFactor = zoomFactor; return self }
 
@@ -166,11 +168,15 @@ public extension MCamera {
      Changes the initial camera flash mode.
 
      For available options, please refer to the ``CameraFlashMode`` documentation.
+
+     - note: If the selected flash mode is not available, the flash mode will not be changed.
      */
     func setFlashMode(_ flashMode: CameraFlashMode) -> Self { manager.attributes.flashMode = flashMode; return self }
 
     /**
      Changes the initial light (torch / flashlight) mode.
+
+     - note: If the selected light mode is not available, the light mode will not be changed.
 
      For available options, please refer to the ``CameraLightMode`` documentation.
      */
