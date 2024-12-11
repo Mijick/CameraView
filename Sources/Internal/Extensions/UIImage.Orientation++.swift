@@ -1,16 +1,17 @@
 //
-//  UIImage.Orientation++.swift of MijickCameraView
+//  UIImage.Orientation++.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import SwiftUI
 
+// MARK: From CGImagePropertyOrientation
 extension UIImage.Orientation {
     init(_ orientation: CGImagePropertyOrientation) { switch orientation {
         case .down: self = .down

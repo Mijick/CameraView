@@ -1,36 +1,17 @@
 //
-//  View++.swift of MijickCameraView
+//  View++.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import SwiftUI
 
-// MARK: - Is Active Modifier
-extension View {
-    @ViewBuilder func isActive(_ value: Bool) -> some View { ZStack {
-        if value { self }
-    }}
-    @ViewBuilder func isActiveStackElement(_ value: Bool) -> some View {
-        if value { self }
-    }
-}
-
-// MARK: - Erased Modifier
+// MARK: Erased
 extension View {
     func erased() -> AnyView { .init(self) }
-}
-
-// MARK: - Returning Self
-extension View {
-    func setAndReturnSelf(_ body: (inout Self) -> Void) -> Self {
-        var result = self
-        body(&result)
-        return result
-    }
 }
