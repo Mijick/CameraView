@@ -98,7 +98,6 @@ public struct MCamera: View {
     
     public var body: some View { if config.isCameraConfigured {
         ZStack(content: createContent)
-            .onAppear(perform: onAppear)
             .onDisappear(perform: onDisappear)
             .onChange(of: manager.attributes.capturedMedia, perform: onCapturedMediaChange)
     }}
@@ -146,12 +145,8 @@ private extension MCamera {
     }
 }
 private extension MCamera {
-    func lockScreenOrientation() {
-        config.appDelegate?.orientationLock = .portrait
-        UINavigationController.attemptRotationToDeviceOrientation()
-    }
-    func unlockScreenOrientation() {
-        config.appDelegate?.orientationLock = .all
+    func lockScreenOrientation(_ orientation: UIInterfaceOrientationMask?) {
+        config.appDelegate?.orientationLock = orientation ?? .all
         UINavigationController.attemptRotationToDeviceOrientation()
     }
     func notifyUserOfMediaCaptured(_ capturedMedia: MCameraMedia) {
