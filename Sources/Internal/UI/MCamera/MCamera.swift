@@ -38,6 +38,27 @@ import SwiftUI
     - ``onVideoCaptured(_:)``
  - note: If there is no **Captured Media Screen**, the action is called immediately after the media is captured, otherwise it is triggered after the user accepts the captured media in the **Captured Media Screen**.
 
+ ## Camera Configuration
+ To change the initial camera settings, use the following methods:
+    - ``setCameraOutputType(_:)``
+    - ``setCameraPosition(_:)``
+    - ``setAudioAvailability(_:)``
+    - ``setZoomFactor(_:)``
+    - ``setFlashMode(_:)``
+    - ``setLightMode(_:)``
+    - ``setResolution(_:)``
+    - ``setFrameRate(_:)``
+    - ``setCameraExposureDuration(_:)``
+    - ``setCameraTargetBias(_:)``
+    - ``setCameraISO(_:)``
+    - ``setCameraExposureMode(_:)``
+    - ``setCameraHDRMode(_:)``
+    - ``setCameraFilters(_:)``
+    - ``setMirrorOutput(_:)``
+    - ``setGridVisibility(_:)``
+    - ``setFocusImage(_:)``
+    - ``setFocusImageColor(_:)``
+    - ``setFocusImageSize(_:)``
 
 
 
@@ -48,9 +69,7 @@ import SwiftUI
  - setCameraPosition
  - bla bla bla
 
- Aby ustalić akcje, które mają być wywoływane po zrobieniu zdjęcia lub nagraniu filmu, użyj funkcji:
- - onImageCaptured
- - onVideoCaptured
+
 
  Aby ustalić akcję, która doprowadzi do zamknięcia MCamera, użyj funkcji setCloseMCameraAction.
 
