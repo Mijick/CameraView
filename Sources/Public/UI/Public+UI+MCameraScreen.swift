@@ -104,7 +104,9 @@ public extension MCameraScreen {
     /**
      Set the camera position.
 
-     For available options, please refer to the ``CameraPosition`` documentation
+     For available options, please refer to the ``CameraPosition`` documentation.
+
+     - note: If the selected camera position is not available, the camera will not be changed.
      */
     func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
 
@@ -119,13 +121,17 @@ public extension MCameraScreen {
      Set the flash mode of the camera.
 
      For available options, please refer to the ``CameraFlashMode`` documentation.
+
+     - note: If the selected flash mode is not available, the flash will not be changed.
      */
     func setFlashMode(_ flashMode: CameraFlashMode) { cameraManager.setFlashMode(flashMode) }
 
     /**
      Set the light mode of the camera.
 
-     For available options, please refer to the ``CameraLightMode`` documentation
+     For available options, please refer to the ``CameraLightMode`` documentation.
+
+     - note: If the selected light mode is not available, the light will not be changed.
      */
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
 
@@ -140,6 +146,7 @@ public extension MCameraScreen {
      Set the camera frame rate.
 
      - important: Changing the resolution may affect the maximum frame rate that can be set.
+     - note: If the frame rate is out of bounds, it will be set to the closest available value.
      */
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
 
@@ -166,6 +173,8 @@ public extension MCameraScreen {
 
     /**
      Set the camera exposure mode.
+
+     - note: If the exposure mode is not supported, the exposure mode will not be changed.
      */
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
 
