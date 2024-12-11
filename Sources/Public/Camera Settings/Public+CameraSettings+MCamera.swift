@@ -290,13 +290,15 @@ public extension MCamera {
      struct ContentView: View {
         var body: some View {
             MCamera()
-     .setCameraScreen(CustomCameraScreen.init)
+                .onImageCaptured { image, controller in
+                    saveImageInGallery(image)
+                    controller.reopenCameraScreen()
+                }
 
-     // MUST BE CALLED!
-     .startSession()
+                // MUST BE CALLED!
+                .startSession()
+            }
      }
-     }
-
      ```
      */
     func onImageCaptured(_ action: @escaping (UIImage, MCamera.Controller) -> ()) -> Self { config.imageCapturedAction = action; return self }
