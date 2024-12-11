@@ -130,13 +130,6 @@ public extension MCameraScreen {
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
 
     /**
-     Set the camera filters to be applied to the camera output.
-
-     - important: Setting multiple filters simultaneously can affect the performance of the camera.
-     */
-    func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
-
-    /**
      Set the camera exposure mode.
      */
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
@@ -163,13 +156,6 @@ public extension MCameraScreen {
     func setExposureTargetBias(_ exposureTargetBias: Float) throws { try cameraManager.setExposureTargetBias(exposureTargetBias) }
 
     /**
-     Set the camera HDR mode.
-
-     For available options, please refer to the ``CameraHDRMode`` documentation.
-     */
-    func setHDRMode(_ hdrMode: CameraHDRMode) throws { try cameraManager.setHDRMode(hdrMode) }
-
-    /**
      Set the camera resolution.
 
      - important: Changing the resolution may affect the maximum frame rate that can be set.
@@ -182,6 +168,20 @@ public extension MCameraScreen {
      - important: Changing the resolution may affect the maximum frame rate that can be set.
      */
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
+
+    /**
+     Set the camera HDR mode.
+
+     For available options, please refer to the ``CameraHDRMode`` documentation.
+     */
+    func setHDRMode(_ hdrMode: CameraHDRMode) throws { try cameraManager.setHDRMode(hdrMode) }
+
+    /**
+     Set the camera filters to be applied to the camera output.
+
+     - important: Setting multiple filters simultaneously can affect the performance of the camera.
+     */
+    func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
 
     /**
      Set whether the camera output should be mirrored.
