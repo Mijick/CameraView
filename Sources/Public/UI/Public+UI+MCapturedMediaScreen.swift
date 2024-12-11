@@ -19,6 +19,17 @@ import SwiftUI
 
  ## Usage
  ```swift
+ struct ContentView: View {
+    var body: some View {
+        MCamera()
+            .setCapturedMediaScreen(CustomCapturedMediaScreen.init)
+
+            // MUST BE CALLED!
+            .startSession()
+    }
+ }
+
+ // MARK: Custom Captured Media Screen
  struct CustomCapturedMediaScreen: MCapturedMediaScreen {
     let capturedMedia: MCameraMedia
     let namespace: Namespace.ID
