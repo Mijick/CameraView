@@ -185,6 +185,12 @@ public extension MCameraScreen {
      - important: Changing the resolution may affect the maximum frame rate that can be set.
      */
     func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
+
+    /**
+     Set the camera frame rate.
+
+     - important: Changing the resolution may affect the maximum frame rate that can be set.
+     */
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
 }
 
