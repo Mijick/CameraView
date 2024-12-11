@@ -44,7 +44,7 @@ public extension MCamera {
      struct ContentView: View {
         var body: some View {
             MCamera()
-                .setCameraScreen(CustomCameraView.init)
+                .setCameraScreen(CustomCameraScreen.init)
 
                 // MUST BE CALLED!
                 .startSession()
@@ -109,6 +109,26 @@ public extension MCamera {
      ```
      */
     func setCapturedMediaScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
+
+    /**
+     Changes the error screen to a selected one.
+
+     For more details and tips on creating your own **Error Screen**, see the ``MCameraErrorScreen`` documentation.
+
+
+     ## Usage
+     ```swift
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+                .setErrorScreen(CustomCameraErrorScreen.init)
+
+                // MUST BE CALLED!
+                .startSession()
+        }
+     }
+     ```
+     */
     func setErrorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
 }
 
