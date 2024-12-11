@@ -109,7 +109,9 @@ public extension MCameraScreen {
     func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
 
     /**
-     Set the zoom factor of the camera. If the zoom factor is out of bounds, it will be set to the closest available value.
+     Set the zoom factor of the camera
+
+     - note: If the zoom factor is out of bounds, it will be set to the closest available value.
      */
     func setZoomFactor(_ zoomFactor: CGFloat) throws { try cameraManager.setCameraZoomFactor(zoomFactor) }
 
@@ -144,11 +146,37 @@ public extension MCameraScreen {
      */
     func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
 
-    
+    /**
+     Set the camera exposure mode.
+     */
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
+
+    /**
+     Set the camera exposure duration.
+
+     - note: If the exposure duration is out of bounds, it will be set to the closest available value.
+     */
     func setExposureDuration(_ exposureDuration: CMTime) throws { try cameraManager.setExposureDuration(exposureDuration) }
+
+    /**
+     Set the camera ISO.
+
+     - note: If the ISO is out of bounds, it will be set to the closest available value.
+     */
     func setISO(_ iso: Float) throws { try cameraManager.setISO(iso) }
+
+    /**
+     Set the camera exposure target bias.
+
+     - note: If the target bias is out of bounds, it will be set to the closest available value.
+     */
     func setExposureTargetBias(_ exposureTargetBias: Float) throws { try cameraManager.setExposureTargetBias(exposureTargetBias) }
+
+    /**
+     Set the camera HDR mode.
+
+     For available options, please refer to the ``CameraHDRMode`` documentation.
+     */
     func setHDRMode(_ hdrMode: CameraHDRMode) throws { try cameraManager.setHDRMode(hdrMode) }
     func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
