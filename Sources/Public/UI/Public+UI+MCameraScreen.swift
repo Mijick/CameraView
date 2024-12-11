@@ -89,6 +89,9 @@ public extension MCameraScreen {
     func createCameraOutputView() -> some View { CameraBridgeView(cameraManager: cameraManager).equatable() }
 }
 public extension MCameraScreen {
+    /**
+     Capture the current camera output. The output type depends on what ``cameraOutputType`` is set to.
+     */
     func captureOutput() { cameraManager.captureOutput() }
     func setOutputType(_ outputType: CameraOutputType) { cameraManager.setOutputType(outputType) }
     func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
