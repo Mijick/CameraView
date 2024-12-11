@@ -154,7 +154,17 @@ public extension MCamera {
         If disabled, the camera will not record audio, and will not ask for permission to access the microphone.
      */
     func setAudioAvailability(_ isAvailable: Bool) -> Self { manager.attributes.isAudioSourceAvailable = isAvailable; return self }
+
+    /**
+        Changes the initial camera zoom level.
+     */
     func setZoomFactor(_ zoomFactor: CGFloat) -> Self { manager.attributes.zoomFactor = zoomFactor; return self }
+
+    /**
+        Changes the initial camera flash mode.
+
+        For available options, please refer to the ``CameraFlashMode`` documentation.
+     */
     func setFlashMode(_ flashMode: CameraFlashMode) -> Self { manager.attributes.flashMode = flashMode; return self }
     func setLightMode(_ lightMode: CameraLightMode) -> Self { manager.attributes.lightMode = lightMode; return self }
     func setResolution(_ resolution: AVCaptureSession.Preset) -> Self { manager.attributes.resolution = resolution; return self }
