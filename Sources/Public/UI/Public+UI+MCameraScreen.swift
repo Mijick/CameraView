@@ -178,6 +178,12 @@ public extension MCameraScreen {
      For available options, please refer to the ``CameraHDRMode`` documentation.
      */
     func setHDRMode(_ hdrMode: CameraHDRMode) throws { try cameraManager.setHDRMode(hdrMode) }
+
+    /**
+     Set the camera resolution.
+
+     - important: Changing the resolution may affect the maximum frame rate that can be set.
+     */
     func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
 }
