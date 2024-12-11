@@ -90,7 +90,9 @@ public extension MCameraScreen {
 }
 public extension MCameraScreen {
     /**
-     Capture the current camera output. The output type depends on what ``cameraOutputType`` is set to.
+     Capture the current camera output.
+
+     The output type depends on what ``cameraOutputType`` is set to.
      */
     func captureOutput() { cameraManager.captureOutput() }
 
@@ -111,7 +113,7 @@ public extension MCameraScreen {
     func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
 
     /**
-     Set the zoom factor of the camera
+     Set the zoom factor of the camera.
 
      - note: If the zoom factor is out of bounds, it will be set to the closest available value.
      */
