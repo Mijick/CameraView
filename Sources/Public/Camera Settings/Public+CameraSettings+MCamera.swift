@@ -142,39 +142,43 @@ public extension MCamera {
     func setCameraOutputType(_ cameraOutputType: CameraOutputType) -> Self { manager.attributes.outputType = cameraOutputType; return self }
 
     /**
-        Changes the initial camera position.
+     Changes the initial camera position.
 
-        For available options, please refer to the ``CameraPosition`` documentation
+     For available options, please refer to the ``CameraPosition`` documentation
      */
     func setCameraPosition(_ cameraPosition: CameraPosition) -> Self { manager.attributes.cameraPosition = cameraPosition; return self }
 
     /**
-        Definies whether the audio source is available.
+     Definies whether the audio source is available.
 
-        If disabled, the camera will not record audio, and will not ask for permission to access the microphone.
+     If disabled, the camera will not record audio, and will not ask for permission to access the microphone.
      */
     func setAudioAvailability(_ isAvailable: Bool) -> Self { manager.attributes.isAudioSourceAvailable = isAvailable; return self }
 
     /**
-        Changes the initial camera zoom level.
+     Changes the initial camera zoom level.
      */
     func setZoomFactor(_ zoomFactor: CGFloat) -> Self { manager.attributes.zoomFactor = zoomFactor; return self }
 
     /**
-        Changes the initial camera flash mode.
+     Changes the initial camera flash mode.
 
-        For available options, please refer to the ``CameraFlashMode`` documentation.
+     For available options, please refer to the ``CameraFlashMode`` documentation.
      */
     func setFlashMode(_ flashMode: CameraFlashMode) -> Self { manager.attributes.flashMode = flashMode; return self }
 
     /**
-        Changes the initial light (torch / flashlight) mode.
+     Changes the initial light (torch / flashlight) mode.
 
-        For available options, please refer to the ``CameraLightMode`` documentation.
+     For available options, please refer to the ``CameraLightMode`` documentation.
      */
     func setLightMode(_ lightMode: CameraLightMode) -> Self { manager.attributes.lightMode = lightMode; return self }
 
-    
+    /**
+     Changes the initial camera resolution.
+
+     - important: Changing the resolution may affect the maximum frame rate that can be set.
+     */
     func setResolution(_ resolution: AVCaptureSession.Preset) -> Self { manager.attributes.resolution = resolution; return self }
     func setFrameRate(_ frameRate: Int32) -> Self { manager.attributes.frameRate = frameRate; return self }
     func setCameraExposureDuration(_ duration: CMTime) -> Self { manager.attributes.cameraExposure.duration = duration; return self }

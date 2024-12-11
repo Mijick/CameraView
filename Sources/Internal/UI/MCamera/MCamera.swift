@@ -60,6 +60,7 @@ import SwiftUI
     - ``setFocusImage(_:)``
     - ``setFocusImageColor(_:)``
     - ``setFocusImageSize(_:)``
+ - important: Note that if you try to set a value that exceeds the camera's capabilities, the camera will automatically set the closest possible value and show you which value has been set.
 
  ## Other
  There are other methods that you can use to customize your experience:
