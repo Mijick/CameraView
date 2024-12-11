@@ -201,20 +201,20 @@ public extension MCameraScreen {
     var zoomFactor: CGFloat { cameraManager.attributes.zoomFactor }
     var flashMode: CameraFlashMode { cameraManager.attributes.flashMode }
     var lightMode: CameraLightMode { cameraManager.attributes.lightMode }
-    var isOutputMirrored: Bool { cameraManager.attributes.mirrorOutput }
-    var isGridVisible: Bool { cameraManager.attributes.isGridVisible }
-    var cameraFilters: [CIFilter] { cameraManager.attributes.cameraFilters }
-    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
+    var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
+    var frameRate: Int32 { cameraManager.attributes.frameRate }
     var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
     var iso: Float { cameraManager.attributes.cameraExposure.iso }
     var exposureTargetBias: Float { cameraManager.attributes.cameraExposure.targetBias }
+    var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
     var hdrMode: CameraHDRMode { cameraManager.attributes.hdrMode }
-    var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
-    var frameRate: Int32 { cameraManager.attributes.frameRate }
+    var cameraFilters: [CIFilter] { cameraManager.attributes.cameraFilters }
+    var isOutputMirrored: Bool { cameraManager.attributes.mirrorOutput }
+    var isGridVisible: Bool { cameraManager.attributes.isGridVisible }
 }
 public extension MCameraScreen {
-    var hasLight: Bool { cameraManager.hasLight }
     var hasFlash: Bool { cameraManager.hasFlash }
+    var hasLight: Bool { cameraManager.hasLight }
     var recordingTime: MTime { cameraManager.videoOutput.recordingTime }
     var isRecording: Bool { cameraManager.videoOutput.timer.timerStatus == .running }
     var isOrientationLocked: Bool { cameraManager.attributes.orientationLocked || cameraManager.attributes.userBlockedScreenRotation }
