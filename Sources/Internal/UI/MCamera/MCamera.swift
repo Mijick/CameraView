@@ -68,7 +68,25 @@ import SwiftUI
 
  # Usage
  ```swift
+ struct ContentView: View {
+    var body: some View {
+        MCamera()
+            .setCameraFilters([.init(name: "CISepiaTone")!])
+            .setCameraPosition(.back)
+            .setCameraOutputType(.video)
+            .setAudioAvailability(false)
+            .setResolution(.hd4K3840x2160)
+            .setFrameRate(30)
+            .setZoomFactor(1.2)
+            .setCameraISO(3)
+            .setCameraTargetBias(1.2)
+            .setLightMode(.on)
+            .setFlashMode(.auto)
 
+            // MUST BE CALLED!
+            .startSession()
+    }
+ }
  ```
  */
 public struct MCamera: View {
