@@ -159,8 +159,7 @@ private extension MCamera {
         do {
             try await manager.setup()
             lockScreenOrientation(.portrait)
-        }
-        catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
+        } catch { print("(MijickCamera) ERROR DURING SETUP: \(error)") }
     }}
     func onCameraDisappear() {
         manager.cancel()
