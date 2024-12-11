@@ -151,18 +151,18 @@ public extension MCameraScreen {
     func setExposureDuration(_ exposureDuration: CMTime) throws { try cameraManager.setExposureDuration(exposureDuration) }
 
     /**
-     Set the camera ISO.
-
-     - note: If the ISO is out of bounds, it will be set to the closest available value.
-     */
-    func setISO(_ iso: Float) throws { try cameraManager.setISO(iso) }
-
-    /**
      Set the camera exposure target bias.
 
      - note: If the target bias is out of bounds, it will be set to the closest available value.
      */
     func setExposureTargetBias(_ exposureTargetBias: Float) throws { try cameraManager.setExposureTargetBias(exposureTargetBias) }
+
+    /**
+     Set the camera ISO.
+
+     - note: If the ISO is out of bounds, it will be set to the closest available value.
+     */
+    func setISO(_ iso: Float) throws { try cameraManager.setISO(iso) }
 
     /**
      Set the camera exposure mode.
@@ -204,8 +204,8 @@ public extension MCameraScreen {
     var resolution: AVCaptureSession.Preset { cameraManager.attributes.resolution }
     var frameRate: Int32 { cameraManager.attributes.frameRate }
     var exposureDuration: CMTime { cameraManager.attributes.cameraExposure.duration }
-    var iso: Float { cameraManager.attributes.cameraExposure.iso }
     var exposureTargetBias: Float { cameraManager.attributes.cameraExposure.targetBias }
+    var iso: Float { cameraManager.attributes.cameraExposure.iso }
     var exposureMode: AVCaptureDevice.ExposureMode { cameraManager.attributes.cameraExposure.mode }
     var hdrMode: CameraHDRMode { cameraManager.attributes.hdrMode }
     var cameraFilters: [CIFilter] { cameraManager.attributes.cameraFilters }
