@@ -130,16 +130,6 @@ public extension MCameraScreen {
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
 
     /**
-     Set whether the camera output should be mirrored.
-     */
-    func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
-
-    /**
-     Set whether the camera grid should be visible.
-     */
-    func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
-
-    /**
      Set the camera filters to be applied to the camera output.
 
      - important: Setting multiple filters simultaneously can affect the performance of the camera.
@@ -192,6 +182,16 @@ public extension MCameraScreen {
      - important: Changing the resolution may affect the maximum frame rate that can be set.
      */
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
+
+    /**
+     Set whether the camera output should be mirrored.
+     */
+    func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
+
+    /**
+     Set whether the camera grid should be visible.
+     */
+    func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
 }
 
 // MARK: Attributes
