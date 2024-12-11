@@ -37,7 +37,7 @@ private extension DefaultCameraScreen {
             .frame(maxHeight: .infinity, alignment: .top)
     }
     func createContentView() -> some View {
-        createCameraView()
+        createCameraOutputView()
             .ignoresSafeArea()
     }
     func createBottomBar() -> some View {
