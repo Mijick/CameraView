@@ -166,7 +166,15 @@ public extension MCamera {
         For available options, please refer to the ``CameraFlashMode`` documentation.
      */
     func setFlashMode(_ flashMode: CameraFlashMode) -> Self { manager.attributes.flashMode = flashMode; return self }
+
+    /**
+        Changes the initial light (torch / flashlight) mode.
+
+        For available options, please refer to the ``CameraLightMode`` documentation.
+     */
     func setLightMode(_ lightMode: CameraLightMode) -> Self { manager.attributes.lightMode = lightMode; return self }
+
+    
     func setResolution(_ resolution: AVCaptureSession.Preset) -> Self { manager.attributes.resolution = resolution; return self }
     func setFrameRate(_ frameRate: Int32) -> Self { manager.attributes.frameRate = frameRate; return self }
     func setCameraExposureDuration(_ duration: CMTime) -> Self { manager.attributes.cameraExposure.duration = duration; return self }
