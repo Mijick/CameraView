@@ -19,4 +19,5 @@ extension DefaultCameraScreen { class Config {
     var lightButtonAllowed: Bool = true
     var flipButtonAllowed: Bool = true
     var gridButtonAllowed: Bool = true
+    var closeButtonAllowed: Bool = true
 }}

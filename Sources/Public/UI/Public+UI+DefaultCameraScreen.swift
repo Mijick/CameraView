@@ -27,4 +27,5 @@ public extension DefaultCameraScreen {
     func lightButtonAllowed(_ value: Bool) -> Self { config.lightButtonAllowed = value; return self }
     func flipButtonAllowed(_ value: Bool) -> Self { config.flipButtonAllowed = value; return self }
     func gridButtonAllowed(_ value: Bool) -> Self { config.gridButtonAllowed = value; return self }
+    func closeButtonAllowed(_ value: Bool) -> Self { config.closeButtonAllowed = value; return self }
 }

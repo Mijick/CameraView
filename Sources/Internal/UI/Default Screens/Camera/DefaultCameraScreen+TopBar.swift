@@ -107,7 +107,7 @@ private extension DefaultCameraScreen.TopBar {
 }
 private extension DefaultCameraScreen.TopBar {
     var isTopBarActive: Bool { parent.cameraManager.captureSession.isRunning }
-    var isCloseButtonActive: Bool { !parent.isRecording }
+    var isCloseButtonActive: Bool { parent.config.closeButtonAllowed && !parent.isRecording }
     var isCentralViewActive: Bool { parent.isRecording }
     var isRightSideViewActive: Bool { !parent.isRecording }
     var isGridButtonActive: Bool { parent.config.gridButtonAllowed }
