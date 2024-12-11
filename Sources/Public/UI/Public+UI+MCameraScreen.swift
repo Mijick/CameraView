@@ -112,7 +112,19 @@ public extension MCameraScreen {
      Set the zoom factor of the camera. If the zoom factor is out of bounds, it will be set to the closest available value.
      */
     func setZoomFactor(_ zoomFactor: CGFloat) throws { try cameraManager.setCameraZoomFactor(zoomFactor) }
+
+    /**
+     Set the flash mode of the camera.
+
+     For available options, please refer to the ``CameraFlashMode`` documentation.
+     */
     func setFlashMode(_ flashMode: CameraFlashMode) { cameraManager.setFlashMode(flashMode) }
+
+    /**
+     Set the light mode of the camera.
+
+     For available options, please refer to the ``CameraLightMode`` documentation
+     */
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
     func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
     func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
