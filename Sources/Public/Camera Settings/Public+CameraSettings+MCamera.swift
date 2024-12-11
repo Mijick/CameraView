@@ -134,6 +134,11 @@ public extension MCamera {
 
 // MARK: Changing Initial Values
 public extension MCamera {
+    /**
+     Changes the initial camera output type.
+
+     For available options, please refer to the ``CameraOutputType`` documentation.
+     */
     func setCameraOutputType(_ cameraOutputType: CameraOutputType) -> Self { manager.attributes.outputType = cameraOutputType; return self }
     func setCameraPosition(_ cameraPosition: CameraPosition) -> Self { manager.attributes.cameraPosition = cameraPosition; return self }
     func setAudioAvailability(_ isAvailable: Bool) -> Self { manager.attributes.isAudioSourceAvailable = isAvailable; return self }
