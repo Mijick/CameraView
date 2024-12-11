@@ -11,6 +11,40 @@
 
 import SwiftUI
 
+/**
+ A view that displays a camera with state-specific screens.
+
+ By default, it includes three screens that change depending on the status of the camera; **Error Screen**, **Camera Screen** and **Captured Media Screen**.
+
+ Handles issues related to asking for permissions, and if permissions are not granted, it displays the **Error Screen**.
+
+ Optionally shows the **Captured Media Screen**, which is displayed after the user captures an image or video.
+
+
+
+
+
+ Aby zmienić wygląd domyślnych ekranów, użyj funkcji:
+ - setCameraScreen
+ - setCapturedMediaScreen
+ - setErrorScreen
+
+ Aby zmienić początkowe ustawienia kamery, użyj funkcji:
+ - setCameraOutputType
+ - setCameraPosition
+ - bla bla bla
+
+ Aby ustalić akcje, które mają być wywoływane po zrobieniu zdjęcia lub nagraniu filmu, użyj funkcji:
+ - onImageCaptured
+ - onVideoCaptured
+
+ Aby ustalić akcję, która doprowadzi do zamknięcia MCamera, użyj funkcji setCloseMCameraAction.
+
+ ## Usage
+ ```swift
+
+ ```
+ */
 public struct MCamera: View {
     @ObservedObject var manager: CameraManager
     @Namespace var namespace

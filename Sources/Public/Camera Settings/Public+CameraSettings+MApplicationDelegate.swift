@@ -12,7 +12,7 @@
 import SwiftUI
 
 /**
- Prevent the screen orientation from changing when the **MCamera** is visible on the screen.
+ Prevent the screen orientation from changing when the ``MCamera`` is visible on the screen.
 
  See ``MCamera/lockOrientation(_:)`` for more details.
  - note: Blocks the rotation of the entire screen on which the **MCamera** is located.
