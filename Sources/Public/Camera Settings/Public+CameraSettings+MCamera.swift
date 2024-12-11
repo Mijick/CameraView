@@ -29,6 +29,47 @@ public extension MCamera {
 
 // MARK: Changing Default Screens
 public extension MCamera {
+    /**
+     Changes the camera screen to a selected one.
+
+     For more details and tips on creating your own **Camera Screen**, see the ``MCameraScreen`` documentation.
+
+     - tip: To hide selected buttons and controls on the screen, use the method with DefaultCameraScreen as argument. For a code example, please refer to Usage -> Default Camera Screen Customization section.
+
+
+     # Usage
+
+     ## New Camera Screen
+     ```swift
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+                .setCameraScreen(CustomCameraView.init)
+
+                // MUST BE CALLED!
+                .startSession()
+        }
+     }
+     ```
+
+     ## Default Camera Screen Customization
+     ```swift
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+                .setCameraScreen {
+                    DefaultCameraScreen(cameraManager: $0, namespace: $1, closeMCameraAction: $2)
+                        .captureButtonAllowed(false)
+                        .cameraOutputSwitchAllowed(false)
+                        .lightButtonAllowed(false)
+                }
+
+                // MUST BE CALLED!
+                .startSession()
+        }
+     }
+     ```
+     */
     func setCameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
     func setCapturedMediaScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
     func setErrorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
