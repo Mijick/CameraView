@@ -25,11 +25,20 @@ import SwiftUI
     }
  }
 
-
+// MARK: App Delegate
  class AppDelegate: NSObject, MApplicationDelegate {
     static var orientationLock = UIInterfaceOrientationMask.all
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask { AppDelegate.orientationLock }
+ }
+
+// MARK: Content View
+ struct ContentView: View {
+    var body: some View {
+        MCamera()
+            .lockOrientation(AppDelegate.self)
+            .startSession()
+    }
  }
  ```
  */

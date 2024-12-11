@@ -67,5 +67,5 @@ public extension MCamera {
 // MARK: Others
 public extension MCamera {
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
-    func start() -> some View { config.isCameraConfigured = true; return self }
+    func startSession() -> some View { config.isCameraConfigured = true; return self }
 }
