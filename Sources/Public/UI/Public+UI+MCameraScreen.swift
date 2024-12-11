@@ -93,7 +93,19 @@ public extension MCameraScreen {
      Capture the current camera output. The output type depends on what ``cameraOutputType`` is set to.
      */
     func captureOutput() { cameraManager.captureOutput() }
+
+    /**
+     Set the output type of the camera.
+
+     For available options, please refer to the ``CameraOutputType`` documentation.
+     */
     func setOutputType(_ outputType: CameraOutputType) { cameraManager.setOutputType(outputType) }
+
+    /**
+     Set the camera position.
+
+     For available options, please refer to the ``CameraPosition`` documentation
+     */
     func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
     func setZoomFactor(_ zoomFactor: CGFloat) throws { try cameraManager.setCameraZoomFactor(zoomFactor) }
     func setFlashMode(_ flashMode: CameraFlashMode) { cameraManager.setFlashMode(flashMode) }
