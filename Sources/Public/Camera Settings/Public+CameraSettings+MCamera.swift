@@ -184,7 +184,8 @@ public extension MCamera {
     /**
      Changes the initial camera frame rate.
 
-     - important: Depending on the resolution of the camera and the current specifications of the device, there are some restrictions on the frame rate that can be set. If you set a frame rate that exceeds the camera's capabilities, the library will automatically set the closest possible value and show you which value has been set (``MCameraScreen/frameRate``).
+     - important: Depending on the resolution of the camera and the current specifications of the device, there are some restrictions on the frame rate that can be set.
+     If you set a frame rate that exceeds the camera's capabilities, the library will automatically set the closest possible value and show you which value has been set (``MCameraScreen/frameRate``).
      */
     func setFrameRate(_ frameRate: Int32) -> Self { manager.attributes.frameRate = frameRate; return self }
     func setCameraExposureDuration(_ duration: CMTime) -> Self { manager.attributes.cameraExposure.duration = duration; return self }
