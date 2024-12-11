@@ -13,6 +13,52 @@ import SwiftUI
 import AVFoundation
 import MijickTimer
 
+/**
+ Screen that displays the camera view and manages camera actions.
+
+ - important: A view conforming to **MCameraScreen** has to be passed directly to ``MCamera``. See ``MCamera/setCameraScreen(_:)`` for more details.
+
+ ## Usage
+ ```swift
+ struct ContentView: View {
+    var body: some View {
+        MCamera()
+            .setCameraScreen(CustomCameraErrorScreen.init)
+
+            // MUST BE CALLED!
+            .startSession()
+    }
+ }
+
+ // MARK: Custom Camera Screen
+ struct CustomCameraScreen: MCameraScreen {
+    @ObservedObject var cameraManager: CameraManager
+    let namespace: Namespace.ID
+    let closeMCameraAction: () -> ()
+
+
+    var body: some View {
+        VStack(spacing: 0) {
+            createNavigationBar()
+            createCameraView()
+            createCaptureButton()
+        }
+    }
+ }
+ private extension CustomCameraScreen {
+    func createNavigationBar() -> some View {
+        Text("This is a Custom Camera View")
+            .padding(.top, 12)
+            .padding(.bottom, 12)
+    }
+    func createCaptureButton() -> some View {
+        Button(action: captureOutput) { Text("Click to capture") }
+            .padding(.top, 12)
+            .padding(.bottom, 12)
+    }
+ }
+ ```
+ */
 public protocol MCameraScreen: View {
     var cameraManager: CameraManager { get }
     var namespace: Namespace.ID { get }
