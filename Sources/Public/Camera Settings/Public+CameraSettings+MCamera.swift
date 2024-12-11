@@ -176,9 +176,9 @@ public extension MCamera {
     /**
      Changes the initial light (torch / flashlight) mode.
 
-     - note: If the selected light mode is not available, the light mode will not be changed.
-
      For available options, please refer to the ``CameraLightMode`` documentation.
+
+     - note: If the selected light mode is not available, the light mode will not be changed.
      */
     func setLightMode(_ lightMode: CameraLightMode) -> Self { manager.attributes.lightMode = lightMode; return self }
 
@@ -260,7 +260,7 @@ public extension MCamera {
     func setFocusImageColor(_ color: UIColor) -> Self { manager.cameraMetalView.focusIndicator.tintColor = color; return self }
 
     /**
-     Changes the size of the focus indicator visible when touching anywhere on the camera
+     Changes the size of the focus indicator visible when touching anywhere on the camera.
      */
     func setFocusImageSize(_ size: CGFloat) -> Self { manager.cameraMetalView.focusIndicator.size = size; return self }
 }
@@ -391,7 +391,7 @@ public extension MCamera {
     /**
      Starts the camera session.
 
-     - important: This method must be called to start the camera
+     - important: This method must be called to start the camera.
      */
     func startSession() -> some View { config.isCameraConfigured = true; return self }
 }
