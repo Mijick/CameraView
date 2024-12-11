@@ -360,7 +360,7 @@ public extension MCamera {
      struct ContentView: View {
         var body: some View {
             MCamera()
-                .lockOrientation(AppDelegate.self)
+                .lockInPortraitOrientation(AppDelegate.self)
 
                 // MUST BE CALLED!
                 .startSession()
@@ -368,6 +368,6 @@ public extension MCamera {
      }
      ```
      */
-    func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
+    func lockInPortraitOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
     func startSession() -> some View { config.isCameraConfigured = true; return self }
 }

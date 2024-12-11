@@ -14,7 +14,7 @@ import SwiftUI
 /**
  Locks the screen in portrait mode when the Camera Screen is active.
 
- See ``MCamera/lockOrientation(_:)`` for more details.
+ See ``MCamera/lockInPortraitOrientation(_:)`` for more details.
  - note: Blocks the rotation of the entire screen on which the **MCamera** is located.
 
  ## Usage
@@ -38,7 +38,7 @@ import SwiftUI
  struct ContentView: View {
     var body: some View {
         MCamera()
-            .lockOrientation(AppDelegate.self)
+            .lockInPortraitOrientation(AppDelegate.self)
 
             // MUST BE CALLED!
             .startSession()
