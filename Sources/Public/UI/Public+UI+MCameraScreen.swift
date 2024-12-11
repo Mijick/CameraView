@@ -130,6 +130,20 @@ public extension MCameraScreen {
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
 
     /**
+     Set the camera resolution.
+
+     - important: Changing the resolution may affect the maximum frame rate that can be set.
+     */
+    func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
+
+    /**
+     Set the camera frame rate.
+
+     - important: Changing the resolution may affect the maximum frame rate that can be set.
+     */
+    func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
+
+    /**
      Set the camera exposure mode.
      */
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
@@ -154,20 +168,6 @@ public extension MCameraScreen {
      - note: If the target bias is out of bounds, it will be set to the closest available value.
      */
     func setExposureTargetBias(_ exposureTargetBias: Float) throws { try cameraManager.setExposureTargetBias(exposureTargetBias) }
-
-    /**
-     Set the camera resolution.
-
-     - important: Changing the resolution may affect the maximum frame rate that can be set.
-     */
-    func setResolution(_ resolution: AVCaptureSession.Preset) { cameraManager.setResolution(resolution) }
-
-    /**
-     Set the camera frame rate.
-
-     - important: Changing the resolution may affect the maximum frame rate that can be set.
-     */
-    func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
 
     /**
      Set the camera HDR mode.
