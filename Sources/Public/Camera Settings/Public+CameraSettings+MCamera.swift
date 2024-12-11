@@ -369,5 +369,11 @@ public extension MCamera {
      ```
      */
     func lockInPortraitOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
+
+    /**
+     Starts the camera session.
+
+     - important: This method must be called to start the camera
+     */
     func startSession() -> some View { config.isCameraConfigured = true; return self }
 }
