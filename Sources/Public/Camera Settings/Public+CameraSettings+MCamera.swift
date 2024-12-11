@@ -333,6 +333,41 @@ public extension MCamera {
 
 // MARK: Others
 public extension MCamera {
+    /**
+     Locks the screen in portrait mode when the Camera Screen is active.
+
+     See ``MApplicationDelegate`` for more details.
+     - note: Blocks the rotation of the entire screen on which the **MCamera** is located.
+
+     ## Usage
+     ```swift
+     @main struct App_Main: App {
+        @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+        var body: some Scene {
+            WindowGroup(content: ContentView.init)
+        }
+     }
+
+     // MARK: App Delegate
+     class AppDelegate: NSObject, MApplicationDelegate {
+        static var orientationLock = UIInterfaceOrientationMask.all
+
+        func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask { AppDelegate.orientationLock }
+     }
+
+     // MARK: Content View
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+                .lockOrientation(AppDelegate.self)
+
+                // MUST BE CALLED!
+                .startSession()
+        }
+     }
+     ```
+     */
     func lockOrientation(_ appDelegate: MApplicationDelegate.Type) -> Self { config.appDelegate = appDelegate; manager.attributes.orientationLocked = true; return self }
     func startSession() -> some View { config.isCameraConfigured = true; return self }
 }
