@@ -140,7 +140,19 @@ public extension MCamera {
      For available options, please refer to the ``CameraOutputType`` documentation.
      */
     func setCameraOutputType(_ cameraOutputType: CameraOutputType) -> Self { manager.attributes.outputType = cameraOutputType; return self }
+
+    /**
+        Changes the initial camera position.
+
+        For available options, please refer to the ``CameraPosition`` documentation
+     */
     func setCameraPosition(_ cameraPosition: CameraPosition) -> Self { manager.attributes.cameraPosition = cameraPosition; return self }
+
+    /**
+        Definies whether the audio source is available.
+
+        If disabled, the camera will not record audio, and will not ask for permission to access the microphone.
+     */
     func setAudioAvailability(_ isAvailable: Bool) -> Self { manager.attributes.isAudioSourceAvailable = isAvailable; return self }
     func setZoomFactor(_ zoomFactor: CGFloat) -> Self { manager.attributes.zoomFactor = zoomFactor; return self }
     func setFlashMode(_ flashMode: CameraFlashMode) -> Self { manager.attributes.flashMode = flashMode; return self }
