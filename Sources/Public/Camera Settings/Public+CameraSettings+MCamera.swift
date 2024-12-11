@@ -249,6 +249,31 @@ public extension MCamera {
 
 // MARK: Actions
 public extension MCamera {
+    /**
+     Indicates how the MCamera can be closed.
+
+     ## Usage
+     ```swift
+     struct ContentView: View {
+        @State private var isSheetPresented: Bool = false
+
+
+        var body: some View {
+            Button(action: { isSheetPresented = true }) {
+                Text("Click me!")
+            }
+            .fullScreenCover(isPresented: $isSheetPresented) {
+                MCamera()
+                    .setResolution(.hd1920x1080)
+                    .setCloseMCameraAction { isSheetPresented = false }
+
+                    // MUST BE CALLED!
+                    .startSession()
+            }
+        }
+     }
+     ```
+     */
     func setCloseMCameraAction(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
     func onImageCaptured(_ action: @escaping (UIImage, MCamera.Controller) -> ()) -> Self { config.imageCapturedAction = action; return self }
     func onVideoCaptured(_ action: @escaping (URL, MCamera.Controller) -> ()) -> Self { config.videoCapturedAction = action; return self }
