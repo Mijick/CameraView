@@ -40,7 +40,7 @@ import MijickTimer
     var body: some View {
         VStack(spacing: 0) {
             createNavigationBar()
-            createCameraView()
+            createCameraOutputView()
             createCaptureButton()
         }
     }
@@ -67,7 +67,26 @@ public protocol MCameraScreen: View {
 
 // MARK: Methods
 public extension MCameraScreen {
-    func createCameraView() -> some View { CameraBridgeView(cameraManager: cameraManager).equatable() }
+    /**
+     View that displays the camera output.
+
+     ## Usage
+     ```swift
+     struct CustomCameraScreen: MCameraScreen {
+        @ObservedObject var cameraManager: CameraManager
+        let namespace: Namespace.ID
+        let closeMCameraAction: () -> ()
+
+
+        var body: some View {
+            (...)
+            createCameraOutputView()
+            (...)
+        }
+     }
+     ```
+     */
+    func createCameraOutputView() -> some View { CameraBridgeView(cameraManager: cameraManager).equatable() }
 }
 public extension MCameraScreen {
     func captureOutput() { cameraManager.captureOutput() }
