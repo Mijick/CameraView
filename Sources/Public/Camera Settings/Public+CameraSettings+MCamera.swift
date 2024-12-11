@@ -275,6 +275,30 @@ public extension MCamera {
      ```
      */
     func setCloseMCameraAction(_ action: @escaping () -> ()) -> Self { config.closeMCameraAction = action; return self }
+
+    /**
+     Action that is called when an image is captured.
+
+     MCameraController can be used to perform additional actions related to MCamera, such as closing MCamera or returning to the camera screen.
+     See ``Controller`` for more information.
+
+     - note: The action is called immediately if **Captured Media Screen** is nil, otherwise after the user accepts the photo.
+
+
+     ## Usage
+     ```swift
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+     .setCameraScreen(CustomCameraScreen.init)
+
+     // MUST BE CALLED!
+     .startSession()
+     }
+     }
+
+     ```
+     */
     func onImageCaptured(_ action: @escaping (UIImage, MCamera.Controller) -> ()) -> Self { config.imageCapturedAction = action; return self }
     func onVideoCaptured(_ action: @escaping (URL, MCamera.Controller) -> ()) -> Self { config.videoCapturedAction = action; return self }
 }
