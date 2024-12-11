@@ -36,6 +36,7 @@ import SwiftUI
  Use one of the methods below to set actions that will be called after capturing media:
     - ``onImageCaptured(_:)``
     - ``onVideoCaptured(_:)``
+ - note: If there is no **Captured Media Screen**, the action is called immediately after the media is captured, otherwise it is triggered after the user accepts the captured media in the **Captured Media Screen**.
 
 
 
