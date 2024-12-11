@@ -144,11 +144,6 @@ public extension MCameraScreen {
     func setFrameRate(_ frameRate: Int32) throws { try cameraManager.setFrameRate(frameRate) }
 
     /**
-     Set the camera exposure mode.
-     */
-    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
-
-    /**
      Set the camera exposure duration.
 
      - note: If the exposure duration is out of bounds, it will be set to the closest available value.
@@ -168,6 +163,11 @@ public extension MCameraScreen {
      - note: If the target bias is out of bounds, it will be set to the closest available value.
      */
     func setExposureTargetBias(_ exposureTargetBias: Float) throws { try cameraManager.setExposureTargetBias(exposureTargetBias) }
+
+    /**
+     Set the camera exposure mode.
+     */
+    func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
 
     /**
      Set the camera HDR mode.
