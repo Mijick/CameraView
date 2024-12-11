@@ -203,8 +203,22 @@ public extension MCamera {
      Changes the initial camera ISO.
      */
     func setCameraISO(_ iso: Float) -> Self { manager.attributes.cameraExposure.iso = iso; return self }
+
+    /**
+     Changes the initial camera exposure mode.
+     */
     func setCameraExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) -> Self { manager.attributes.cameraExposure.mode = exposureMode; return self }
+
+    /**
+     Changes the initial camera HDR mode.
+     */
     func setCameraHDRMode(_ hdrMode: CameraHDRMode) -> Self { manager.attributes.hdrMode = hdrMode; return self }
+
+    /**
+     Changes the initial camera filters.
+
+     - important: Setting multiple filters simultaneously can affect the performance of the camera.
+     */
     func setCameraFilters(_ filters: [CIFilter]) -> Self { manager.attributes.cameraFilters = filters; return self }
     func setMirrorOutput(_ shouldMirror: Bool) -> Self { manager.attributes.mirrorOutput = shouldMirror; return self }
     func setGridVisibility(_ shouldShowGrid: Bool) -> Self { manager.attributes.isGridVisible = shouldShowGrid; return self }
