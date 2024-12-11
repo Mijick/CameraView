@@ -71,6 +71,43 @@ public extension MCamera {
      ```
      */
     func setCameraScreen(_ builder: @escaping CameraScreenBuilder) -> Self { config.cameraScreen = builder; return self }
+
+    /**
+     Changes the captured media screen to a selected one.
+
+     For more details and tips on creating your own **Captured Media Screen**, see the ``MCapturedMediaScreen`` documentation.
+
+     - tip: To disable displaying captured media, call the method with a nil value.
+
+
+     # Usage
+
+     ## New Captured Media Screen
+     ```swift
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+                .setCapturedMediaScreen(DefaultCapturedMediaScreen.init)
+
+                // MUST BE CALLED!
+                .startSession()
+        }
+     }
+     ```
+
+     ## No Captured Media Screen
+     ```swift
+     struct ContentView: View {
+        var body: some View {
+            MCamera()
+                .setCapturedMediaScreen(nil)
+
+                // MUST BE CALLED!
+                .startSession()
+        }
+     }
+     ```
+     */
     func setCapturedMediaScreen(_ builder: CapturedMediaScreenBuilder?) -> Self { config.capturedMediaScreen = builder; return self }
     func setErrorScreen(_ builder: @escaping ErrorScreenBuilder) -> Self { config.errorScreen = builder; return self }
 }
