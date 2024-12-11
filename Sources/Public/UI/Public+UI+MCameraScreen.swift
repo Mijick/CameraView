@@ -107,6 +107,10 @@ public extension MCameraScreen {
      For available options, please refer to the ``CameraPosition`` documentation
      */
     func setCameraPosition(_ cameraPosition: CameraPosition) async throws { try await cameraManager.setCameraPosition(cameraPosition) }
+
+    /**
+     Set the zoom factor of the camera. If the zoom factor is out of bounds, it will be set to the closest available value.
+     */
     func setZoomFactor(_ zoomFactor: CGFloat) throws { try cameraManager.setCameraZoomFactor(zoomFactor) }
     func setFlashMode(_ flashMode: CameraFlashMode) { cameraManager.setFlashMode(flashMode) }
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
