@@ -126,8 +126,20 @@ public extension MCameraScreen {
      For available options, please refer to the ``CameraLightMode`` documentation
      */
     func setLightMode(_ lightMode: CameraLightMode) throws { try cameraManager.setLightMode(lightMode) }
+
+    /**
+     Set whether the camera output should be mirrored.
+     */
     func setMirrorOutput(_ shouldMirror: Bool) { cameraManager.setMirrorOutput(shouldMirror) }
+
+    /**
+     Set whether the camera grid should be visible.
+     */
     func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
+
+    /**
+     
+     */
     func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
     func setExposureDuration(_ exposureDuration: CMTime) throws { try cameraManager.setExposureDuration(exposureDuration) }
