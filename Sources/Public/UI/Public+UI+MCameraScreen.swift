@@ -138,9 +138,13 @@ public extension MCameraScreen {
     func setGridVisibility(_ shouldShowGrid: Bool) { cameraManager.setGridVisibility(shouldShowGrid) }
 
     /**
-     
+     Set the camera filters to be applied to the camera output.
+
+     - important: Setting multiple filters simultaneously can affect the performance of the camera.
      */
     func setCameraFilters(_ filters: [CIFilter]) { cameraManager.setCameraFilters(filters) }
+
+    
     func setExposureMode(_ exposureMode: AVCaptureDevice.ExposureMode) throws { try cameraManager.setExposureMode(exposureMode) }
     func setExposureDuration(_ exposureDuration: CMTime) throws { try cameraManager.setExposureDuration(exposureDuration) }
     func setISO(_ iso: Float) throws { try cameraManager.setISO(iso) }
