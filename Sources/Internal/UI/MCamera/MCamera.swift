@@ -65,7 +65,7 @@ import SwiftUI
  ## Other
  There are other methods that you can use to customize your experience:
     - ``setCloseMCameraAction(_:)``
-    - ``lockInPortraitOrientation(_:)``
+    - ``lockCameraInPortraitOrientation(_:)``
 
  # Usage
  ```swift
