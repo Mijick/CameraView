@@ -130,9 +130,9 @@
         <td>📸</td>
         <td>Flash</td>
     </tr>
-        <tr>
-        <td></td>
-        <td></td>
+    <tr>
+        <td>⏱️</td>
+        <td>Other camera settings (exposure duration, target bias, ISO, HDR mode and more)</td>
     </tr>
         <tr>
         <td></td>
