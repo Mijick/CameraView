@@ -82,3 +82,20 @@
         <img alt="Buy us a coffee" src="https://github.com/Mijick/Assets/blob/main/Popups/Buttons/buymeacoffee.png" height="40px">
     </a>
 </p>
+
+<!--Features-->
+# ✨ Features
+<table><tbody>
+    <tr>
+        <td>⏳</td>
+        <td>Countdown Timer (Down-Going)</td>
+    </tr>
+    <tr>
+        <td>⏱️</td>
+        <td>Count-Up Timer (Elapsed Time)</td>
+    </tr>
+    <tr>
+        <td>⏸️</td>
+        <td>Pause Timer</td>
+    </tr>
+</tbody></table>
