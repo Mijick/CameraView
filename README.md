@@ -174,7 +174,7 @@
 
 <!--Description-->
 # ☀️ Why MijickCamera?
-MijickCamera library solves two seemingly contradictory problems - to allow developers to create fully customizable popup views, and to make the process as simple as possible. Here is why we think we have successfully met these objectives:
+The main problem we wanted to solve was the complexity of implementing camera into Swift projects; to get a camera view, you either have to accept a number of trade-offs or spend hours wrestling with the complexity of the AVKit framework. Here is why we think we have successfully solved the problem:
 
 
 
