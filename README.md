@@ -181,7 +181,7 @@ MijickCamera library solves two seemingly contradictory problems - to allow deve
 
 <!--Documentation-->
 # 🚀 How to use it?
-Visit the framework's [documentation page](https://link.mijick.com/camera-wiki) to learn how to integrate your project with **MijickPopups**.
+Visit the framework's [documentation page](https://link.mijick.com/camera-wiki) to learn how to integrate your project with **MijickCameras**.
 
 <!--Community-->
 # 🍀 Community
@@ -189,7 +189,7 @@ Join the welcoming community of developers on [Discord](https://link.mijick.com/
 
 <!--Contribution-->
 # 🌼 Contribute
-To contribute a feature or idea to **MijickPopups**, create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne&labels=state%3A+inactive%2C+type%3A+feature&projects=&template=🚀-feature-request.md&title=%5BFREQ%5D) explaining your idea or bring it up on [Discord](https://discord.com/invite/dT5V7nm5SC). <br>
+To contribute a feature or idea to **MijickCamera**, create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne&labels=state%3A+inactive%2C+type%3A+feature&projects=&template=🚀-feature-request.md&title=%5BFREQ%5D) explaining your idea or bring it up on [Discord](https://discord.com/invite/dT5V7nm5SC). <br>
 If you find a bug, please create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne%2C+jay-jay-lama&labels=state%3A+inactive%2C+type%3A+bug&projects=&template=🦟-bug-report.md&title=%5BBUG%5D). <br>
 If you would like to contribute, please refer to the [Contribution Guidelines](https://link.mijick.com/contribution-guidelines).
 
