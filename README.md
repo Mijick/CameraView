@@ -99,3 +99,28 @@
         <td>Pause Timer</td>
     </tr>
 </tbody></table>
+
+<!--Description-->
+# ☀️ Why MijickCamera?
+MijickCamera library solves two seemingly contradictory problems - to allow developers to create fully customizable popup views, and to make the process as simple as possible. Here is why we think we have successfully met these objectives:
+
+
+
+
+<!--Documentation-->
+# 🚀 How to use it?
+Visit the framework's [documentation page](https://link.mijick.com/camera-wiki) to learn how to integrate your project with **MijickPopups**.
+
+<!--Community-->
+# 🍀 Community
+Join the welcoming community of developers on [Discord](https://link.mijick.com/discord).
+
+<!--Contribution-->
+# 🌼 Contribute
+To contribute a feature or idea to **MijickPopups**, create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne&labels=state%3A+inactive%2C+type%3A+feature&projects=&template=🚀-feature-request.md&title=%5BFREQ%5D) explaining your idea or bring it up on [Discord](https://discord.com/invite/dT5V7nm5SC). <br>
+If you find a bug, please create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne%2C+jay-jay-lama&labels=state%3A+inactive%2C+type%3A+bug&projects=&template=🦟-bug-report.md&title=%5BBUG%5D). <br>
+If you would like to contribute, please refer to the [Contribution Guidelines](https://link.mijick.com/contribution-guidelines).
+
+<!--Sponsorship-->
+# 💜 Sponsor our work
+Support our work by [becoming a backer](https://link.mijick.com/buymeacoffee).
