@@ -87,16 +87,16 @@
 # ✨ Features
 <table><tbody>
     <tr>
-        <td>⏳</td>
-        <td>Countdown Timer (Down-Going)</td>
+        <td>🙏🏻</td>
+        <td>Automatically handles permissions</td>
     </tr>
     <tr>
-        <td>⏱️</td>
-        <td>Count-Up Timer (Elapsed Time)</td>
+        <td>🖼️</td>
+        <td>Image capture</td>
     </tr>
     <tr>
-        <td>⏸️</td>
-        <td>Pause Timer</td>
+        <td>🎬️</td>
+        <td>Video capture (with or without sound)</td>
     </tr>
 </tbody></table>
 
