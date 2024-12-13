@@ -28,3 +28,33 @@
 </p>
 
 <br>
+
+<!--GIFs-->
+<table>
+    <thead>
+        <tr>
+            <th>Popups</th>
+            <th>Alerts</th>
+            <th>Resizable Sheets</th>
+            <th>Banners</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-1.gif"/>
+            </td>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-2.gif"/>
+            </td>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-3.gif"/>
+            </td>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-4.gif"/>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<br><br>
