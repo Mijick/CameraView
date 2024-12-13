@@ -135,7 +135,7 @@
         <td>Other camera settings (exposure duration, target bias, ISO, HDR mode and more)</td>
     </tr>
     <tr>
-        <td>❌</td>
+        <td>☢️</td>
         <td>Displays error screen if permissions are not granted</td>
     </tr>
     <tr>
