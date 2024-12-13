@@ -8,5 +8,5 @@
 <!--Text Header-->
 <p>
     <h3 align="center">Camera made simple</h3>
-    <p align="center">Create any popup in no time. Keep your code clean.</p>
+    <p align="center">The Ultimate camera library that significantly reduces implementation time and effort.</p>
 </p>
