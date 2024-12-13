@@ -110,13 +110,13 @@
         <td>👁️</td>
         <td>Supports manual focus</td>
     </tr>
-        <tr>
-        <td></td>
-        <td></td>
+    <tr>
+        <td>🎞️</td>
+        <td>Changeable frame rate</td>
     </tr>
-        <tr>
-        <td></td>
-        <td></td>
+    <tr>
+        <td>📺️</td>
+        <td>Changeable camera resolution</td>
     </tr>
         <tr>
         <td></td>
