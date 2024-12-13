@@ -134,53 +134,41 @@
         <td>⏱️</td>
         <td>Other camera settings (exposure duration, target bias, ISO, HDR mode and more)</td>
     </tr>
-        <tr>
+    <tr>
+        <td>❌</td>
+        <td>Displays error screen if permissions are not granted</td>
+    </tr>
+    <tr>
+        <td>🖼️</td>
+        <td>Displays captured media screen</td>
+    </tr>
+    <tr>
         <td></td>
-        <td></td>
+        <td>Modern and minimalistic UI</td>
     </tr>
         <tr>
         <td></td>
-        <td></td>
+        <td>Beautiful animations</td>
     </tr>
         <tr>
         <td></td>
-        <td></td>
+        <td>Fully customizable screens</td>
     </tr>
         <tr>
         <td></td>
-        <td></td>
+        <td>Gestures support</td>
     </tr>
         <tr>
         <td></td>
-        <td></td>
+        <td>Blocks screen orientation change</td>
     </tr>
         <tr>
         <td></td>
-        <td></td>
+        <td>Supports Swift 6</td>
     </tr>
         <tr>
         <td></td>
-        <td></td>
-    </tr>
-        <tr>
-        <td></td>
-        <td></td>
-    </tr>
-        <tr>
-        <td></td>
-        <td></td>
-    </tr>
-        <tr>
-        <td></td>
-        <td></td>
-    </tr>
-        <tr>
-        <td></td>
-        <td></td>
-    </tr>
-        <tr>
-        <td></td>
-        <td></td>
+        <td>... and others</td>
     </tr>
 </tbody></table>
 
