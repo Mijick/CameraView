@@ -19,3 +19,12 @@
     |
     <a href="https://link.mijick.com/camera-roadmap" rel="nofollow"><b>Roadmap</b></a>
 </p>
+
+<br>
+
+<!--Labels-->
+<p align="center">
+    <img alt="Labels" src="https://github.com/Mijick/Assets/blob/main/Camera/labels.svg"/>
+</p>
+
+<br>
