@@ -143,18 +143,18 @@
         <td>Displays captured media screen</td>
     </tr>
     <tr>
-        <td></td>
+        <td>📱</td>
         <td>Modern and minimalistic UI</td>
     </tr>
-        <tr>
-        <td></td>
+    <tr>
+        <td>🕺</td>
         <td>Beautiful animations</td>
     </tr>
-        <tr>
-        <td></td>
+    <tr>
+        <td>↺</td>
         <td>Fully customizable screens</td>
     </tr>
-        <tr>
+    <tr>
         <td></td>
         <td>Gestures support</td>
     </tr>
