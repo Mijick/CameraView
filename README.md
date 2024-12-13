@@ -8,5 +8,5 @@
 <!--Text Header-->
 <p>
     <h3 align="center">Camera made simple</h3>
-    <p align="center">The ultimate camera library that significantly reduces implementation time and effort. Keep your code clean.</p>
+    <p align="center">Significantly reduces implementation time and effort. Keep your code clean.</p>
 </p>
