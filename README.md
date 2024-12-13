@@ -151,23 +151,23 @@
         <td>Beautiful animations</td>
     </tr>
     <tr>
-        <td>↺</td>
+        <td>🚧</td>
         <td>Fully customizable screens</td>
     </tr>
     <tr>
-        <td></td>
+        <td>🤏🏼</td>
         <td>Gestures support</td>
     </tr>
-        <tr>
-        <td></td>
+    <tr>
+        <td>📲</td>
         <td>Blocks screen orientation change</td>
     </tr>
-        <tr>
-        <td></td>
+    <tr>
+        <td>⚡️</td>
         <td>Supports Swift 6</td>
     </tr>
-        <tr>
-        <td></td>
+    <tr>
+        <td>🚀</td>
         <td>... and others</td>
     </tr>
 </tbody></table>
