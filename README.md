@@ -118,17 +118,17 @@
         <td>📺️</td>
         <td>Changeable camera resolution</td>
     </tr>
-        <tr>
-        <td></td>
-        <td></td>
+    <tr>
+        <td>🙈</td>
+        <td>Camera filters</td>
     </tr>
-        <tr>
-        <td></td>
-        <td></td>
+    <tr>
+        <td>🔦</td>
+        <td>Torch</td>
     </tr>
-        <tr>
-        <td></td>
-        <td></td>
+    <tr>
+        <td>📸</td>
+        <td>Flash</td>
     </tr>
         <tr>
         <td></td>
