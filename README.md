@@ -205,7 +205,7 @@ The main problem we wanted to solve was the complexity of implementing camera in
 
 <!--Documentation-->
 # 🚀 How to use it?
-Visit the framework's [documentation page](https://link.mijick.com/camera-wiki) to learn how to integrate your project with **MijickCameras**.
+Visit the framework's [documentation page](https://link.mijick.com/camera-wiki) to learn how to integrate your project with **MijickCamera**.
 
 <!--Community-->
 # 🍀 Community
