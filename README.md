@@ -33,8 +33,8 @@
 <table width="100%">
     <thead>
         <tr>
-            <th>Camera Position</th>
-            <th>Media Capturing</th>
+            <th>Position</th>
+            <th>Capturing</th>
             <th>Gestures</th>
             <th>Filters</th>
         </tr>
