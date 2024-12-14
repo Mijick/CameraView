@@ -195,6 +195,14 @@ The main problem we wanted to solve was the complexity of implementing camera in
 </p>
 
 
+### There is much more besides:
+- Advanced camera controls.
+- Gesture support.
+- Thoroughly designed animations.
+- Supports Swift 6.0.
+- ... and much more.
+
+
 <!--Documentation-->
 # 🚀 How to use it?
 Visit the framework's [documentation page](https://link.mijick.com/camera-wiki) to learn how to integrate your project with **MijickCameras**.
