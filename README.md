@@ -33,10 +33,10 @@
 <table>
     <thead>
         <tr>
-            <th>Popups</th>
-            <th>Alerts</th>
-            <th>Resizable Sheets</th>
-            <th>Banners</th>
+            <th>Camera Position</th>
+            <th>Media Capturing</th>
+            <th>Gestures</th>
+            <th>Filters</th>
         </tr>
     </thead>
     <tbody>
