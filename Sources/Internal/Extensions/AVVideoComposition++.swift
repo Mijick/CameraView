@@ -1,30 +1,20 @@
 //
-//  AVVideoComposition++.swift of MijickCameraView
+//  AVVideoComposition++.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import AVKit
 
-// MARK: - Applying Filters
+// MARK: Apply Filters
 extension AVVideoComposition {
-    static func applyFilters(to asset: AVAsset, applyFiltersAction: @escaping (AVAsynchronousCIImageFilteringRequest) -> (), completionHandler: @escaping (AVVideoComposition?, (any Error)?) -> ()) {
-        if #available(iOS 16.0, *) { applyFiltersNewWay(asset, applyFiltersAction, completionHandler) }
-        else { applyFiltersOldWay(asset, applyFiltersAction, completionHandler) }
-    }
-}
-private extension AVVideoComposition {
-    @available(iOS 16.0, *)
-    static func applyFiltersNewWay(_ asset: AVAsset, _ applyFiltersAction: @escaping (AVAsynchronousCIImageFilteringRequest) -> (), _ completionHandler: @escaping (AVVideoComposition?, (any Error)?) -> ()) {
-        AVVideoComposition.videoComposition(with: asset, applyingCIFiltersWithHandler: applyFiltersAction, completionHandler: completionHandler)
-    }
-    static func applyFiltersOldWay(_ asset: AVAsset, _ applyFiltersAction: @escaping (AVAsynchronousCIImageFilteringRequest) -> (), _ completionHandler: @escaping (AVVideoComposition?, (any Error)?) -> ()) {
-        let composition = AVVideoComposition(asset: asset, applyingCIFiltersWithHandler: applyFiltersAction)
-        completionHandler(composition, nil)
+    static func applyFilters(to asset: AVAsset, applyFiltersAction: @Sendable @escaping (AVAsynchronousCIImageFilteringRequest) -> ()) async throws -> AVVideoComposition {
+        if #available(iOS 16.0, *) { return try await AVVideoComposition.videoComposition(with: asset, applyingCIFiltersWithHandler: applyFiltersAction) }
+        return AVVideoComposition(asset: asset, applyingCIFiltersWithHandler: applyFiltersAction)
     }
 }

@@ -1,0 +1,14 @@
+name: Run Tests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run tests
+      run: xcodebuild test -scheme MijickCamera -destination 'platform=iOS Simulator,OS=18.0,name=iPhone 16 Pro'

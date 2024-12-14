@@ -1,17 +1,20 @@
 //
-//  Animation++.swift of MijickCameraView
+//  Animation++.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import SwiftUI
 
+// MARK: Custom Animation
 extension Animation {
-    static var defaultSpring: Animation { .spring(response: 0.4, dampingFraction: 1, blendDuration: 0.1) }
-    static var defaultEase: Animation { .easeInOut(duration: 0.32) }
+    static var mSpring: Animation { .spring(duration: duration, bounce: 0, blendDuration: 0) }
+}
+extension Animation {
+    static var duration: CGFloat { 0.3 }
 }

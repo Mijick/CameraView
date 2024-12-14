@@ -1,20 +1,22 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
-    name: "MijickCameraView",
+    name: "MijickCamera",
     platforms: [
         .iOS(.v14)
     ],
     products: [
-        .library(name: "MijickCameraView", targets: ["MijickCameraView"]),
+        .library(name: "MijickCamera", targets: ["MijickCamera"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Mijick/Timer", from: "1.0.1")
+        .package(url: "https://github.com/Mijick/Timer", exact: "2.0.0")
     ],
     targets: [
-        .target(name: "MijickCameraView", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources")
-    ]
+        .target(name: "MijickCamera", dependencies: [.product(name: "MijickTimer", package: "Timer")], path: "Sources", resources: [.process("Internal/Assets")]),
+        .testTarget(name: "MijickCameraTests", dependencies: ["MijickCamera"], path: "Tests")
+    ],
+    swiftLanguageModes: [.v6]
 )

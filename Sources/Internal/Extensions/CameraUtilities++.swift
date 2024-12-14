@@ -1,37 +1,21 @@
 //
-//  CameraUtilities++.swift of MijickCameraView
+//  CameraUtilities++.swift of MijickCamera
 //
-//  Created by Tomasz Kurylik
-//    - Twitter: https://twitter.com/tkurylik
+//  Created by Tomasz Kurylik. Sending ❤️ from Kraków!
 //    - Mail: tomasz.kurylik@mijick.com
 //    - GitHub: https://github.com/FulcrumOne
+//    - Medium: https://medium.com/@mijick
 //
-//  Copyright ©2024 Mijick. Licensed under MIT License.
+//  Copyright ©2024 Mijick. All rights reserved.
 
 
 import AVKit
 
-// MARK: Camera Position
-extension CameraPosition {
-    func get() -> AVCaptureDevice.Position { switch self {
-        case .back: .back
-        case .front: .front
-    }}
-}
-
-// MARK: Camera Flash Mode
+// MARK: To Device Flash Mode
 extension CameraFlashMode {
-    func get() -> AVCaptureDevice.FlashMode { switch self {
+    func toDeviceFlashMode() -> AVCaptureDevice.FlashMode { switch self {
         case .off: .off
         case .on: .on
         case .auto: .auto
-    }}
-}
-
-// MARK: Camera Torch Mode
-extension CameraTorchMode {
-    func get() -> AVCaptureDevice.TorchMode { switch self {
-        case .off: .off
-        case .on: .on
     }}
 }
