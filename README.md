@@ -215,7 +215,7 @@ Join the welcoming community of developers on [Discord](https://link.mijick.com/
 # 🌼 Contribute
 To contribute a feature or idea to **MijickCamera**, create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne&labels=state%3A+inactive%2C+type%3A+feature&projects=&template=🚀-feature-request.md&title=%5BFREQ%5D) explaining your idea or bring it up on [Discord](https://discord.com/invite/dT5V7nm5SC). <br>
 If you find a bug, please create an [issue](https://github.com/Mijick/Camera/issues/new?assignees=FulcrumOne%2C+jay-jay-lama&labels=state%3A+inactive%2C+type%3A+bug&projects=&template=🦟-bug-report.md&title=%5BBUG%5D). <br>
-If you would like to contribute, please refer to the [Contribution Guidelines](https://github.com/Mijick/Camera/blob/patch-3.0.0/.github/CONTRIBUTING.md).
+If you would like to contribute, please refer to the [Contribution Guidelines](https://github.com/Mijick/Camera/blob/main/.github/CONTRIBUTING.md).
 
 <!--Sponsorship-->
 # 💜 Sponsor our work
