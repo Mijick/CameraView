@@ -42,16 +42,16 @@
     <tbody>
         <tr>
             <td>
-                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-1.gif"/>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-1.gif"/>
             </td>
             <td>
-                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-2.gif"/>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-2.gif"/>
             </td>
             <td>
-                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-3.gif"/>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-3.gif"/>
             </td>
             <td>
-                <img src="https://github.com/Mijick/Assets/blob/main/Popups/Gifs/Popups-4.gif"/>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-4.gif"/>
             </td>
         </tr>
     </tbody>
