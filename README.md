@@ -183,6 +183,12 @@ The main problem we wanted to solve was the complexity of implementing camera in
 </p>
 
 <p>
+    <h3>Three in one</h3>
+    <p>MCamera contains three screens - Error Screen, Captured Media Screen and Camera Screen - making the process of handling camera states super easy. Moreover, MijickCamera automatically manages the entire workflow, from requesting camera permissions to displaying the results of camera captures!</p>
+    <img alt="Code Example 4" src="https://github.com/Mijick/Assets/blob/main/Popups/Code/any-position.png" width="100%">
+</p>
+
+<p>
     <h3>Engineered for limitless creativity</h3>
     <p>Every application is a special one, and we at Mijick know this very well, thus we have given you the possibility to customize each of the three screens that constitute MCamera.</p>
     <img alt="Code Example 1" src="https://github.com/Mijick/Assets/blob/main/Popups/Code/less-code.png" width="100%">
