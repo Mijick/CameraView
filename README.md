@@ -30,9 +30,32 @@
 <br>
 
 <!--GIFs-->
-| Camera Position | Media Capturing | Gestures | Filters |
-| ------------- | ------------- |------------- |------------- |
-| <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-1.gif"> | <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-2.gif"> | <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-3.gif"> | <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-4.gif"> |
+<table>
+    <thead>
+        <tr>
+            <th>Camera Position</th>
+            <th>Media Capturing</th>
+            <th>Gestures</th>
+            <th>Filters</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-1.gif"/>
+            </td>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-2.gif"/>
+            </td>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-3.gif"/>
+            </td>
+            <td>
+                <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-4.gif"/>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <br><br>
 
