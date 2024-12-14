@@ -176,6 +176,12 @@
 # ☀️ Why MijickCamera?
 The main problem we wanted to solve was the complexity of implementing camera into Swift projects; to get a camera view, you either have to accept a number of trade-offs or spend hours wrestling with the complexity of the AVKit framework. Here is why we think we have successfully solved the problem:
 
+<p>
+    <h3>The power of simplicity</h3>
+    <p>Thanks to a modern and minimalistic UI and a thoughtfully designed public API, the most common use cases can be solved with just a few lines of code.</p>
+    <img alt="Code Example 1" src="https://github.com/Mijick/Assets/blob/main/Popups/Code/less-code.png" width="100%">
+</p>
+
 
 
 
