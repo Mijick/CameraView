@@ -3,13 +3,13 @@ name: "\U0001F99F Bug Report"
 about: If something isn't working
 title: "[BUG]"
 labels: 'bug'
-projects: "Mijick/13"
+projects: "Mijick/15"
 assignees: FulcrumOne, jay-jay-lama
 
 ---
 
 ## Prerequisites
-- [ ] I checked the [documentation](https://github.com/Mijick/Popups/wiki) and found no answer
+- [ ] I checked the [documentation](https://github.com/Mijick/Camera/wiki) and found no answer
 - [ ] I checked to make sure that this issue has not already been filed
 
 ## Expected Behavior
