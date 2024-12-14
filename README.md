@@ -30,27 +30,27 @@
 <br>
 
 <!--GIFs-->
-<table width="100%">
+<table>
     <thead>
         <tr>
-            <th>Position</th>
-            <th>Capturing</th>
+            <th>Camera Position</th>
+            <th>Media Capturing</th>
             <th>Gestures</th>
             <th>Filters</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td width="25%">
+            <td>
                 <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-1.gif"/>
             </td>
-            <td width="25%">
+            <td>
                 <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-2.gif"/>
             </td>
-            <td width="25%">
+            <td>
                 <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-3.gif"/>
             </td>
-            <td width="25%">
+            <td>
                 <img src="https://github.com/Mijick/Assets/blob/main/Camera/Gifs/Camera-4.gif"/>
             </td>
         </tr>
