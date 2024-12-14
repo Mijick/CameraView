@@ -63,23 +63,23 @@
 <p>
     <!--Discord-->
     <a href="https://link.mijick.com/discord">
-        <img alt="Join us on Discord" src="https://github.com/Mijick/Assets/blob/main/Popups/Buttons/discord.png" height="40px">
+        <img alt="Join us on Discord" src="https://github.com/Mijick/Assets/blob/main/Common/Buttons/discord.png" height="40px">
     </a>
     <!--Linkedin-->
     <a href="https://link.mijick.com/linkedin">
-        <img alt="Follow us on LinkedIn" src="https://github.com/Mijick/Assets/blob/main/Popups/Buttons/linkedin.png" height="40px">
+        <img alt="Follow us on LinkedIn" src="https://github.com/Mijick/Assets/blob/main/Common/Buttons/linkedin.png" height="40px">
     </a>
     <!--GitHub-->
     <a href="https://link.mijick.com/github">
-        <img alt="See our other frameworks" src="https://github.com/Mijick/Assets/blob/main/Popups/Buttons/github.png" height="40px">
+        <img alt="See our other frameworks" src="https://github.com/Mijick/Assets/blob/main/Common/Buttons/github.png" height="40px">
     </a>
     <!--Medium-->
     <a href="https://link.mijick.com/medium">
-        <img alt="Read us on Medium" src="https://github.com/Mijick/Assets/blob/main/Popups/Buttons/medium.png" height="40px">
+        <img alt="Read us on Medium" src="https://github.com/Mijick/Assets/blob/main/Common/Buttons/medium.png" height="40px">
     </a>
     <!--Buymeacoffee-->
     <a href="https://link.mijick.com/buymeacoffee">
-        <img alt="Buy us a coffee" src="https://github.com/Mijick/Assets/blob/main/Popups/Buttons/buymeacoffee.png" height="40px">
+        <img alt="Buy us a coffee" src="https://github.com/Mijick/Assets/blob/main/Common/Buttons/buymeacoffee.png" height="40px">
     </a>
 </p>
 
@@ -179,19 +179,19 @@ The main problem we wanted to solve was the complexity of implementing camera in
 <p>
     <h3>The power of simplicity</h3>
     <p>Thanks to a modern and minimalistic UI and a thoughtfully designed public API, the most common use cases can be solved with just a few lines of code.</p>
-    <img alt="Code Example 1" src="https://github.com/Mijick/Assets/blob/main/Popups/Code/less-code.png" width="100%">
+    <img alt="Code Example 1" src="https://github.com/Mijick/Assets/blob/main/Camera/Code/power-of-simplicity.png" width="100%">
 </p>
 
 <p>
     <h3>Three in one</h3>
     <p>MCamera contains three screens - Error Screen, Captured Media Screen and Camera Screen - making the process of handling camera states super easy. Moreover, MijickCamera automatically manages the entire workflow, from requesting camera permissions to displaying the results of camera captures!</p>
-    <img alt="Code Example 4" src="https://github.com/Mijick/Assets/blob/main/Popups/Code/any-position.png" width="100%">
+    <img alt="Code Example 4" src="https://github.com/Mijick/Assets/blob/main/Camera/Code/three-in-one.png" width="100%">
 </p>
 
 <p>
     <h3>Engineered for limitless creativity</h3>
     <p>Every application is a special one, and we at Mijick know this very well, thus we have given you the possibility to customize each of the three screens that constitute MCamera.</p>
-    <img alt="Code Example 1" src="https://github.com/Mijick/Assets/blob/main/Popups/Code/less-code.png" width="100%">
+    <img alt="Code Example 1" src="https://github.com/Mijick/Assets/blob/main/Camera/Code/limitless-creativity.png" width="100%">
 </p>
 
 
