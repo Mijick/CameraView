@@ -31,9 +31,9 @@ class MockCaptureSession: NSObject, CaptureSession { required override init() {}
 
 
 extension MockCaptureSession {
-    func startRunning() {
+    func startRunning() { Task { @MainActor in
         _isRunning = true
-    }
+    }}
     func stopRunningAndReturnNewInstance() -> any CaptureSession {
         _isRunning = false
         return MockCaptureSession()
