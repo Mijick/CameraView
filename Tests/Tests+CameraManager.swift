@@ -383,7 +383,7 @@ private extension CameraManagerTests {
 
         cameraManager.initialize(in: cameraView)
         try await cameraManager.setup()
-        await Task.sleep(seconds: 1)
+        await Task.sleep(seconds: 10)
     }
 }
 private extension CameraManagerTests {
