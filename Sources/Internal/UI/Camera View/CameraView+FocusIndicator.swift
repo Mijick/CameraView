@@ -14,7 +14,7 @@ import SwiftUI
 @MainActor class CameraFocusIndicatorView {
     var image: UIImage = .init(resource: .mijickIconCrosshair)
     var tintColor: UIColor = .init(resource: .mijickBackgroundYellow)
-    var size: CGFloat = 92
+    var size: CGFloat = 96
 }
 
 // MARK: Create
