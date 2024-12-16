@@ -78,7 +78,7 @@ private extension CameraManager {
     }
     func setupDeviceInputs() throws(MCameraError) {
         try captureSession.add(input: getCameraInput())
-        if let audioInput = getAudioDeviceInput() { try captureSession.add(input: audioInput) }
+        if let audioInput = getAudioInput() { try captureSession.add(input: audioInput) }
     }
     func setupDeviceOutput() throws(MCameraError) {
         try photoOutput.setup(parent: self)
@@ -100,6 +100,15 @@ private extension CameraManager {
     }}
 }
 private extension CameraManager {
+    func getAudioInput() -> (any CaptureDeviceInput)? {
+        guard attributes.isAudioSourceAvailable,
+              let deviceInput = frontCameraInput ?? backCameraInput
+        else { return nil }
+
+        let captureDeviceInputType = type(of: deviceInput)
+        let audioInput = captureDeviceInputType.get(mediaType: .audio, position: .unspecified)
+        return audioInput
+    }
     nonisolated func startCaptureSession() async throws {
         await captureSession.startRunning()
     }
