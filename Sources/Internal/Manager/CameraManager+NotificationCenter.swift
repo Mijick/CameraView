@@ -32,6 +32,6 @@ private extension CameraManagerNotificationCenter {
 // MARK: Reset
 extension CameraManagerNotificationCenter {
     func reset() {
-        NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: parent.captureSession)
+        NotificationCenter.default.removeObserver(self, name: .AVCaptureSessionWasInterrupted, object: parent?.captureSession)
     }
 }

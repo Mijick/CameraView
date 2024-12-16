@@ -21,6 +21,7 @@ import SwiftUI
 extension CameraFocusIndicatorView {
     func create(at touchPoint: CGPoint) -> UIImageView {
         let focusIndicator = UIImageView(image: image)
+        focusIndicator.contentMode = .scaleAspectFit
         focusIndicator.tintColor = tintColor
         focusIndicator.frame.size = .init(width: size, height: size)
         focusIndicator.frame.origin.x = touchPoint.x - size / 2
