@@ -14,13 +14,14 @@ import SwiftUI
 @MainActor class CameraFocusIndicatorView {
     var image: UIImage = .init(resource: .mijickIconCrosshair)
     var tintColor: UIColor = .init(resource: .mijickBackgroundYellow)
-    var size: CGFloat = 92
+    var size: CGFloat = 96
 }
 
 // MARK: Create
 extension CameraFocusIndicatorView {
     func create(at touchPoint: CGPoint) -> UIImageView {
         let focusIndicator = UIImageView(image: image)
+        focusIndicator.contentMode = .scaleAspectFit
         focusIndicator.tintColor = tintColor
         focusIndicator.frame.size = .init(width: size, height: size)
         focusIndicator.frame.origin.x = touchPoint.x - size / 2

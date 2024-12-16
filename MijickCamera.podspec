@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
     Camera made simple. The ultimate camera library that significantly reduces implementation time and effort. Written with and for SwiftUI.
                             DESC
 
-    s.version               = '3.0.0'
+    s.version               = '3.0.1'
     s.ios.deployment_target = '14.0'
     s.swift_version         = '6.0'
 
