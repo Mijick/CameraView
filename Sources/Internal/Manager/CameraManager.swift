@@ -19,7 +19,6 @@ import AVKit
     private(set) var captureSession: any CaptureSession
     private(set) var frontCameraInput: (any CaptureDeviceInput)?
     private(set) var backCameraInput: (any CaptureDeviceInput)?
-    private(set) var audioInput: (any CaptureDeviceInput)?
 
     // MARK: Output
     private(set) var photoOutput: CameraManagerPhotoOutput = .init()
@@ -37,11 +36,10 @@ import AVKit
     private(set) var notificationCenterManager: CameraManagerNotificationCenter = .init()
 
     // MARK: Initializer
-    init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, fontCameraInput: CDI?, backCameraInput: CDI?, audioInput: CDI?) {
+    init<CS: CaptureSession, CDI: CaptureDeviceInput>(captureSession: CS, captureDeviceInputType: CDI.Type) {
         self.captureSession = captureSession
-        self.frontCameraInput = fontCameraInput
-        self.backCameraInput = backCameraInput
-        self.audioInput = audioInput
+        self.frontCameraInput = CDI.get(mediaType: .video, position: .front)
+        self.backCameraInput = CDI.get(mediaType: .video, position: .back)
     }
 }
 
@@ -80,7 +78,7 @@ private extension CameraManager {
     }
     func setupDeviceInputs() throws(MCameraError) {
         try captureSession.add(input: getCameraInput())
-        if attributes.isAudioSourceAvailable { try captureSession.add(input: audioInput) }
+        if let audioInput = getAudioDeviceInput() { try captureSession.add(input: audioInput) }
     }
     func setupDeviceOutput() throws(MCameraError) {
         try photoOutput.setup(parent: self)

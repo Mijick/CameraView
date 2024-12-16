@@ -16,9 +16,7 @@ import AVKit
 public extension MCamera {
     init() { self.init(manager: .init(
         captureSession: AVCaptureSession(),
-        fontCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .front),
-        backCameraInput: AVCaptureDeviceInput.get(mediaType: .video, position: .back),
-        audioInput: AVCaptureDeviceInput.get(mediaType: .audio, position: .unspecified)
+        captureDeviceInputType: AVCaptureDeviceInput.self
     ))}
 }
 

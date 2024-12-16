@@ -16,9 +16,7 @@ import SwiftUI
 @MainActor @Suite("Camera Manager Tests") struct CameraManagerTests {
     var cameraManager: CameraManager = .init(
         captureSession: MockCaptureSession(),
-        fontCameraInput: MockDeviceInput.get(mediaType: .video, position: .front),
-        backCameraInput: MockDeviceInput.get(mediaType: .video, position: .back),
-        audioInput: MockDeviceInput.get(mediaType: .audio, position: .unspecified)
+        captureDeviceInputType: MockDeviceInput.self
     )
 }
 
@@ -385,7 +383,7 @@ private extension CameraManagerTests {
 
         cameraManager.initialize(in: cameraView)
         try await cameraManager.setup()
-        await Task.sleep(seconds: 2)
+        await Task.sleep(seconds: 2.5)
     }
 }
 private extension CameraManagerTests {
